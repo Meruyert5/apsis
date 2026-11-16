@@ -1,0 +1,1129 @@
+/* ==========================================================================
+   APSIS — DEEP-SPACE CYBERNETIC
+   A glass console over one fixed deep-space field: electric blue, iris,
+   a restrained rose edge and a single gold live signal. Data stays legible;
+   the atmosphere does the theatrical work.
+   ========================================================================== */
+
+:root {
+  --chassis: #03050e;
+  --chassis-2: #070b18;
+  --well: #060b18;
+  --well-2: #0a1024;
+  --chalk: #eef3ff;
+  --chalk-2: #b7c5e6;
+  --mute: #8b9bc4;
+  --faint: #60709b;
+  --steel: rgb(158 188 255 / 22%);
+  --steel-2: rgb(130 160 255 / 9%);
+  --saffron: #5b8cff;
+  --saffron-deep: #1d3fa8;
+  --signal-soft: rgb(91 140 255 / 14%);
+  --oxide: #ff7696;
+  --plasma-soft: rgb(255 118 150 / 14%);
+  --cobalt: #7aa2ff;
+  --violet: #8b5cf6;
+  --violet-lit: #c9b8ff;
+  --gold: #e6b86a;
+  --gold-lit: #f5d9a8;
+  --mint: #7aa2ff;
+  --sage: #7d8fc4;
+  --solar: #8b5cf6;
+  --blue-lit: #7aa2ff;
+  --sheet: #070c1a;
+  --sheet-2: #0a1024;
+  --sheet-line: rgb(130 160 255 / 20%);
+  --ink: #eef3ff;
+  --accent: #5b8cff;
+  --accent-2: #8b5cf6;
+  --glass-bg: linear-gradient(155deg, rgb(20 31 72 / 58%), rgb(6 10 26 / 72%));
+  --glass-strong: linear-gradient(155deg, rgb(20 32 78 / 80%), rgb(5 8 20 / 88%));
+  --glass-edge: rgb(158 188 255 / 24%);
+  --glass-blur: blur(22px) saturate(145%);
+  --glass-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    0 34px 90px -52px rgb(40 90 255 / 70%);
+  --r-pill: 999px;
+}
+
+/* --------------------------------------------------------------- sky layer */
+
+body {
+  background: var(--chassis);
+}
+
+body::before,
+body::after {
+  display: none;
+}
+
+.cosmos {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #03050e;
+}
+
+#main {
+  position: relative;
+  z-index: 1;
+}
+
+.cosmos__mesh {
+  position: absolute;
+  inset: -18%;
+  background:
+    radial-gradient(52% 46% at 78% 6%, rgb(67 113 255 / 52%), transparent 68%),
+    radial-gradient(40% 42% at 15% 22%, rgb(104 67 220 / 40%), transparent 70%),
+    radial-gradient(38% 36% at 90% 72%, rgb(255 91 139 / 12%), transparent 72%),
+    radial-gradient(50% 44% at 48% 108%, rgb(25 69 180 / 34%), transparent 70%),
+    radial-gradient(32% 34% at 38% 52%, rgb(64 58 180 / 18%), transparent 72%),
+    #03050e;
+  animation: cosmos-drift 32s var(--ease-in-out) infinite alternate;
+  will-change: transform;
+}
+
+.cosmos__nebula {
+  position: absolute;
+  left: 50%;
+  top: 12%;
+  width: 110vw;
+  height: 70vh;
+  transform: translateX(-50%) rotate(-7deg);
+  background:
+    radial-gradient(38% 50% at 50% 46%, rgb(70 120 255 / 22%), transparent 70%),
+    radial-gradient(28% 44% at 42% 54%, rgb(139 92 246 / 18%), transparent 70%);
+  opacity: 0.9;
+}
+
+.cosmos__stars {
+  position: absolute;
+  inset: -8%;
+  opacity: 0.75;
+  background-image:
+    radial-gradient(1.4px 1.4px at 8% 14%, rgb(239 246 255 / 90%), transparent 60%),
+    radial-gradient(1px 1px at 21% 38%, rgb(196 218 255 / 70%), transparent 60%),
+    radial-gradient(1.6px 1.6px at 37% 12%, rgb(255 255 255 / 85%), transparent 60%),
+    radial-gradient(1px 1px at 52% 64%, rgb(196 218 255 / 60%), transparent 60%),
+    radial-gradient(1.3px 1.3px at 68% 26%, rgb(232 242 255 / 80%), transparent 60%),
+    radial-gradient(1px 1px at 81% 72%, rgb(190 210 255 / 60%), transparent 60%),
+    radial-gradient(1.5px 1.5px at 94% 18%, rgb(250 252 255 / 85%), transparent 60%),
+    radial-gradient(1px 1px at 12% 82%, rgb(190 210 255 / 55%), transparent 60%),
+    radial-gradient(1.2px 1.2px at 44% 90%, rgb(232 242 255 / 70%), transparent 60%),
+    radial-gradient(1px 1px at 73% 92%, rgb(196 218 255 / 60%), transparent 60%);
+  background-size: 760px 680px;
+  mask-image: radial-gradient(86% 86% at 50% 44%, #000 20%, transparent 92%);
+  -webkit-mask-image: radial-gradient(86% 86% at 50% 44%, #000 20%, transparent 92%);
+}
+
+.cosmos__stars--near {
+  opacity: 0.45;
+  background-size: 430px 390px;
+  transform: rotate(3deg) scale(1.08);
+}
+
+.cosmos__arc {
+  position: absolute;
+  left: 50%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgb(120 165 255 / 16%);
+  box-shadow:
+    0 0 90px rgb(50 105 255 / 18%),
+    inset 0 0 100px rgb(50 105 255 / 8%);
+  pointer-events: none;
+}
+
+.cosmos__arc--one {
+  top: 62%;
+  width: 176vw;
+  transform: translate(-50%, -50%);
+  border-top-color: rgb(197 218 255 / 55%);
+  border-right-color: rgb(139 92 246 / 26%);
+  opacity: 0.85;
+}
+
+.cosmos__arc--two {
+  top: 30%;
+  width: 128vw;
+  transform: translate(-50%, -50%) rotate(-11deg);
+  border-left-color: rgb(139 92 246 / 42%);
+  border-bottom-color: rgb(90 140 255 / 12%);
+  opacity: 0.55;
+}
+
+.cosmos__horizon {
+  position: absolute;
+  left: 50%;
+  bottom: -28%;
+  width: 170%;
+  height: 56%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 10%, rgb(66 120 255 / 24%), transparent 62%);
+  opacity: 0.9;
+}
+
+.cosmos__orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 25%, #f4f8ff, #8bb2ff 14%, #3155c9 45%, #060b1d 82%);
+  box-shadow:
+    0 0 90px rgb(70 130 255 / 42%),
+    inset -18px -20px 50px rgb(0 0 0 / 65%);
+  opacity: 0.82;
+}
+
+.cosmos__orb::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 175%;
+  height: 34%;
+  transform: translate(-50%, -50%) rotate(-22deg);
+  border: 1px solid rgb(190 214 255 / 42%);
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgb(90 150 255 / 28%);
+}
+
+.cosmos__orb--one {
+  top: 15%;
+  right: 4%;
+  width: clamp(120px, 14vw, 230px);
+  aspect-ratio: 1;
+  animation: orb-float 16s var(--ease-in-out) infinite alternate;
+}
+
+.cosmos__orb--two {
+  left: 7%;
+  bottom: 12%;
+  width: clamp(54px, 6vw, 92px);
+  aspect-ratio: 1;
+  opacity: 0.55;
+  animation: orb-float 21s var(--ease-in-out) -6s infinite alternate-reverse;
+}
+
+.cosmos__axis {
+  position: absolute;
+  background: linear-gradient(90deg, transparent, rgb(146 180 255 / 16%), transparent);
+  opacity: 0.5;
+}
+
+.cosmos__axis--x {
+  top: 49%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+}
+
+.cosmos__axis--y {
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, rgb(146 180 255 / 12%), transparent);
+}
+
+/* ------------------------------------------------------------- page plates */
+
+.hero,
+.survey,
+.atlas,
+.commands,
+.close {
+  background: transparent;
+  background-image: none;
+}
+
+.hero__field {
+  background: transparent;
+}
+
+.survey__map {
+  background: rgb(4 7 18 / 30%);
+}
+
+.hero__shade {
+  background:
+    linear-gradient(90deg, rgb(3 5 14 / 96%) 0%, rgb(3 5 14 / 86%) 34%, rgb(3 5 14 / 36%) 64%, transparent 86%),
+    linear-gradient(0deg, var(--chassis) 0%, transparent 32%),
+    linear-gradient(180deg, rgb(3 5 14 / 45%) 0%, transparent 22%);
+}
+
+.hero__stage::before {
+  inset: auto auto 12% 53%;
+  width: 1px;
+  height: 66%;
+  background: linear-gradient(180deg, transparent, rgb(130 180 255 / 55%), transparent);
+  box-shadow: 0 0 34px rgb(70 130 255 / 45%);
+}
+
+.hero__stage::after {
+  content: "";
+  position: absolute;
+  top: 5%;
+  right: -16%;
+  z-index: 2;
+  width: min(76vw, 1080px);
+  aspect-ratio: 1;
+  border: 1px solid rgb(150 190 255 / 20%);
+  border-top-color: rgb(200 222 255 / 45%);
+  border-radius: 50%;
+  box-shadow:
+    0 0 100px rgb(62 120 255 / 16%),
+    inset 0 0 90px rgb(70 120 255 / 10%);
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.hero__stage > .mystic,
+.hero__stage > .cosmos {
+  display: none;
+}
+
+/* --------------------------------------------------------------- top rail */
+
+.mast {
+  background: linear-gradient(180deg, rgb(13 21 48 / 62%), rgb(5 9 22 / 72%));
+  border: 1px solid var(--glass-edge);
+  border-radius: 22px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 12%),
+    0 24px 70px -44px rgb(45 100 255 / 75%);
+}
+
+.mast__word {
+  text-shadow: 0 0 26px rgb(80 140 255 / 45%);
+}
+
+.mast__nav {
+  background: rgb(255 255 255 / 3%);
+  border-color: rgb(160 190 255 / 16%);
+}
+
+.mast__link[aria-current="true"] {
+  background: linear-gradient(135deg, rgb(43 82 190 / 55%), rgb(88 76 190 / 42%));
+  box-shadow:
+    inset 0 0 0 1px rgb(160 195 255 / 28%),
+    0 0 24px -10px rgb(70 130 255 / 80%);
+}
+
+.mast__progress {
+  background: linear-gradient(90deg, transparent, #6f9cff, #a78bfa, transparent);
+  box-shadow: 0 0 16px rgb(80 140 255 / 60%);
+}
+
+/* --------------------------------------------------------------- type */
+
+.hero__title {
+  font-family: var(--display);
+  font-size: clamp(3.4rem, 6vw, 6.7rem);
+  font-weight: 600;
+  line-height: 0.91;
+  letter-spacing: -0.045em;
+  color: #f3f7ff;
+  text-shadow: 0 0 70px rgb(70 130 255 / 14%);
+}
+
+.hero__title .accent-text {
+  font-family: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--display);
+  color: #f3f7ff;
+  text-shadow: 0 0 56px rgb(70 130 255 / 10%);
+}
+
+.atlas__head h2,
+.commands__head h2 {
+  font-size: clamp(3.1rem, 6vw, 5.8rem);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+}
+
+.hero__methodHead h2 {
+  font-size: clamp(2.8rem, 5vw, 4.7rem);
+}
+
+.survey__head h2 {
+  font-size: clamp(2.2rem, 3.1vw, 3.2rem);
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 13px;
+  border: 1px solid rgb(160 190 255 / 18%);
+  border-radius: 999px;
+  background: rgb(10 18 40 / 42%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #aebde2;
+}
+
+.kicker::before {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #7aa2ff;
+  box-shadow: 0 0 10px rgb(110 160 255 / 90%);
+}
+
+/* --------------------------------------------------------------- intro */
+
+.atlas__head,
+.commands__head,
+.hero__methodHead {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  text-align: center;
+}
+
+.atlas__head > div,
+.atlas__headSide,
+.commands__head > div,
+.commands__headSide,
+.hero__methodHead > div {
+  max-width: min(880px, 100%);
+}
+
+.atlas__head h2,
+.commands__head h2 {
+  margin-top: 18px;
+}
+
+.atlas__head .kicker,
+.commands__head .kicker,
+.hero__methodHead .kicker {
+  margin-inline: auto;
+}
+
+.atlas__pull {
+  max-width: 52ch;
+  margin: 20px auto 0;
+  color: var(--chalk-2);
+  font-size: 1.0625rem;
+}
+
+.atlas__headSide,
+.commands__headSide {
+  margin-top: 22px;
+}
+
+.atlas__lede,
+.commands__lede {
+  margin-inline: auto;
+  color: var(--chalk-2);
+}
+
+.atlas__source,
+.commands__source {
+  margin-top: 12px;
+  color: var(--mute);
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.atlas__metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: min(640px, 100%);
+  margin: 26px auto 0;
+  padding: 0;
+  border: 0;
+}
+
+.atlas__metrics > div {
+  padding: 14px 16px;
+  border: 1px solid var(--glass-edge);
+  border-radius: 18px;
+  background: linear-gradient(155deg, rgb(17 28 64 / 58%), rgb(5 9 22 / 70%));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 8%),
+    0 18px 44px -34px rgb(60 110 255 / 80%);
+  text-align: left;
+}
+
+.atlas__metrics dd {
+  color: #f1f5ff;
+  font-size: 2.2rem;
+}
+
+.commands__headSide {
+  padding-bottom: 0;
+}
+
+.commands__lede {
+  max-width: 60ch;
+}
+
+.hero__methodHead > p {
+  max-width: 54ch;
+  margin: 16px auto 0;
+  color: var(--chalk-2);
+}
+
+/* --------------------------------------------------------------- glass */
+
+.hero__hud,
+.survey__aside,
+.atlas__inspect,
+.atlas__panel,
+.commands__builder,
+.terminal,
+.commands__note {
+  border: 1px solid var(--glass-edge);
+  border-radius: 24px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+}
+
+.hero__hud,
+.survey__aside,
+.atlas__inspect,
+.commands__builder,
+.commands__note {
+  background: var(--glass-bg);
+}
+
+.atlas__panel {
+  background: linear-gradient(160deg, rgb(8 14 34 / 82%), rgb(4 7 17 / 88%));
+  backdrop-filter: blur(18px) saturate(130%);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+}
+
+.terminal {
+  background:
+    linear-gradient(rgb(120 150 255 / 2.2%) 1px, transparent 1px) 0 0 / 26px 26px,
+    linear-gradient(90deg, rgb(120 150 255 / 2.2%) 1px, transparent 1px) 0 0 / 26px 26px,
+    linear-gradient(155deg, rgb(12 20 48 / 76%), rgb(4 8 20 / 84%)),
+    #060a15;
+  border-color: rgb(140 175 255 / 26%);
+}
+
+.hero__hud,
+.survey__aside,
+.atlas__inspect {
+  border-radius: 22px;
+}
+
+.hero__hudKicker {
+  background: linear-gradient(90deg, #2346b6, #483eaf);
+  color: #f2f5ff;
+  border-bottom: 1px solid rgb(160 190 255 / 22%);
+}
+
+.survey__aside::before,
+.atlas__inspect::before {
+  background: linear-gradient(90deg, #6f9cff, #a78bfa);
+  box-shadow: 0 0 20px rgb(95 140 255 / 55%);
+}
+
+.survey__aside::after,
+.atlas__inspect::after,
+.commands__builder::after {
+  border-radius: 16px;
+  opacity: 0.7;
+  background:
+    linear-gradient(#8db4ff, #8db4ff) left top / 16px 1px no-repeat,
+    linear-gradient(#8db4ff, #8db4ff) left top / 1px 16px no-repeat,
+    linear-gradient(#a78bfa, #a78bfa) right bottom / 16px 1px no-repeat,
+    linear-gradient(#a78bfa, #a78bfa) right bottom / 1px 16px no-repeat;
+}
+
+.dossier__card {
+  border-top-color: rgb(150 180 255 / 16%);
+}
+
+.dossier__arn,
+.dossier__evidence {
+  background: rgb(4 8 20 / 45%);
+  border-color: rgb(140 170 255 / 16%);
+}
+
+.dossier__route[aria-current="true"] {
+  background: rgb(70 110 230 / 10%);
+}
+
+.dossier__detail {
+  border-left-color: rgb(140 170 255 / 18%);
+}
+
+.atlas__table thead th {
+  background: rgb(5 10 24 / 86%);
+  border-bottom-color: rgb(150 180 255 / 16%);
+}
+
+.atlas__group th {
+  background: rgb(70 100 200 / 9%);
+  border-color: rgb(140 170 255 / 14%);
+}
+
+.atlas__row {
+  border-bottom-color: rgb(140 170 255 / 12%);
+}
+
+.atlas__row[data-selected="true"] {
+  background: rgb(90 130 255 / 8%);
+}
+
+.atlas__cell:hover {
+  background: rgb(90 130 255 / 7%);
+}
+
+.hero__stats {
+  padding: 2px 16px;
+  border: 1px solid var(--glass-edge);
+  border-radius: 18px;
+  background: rgb(8 14 34 / 42%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.hero__stats li {
+  border-left-color: rgb(150 180 255 / 16%);
+}
+
+.hero__statValue {
+  color: #f3f7ff;
+}
+
+.method {
+  gap: 12px;
+  border-top: 0;
+}
+
+.method__step {
+  border: 1px solid var(--glass-edge);
+  border-radius: 20px;
+  background: linear-gradient(155deg, rgb(18 30 68 / 56%), rgb(5 9 22 / 68%));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 8%),
+    0 20px 50px -40px rgb(60 110 255 / 70%);
+}
+
+.method__step:first-child,
+.method__step:last-child {
+  padding: 18px;
+  border-left: 1px solid var(--glass-edge);
+}
+
+.method__step:hover {
+  border-color: rgb(160 195 255 / 38%);
+  background: linear-gradient(155deg, rgb(25 40 88 / 62%), rgb(6 11 26 / 72%));
+}
+
+.close__facts {
+  gap: 8px;
+  border: 0;
+  overflow: visible;
+}
+
+.close__facts li {
+  border: 1px solid var(--glass-edge);
+  border-radius: 18px;
+  background: linear-gradient(155deg, rgb(17 28 64 / 50%), rgb(5 9 22 / 66%));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.close__facts li:first-child {
+  border-left: 1px solid var(--glass-edge);
+}
+
+.faq {
+  margin-bottom: 8px;
+  border: 1px solid rgb(150 180 255 / 14%);
+  border-radius: 16px;
+  background: rgb(6 11 26 / 38%);
+  padding-inline: 16px;
+}
+
+.faq[open] {
+  background: linear-gradient(135deg, rgb(40 76 170 / 16%), rgb(5 9 22 / 42%));
+}
+
+.close__footer {
+  background: rgb(4 8 20 / 62%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* --------------------------------------------------------------- controls */
+
+.btn {
+  border-radius: 999px;
+  min-height: 44px;
+  padding: 0 20px;
+  font-family: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  box-shadow: none;
+}
+
+.btn--signal {
+  border-color: rgb(190 214 255 / 45%);
+  background: linear-gradient(135deg, #2c62ff 0%, #536dff 44%, #8b5cf6 100%);
+  color: #fbfdff;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 24%),
+    0 14px 40px -18px rgb(80 120 255 / 90%),
+    0 0 38px -16px rgb(139 92 246 / 80%);
+}
+
+.btn--signal:hover {
+  border-color: rgb(210 226 255 / 70%);
+  background: linear-gradient(135deg, #3a72ff 0%, #6b81ff 44%, #a275ff 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 30%),
+    0 18px 50px -16px rgb(90 130 255 / 95%),
+    0 0 48px -14px rgb(150 105 255 / 90%);
+}
+
+.btn--line {
+  border: 1px solid rgb(160 190 255 / 26%);
+  background: rgb(9 16 38 / 38%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #dfe9ff;
+}
+
+.btn--line:hover {
+  border-color: rgb(180 205 255 / 54%);
+  background: rgb(16 28 60 / 52%);
+  color: #f3f7ff;
+}
+
+.btn svg {
+  box-sizing: content-box;
+  padding: 4px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 12%);
+}
+
+.survey__control,
+.survey__reset,
+.hoprail__play {
+  border: 1px solid rgb(160 190 255 / 24%);
+  background: rgb(8 14 34 / 44%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 8%);
+}
+
+.hoprail__play {
+  background: linear-gradient(135deg, #2e65ff, #7b5cf0);
+  border-color: rgb(190 214 255 / 42%);
+  box-shadow: 0 0 30px -12px rgb(100 130 255 / 90%);
+}
+
+.hoprail__hop {
+  border-radius: 12px;
+  border-color: rgb(160 190 255 / 20%);
+  background: rgb(8 14 34 / 38%);
+}
+
+.hoprail__hop[aria-current="true"] {
+  border-color: rgb(170 200 255 / 60%);
+  background: linear-gradient(135deg, #2e65ff, #6d5cf0);
+  color: #f8fbff;
+  box-shadow: 0 0 26px -12px rgb(100 140 255 / 90%);
+}
+
+.survey__sever {
+  border-color: rgb(255 118 150 / 48%);
+  background: rgb(60 18 40 / 28%);
+  color: #ff9cb5;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.survey__sever:hover,
+.survey__sever[aria-pressed="true"] {
+  background: linear-gradient(135deg, #6d203b, #b84266);
+  color: #fff2f6;
+}
+
+.atlas__filters {
+  border: 1px solid rgb(160 190 255 / 16%);
+  background: rgb(7 12 28 / 38%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.atlas__filter {
+  border-radius: 999px;
+}
+
+.atlas__filter[aria-pressed="true"] {
+  border: 0;
+  background: linear-gradient(135deg, rgb(48 86 190 / 60%), rgb(94 76 190 / 52%));
+  box-shadow:
+    inset 0 0 0 1px rgb(175 205 255 / 30%),
+    0 0 26px -12px rgb(80 130 255 / 80%);
+  color: #f7faff;
+}
+
+.commands__verb {
+  border-color: rgb(150 180 255 / 18%);
+  border-radius: 14px;
+  background: rgb(7 12 28 / 32%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.commands__verb[aria-pressed="true"] {
+  border-color: rgb(160 195 255 / 44%);
+  background: linear-gradient(135deg, rgb(44 82 190 / 48%), rgb(96 76 190 / 36%));
+  box-shadow: 0 0 26px -14px rgb(80 130 255 / 72%);
+}
+
+.commands__format {
+  border: 1px solid rgb(150 180 255 / 16%);
+  background: rgb(7 12 28 / 32%);
+}
+
+.commands__format[aria-pressed="true"],
+.commands__format[data-on="true"] {
+  border-color: rgb(160 195 255 / 42%);
+  background: linear-gradient(135deg, rgb(44 82 190 / 44%), rgb(96 76 190 / 32%));
+}
+
+.commands__copy,
+.dossier__hop,
+.dossier__restore {
+  border-color: rgb(160 190 255 / 24%);
+  background: rgb(8 14 34 / 42%);
+  color: #dbe6ff;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.commands__copy:hover,
+.dossier__hop:hover:not(:disabled),
+.dossier__restore:hover {
+  border-color: rgb(170 200 255 / 52%);
+  color: #f2f7ff;
+}
+
+.terminal__rec {
+  border-color: rgb(230 184 106 / 50%);
+  background: rgb(230 184 106 / 6%);
+  color: var(--gold);
+}
+
+.terminal__rec span {
+  background: var(--gold);
+}
+
+.terminal__title {
+  color: #f0f4ff;
+}
+
+.terminal__body,
+.terminal__pre,
+.terminal__line {
+  color: #e8eeff;
+}
+
+.terminal__line::before {
+  color: #7c8db8;
+}
+
+.terminal__foot {
+  border-top-color: rgb(150 180 255 / 16%);
+  background: rgb(4 8 20 / 52%);
+  color: #93a4cd;
+}
+
+.terminal__foot strong {
+  color: #f2f6ff;
+}
+
+/* --------------------------------------------------------------- detail */
+
+.atlas__inspect {
+  background: linear-gradient(155deg, rgb(16 26 60 / 62%), rgb(5 9 22 / 74%));
+}
+
+.atlas__dial::after {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 58%,
+    #7aa2ff 70%,
+    #a78bfa 82%,
+    transparent 90%
+  );
+}
+
+.atlas__fix,
+.dossier__fix {
+  border-left: 2px solid #7aa2ff;
+  background: rgb(50 80 180 / 10%);
+}
+
+.atlas__picked {
+  border-color: rgb(255 118 150 / 44%);
+  background: rgb(255 118 150 / 7%);
+}
+
+.atlas__bodyKey,
+.atlas__legend {
+  background: rgb(4 8 20 / 38%);
+  border-top-color: rgb(150 180 255 / 14%);
+}
+
+/* --------------------------------------------------------------- res */
+
+.close__zeroDial {
+  border: 1px solid rgb(150 190 255 / 22%);
+  border-radius: 28px;
+  box-shadow:
+    0 0 80px -30px rgb(70 130 255 / 55%),
+    inset 0 0 0 1px rgb(255 255 255 / 4%);
+}
+
+.close__zeroLabel b {
+  color: var(--gold);
+}
+
+.close__nav button {
+  border-radius: 10px;
+}
+
+/* --------------------------------------------------------------- motion */
+
+@keyframes cosmos-drift {
+  to {
+    transform: translate3d(-3%, 3%, 0) scale(1.05);
+  }
+}
+
+@keyframes orb-float {
+  to {
+    transform: translate3d(-10px, 14px, 0) scale(1.03);
+  }
+}
+
+html[data-motion="off"] .cosmos__mesh,
+html[data-motion="off"] .cosmos__orb {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cosmos__mesh,
+  .cosmos__orb {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------- breakpoints */
+
+@media (max-width: 1100px) {
+  .atlas__head h2,
+  .commands__head h2 {
+    font-size: clamp(2.9rem, 8vw, 4.6rem);
+  }
+
+  .cosmos__orb--one {
+    opacity: 0.55;
+  }
+}
+
+@media (max-width: 900px) {
+  .mast {
+    border-radius: 16px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .hero__stage::after {
+    right: -45%;
+    width: 105vw;
+    opacity: 0.6;
+  }
+
+  .atlas__head h2,
+  .commands__head h2 {
+    font-size: clamp(2.6rem, 9vw, 3.8rem);
+  }
+
+  .cosmos__orb--two {
+    display: none;
+  }
+
+  .method__step,
+  .atlas__metrics > div,
+  .close__facts li {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .atlas__metrics {
+    width: 100%;
+  }
+
+  .atlas__metrics > div {
+    padding: 12px;
+  }
+
+  .atlas__metrics dd {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero__title {
+    font-size: clamp(2.9rem, 13vw, 4.4rem);
+  }
+
+  .atlas__head h2,
+  .commands__head h2 {
+    font-size: clamp(2.3rem, 10vw, 3.4rem);
+  }
+
+  .atlas__metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .atlas__metrics dt {
+    font-size: 0.875rem;
+  }
+
+  .atlas__metrics dd {
+    font-size: 1.45rem;
+  }
+
+  .atlas__metrics .spaceCount {
+    --glyph: 30px;
+  }
+
+  .hero__stats {
+    padding: 0 12px;
+  }
+
+  .cosmos__orb--one {
+    top: 8%;
+    right: -14%;
+    opacity: 0.35;
+  }
+
+  .cosmos__arc--one {
+    width: 230vw;
+  }
+
+  .hero__stage::after {
+    display: none;
+  }
+
+  .faq {
+    padding-inline: 12px;
+  }
+}
+/* The fleet is larger than the side rail can hold. The matrix takes the full
+   width; the selected technique becomes a detail plate underneath. */
+.atlas__layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.atlas__panel {
+  width: 100%;
+}
+
+.atlas__inspector {
+  width: min(1040px, 100%);
+  margin: 0 auto;
+}
+
+.atlas__inspect {
+  width: 100%;
+}
+
+.atlas__bars {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px 26px;
+}
+
+.atlas__barName {
+  min-width: 86px;
+}
+
+.atlas__summary,
+.atlas__reachText {
+  max-width: 74ch;
+}
+
+@media (max-width: 720px) {
+  .atlas__bars {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Keep the matrix readable on a phone: a narrower sticky label column that
+     wraps instead of clipping, and wider account columns so a swipe lands on a
+     full body rather than a sliver. */
+  .atlas__table {
+    min-width: 1180px;
+  }
+
+  .atlas__thTech,
+  .atlas__techCell {
+    width: 226px;
+    min-width: 226px;
+    max-width: 226px;
+  }
+
+  .atlas__tech {
+    min-height: 46px;
+    padding-left: 12px;
+    padding-right: 10px;
+  }
+
+  .atlas__techName {
+    max-width: none;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    line-height: 1.25;
+  }
+
+  .atlas__techTotal {
+    display: none;
+  }
+
+  .atlas__thTotal {
+    display: none;
+  }
+}

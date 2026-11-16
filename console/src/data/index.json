@@ -1,0 +1,361 @@
+{
+  "generated": "2026-11-16T18:48:43+00:00",
+  "engine": {
+    "name": "apsis",
+    "version": "0.2.0"
+  },
+  "scenarios": [
+    {
+      "key": "ci-cd",
+      "title": "Delivery pipeline, before the PR",
+      "stats": {
+        "identities": 6,
+        "resources": 1,
+        "edges": 2,
+        "sourcesWithPath": 0,
+        "sources": 4,
+        "routes": 0,
+        "shortest": null,
+        "admins": [
+          "Platform admin",
+          "Break glass"
+        ]
+      },
+      "sever": {
+        "routesBefore": 0,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "ci-cd-after",
+      "title": "Delivery pipeline, after the PR",
+      "stats": {
+        "identities": 6,
+        "resources": 1,
+        "edges": 3,
+        "sourcesWithPath": 2,
+        "sources": 4,
+        "routes": 2,
+        "shortest": 1,
+        "admins": [
+          "Platform admin",
+          "Break glass"
+        ]
+      },
+      "sever": {
+        "routesBefore": 2,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "enterprise",
+      "title": "Enterprise account, inherited",
+      "stats": {
+        "identities": 14,
+        "resources": 1,
+        "edges": 10,
+        "sourcesWithPath": 7,
+        "sources": 10,
+        "routes": 10,
+        "shortest": 1,
+        "admins": [
+          "SecOps lead",
+          "Deploy admin",
+          "Break glass"
+        ]
+      },
+      "sever": {
+        "routesBefore": 7,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "fintech",
+      "title": "Fintech ledger, post-series-C",
+      "stats": {
+        "identities": 15,
+        "resources": 1,
+        "edges": 16,
+        "sourcesWithPath": 8,
+        "sources": 13,
+        "routes": 13,
+        "shortest": 1,
+        "admins": [
+          "Platform administrator"
+        ]
+      },
+      "sever": {
+        "routesBefore": 8,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "games-studio",
+      "title": "Games studio, live services",
+      "stats": {
+        "identities": 15,
+        "resources": 2,
+        "edges": 16,
+        "sourcesWithPath": 9,
+        "sources": 13,
+        "routes": 15,
+        "shortest": 1,
+        "admins": [
+          "Studio administrator"
+        ]
+      },
+      "sever": {
+        "routesBefore": 9,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "gov-contractor",
+      "title": "Federal contractor, benefits portal",
+      "stats": {
+        "identities": 13,
+        "resources": 2,
+        "edges": 12,
+        "sourcesWithPath": 7,
+        "sources": 12,
+        "routes": 7,
+        "shortest": 1,
+        "admins": [
+          "Agency administrator"
+        ]
+      },
+      "sever": {
+        "routesBefore": 7,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "healthcare",
+      "title": "Health network, claims platform",
+      "stats": {
+        "identities": 14,
+        "resources": 1,
+        "edges": 15,
+        "sourcesWithPath": 8,
+        "sources": 12,
+        "routes": 18,
+        "shortest": 1,
+        "admins": [
+          "Health platform admin"
+        ]
+      },
+      "sever": {
+        "routesBefore": 8,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "legacy",
+      "title": "Legacy account, never migrated",
+      "stats": {
+        "identities": 8,
+        "resources": 0,
+        "edges": 4,
+        "sourcesWithPath": 4,
+        "sources": 7,
+        "routes": 4,
+        "shortest": 1,
+        "admins": [
+          "Legacy admin"
+        ]
+      },
+      "sever": {
+        "routesBefore": 4,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "logistics",
+      "title": "Logistics network, 24/7 operations",
+      "stats": {
+        "identities": 12,
+        "resources": 1,
+        "edges": 7,
+        "sourcesWithPath": 3,
+        "sources": 8,
+        "routes": 4,
+        "shortest": 1,
+        "admins": [
+          "Org admin",
+          "Break glass user"
+        ]
+      },
+      "sever": {
+        "routesBefore": 3,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "media",
+      "title": "Media network, live events",
+      "stats": {
+        "identities": 15,
+        "resources": 1,
+        "edges": 16,
+        "sourcesWithPath": 8,
+        "sources": 13,
+        "routes": 13,
+        "shortest": 1,
+        "admins": [
+          "Platform administrator"
+        ]
+      },
+      "sever": {
+        "routesBefore": 8,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "ml-platform",
+      "title": "ML platform, outsourced labeling",
+      "stats": {
+        "identities": 12,
+        "resources": 1,
+        "edges": 9,
+        "sourcesWithPath": 4,
+        "sources": 9,
+        "routes": 4,
+        "shortest": 1,
+        "admins": [
+          "ML admins group",
+          "Platform admin"
+        ]
+      },
+      "sever": {
+        "routesBefore": 4,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "multi-account",
+      "title": "Multi-account platform",
+      "stats": {
+        "identities": 12,
+        "resources": 1,
+        "edges": 7,
+        "sourcesWithPath": 3,
+        "sources": 8,
+        "routes": 4,
+        "shortest": 1,
+        "admins": [
+          "Org admin",
+          "Break glass user"
+        ]
+      },
+      "sever": {
+        "routesBefore": 3,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "platform",
+      "title": "Platform group, regulated workloads",
+      "stats": {
+        "identities": 13,
+        "resources": 2,
+        "edges": 12,
+        "sourcesWithPath": 7,
+        "sources": 12,
+        "routes": 7,
+        "shortest": 1,
+        "admins": [
+          "Agency administrator"
+        ]
+      },
+      "sever": {
+        "routesBefore": 7,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "research",
+      "title": "Research lab, grant funded",
+      "stats": {
+        "identities": 14,
+        "resources": 1,
+        "edges": 15,
+        "sourcesWithPath": 8,
+        "sources": 12,
+        "routes": 18,
+        "shortest": 1,
+        "admins": [
+          "Health platform admin"
+        ]
+      },
+      "sever": {
+        "routesBefore": 8,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "retail",
+      "title": "Retail marketplace, post-acquisition",
+      "stats": {
+        "identities": 14,
+        "resources": 1,
+        "edges": 10,
+        "sourcesWithPath": 7,
+        "sources": 10,
+        "routes": 10,
+        "shortest": 1,
+        "admins": [
+          "SecOps lead",
+          "Deploy admin",
+          "Break glass"
+        ]
+      },
+      "sever": {
+        "routesBefore": 7,
+        "routesAfter": 0,
+        "closed": true
+      }
+    },
+    {
+      "key": "startup",
+      "title": "Series A SaaS startup",
+      "stats": {
+        "identities": 11,
+        "resources": 2,
+        "edges": 9,
+        "sourcesWithPath": 6,
+        "sources": 8,
+        "routes": 15,
+        "shortest": 1,
+        "admins": [
+          "Platform admin",
+          "Security admin"
+        ]
+      },
+      "sever": {
+        "routesBefore": 6,
+        "routesAfter": 0,
+        "closed": true
+      }
+    }
+  ],
+  "totals": {
+    "identities": 194,
+    "edges": 163,
+    "routes": 144,
+    "fixtures": 16
+  }
+}

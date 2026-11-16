@@ -1,0 +1,440 @@
+/* Opaque instrument surfaces. No glassmorphism: matte obsidian, hairline
+   structure, one cold top light. */
+
+.mast {
+  background: #010207;
+  box-shadow:
+    0 1px 0 rgb(190 210 255 / 8%),
+    0 22px 60px -48px rgb(0 0 0 / 95%);
+}
+
+.hero__hud,
+.hero__stats li,
+.survey__bar,
+.survey__aside,
+.dossier__card,
+.hoprail,
+.survey__controls,
+.survey__select select,
+.atlas__panel,
+.atlas__inspect,
+.atlas__filters,
+.commands__builder,
+.terminal,
+.commands__note,
+.close__facts li,
+.close__faq .faq {
+  background:
+    linear-gradient(180deg, rgb(155 184 255 / 3.5%), transparent 34%),
+    linear-gradient(160deg, #050810 0%, #03060c 56%, #010207 100%);
+  border-color: rgb(190 210 255 / 12%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 5%),
+    0 22px 55px -44px rgb(0 0 0 / 94%);
+}
+
+.hero__hud::after,
+.survey__aside::after,
+.dossier__card::after,
+.hoprail::after,
+.survey__controls::after,
+.atlas__inspect::after,
+.commands__builder::after,
+.terminal::after,
+.commands__note::after,
+.close__facts li::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image:
+    linear-gradient(rgb(190 210 255 / 2.2%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(190 210 255 / 2.2%) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(180deg, #000, transparent 72%);
+  -webkit-mask-image: linear-gradient(180deg, #000, transparent 72%);
+  opacity: 0.5;
+}
+
+.terminal::after {
+  background-image:
+    repeating-linear-gradient(180deg, rgb(255 255 255 / 2.5%) 0 1px, transparent 1px 3px),
+    linear-gradient(rgb(190 210 255 / 2.2%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(190 210 255 / 2.2%) 1px, transparent 1px);
+  background-size: 100% 3px, 32px 32px, 32px 32px;
+  mask-image: linear-gradient(180deg, #000, transparent 86%);
+  -webkit-mask-image: linear-gradient(180deg, #000, transparent 86%);
+  opacity: 0.55;
+}
+
+.hero__stats li,
+.close__facts li {
+  position: relative;
+  overflow: hidden;
+}
+
+.survey__frame,
+.survey__map,
+.atlas__panel,
+.atlas__inspect,
+.terminal,
+.commands__builder {
+  background-clip: padding-box;
+}
+
+.atlas__cell {
+  background-color: rgb(255 255 255 / 0.01);
+}
+
+.survey__select select {
+  background: #010207;
+}
+
+.mast__progress {
+  height: 1px;
+}
+/* ------------------------------------------------------- open instruments
+   Not every number needs a box. These rails use rules and spacing instead
+   of cards, which reads as a scientific console rather than a game HUD. */
+
+.hero__stats {
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.hero__stats li {
+  padding: 14px 18px;
+  border: 0;
+  border-left: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.hero__stats li:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.hero__stats li:hover {
+  background: rgb(155 184 255 / 3%);
+  box-shadow: none;
+  transform: none;
+}
+
+.hero__stats li::before,
+.hero__stats li::after {
+  display: none;
+}
+
+.hero__hud {
+  padding: 14px 16px 14px 18px;
+  border: 0;
+  border-left: 1px solid rgb(190 210 255 / 28%);
+  border-radius: 0;
+  background: linear-gradient(90deg, rgb(5 7 15 / 92%), rgb(5 7 15 / 58%));
+  box-shadow: none;
+}
+
+.hero__hud::after {
+  display: none;
+}
+
+.survey__aside {
+  border: 0;
+  border-left: 1px solid var(--rule);
+  border-radius: 0;
+  background: linear-gradient(90deg, rgb(5 7 15 / 94%), rgb(5 7 15 / 78%));
+  box-shadow: none;
+}
+
+.survey__aside::after {
+  display: none;
+}
+
+.dossier__card {
+  margin: 0;
+  padding: 16px 0;
+  border: 0;
+  border-top: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.dossier__card:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.dossier__card::after {
+  display: none;
+}
+
+.dossier__card--node {
+  background: transparent;
+}
+
+.hoprail {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  border-radius: 0;
+  background: linear-gradient(180deg, rgb(5 7 15 / 88%), rgb(5 7 15 / 96%));
+  box-shadow: none;
+}
+
+.hoprail::after {
+  display: none;
+}
+
+.survey__controls {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.survey__controls::after {
+  display: none;
+}
+
+.survey__control {
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: rgb(5 7 15 / 72%);
+}
+
+.survey__control:hover {
+  background: rgb(155 184 255 / 6%);
+}
+
+.survey__reset {
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  padding: 2px 0;
+}
+
+.atlas__filters {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.atlas__filter {
+  padding: 8px 10px;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  background: transparent;
+}
+
+.atlas__filter[aria-pressed="true"] {
+  border: 0;
+  border-bottom-color: var(--signal);
+  background: transparent;
+  box-shadow: none;
+  color: var(--signal);
+}
+
+.atlas__panel {
+  border-radius: 4px;
+  border-color: var(--rule);
+  background: #010207;
+  box-shadow: none;
+}
+
+.atlas__cell {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.atlas__cell:hover {
+  background: rgb(155 184 255 / 4%);
+  box-shadow: inset 0 0 0 1px rgb(155 184 255 / 18%);
+}
+
+.atlas__cell[data-picked="true"] {
+  background: rgb(229 138 166 / 9%);
+  box-shadow: inset 0 0 0 1px rgb(229 138 166 / 52%);
+}
+
+.atlas__inspect {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding-top: 16px;
+}
+
+.atlas__inspect::after {
+  display: none;
+}
+
+.close__facts {
+  display: flex;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.close__facts li {
+  flex: 1 1 0;
+  padding: 12px 16px;
+  border: 0;
+  border-left: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.close__facts li:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.close__facts li::after {
+  display: none;
+}
+
+.close__faq .faq {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.faq__summary {
+  padding: 16px 0;
+}
+
+.commands__builder,
+.terminal,
+.commands__note {
+  border-radius: 4px;
+  border-color: var(--rule);
+  background: #010207;
+  box-shadow: none;
+}
+
+.commands__builder::after,
+.terminal::after,
+.commands__note::after {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .close__facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border: 0;
+  }
+  .close__facts li {
+    border: 1px solid var(--rule);
+    padding: 10px 12px;
+  }
+}
+@media (max-width: 720px) {
+  .atlas__thTech,
+  .atlas__techCell {
+    width: 300px;
+  }
+  .atlas__techName {
+    max-width: 205px;
+  }
+  .atlas__thTech .atlas__thTotal {
+    margin-left: auto;
+  }
+}
+@media (max-width: 720px) {
+  .atlas__thTech,
+  .atlas__techCell {
+    width: 330px;
+  }
+  .atlas__techName {
+    max-width: 235px;
+  }
+}
+/* ------------------------------------------------------- gradient controls */
+
+.survey__sever {
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, #070a14, #05070f) padding-box,
+    linear-gradient(100deg, rgb(229 138 166 / 72%), rgb(230 184 120 / 58%)) border-box;
+  color: #f0b9c8;
+  font-family: var(--text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  text-transform: none;
+}
+
+.survey__sever:hover,
+.survey__sever[aria-pressed="true"] {
+  background: var(--grad-hot);
+  color: #1a0710;
+  border-color: transparent;
+  box-shadow: 0 10px 26px -20px rgb(229 138 166 / 80%);
+}
+
+.atlas__filter[aria-pressed="true"] {
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background:
+    linear-gradient(90deg, #6f8cff, #a78bfa 52%, #7fd8c4) bottom / 100% 1px no-repeat;
+  color: var(--signal);
+  box-shadow: none;
+}
+
+.atlas__filter:hover {
+  color: var(--bone);
+}
+
+.commands__verb[aria-pressed="true"] {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(180deg, #070a14, #05070f) padding-box,
+    linear-gradient(100deg, #4f6ef2, #a78bfa) border-box;
+  color: var(--signal);
+  box-shadow: none;
+}
+
+.commands__format[aria-pressed="true"],
+.commands__format[data-on="true"] {
+  border-color: transparent;
+  background:
+    linear-gradient(180deg, #070a14, #05070f) padding-box,
+    linear-gradient(100deg, #4f6ef2, #7fd8c4) border-box;
+  color: var(--signal);
+}
+
+.hoprail__play,
+.hoprail__hop[aria-current="true"] {
+  background: var(--grad-blue);
+  border-color: rgb(214 224 255 / 42%);
+  box-shadow: 0 0 18px -8px rgb(111 140 255 / 65%);
+}
+
+.close__nav button:hover {
+  background: linear-gradient(90deg, rgb(111 140 255 / 6%), transparent);
+}
+
+@media (max-width: 720px) {
+  .survey__sever {
+    width: 100%;
+    justify-content: center;
+  }
+}

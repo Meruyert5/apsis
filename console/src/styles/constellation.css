@@ -1,0 +1,123 @@
+.constellation {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.constellation[data-variant="survey"] {
+  pointer-events: auto;
+}
+
+.constellation[data-variant="hero"] {
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.constellation__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+.constellation[data-variant="survey"] .constellation__canvas {
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.constellation__leaders {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.constellation__leaders line {
+  stroke: rgb(231 201 139 / 42%);
+  stroke-width: 1.2;
+  stroke-dasharray: 2 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.constellation__labels {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.constellation__label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  max-width: 218px;
+  padding: 4px 9px;
+  border: 1px solid rgb(138 166 230 / 30%);
+  border-radius: 0;
+  clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
+  background:
+    linear-gradient(150deg, rgb(138 166 230 / 11%), transparent 52%),
+    rgb(3 8 18 / 92%);
+  box-shadow:
+    0 8px 24px -18px rgb(0 0 0 / 90%),
+    0 0 14px -8px rgb(138 166 230 / 65%);
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--bone-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  transition: opacity var(--d-hover) linear, border-color var(--d-hover) linear;
+  will-change: transform;
+}
+
+.constellation__label[data-side="left"] {
+  text-align: right;
+}
+
+.constellation__label[data-visible="true"] {
+  opacity: 1;
+}
+
+.constellation__label[data-active="true"] {
+  border-color: rgb(138 166 230 / 65%);
+  color: var(--signal);
+  box-shadow:
+    0 8px 24px -18px rgb(0 0 0 / 90%),
+    0 0 18px -8px rgb(138 166 230 / 85%);
+}
+
+.constellation__label[data-admin="true"] {
+  border-color: rgb(255 177 61 / 55%);
+  color: var(--gold-lit);
+}
+
+.constellation__label[data-selected="true"] {
+  border-color: rgb(138 166 230 / 90%);
+  color: var(--bone);
+  box-shadow:
+    0 0 0 1px rgb(138 166 230 / 12%),
+    0 0 24px -8px rgb(138 166 230 / 80%);
+}
+
+@media (max-width: 720px) {
+  .constellation__leaders {
+    display: none;
+  }
+  .constellation__label {
+    display: none;
+  }
+  .constellation__label[data-selected="true"] {
+    display: inline-block;
+  }
+}

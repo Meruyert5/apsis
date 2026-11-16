@@ -1,0 +1,770 @@
+{
+  "generated": "2026-11-16T18:48:43+00:00",
+  "engine": {
+    "name": "apsis",
+    "version": "0.2.0"
+  },
+  "scenario": {
+    "name": "logistics",
+    "title": "Logistics network, 24/7 operations",
+    "summary": "A multi-account logistics platform where a vendor audit role and a break-glass user meet in the same trust graph.",
+    "accountId": "777700004444",
+    "region": "us-east-2",
+    "severity": "critical"
+  },
+  "stats": {
+    "identities": 12,
+    "resources": 1,
+    "edges": 7,
+    "sourcesWithPath": 3,
+    "sources": 8,
+    "routes": 4,
+    "shortest": 1,
+    "admins": [
+      "Org admin",
+      "Break glass user"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "__admin__",
+      "label": "Administrator",
+      "kind": "admin",
+      "admin": true,
+      "x": 0.9368,
+      "y": 0.7733,
+      "degree": 0,
+      "note": "",
+      "arn": "",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "ops",
+      "label": "Ops group",
+      "kind": "group",
+      "admin": false,
+      "x": 0.0721,
+      "y": 0.3829,
+      "degree": 1,
+      "note": "On-call deploy group.",
+      "arn": "arn:aws:iam::777700004444:group/ops",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "worker",
+      "label": "worker",
+      "kind": "lambda",
+      "admin": false,
+      "x": 0.0635,
+      "y": 0.8514,
+      "degree": 0,
+      "note": "",
+      "arn": "arn:aws:lambda:us-east-2:777700004444:function:worker",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "app-runtime",
+      "label": "App runtime",
+      "kind": "role",
+      "admin": false,
+      "x": 0.065,
+      "y": 0.1486,
+      "degree": 1,
+      "note": "Application execution role.",
+      "arn": "arn:aws:iam::777700004444:role/app-runtime",
+      "groups": [],
+      "trust": [
+        "lambda.amazonaws.com"
+      ]
+    },
+    {
+      "id": "audit-role",
+      "label": "Audit role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.6428,
+      "y": 0.295,
+      "degree": 2,
+      "note": "Reads the audit bundle and rotates the break-glass key.",
+      "arn": "arn:aws:iam::777700004444:role/audit-role",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700004444:root"
+      ]
+    },
+    {
+      "id": "deploy-role",
+      "label": "Deploy role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.0702,
+      "y": 0.2657,
+      "degree": 2,
+      "note": "Deployment role. Can write its own inline policy.",
+      "arn": "arn:aws:iam::777700004444:role/deploy-role",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700004444:root"
+      ]
+    },
+    {
+      "id": "org-admin",
+      "label": "Org admin",
+      "kind": "role",
+      "admin": true,
+      "x": 0.9292,
+      "y": 0.2267,
+      "degree": 2,
+      "note": "Organization administrator role.",
+      "arn": "arn:aws:iam::777700004444:role/org-admin",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700004444:role/terraform-ci",
+        "arn:aws:iam::777700004444:root"
+      ]
+    },
+    {
+      "id": "terraform-ci",
+      "label": "Terraform CI",
+      "kind": "role",
+      "admin": false,
+      "x": 0.6435,
+      "y": 0.705,
+      "degree": 2,
+      "note": "Applies every infrastructure change. Can rewrite the admin role's trust policy.",
+      "arn": "arn:aws:iam::777700004444:role/terraform-ci",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700004444:root"
+      ]
+    },
+    {
+      "id": "break-glass",
+      "label": "Break glass user",
+      "kind": "user",
+      "admin": true,
+      "x": 0.931,
+      "y": 0.5,
+      "degree": 1,
+      "note": "Human emergency account. Access key rotated quarterly by the audit role.",
+      "arn": "arn:aws:iam::777700004444:user/break-glass",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "intern",
+      "label": "Intern",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0747,
+      "y": 0.5,
+      "degree": 0,
+      "note": "Read-only.",
+      "arn": "arn:aws:iam::777700004444:user/intern",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "platform-lead",
+      "label": "Platform lead",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0635,
+      "y": 0.6171,
+      "degree": 1,
+      "note": "Can add itself to the ops group for on-call.",
+      "arn": "arn:aws:iam::777700004444:user/platform-lead",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "svc-deploy",
+      "label": "Deploy service",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0669,
+      "y": 0.7343,
+      "degree": 1,
+      "note": "Legacy deploy user, still uses an access key.",
+      "arn": "arn:aws:iam::777700004444:user/svc-deploy",
+      "groups": [
+        "ops"
+      ],
+      "trust": []
+    },
+    {
+      "id": "vendor-consultant",
+      "label": "Vendor consultant",
+      "kind": "user",
+      "admin": false,
+      "x": 0.3581,
+      "y": 0.5,
+      "degree": 1,
+      "note": "External auditor with a standing key.",
+      "arn": "arn:aws:iam::777700004444:user/vendor-consultant",
+      "groups": [],
+      "trust": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "source": "audit-role",
+      "target": "break-glass",
+      "technique": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateAccessKey"
+      ],
+      "conditional": false,
+      "evidence": "vendor-audit allows iam:CreateAccessKey on arn:aws:iam::777700004444:user/break-glass",
+      "narration": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
+    },
+    {
+      "id": "e1",
+      "source": "deploy-role",
+      "target": "app-runtime",
+      "technique": "lambda_update_code",
+      "name": "Rewrite a function's code",
+      "severity": "critical",
+      "mitre": "T1648",
+      "actions": [
+        "lambda:UpdateFunctionCode",
+        "lambda:InvokeFunction"
+      ],
+      "conditional": false,
+      "evidence": "deploy-policy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-2:777700004444:function:worker; deploy-policy allows lambda:InvokeFunction on arn:aws:lambda:us-east-2:777700004444:function:worker",
+      "narration": "Replace the handler of an existing function that already holds a strong role.",
+      "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions."
+    },
+    {
+      "id": "e2",
+      "source": "platform-lead",
+      "target": "ops",
+      "technique": "iam_add_user_to_group",
+      "name": "Join a more privileged group",
+      "severity": "high",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:AddUserToGroup"
+      ],
+      "conditional": false,
+      "evidence": "platform-self-service allows iam:AddUserToGroup on arn:aws:iam::777700004444:group/ops",
+      "narration": "Add yourself to a group that carries wider policies.",
+      "fix": "Group membership changes are privilege changes; route them through review."
+    },
+    {
+      "id": "e3",
+      "source": "svc-deploy",
+      "target": "deploy-role",
+      "technique": "passrole_lambda",
+      "name": "PassRole into Lambda",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:PassRole",
+        "lambda:CreateFunction",
+        "lambda:InvokeFunction"
+      ],
+      "conditional": false,
+      "evidence": "Ops group/ops-group allows iam:PassRole on arn:aws:iam::777700004444:role/deploy-role; Ops group/ops-group allows lambda:CreateFunction on *",
+      "narration": "Pass a privileged role to a new function, then invoke it.",
+      "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist."
+    },
+    {
+      "id": "e4",
+      "source": "terraform-ci",
+      "target": "org-admin",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "terraform-platform allows sts:AssumeRole on arn:aws:iam::777700004444:role/org-admin",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e5",
+      "source": "terraform-ci",
+      "target": "org-admin",
+      "technique": "iam_update_assume_role_policy",
+      "name": "Rewrite a trust policy",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:UpdateAssumeRolePolicy",
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "terraform-platform allows iam:UpdateAssumeRolePolicy on arn:aws:iam::777700004444:role/org-admin; terraform-platform allows sts:AssumeRole on arn:aws:iam::777700004444:role/org-admin",
+      "narration": "Add yourself to a role's trust policy, then assume it.",
+      "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads."
+    },
+    {
+      "id": "e6",
+      "source": "vendor-consultant",
+      "target": "audit-role",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "vendor-audit-assume allows sts:AssumeRole on arn:aws:iam::777700004444:role/audit-role",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    }
+  ],
+  "paths": {
+    "terraform-ci": [
+      {
+        "hops": 1,
+        "nodes": [
+          "terraform-ci",
+          "org-admin"
+        ],
+        "edges": [
+          "e4"
+        ],
+        "labels": [
+          "Terraform CI",
+          "Org admin"
+        ],
+        "steps": [
+          {
+            "edge": "e4",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "terraform-platform allows sts:AssumeRole on arn:aws:iam::777700004444:role/org-admin",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 1,
+        "nodes": [
+          "terraform-ci",
+          "org-admin"
+        ],
+        "edges": [
+          "e5"
+        ],
+        "labels": [
+          "Terraform CI",
+          "Org admin"
+        ],
+        "steps": [
+          {
+            "edge": "e5",
+            "technique": "iam_update_assume_role_policy",
+            "name": "Rewrite a trust policy",
+            "narration": "Add yourself to a role's trust policy, then assume it.",
+            "actions": [
+              "iam:UpdateAssumeRolePolicy",
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "terraform-platform allows iam:UpdateAssumeRolePolicy on arn:aws:iam::777700004444:role/org-admin; terraform-platform allows sts:AssumeRole on arn:aws:iam::777700004444:role/org-admin",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "vendor-consultant": [
+      {
+        "hops": 2,
+        "nodes": [
+          "vendor-consultant",
+          "audit-role",
+          "break-glass"
+        ],
+        "edges": [
+          "e6",
+          "e0"
+        ],
+        "labels": [
+          "Vendor consultant",
+          "Audit role",
+          "Break glass user"
+        ],
+        "steps": [
+          {
+            "edge": "e6",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "vendor-audit-assume allows sts:AssumeRole on arn:aws:iam::777700004444:role/audit-role",
+            "conditional": false
+          },
+          {
+            "edge": "e0",
+            "technique": "iam_create_access_key",
+            "name": "Mint credentials for another user",
+            "narration": "Create an access key for a user with more access than you.",
+            "actions": [
+              "iam:CreateAccessKey"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "vendor-audit allows iam:CreateAccessKey on arn:aws:iam::777700004444:user/break-glass",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "audit-role": [
+      {
+        "hops": 1,
+        "nodes": [
+          "audit-role",
+          "break-glass"
+        ],
+        "edges": [
+          "e0"
+        ],
+        "labels": [
+          "Audit role",
+          "Break glass user"
+        ],
+        "steps": [
+          {
+            "edge": "e0",
+            "technique": "iam_create_access_key",
+            "name": "Mint credentials for another user",
+            "narration": "Create an access key for a user with more access than you.",
+            "actions": [
+              "iam:CreateAccessKey"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "vendor-audit allows iam:CreateAccessKey on arn:aws:iam::777700004444:user/break-glass",
+            "conditional": false
+          }
+        ]
+      }
+    ]
+  },
+  "sever": {
+    "routesBefore": 3,
+    "routesAfter": 0,
+    "closed": true,
+    "edgeCut": {
+      "edges": [
+        "e0",
+        "e4",
+        "e5"
+      ],
+      "byTechnique": {
+        "iam_create_access_key": 1,
+        "assume_role": 1,
+        "iam_update_assume_role_policy": 1
+      },
+      "byAction": {
+        "iam:CreateAccessKey": 1,
+        "sts:AssumeRole": 2,
+        "iam:UpdateAssumeRolePolicy": 1
+      }
+    },
+    "permissionSteps": [
+      {
+        "action": "iam:CreateAccessKey",
+        "edgesRemoved": 1,
+        "routesKilled": 2
+      },
+      {
+        "action": "sts:AssumeRole",
+        "edgesRemoved": 3,
+        "routesKilled": 1
+      }
+    ]
+  },
+  "signature": {
+    "hops": 2,
+    "nodes": [
+      "vendor-consultant",
+      "audit-role",
+      "break-glass"
+    ],
+    "edges": [
+      "e6",
+      "e0"
+    ],
+    "labels": [
+      "Vendor consultant",
+      "Audit role",
+      "Break glass user"
+    ],
+    "steps": [
+      {
+        "edge": "e6",
+        "technique": "assume_role",
+        "name": "Cross-role assumption",
+        "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1078.004",
+        "evidence": "vendor-audit-assume allows sts:AssumeRole on arn:aws:iam::777700004444:role/audit-role",
+        "conditional": false
+      },
+      {
+        "edge": "e0",
+        "technique": "iam_create_access_key",
+        "name": "Mint credentials for another user",
+        "narration": "Create an access key for a user with more access than you.",
+        "actions": [
+          "iam:CreateAccessKey"
+        ],
+        "mitre": "T1098.001",
+        "evidence": "vendor-audit allows iam:CreateAccessKey on arn:aws:iam::777700004444:user/break-glass",
+        "conditional": false
+      }
+    ]
+  },
+  "registry": [
+    {
+      "id": "assume_role",
+      "name": "Cross-role assumption",
+      "category": "trust",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "summary": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root.",
+      "actions": [
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "passrole_lambda",
+      "name": "PassRole into Lambda",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Pass a privileged role to a new function, then invoke it.",
+      "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist.",
+      "actions": [
+        "iam:PassRole",
+        "lambda:CreateFunction",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "passrole_ec2",
+      "name": "PassRole into EC2",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Launch an instance with an instance profile and read its metadata credentials.",
+      "fix": "Deny iam:PassRole for EC2 unless the caller owns the instance profile.",
+      "actions": [
+        "iam:PassRole",
+        "ec2:RunInstances"
+      ]
+    },
+    {
+      "id": "passrole_cloudformation",
+      "name": "PassRole into CloudFormation",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a stack with a service role and let the template call IAM.",
+      "fix": "Deny cloudformation:CreateStack with a RoleARN outside the team boundary.",
+      "actions": [
+        "iam:PassRole",
+        "cloudformation:CreateStack"
+      ]
+    },
+    {
+      "id": "passrole_glue",
+      "name": "PassRole into Glue",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a development endpoint that runs with the passed role.",
+      "fix": "Block glue:CreateDevEndpoint, or pin iam:PassRole to a known role.",
+      "actions": [
+        "iam:PassRole",
+        "glue:CreateDevEndpoint"
+      ]
+    },
+    {
+      "id": "passrole_sagemaker",
+      "name": "PassRole into SageMaker",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a notebook instance with the passed role, then open its terminal.",
+      "fix": "Deny sagemaker:CreateNotebookInstance with an arbitrary execution role.",
+      "actions": [
+        "iam:PassRole",
+        "sagemaker:CreateNotebookInstance"
+      ]
+    },
+    {
+      "id": "lambda_update_code",
+      "name": "Rewrite a function's code",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1648",
+      "summary": "Replace the handler of an existing function that already holds a strong role.",
+      "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions.",
+      "actions": [
+        "lambda:UpdateFunctionCode",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "ssm_send_command",
+      "name": "Shell through SSM",
+      "category": "compute",
+      "severity": "high",
+      "mitre": "T1651",
+      "summary": "Run a command on an instance and use its instance profile.",
+      "fix": "Scope ssm:SendCommand to document ARNs and tag-gated instances.",
+      "actions": [
+        "ssm:SendCommand",
+        "ec2:DescribeInstances"
+      ]
+    },
+    {
+      "id": "iam_attach_user_policy",
+      "name": "Attach a policy to yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach AdministratorAccess to your own user and inherit it.",
+      "fix": "No human or machine identity should hold iam:AttachUserPolicy on its own ARN.",
+      "actions": [
+        "iam:AttachUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_put_user_policy",
+      "name": "Write an inline policy on yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add an inline administrator statement to your own user.",
+      "fix": "Treat iam:PutUserPolicy on self as equivalent to administrator.",
+      "actions": [
+        "iam:PutUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_create_policy_version",
+      "name": "New version of an attached policy",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Publish a new policy version that grants more than the current one.",
+      "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant.",
+      "actions": [
+        "iam:CreatePolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_set_default_policy_version",
+      "name": "Activate a dormant policy version",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Promote an older, wider policy version that is still stored.",
+      "fix": "Delete unused policy versions and block SetDefaultPolicyVersion.",
+      "actions": [
+        "iam:SetDefaultPolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_attach_role_policy",
+      "name": "Attach a policy to a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach an administrator policy to a role you can already assume.",
+      "fix": "Only a break-glass pipeline should hold iam:AttachRolePolicy.",
+      "actions": [
+        "iam:AttachRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_put_role_policy",
+      "name": "Inline policy on a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Write an inline administrator statement onto a role you can assume.",
+      "fix": "Block iam:PutRolePolicy outside the IAM administration role.",
+      "actions": [
+        "iam:PutRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_update_assume_role_policy",
+      "name": "Rewrite a trust policy",
+      "category": "trust",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a role's trust policy, then assume it.",
+      "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads.",
+      "actions": [
+        "iam:UpdateAssumeRolePolicy",
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role.",
+      "actions": [
+        "iam:CreateAccessKey"
+      ]
+    },
+    {
+      "id": "iam_create_login_profile",
+      "name": "Set a console password for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create a console login for a stronger identity without touching its keys.",
+      "fix": "Alert on CreateLoginProfile and UpdateLoginProfile outside the IdP flow.",
+      "actions": [
+        "iam:CreateLoginProfile"
+      ]
+    },
+    {
+      "id": "iam_add_user_to_group",
+      "name": "Join a more privileged group",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a group that carries wider policies.",
+      "fix": "Group membership changes are privilege changes; route them through review.",
+      "actions": [
+        "iam:AddUserToGroup"
+      ]
+    }
+  ]
+}

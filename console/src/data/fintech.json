@@ -1,0 +1,1746 @@
+{
+  "generated": "2026-11-16T18:48:43+00:00",
+  "engine": {
+    "name": "apsis",
+    "version": "0.2.0"
+  },
+  "scenario": {
+    "name": "fintech",
+    "title": "Fintech ledger, post-series-C",
+    "summary": "A payments platform where the analytics chain reaches administrator in six hops. The pipeline can publish a new version of the policy that governs it.",
+    "accountId": "333344445555",
+    "region": "us-east-1",
+    "severity": "critical"
+  },
+  "stats": {
+    "identities": 15,
+    "resources": 1,
+    "edges": 16,
+    "sourcesWithPath": 8,
+    "sources": 13,
+    "routes": 13,
+    "shortest": 1,
+    "admins": [
+      "Platform administrator"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "__admin__",
+      "label": "Administrator",
+      "kind": "admin",
+      "admin": true,
+      "x": 0.9292,
+      "y": 0.295,
+      "degree": 2,
+      "note": "",
+      "arn": "",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "fin-finance",
+      "label": "Finance team",
+      "kind": "group",
+      "admin": false,
+      "x": 0.0627,
+      "y": 0.8417,
+      "degree": 0,
+      "note": "Group used for billing dashboards.",
+      "arn": "arn:aws:iam::333344445555:group/fin-finance",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "fin-admin",
+      "label": "Platform administrator",
+      "kind": "role",
+      "admin": true,
+      "x": 0.931,
+      "y": 0.705,
+      "degree": 0,
+      "note": "Break-glass administrator role for the ledger.",
+      "arn": "arn:aws:iam::333344445555:role/fin-admin",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::333344445555:root"
+      ]
+    },
+    {
+      "id": "fin-build",
+      "label": "Build role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.4388,
+      "y": 0.5,
+      "degree": 2,
+      "note": "Passes the deploy role into new functions.",
+      "arn": "arn:aws:iam::333344445555:role/fin-build",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::333344445555:role/fin-ci"
+      ]
+    },
+    {
+      "id": "fin-ci",
+      "label": "CI runner",
+      "kind": "role",
+      "admin": false,
+      "x": 0.3178,
+      "y": 0.5,
+      "degree": 3,
+      "note": "CI role. Assumes the build role and the data role.",
+      "arn": "arn:aws:iam::333344445555:role/fin-ci",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::333344445555:user/fin-analyst"
+      ]
+    },
+    {
+      "id": "fin-data",
+      "label": "Data engineering",
+      "kind": "role",
+      "admin": false,
+      "x": 0.0635,
+      "y": 0.1583,
+      "degree": 3,
+      "note": "Passes the ETL role into a development endpoint.",
+      "arn": "arn:aws:iam::333344445555:role/fin-data",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::333344445555:role/fin-ci",
+        "arn:aws:iam::333344445555:user/fin-vendor"
+      ]
+    },
+    {
+      "id": "fin-deploy",
+      "label": "Deploy role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.5564,
+      "y": 0.5,
+      "degree": 2,
+      "note": "Holds the release role in reach.",
+      "arn": "arn:aws:iam::333344445555:role/fin-deploy",
+      "groups": [],
+      "trust": [
+        "lambda.amazonaws.com"
+      ]
+    },
+    {
+      "id": "fin-etl",
+      "label": "ETL role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.0635,
+      "y": 0.4317,
+      "degree": 2,
+      "note": "Nightly settlement job. Assumes the reporting role.",
+      "arn": "arn:aws:iam::333344445555:role/fin-etl",
+      "groups": [],
+      "trust": [
+        "glue.amazonaws.com"
+      ]
+    },
+    {
+      "id": "fin-pipeline",
+      "label": "Payments pipeline",
+      "kind": "role",
+      "admin": false,
+      "x": 0.8139,
+      "y": 0.295,
+      "degree": 3,
+      "note": "Publishes versions of its own policy. That is the last step to administrator.",
+      "arn": "arn:aws:iam::333344445555:role/fin-pipeline",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::333344445555:role/fin-release"
+      ]
+    },
+    {
+      "id": "fin-release",
+      "label": "Release role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.6844,
+      "y": 0.295,
+      "degree": 3,
+      "note": "Can rewrite the pipeline's trust policy and then assume it.",
+      "arn": "arn:aws:iam::333344445555:role/fin-release",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::333344445555:role/fin-deploy"
+      ]
+    },
+    {
+      "id": "fin-reporting",
+      "label": "Reporting role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.075,
+      "y": 0.5683,
+      "degree": 1,
+      "note": "Reads settlement data for dashboards.",
+      "arn": "arn:aws:iam::333344445555:role/fin-reporting",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::333344445555:role/fin-etl"
+      ]
+    },
+    {
+      "id": "fin-analyst",
+      "label": "Ledger analyst",
+      "kind": "user",
+      "admin": false,
+      "x": 0.1975,
+      "y": 0.5,
+      "degree": 2,
+      "note": "Reads the ledger. Can also assume the CI role for report builds.",
+      "arn": "arn:aws:iam::333344445555:user/fin-analyst",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "fin-auditor",
+      "label": "External auditor",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0669,
+      "y": 0.295,
+      "degree": 1,
+      "note": "Read-only quarterly access.",
+      "arn": "arn:aws:iam::333344445555:user/fin-auditor",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "fin-ops",
+      "label": "Operations engineer",
+      "kind": "user",
+      "admin": false,
+      "x": 0.8066,
+      "y": 0.705,
+      "degree": 2,
+      "note": "Can attach a policy to their own user.",
+      "arn": "arn:aws:iam::333344445555:user/fin-ops",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "fin-support",
+      "label": "Support desk",
+      "kind": "user",
+      "admin": false,
+      "x": 0.6857,
+      "y": 0.705,
+      "degree": 4,
+      "note": "Mints access keys when a merchant cannot log in.",
+      "arn": "arn:aws:iam::333344445555:user/fin-support",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "fin-vendor",
+      "label": "Settlement vendor",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0731,
+      "y": 0.705,
+      "degree": 2,
+      "note": "Third-party contractor. Assumes the data role.",
+      "arn": "arn:aws:iam::333344445555:user/fin-vendor",
+      "groups": [],
+      "trust": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "source": "fin-analyst",
+      "target": "fin-ci",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "fin-analyst-read allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-ci",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e1",
+      "source": "fin-build",
+      "target": "fin-deploy",
+      "technique": "passrole_lambda",
+      "name": "PassRole into Lambda",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:PassRole",
+        "lambda:CreateFunction",
+        "lambda:InvokeFunction"
+      ],
+      "conditional": false,
+      "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::333344445555:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
+      "narration": "Pass a privileged role to a new function, then invoke it.",
+      "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist."
+    },
+    {
+      "id": "e2",
+      "source": "fin-ci",
+      "target": "fin-build",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-build",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e3",
+      "source": "fin-ci",
+      "target": "fin-data",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-data",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e4",
+      "source": "fin-data",
+      "target": "fin-etl",
+      "technique": "passrole_glue",
+      "name": "PassRole into Glue",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:PassRole",
+        "glue:CreateDevEndpoint"
+      ],
+      "conditional": false,
+      "evidence": "fin-data-policy allows iam:PassRole on arn:aws:iam::333344445555:role/fin-etl; fin-data-policy allows glue:CreateDevEndpoint on *",
+      "narration": "Create a development endpoint that runs with the passed role.",
+      "fix": "Block glue:CreateDevEndpoint, or pin iam:PassRole to a known role."
+    },
+    {
+      "id": "e5",
+      "source": "fin-deploy",
+      "target": "fin-release",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-release",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e6",
+      "source": "fin-etl",
+      "target": "fin-reporting",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "fin-etl-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-reporting",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e7",
+      "source": "fin-ops",
+      "target": "__admin__",
+      "technique": "iam_attach_user_policy",
+      "name": "Attach a policy to yourself",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:AttachUserPolicy"
+      ],
+      "conditional": false,
+      "evidence": "fin-ops-policy allows iam:AttachUserPolicy on arn:aws:iam::333344445555:user/fin-ops",
+      "narration": "Attach AdministratorAccess to your own user and inherit it.",
+      "fix": "No human or machine identity should hold iam:AttachUserPolicy on its own ARN."
+    },
+    {
+      "id": "e8",
+      "source": "fin-pipeline",
+      "target": "__admin__",
+      "technique": "iam_create_policy_version",
+      "name": "New version of an attached policy",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:CreatePolicyVersion"
+      ],
+      "conditional": false,
+      "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/fin-pipeline-policy",
+      "narration": "Publish a new policy version that grants more than the current one.",
+      "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant."
+    },
+    {
+      "id": "e9",
+      "source": "fin-release",
+      "target": "fin-pipeline",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "fin-release-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-pipeline",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e10",
+      "source": "fin-release",
+      "target": "fin-pipeline",
+      "technique": "iam_update_assume_role_policy",
+      "name": "Rewrite a trust policy",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:UpdateAssumeRolePolicy",
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::333344445555:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-pipeline",
+      "narration": "Add yourself to a role's trust policy, then assume it.",
+      "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads."
+    },
+    {
+      "id": "e11",
+      "source": "fin-support",
+      "target": "fin-analyst",
+      "technique": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateAccessKey"
+      ],
+      "conditional": false,
+      "evidence": "fin-support-policy allows iam:CreateAccessKey on arn:aws:iam::333344445555:user/fin-analyst",
+      "narration": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
+    },
+    {
+      "id": "e12",
+      "source": "fin-support",
+      "target": "fin-auditor",
+      "technique": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateAccessKey"
+      ],
+      "conditional": false,
+      "evidence": "fin-support-policy allows iam:CreateAccessKey on arn:aws:iam::333344445555:user/fin-auditor",
+      "narration": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
+    },
+    {
+      "id": "e13",
+      "source": "fin-support",
+      "target": "fin-ops",
+      "technique": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateAccessKey"
+      ],
+      "conditional": false,
+      "evidence": "fin-support-policy allows iam:CreateAccessKey on arn:aws:iam::333344445555:user/fin-ops",
+      "narration": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
+    },
+    {
+      "id": "e14",
+      "source": "fin-support",
+      "target": "fin-vendor",
+      "technique": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateAccessKey"
+      ],
+      "conditional": false,
+      "evidence": "fin-support-policy allows iam:CreateAccessKey on arn:aws:iam::333344445555:user/fin-vendor",
+      "narration": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
+    },
+    {
+      "id": "e15",
+      "source": "fin-vendor",
+      "target": "fin-data",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "fin-vendor-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-data",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    }
+  ],
+  "paths": {
+    "fin-analyst": [
+      {
+        "hops": 6,
+        "nodes": [
+          "fin-analyst",
+          "fin-ci",
+          "fin-build",
+          "fin-deploy",
+          "fin-release",
+          "fin-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e0",
+          "e2",
+          "e1",
+          "e5",
+          "e10",
+          "e8"
+        ],
+        "labels": [
+          "Ledger analyst",
+          "CI runner",
+          "Build role",
+          "Deploy role",
+          "Release role",
+          "Payments pipeline",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-analyst-read allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-ci",
+            "conditional": false
+          },
+          {
+            "edge": "e2",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-build",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_lambda",
+            "name": "PassRole into Lambda",
+            "narration": "Pass a privileged role to a new function, then invoke it.",
+            "actions": [
+              "iam:PassRole",
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::333344445555:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
+            "conditional": false
+          },
+          {
+            "edge": "e5",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-release",
+            "conditional": false
+          },
+          {
+            "edge": "e10",
+            "technique": "iam_update_assume_role_policy",
+            "name": "Rewrite a trust policy",
+            "narration": "Add yourself to a role's trust policy, then assume it.",
+            "actions": [
+              "iam:UpdateAssumeRolePolicy",
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::333344445555:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e8",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/fin-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 6,
+        "nodes": [
+          "fin-analyst",
+          "fin-ci",
+          "fin-build",
+          "fin-deploy",
+          "fin-release",
+          "fin-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e0",
+          "e2",
+          "e1",
+          "e5",
+          "e9",
+          "e8"
+        ],
+        "labels": [
+          "Ledger analyst",
+          "CI runner",
+          "Build role",
+          "Deploy role",
+          "Release role",
+          "Payments pipeline",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-analyst-read allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-ci",
+            "conditional": false
+          },
+          {
+            "edge": "e2",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-build",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_lambda",
+            "name": "PassRole into Lambda",
+            "narration": "Pass a privileged role to a new function, then invoke it.",
+            "actions": [
+              "iam:PassRole",
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::333344445555:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
+            "conditional": false
+          },
+          {
+            "edge": "e5",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-release",
+            "conditional": false
+          },
+          {
+            "edge": "e9",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-release-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e8",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/fin-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "fin-ci": [
+      {
+        "hops": 5,
+        "nodes": [
+          "fin-ci",
+          "fin-build",
+          "fin-deploy",
+          "fin-release",
+          "fin-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e2",
+          "e1",
+          "e5",
+          "e10",
+          "e8"
+        ],
+        "labels": [
+          "CI runner",
+          "Build role",
+          "Deploy role",
+          "Release role",
+          "Payments pipeline",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e2",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-build",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_lambda",
+            "name": "PassRole into Lambda",
+            "narration": "Pass a privileged role to a new function, then invoke it.",
+            "actions": [
+              "iam:PassRole",
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::333344445555:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
+            "conditional": false
+          },
+          {
+            "edge": "e5",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-release",
+            "conditional": false
+          },
+          {
+            "edge": "e10",
+            "technique": "iam_update_assume_role_policy",
+            "name": "Rewrite a trust policy",
+            "narration": "Add yourself to a role's trust policy, then assume it.",
+            "actions": [
+              "iam:UpdateAssumeRolePolicy",
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::333344445555:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e8",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/fin-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 5,
+        "nodes": [
+          "fin-ci",
+          "fin-build",
+          "fin-deploy",
+          "fin-release",
+          "fin-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e2",
+          "e1",
+          "e5",
+          "e9",
+          "e8"
+        ],
+        "labels": [
+          "CI runner",
+          "Build role",
+          "Deploy role",
+          "Release role",
+          "Payments pipeline",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e2",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-build",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_lambda",
+            "name": "PassRole into Lambda",
+            "narration": "Pass a privileged role to a new function, then invoke it.",
+            "actions": [
+              "iam:PassRole",
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::333344445555:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
+            "conditional": false
+          },
+          {
+            "edge": "e5",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-release",
+            "conditional": false
+          },
+          {
+            "edge": "e9",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-release-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e8",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/fin-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "fin-build": [
+      {
+        "hops": 4,
+        "nodes": [
+          "fin-build",
+          "fin-deploy",
+          "fin-release",
+          "fin-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e1",
+          "e5",
+          "e10",
+          "e8"
+        ],
+        "labels": [
+          "Build role",
+          "Deploy role",
+          "Release role",
+          "Payments pipeline",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e1",
+            "technique": "passrole_lambda",
+            "name": "PassRole into Lambda",
+            "narration": "Pass a privileged role to a new function, then invoke it.",
+            "actions": [
+              "iam:PassRole",
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::333344445555:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
+            "conditional": false
+          },
+          {
+            "edge": "e5",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-release",
+            "conditional": false
+          },
+          {
+            "edge": "e10",
+            "technique": "iam_update_assume_role_policy",
+            "name": "Rewrite a trust policy",
+            "narration": "Add yourself to a role's trust policy, then assume it.",
+            "actions": [
+              "iam:UpdateAssumeRolePolicy",
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::333344445555:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e8",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/fin-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 4,
+        "nodes": [
+          "fin-build",
+          "fin-deploy",
+          "fin-release",
+          "fin-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e1",
+          "e5",
+          "e9",
+          "e8"
+        ],
+        "labels": [
+          "Build role",
+          "Deploy role",
+          "Release role",
+          "Payments pipeline",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e1",
+            "technique": "passrole_lambda",
+            "name": "PassRole into Lambda",
+            "narration": "Pass a privileged role to a new function, then invoke it.",
+            "actions": [
+              "iam:PassRole",
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::333344445555:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
+            "conditional": false
+          },
+          {
+            "edge": "e5",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-release",
+            "conditional": false
+          },
+          {
+            "edge": "e9",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-release-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e8",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/fin-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "fin-deploy": [
+      {
+        "hops": 3,
+        "nodes": [
+          "fin-deploy",
+          "fin-release",
+          "fin-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e5",
+          "e10",
+          "e8"
+        ],
+        "labels": [
+          "Deploy role",
+          "Release role",
+          "Payments pipeline",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e5",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-release",
+            "conditional": false
+          },
+          {
+            "edge": "e10",
+            "technique": "iam_update_assume_role_policy",
+            "name": "Rewrite a trust policy",
+            "narration": "Add yourself to a role's trust policy, then assume it.",
+            "actions": [
+              "iam:UpdateAssumeRolePolicy",
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::333344445555:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e8",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/fin-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 3,
+        "nodes": [
+          "fin-deploy",
+          "fin-release",
+          "fin-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e5",
+          "e9",
+          "e8"
+        ],
+        "labels": [
+          "Deploy role",
+          "Release role",
+          "Payments pipeline",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e5",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-release",
+            "conditional": false
+          },
+          {
+            "edge": "e9",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-release-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e8",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/fin-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "fin-release": [
+      {
+        "hops": 2,
+        "nodes": [
+          "fin-release",
+          "fin-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e10",
+          "e8"
+        ],
+        "labels": [
+          "Release role",
+          "Payments pipeline",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e10",
+            "technique": "iam_update_assume_role_policy",
+            "name": "Rewrite a trust policy",
+            "narration": "Add yourself to a role's trust policy, then assume it.",
+            "actions": [
+              "iam:UpdateAssumeRolePolicy",
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::333344445555:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e8",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/fin-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 2,
+        "nodes": [
+          "fin-release",
+          "fin-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e9",
+          "e8"
+        ],
+        "labels": [
+          "Release role",
+          "Payments pipeline",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e9",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "fin-release-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e8",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/fin-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "fin-pipeline": [
+      {
+        "hops": 1,
+        "nodes": [
+          "fin-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e8"
+        ],
+        "labels": [
+          "Payments pipeline",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e8",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/fin-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "fin-support": [
+      {
+        "hops": 2,
+        "nodes": [
+          "fin-support",
+          "fin-ops",
+          "__admin__"
+        ],
+        "edges": [
+          "e13",
+          "e7"
+        ],
+        "labels": [
+          "Support desk",
+          "Operations engineer",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e13",
+            "technique": "iam_create_access_key",
+            "name": "Mint credentials for another user",
+            "narration": "Create an access key for a user with more access than you.",
+            "actions": [
+              "iam:CreateAccessKey"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "fin-support-policy allows iam:CreateAccessKey on arn:aws:iam::333344445555:user/fin-ops",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "iam_attach_user_policy",
+            "name": "Attach a policy to yourself",
+            "narration": "Attach AdministratorAccess to your own user and inherit it.",
+            "actions": [
+              "iam:AttachUserPolicy"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-ops-policy allows iam:AttachUserPolicy on arn:aws:iam::333344445555:user/fin-ops",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "fin-ops": [
+      {
+        "hops": 1,
+        "nodes": [
+          "fin-ops",
+          "__admin__"
+        ],
+        "edges": [
+          "e7"
+        ],
+        "labels": [
+          "Operations engineer",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e7",
+            "technique": "iam_attach_user_policy",
+            "name": "Attach a policy to yourself",
+            "narration": "Attach AdministratorAccess to your own user and inherit it.",
+            "actions": [
+              "iam:AttachUserPolicy"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "fin-ops-policy allows iam:AttachUserPolicy on arn:aws:iam::333344445555:user/fin-ops",
+            "conditional": false
+          }
+        ]
+      }
+    ]
+  },
+  "sever": {
+    "routesBefore": 8,
+    "routesAfter": 0,
+    "closed": true,
+    "edgeCut": {
+      "edges": [
+        "e7",
+        "e8"
+      ],
+      "byTechnique": {
+        "iam_attach_user_policy": 1,
+        "iam_create_policy_version": 1
+      },
+      "byAction": {
+        "iam:AttachUserPolicy": 1,
+        "iam:CreatePolicyVersion": 1
+      }
+    },
+    "permissionSteps": [
+      {
+        "action": "iam:CreatePolicyVersion",
+        "edgesRemoved": 1,
+        "routesKilled": 6
+      },
+      {
+        "action": "iam:AttachUserPolicy",
+        "edgesRemoved": 1,
+        "routesKilled": 2
+      }
+    ]
+  },
+  "signature": {
+    "hops": 6,
+    "nodes": [
+      "fin-analyst",
+      "fin-ci",
+      "fin-build",
+      "fin-deploy",
+      "fin-release",
+      "fin-pipeline",
+      "__admin__"
+    ],
+    "edges": [
+      "e0",
+      "e2",
+      "e1",
+      "e5",
+      "e10",
+      "e8"
+    ],
+    "labels": [
+      "Ledger analyst",
+      "CI runner",
+      "Build role",
+      "Deploy role",
+      "Release role",
+      "Payments pipeline",
+      "Administrator"
+    ],
+    "steps": [
+      {
+        "edge": "e0",
+        "technique": "assume_role",
+        "name": "Cross-role assumption",
+        "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1078.004",
+        "evidence": "fin-analyst-read allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-ci",
+        "conditional": false
+      },
+      {
+        "edge": "e2",
+        "technique": "assume_role",
+        "name": "Cross-role assumption",
+        "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1078.004",
+        "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-build",
+        "conditional": false
+      },
+      {
+        "edge": "e1",
+        "technique": "passrole_lambda",
+        "name": "PassRole into Lambda",
+        "narration": "Pass a privileged role to a new function, then invoke it.",
+        "actions": [
+          "iam:PassRole",
+          "lambda:CreateFunction",
+          "lambda:InvokeFunction"
+        ],
+        "mitre": "T1098.001",
+        "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::333344445555:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
+        "conditional": false
+      },
+      {
+        "edge": "e5",
+        "technique": "assume_role",
+        "name": "Cross-role assumption",
+        "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1078.004",
+        "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-release",
+        "conditional": false
+      },
+      {
+        "edge": "e10",
+        "technique": "iam_update_assume_role_policy",
+        "name": "Rewrite a trust policy",
+        "narration": "Add yourself to a role's trust policy, then assume it.",
+        "actions": [
+          "iam:UpdateAssumeRolePolicy",
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1098.003",
+        "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::333344445555:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::333344445555:role/fin-pipeline",
+        "conditional": false
+      },
+      {
+        "edge": "e8",
+        "technique": "iam_create_policy_version",
+        "name": "New version of an attached policy",
+        "narration": "Publish a new policy version that grants more than the current one.",
+        "actions": [
+          "iam:CreatePolicyVersion"
+        ],
+        "mitre": "T1098.003",
+        "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/fin-pipeline-policy",
+        "conditional": false
+      }
+    ]
+  },
+  "registry": [
+    {
+      "id": "assume_role",
+      "name": "Cross-role assumption",
+      "category": "trust",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "summary": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root.",
+      "actions": [
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "passrole_lambda",
+      "name": "PassRole into Lambda",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Pass a privileged role to a new function, then invoke it.",
+      "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist.",
+      "actions": [
+        "iam:PassRole",
+        "lambda:CreateFunction",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "passrole_ec2",
+      "name": "PassRole into EC2",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Launch an instance with an instance profile and read its metadata credentials.",
+      "fix": "Deny iam:PassRole for EC2 unless the caller owns the instance profile.",
+      "actions": [
+        "iam:PassRole",
+        "ec2:RunInstances"
+      ]
+    },
+    {
+      "id": "passrole_cloudformation",
+      "name": "PassRole into CloudFormation",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a stack with a service role and let the template call IAM.",
+      "fix": "Deny cloudformation:CreateStack with a RoleARN outside the team boundary.",
+      "actions": [
+        "iam:PassRole",
+        "cloudformation:CreateStack"
+      ]
+    },
+    {
+      "id": "passrole_glue",
+      "name": "PassRole into Glue",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a development endpoint that runs with the passed role.",
+      "fix": "Block glue:CreateDevEndpoint, or pin iam:PassRole to a known role.",
+      "actions": [
+        "iam:PassRole",
+        "glue:CreateDevEndpoint"
+      ]
+    },
+    {
+      "id": "passrole_sagemaker",
+      "name": "PassRole into SageMaker",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a notebook instance with the passed role, then open its terminal.",
+      "fix": "Deny sagemaker:CreateNotebookInstance with an arbitrary execution role.",
+      "actions": [
+        "iam:PassRole",
+        "sagemaker:CreateNotebookInstance"
+      ]
+    },
+    {
+      "id": "lambda_update_code",
+      "name": "Rewrite a function's code",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1648",
+      "summary": "Replace the handler of an existing function that already holds a strong role.",
+      "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions.",
+      "actions": [
+        "lambda:UpdateFunctionCode",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "ssm_send_command",
+      "name": "Shell through SSM",
+      "category": "compute",
+      "severity": "high",
+      "mitre": "T1651",
+      "summary": "Run a command on an instance and use its instance profile.",
+      "fix": "Scope ssm:SendCommand to document ARNs and tag-gated instances.",
+      "actions": [
+        "ssm:SendCommand",
+        "ec2:DescribeInstances"
+      ]
+    },
+    {
+      "id": "iam_attach_user_policy",
+      "name": "Attach a policy to yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach AdministratorAccess to your own user and inherit it.",
+      "fix": "No human or machine identity should hold iam:AttachUserPolicy on its own ARN.",
+      "actions": [
+        "iam:AttachUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_put_user_policy",
+      "name": "Write an inline policy on yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add an inline administrator statement to your own user.",
+      "fix": "Treat iam:PutUserPolicy on self as equivalent to administrator.",
+      "actions": [
+        "iam:PutUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_create_policy_version",
+      "name": "New version of an attached policy",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Publish a new policy version that grants more than the current one.",
+      "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant.",
+      "actions": [
+        "iam:CreatePolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_set_default_policy_version",
+      "name": "Activate a dormant policy version",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Promote an older, wider policy version that is still stored.",
+      "fix": "Delete unused policy versions and block SetDefaultPolicyVersion.",
+      "actions": [
+        "iam:SetDefaultPolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_attach_role_policy",
+      "name": "Attach a policy to a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach an administrator policy to a role you can already assume.",
+      "fix": "Only a break-glass pipeline should hold iam:AttachRolePolicy.",
+      "actions": [
+        "iam:AttachRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_put_role_policy",
+      "name": "Inline policy on a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Write an inline administrator statement onto a role you can assume.",
+      "fix": "Block iam:PutRolePolicy outside the IAM administration role.",
+      "actions": [
+        "iam:PutRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_update_assume_role_policy",
+      "name": "Rewrite a trust policy",
+      "category": "trust",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a role's trust policy, then assume it.",
+      "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads.",
+      "actions": [
+        "iam:UpdateAssumeRolePolicy",
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role.",
+      "actions": [
+        "iam:CreateAccessKey"
+      ]
+    },
+    {
+      "id": "iam_create_login_profile",
+      "name": "Set a console password for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create a console login for a stronger identity without touching its keys.",
+      "fix": "Alert on CreateLoginProfile and UpdateLoginProfile outside the IdP flow.",
+      "actions": [
+        "iam:CreateLoginProfile"
+      ]
+    },
+    {
+      "id": "iam_add_user_to_group",
+      "name": "Join a more privileged group",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a group that carries wider policies.",
+      "fix": "Group membership changes are privilege changes; route them through review.",
+      "actions": [
+        "iam:AddUserToGroup"
+      ]
+    }
+  ]
+}

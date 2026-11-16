@@ -1,0 +1,386 @@
+{
+  "name": "startup",
+  "title": "Series A SaaS startup",
+  "account_id": "111122223333",
+  "region": "us-east-1",
+  "severity": "critical",
+  "summary": "Eleven identities, four years of growth, no IAM review. Every grant below was reasonable on the day somebody made it.",
+  "policies": {
+    "admin": {
+      "Name": "AdministratorAccess",
+      "Source": "aws",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "read-only": {
+      "Name": "ReadOnlyAccess",
+      "Source": "aws",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "*:Describe*",
+              "*:Get*",
+              "*:List*"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "support-rotate": {
+      "Name": "support-rotate-oncall-key",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "RotateOnCallKey",
+            "Effect": "Allow",
+            "Action": [
+              "iam:CreateAccessKey",
+              "iam:ListAccessKeys"
+            ],
+            "Resource": "arn:aws:iam::111122223333:user/platform-oncall"
+          }
+        ]
+      }
+    },
+    "oncall-deploy": {
+      "Name": "oncall-deploy-worker",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "PassWorkerRole",
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::111122223333:role/app-runtime"
+          },
+          {
+            "Sid": "ShipFunctions",
+            "Effect": "Allow",
+            "Action": [
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction",
+              "lambda:GetFunction"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "app-runtime": {
+      "Name": "app-runtime-access",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "CustomerData",
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::startup-customer-data/*"
+          },
+          {
+            "Sid": "ProductionSecrets",
+            "Effect": "Allow",
+            "Action": "secretsmanager:GetSecretValue",
+            "Resource": "arn:aws:secretsmanager:us-east-1:111122223333:secret:prod/*"
+          },
+          {
+            "Sid": "BatchJobs",
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::111122223333:role/data-eng"
+          }
+        ]
+      }
+    },
+    "data-eng-pipeline": {
+      "Name": "data-eng-pipeline",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "RunPlatformJobs",
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::111122223333:role/platform-admin",
+            "Condition": {
+              "StringEquals": {
+                "sts:ExternalId": "data-pipeline-prod"
+              }
+            }
+          },
+          {
+            "Sid": "RepairTrustPolicies",
+            "Effect": "Allow",
+            "Action": "iam:UpdateAssumeRolePolicy",
+            "Resource": "arn:aws:iam::111122223333:role/platform-admin",
+            "Condition": {
+              "StringEquals": {
+                "aws:RequestedRegion": "us-east-1"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ci-deploy": {
+      "Name": "ci-deploy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "DeployWorker",
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::111122223333:role/deploy-role"
+          },
+          {
+            "Sid": "Ship",
+            "Effect": "Allow",
+            "Action": [
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction",
+              "lambda:UpdateFunctionCode"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "Artifacts",
+            "Effect": "Allow",
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::startup-artifacts/*"
+          }
+        ]
+      }
+    },
+    "deploy-role-policy": {
+      "Name": "deploy-role-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "ManageOwnPolicy",
+            "Effect": "Allow",
+            "Action": [
+              "iam:CreatePolicyVersion",
+              "iam:ListPolicyVersions"
+            ],
+            "Resource": "arn:aws:iam::111122223333:policy/deploy-role-policy"
+          },
+          {
+            "Sid": "Deploy",
+            "Effect": "Allow",
+            "Action": [
+              "lambda:UpdateFunctionCode",
+              "lambda:InvokeFunction"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "billing-read": {
+      "Name": "billing-read",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:ListBucket"
+            ],
+            "Resource": [
+              "arn:aws:s3:::startup-billing",
+              "arn:aws:s3:::startup-billing/*"
+            ]
+          }
+        ]
+      }
+    },
+    "ops-bastion": {
+      "Name": "ops-bastion",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "ssm:SendCommand",
+              "ec2:DescribeInstances"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::startup-artifacts/*"
+          }
+        ]
+      }
+    }
+  },
+  "identities": [
+    {
+      "id": "support-contractor",
+      "name": "support-contractor",
+      "label": "Support contractor",
+      "kind": "user",
+      "attached": [
+        "support-rotate"
+      ],
+      "note": "External contractor. Key issued for a two-week migration in 2023 and never closed."
+    },
+    {
+      "id": "platform-oncall",
+      "name": "platform-oncall",
+      "label": "Platform on-call",
+      "kind": "user",
+      "attached": [
+        "oncall-deploy"
+      ],
+      "groups": [
+        "platform"
+      ],
+      "note": "Shared on-call identity. Rotated by whoever is on shift."
+    },
+    {
+      "id": "platform",
+      "name": "platform",
+      "label": "Platform group",
+      "kind": "group",
+      "attached": [
+        "read-only"
+      ],
+      "note": "Read access for the platform team."
+    },
+    {
+      "id": "app-runtime",
+      "name": "app-runtime",
+      "label": "App runtime",
+      "kind": "role",
+      "attached": [
+        "app-runtime"
+      ],
+      "trust": [
+        "lambda.amazonaws.com"
+      ],
+      "note": "Execution role for the customer-facing worker."
+    },
+    {
+      "id": "data-eng",
+      "name": "data-eng",
+      "label": "Data engineering",
+      "kind": "role",
+      "attached": [
+        "data-eng-pipeline"
+      ],
+      "trust": [
+        "arn:aws:iam::111122223333:root"
+      ],
+      "note": "Nightly batch jobs. Runs with an ExternalId taken from the pipeline config."
+    },
+    {
+      "id": "platform-admin",
+      "name": "platform-admin",
+      "label": "Platform admin",
+      "kind": "role",
+      "attached": [
+        "admin"
+      ],
+      "trust": [
+        "arn:aws:iam::111122223333:role/data-eng",
+        "arn:aws:iam::111122223333:root"
+      ],
+      "note": "The role that can do anything. Assumed by the platform team through SSO."
+    },
+    {
+      "id": "ci-runner",
+      "name": "ci-runner",
+      "label": "CI deploy key",
+      "kind": "user",
+      "attached": [
+        "ci-deploy"
+      ],
+      "note": "Long-lived access key committed to a private repo in 2021."
+    },
+    {
+      "id": "deploy-role",
+      "name": "deploy-role",
+      "label": "Deploy role",
+      "kind": "role",
+      "attached": [
+        "deploy-role-policy"
+      ],
+      "trust": [
+        "arn:aws:iam::111122223333:root"
+      ],
+      "note": "GitHub Actions assumes this on every merge to main."
+    },
+    {
+      "id": "billing-analyst",
+      "name": "billing-analyst",
+      "label": "Billing analyst",
+      "kind": "user",
+      "attached": [
+        "billing-read"
+      ],
+      "note": "Reads invoices. Has no route to anything."
+    },
+    {
+      "id": "ops-bastion",
+      "name": "ops-bastion",
+      "label": "Bastion role",
+      "kind": "role",
+      "attached": [
+        "ops-bastion"
+      ],
+      "trust": [
+        "ec2.amazonaws.com"
+      ],
+      "note": "Instance profile for the jump host."
+    },
+    {
+      "id": "secops-admin",
+      "name": "secops-admin",
+      "label": "Security admin",
+      "kind": "user",
+      "attached": [
+        "admin"
+      ],
+      "note": "Break-glass administrator. No access key, hardware key only."
+    }
+  ],
+  "resources": [
+    {
+      "id": "app-worker",
+      "name": "app-worker",
+      "label": "app-worker",
+      "kind": "lambda",
+      "role": "app-runtime"
+    },
+    {
+      "id": "bastion-host",
+      "name": "i-0a1b2c3d4e5f",
+      "label": "bastion-host",
+      "kind": "ec2",
+      "role": "ops-bastion"
+    }
+  ],
+  "signature_source": "support-contractor"
+}

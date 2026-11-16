@@ -1,0 +1,403 @@
+{
+  "generated": "2026-11-16T18:48:43+00:00",
+  "engine": {
+    "name": "apsis",
+    "version": "0.2.0"
+  },
+  "scenario": {
+    "name": "ci-cd",
+    "title": "Delivery pipeline, before the PR",
+    "summary": "A small delivery account. No identity reaches administrator. This is the baseline the drift check compares against.",
+    "accountId": "999900001111",
+    "region": "us-west-2",
+    "severity": "medium"
+  },
+  "stats": {
+    "identities": 6,
+    "resources": 1,
+    "edges": 2,
+    "sourcesWithPath": 0,
+    "sources": 4,
+    "routes": 0,
+    "shortest": null,
+    "admins": [
+      "Platform admin",
+      "Break glass"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "__admin__",
+      "label": "Administrator",
+      "kind": "admin",
+      "admin": true,
+      "x": 0.9292,
+      "y": 0.2267,
+      "degree": 0,
+      "note": "",
+      "arn": "",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "app-runtime",
+      "label": "App runtime",
+      "kind": "role",
+      "admin": false,
+      "x": 0.0695,
+      "y": 0.1925,
+      "degree": 1,
+      "note": "Execution role for the delivery service.",
+      "arn": "arn:aws:iam::999900001111:role/app-runtime",
+      "groups": [],
+      "trust": [
+        "lambda.amazonaws.com"
+      ]
+    },
+    {
+      "id": "gha-deploy",
+      "label": "GitHub deploy role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.0701,
+      "y": 0.3975,
+      "degree": 2,
+      "note": "OIDC deploy role. Scoped to one repository.",
+      "arn": "arn:aws:iam::999900001111:role/gha-deploy",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::999900001111:role/release-manager",
+        "arn:aws:iam::999900001111:root"
+      ]
+    },
+    {
+      "id": "platform-admin",
+      "label": "Platform admin",
+      "kind": "role",
+      "admin": true,
+      "x": 0.9368,
+      "y": 0.7733,
+      "degree": 0,
+      "note": "Administrator. Assumed by a human, never by CI.",
+      "arn": "arn:aws:iam::999900001111:role/platform-admin",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::999900001111:user/break-glass"
+      ]
+    },
+    {
+      "id": "auditor",
+      "label": "Auditor",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0714,
+      "y": 0.6025,
+      "degree": 0,
+      "note": "Read-only review account.",
+      "arn": "arn:aws:iam::999900001111:user/auditor",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "break-glass",
+      "label": "Break glass",
+      "kind": "user",
+      "admin": true,
+      "x": 0.931,
+      "y": 0.5,
+      "degree": 0,
+      "note": "Human emergency account.",
+      "arn": "arn:aws:iam::999900001111:user/break-glass",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "release-bot",
+      "label": "Release bot",
+      "kind": "user",
+      "admin": false,
+      "x": 0.065,
+      "y": 0.8075,
+      "degree": 1,
+      "note": "Assumes the deploy role from the release workflow.",
+      "arn": "arn:aws:iam::999900001111:user/release-bot",
+      "groups": [],
+      "trust": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "source": "gha-deploy",
+      "target": "app-runtime",
+      "technique": "lambda_update_code",
+      "name": "Rewrite a function's code",
+      "severity": "critical",
+      "mitre": "T1648",
+      "actions": [
+        "lambda:UpdateFunctionCode",
+        "lambda:InvokeFunction"
+      ],
+      "conditional": false,
+      "evidence": "gha-deploy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-west-2:999900001111:function:delivery-worker; gha-deploy allows lambda:InvokeFunction on arn:aws:lambda:us-west-2:999900001111:function:delivery-worker",
+      "narration": "Replace the handler of an existing function that already holds a strong role.",
+      "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions."
+    },
+    {
+      "id": "e1",
+      "source": "release-bot",
+      "target": "gha-deploy",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "release-manager allows sts:AssumeRole on arn:aws:iam::999900001111:role/gha-deploy",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    }
+  ],
+  "paths": {},
+  "sever": {
+    "routesBefore": 0,
+    "routesAfter": 0,
+    "closed": true,
+    "edgeCut": {
+      "edges": [],
+      "byTechnique": {},
+      "byAction": {}
+    },
+    "permissionSteps": []
+  },
+  "signature": null,
+  "registry": [
+    {
+      "id": "assume_role",
+      "name": "Cross-role assumption",
+      "category": "trust",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "summary": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root.",
+      "actions": [
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "passrole_lambda",
+      "name": "PassRole into Lambda",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Pass a privileged role to a new function, then invoke it.",
+      "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist.",
+      "actions": [
+        "iam:PassRole",
+        "lambda:CreateFunction",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "passrole_ec2",
+      "name": "PassRole into EC2",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Launch an instance with an instance profile and read its metadata credentials.",
+      "fix": "Deny iam:PassRole for EC2 unless the caller owns the instance profile.",
+      "actions": [
+        "iam:PassRole",
+        "ec2:RunInstances"
+      ]
+    },
+    {
+      "id": "passrole_cloudformation",
+      "name": "PassRole into CloudFormation",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a stack with a service role and let the template call IAM.",
+      "fix": "Deny cloudformation:CreateStack with a RoleARN outside the team boundary.",
+      "actions": [
+        "iam:PassRole",
+        "cloudformation:CreateStack"
+      ]
+    },
+    {
+      "id": "passrole_glue",
+      "name": "PassRole into Glue",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a development endpoint that runs with the passed role.",
+      "fix": "Block glue:CreateDevEndpoint, or pin iam:PassRole to a known role.",
+      "actions": [
+        "iam:PassRole",
+        "glue:CreateDevEndpoint"
+      ]
+    },
+    {
+      "id": "passrole_sagemaker",
+      "name": "PassRole into SageMaker",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a notebook instance with the passed role, then open its terminal.",
+      "fix": "Deny sagemaker:CreateNotebookInstance with an arbitrary execution role.",
+      "actions": [
+        "iam:PassRole",
+        "sagemaker:CreateNotebookInstance"
+      ]
+    },
+    {
+      "id": "lambda_update_code",
+      "name": "Rewrite a function's code",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1648",
+      "summary": "Replace the handler of an existing function that already holds a strong role.",
+      "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions.",
+      "actions": [
+        "lambda:UpdateFunctionCode",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "ssm_send_command",
+      "name": "Shell through SSM",
+      "category": "compute",
+      "severity": "high",
+      "mitre": "T1651",
+      "summary": "Run a command on an instance and use its instance profile.",
+      "fix": "Scope ssm:SendCommand to document ARNs and tag-gated instances.",
+      "actions": [
+        "ssm:SendCommand",
+        "ec2:DescribeInstances"
+      ]
+    },
+    {
+      "id": "iam_attach_user_policy",
+      "name": "Attach a policy to yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach AdministratorAccess to your own user and inherit it.",
+      "fix": "No human or machine identity should hold iam:AttachUserPolicy on its own ARN.",
+      "actions": [
+        "iam:AttachUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_put_user_policy",
+      "name": "Write an inline policy on yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add an inline administrator statement to your own user.",
+      "fix": "Treat iam:PutUserPolicy on self as equivalent to administrator.",
+      "actions": [
+        "iam:PutUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_create_policy_version",
+      "name": "New version of an attached policy",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Publish a new policy version that grants more than the current one.",
+      "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant.",
+      "actions": [
+        "iam:CreatePolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_set_default_policy_version",
+      "name": "Activate a dormant policy version",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Promote an older, wider policy version that is still stored.",
+      "fix": "Delete unused policy versions and block SetDefaultPolicyVersion.",
+      "actions": [
+        "iam:SetDefaultPolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_attach_role_policy",
+      "name": "Attach a policy to a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach an administrator policy to a role you can already assume.",
+      "fix": "Only a break-glass pipeline should hold iam:AttachRolePolicy.",
+      "actions": [
+        "iam:AttachRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_put_role_policy",
+      "name": "Inline policy on a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Write an inline administrator statement onto a role you can assume.",
+      "fix": "Block iam:PutRolePolicy outside the IAM administration role.",
+      "actions": [
+        "iam:PutRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_update_assume_role_policy",
+      "name": "Rewrite a trust policy",
+      "category": "trust",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a role's trust policy, then assume it.",
+      "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads.",
+      "actions": [
+        "iam:UpdateAssumeRolePolicy",
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role.",
+      "actions": [
+        "iam:CreateAccessKey"
+      ]
+    },
+    {
+      "id": "iam_create_login_profile",
+      "name": "Set a console password for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create a console login for a stronger identity without touching its keys.",
+      "fix": "Alert on CreateLoginProfile and UpdateLoginProfile outside the IdP flow.",
+      "actions": [
+        "iam:CreateLoginProfile"
+      ]
+    },
+    {
+      "id": "iam_add_user_to_group",
+      "name": "Join a more privileged group",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a group that carries wider policies.",
+      "fix": "Group membership changes are privilege changes; route them through review.",
+      "actions": [
+        "iam:AddUserToGroup"
+      ]
+    }
+  ]
+}

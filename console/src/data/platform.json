@@ -1,0 +1,1222 @@
+{
+  "generated": "2026-11-16T18:48:43+00:00",
+  "engine": {
+    "name": "apsis",
+    "version": "0.2.0"
+  },
+  "scenario": {
+    "name": "platform",
+    "title": "Platform group, regulated workloads",
+    "summary": "A regulated platform account with a vendor shell path, a batch host, and a pipeline role that can rewrite its own policy.",
+    "accountId": "777700005555",
+    "region": "ca-central-1",
+    "severity": "critical"
+  },
+  "stats": {
+    "identities": 13,
+    "resources": 2,
+    "edges": 12,
+    "sourcesWithPath": 7,
+    "sources": 12,
+    "routes": 7,
+    "shortest": 1,
+    "admins": [
+      "Agency administrator"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "__admin__",
+      "label": "Administrator",
+      "kind": "admin",
+      "admin": true,
+      "x": 0.9292,
+      "y": 0.295,
+      "degree": 1,
+      "note": "",
+      "arn": "",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "gc-archive",
+      "label": "Archive role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.0747,
+      "y": 0.172,
+      "degree": 1,
+      "note": "Moves records into long-term storage.",
+      "arn": "arn:aws:iam::777700005555:role/gc-archive",
+      "groups": [],
+      "trust": [
+        "ec2.amazonaws.com"
+      ]
+    },
+    {
+      "id": "gc-build",
+      "label": "Build role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.3159,
+      "y": 0.5,
+      "degree": 2,
+      "note": "Sends commands to the batch fleet.",
+      "arn": "arn:aws:iam::777700005555:role/gc-build",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700005555:user/gc-vendor"
+      ]
+    },
+    {
+      "id": "gc-data",
+      "label": "Data platform role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.075,
+      "y": 0.828,
+      "degree": 1,
+      "note": "Passes the archive role into instances.",
+      "arn": "arn:aws:iam::777700005555:role/gc-data",
+      "groups": [],
+      "trust": [
+        "ec2.amazonaws.com"
+      ]
+    },
+    {
+      "id": "gc-deploy",
+      "label": "Deploy role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.5628,
+      "y": 0.5,
+      "degree": 2,
+      "note": "Starts builds and can assume the release role.",
+      "arn": "arn:aws:iam::777700005555:role/gc-deploy",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700005555:role/gc-fleet"
+      ]
+    },
+    {
+      "id": "gc-fleet",
+      "label": "Batch fleet role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.4335,
+      "y": 0.5,
+      "degree": 2,
+      "note": "Instance profile on the batch hosts. Assumes the deploy role.",
+      "arn": "arn:aws:iam::777700005555:role/gc-fleet",
+      "groups": [],
+      "trust": [
+        "ec2.amazonaws.com"
+      ]
+    },
+    {
+      "id": "gc-pipeline",
+      "label": "Pipeline role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.8139,
+      "y": 0.295,
+      "degree": 2,
+      "note": "Publishes versions of the policy attached to itself.",
+      "arn": "arn:aws:iam::777700005555:role/gc-pipeline",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700005555:role/gc-release"
+      ]
+    },
+    {
+      "id": "gc-release",
+      "label": "Release role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.6844,
+      "y": 0.5,
+      "degree": 2,
+      "note": "Pushes images and can assume the pipeline role.",
+      "arn": "arn:aws:iam::777700005555:role/gc-release",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700005555:role/gc-deploy"
+      ]
+    },
+    {
+      "id": "gc-admin",
+      "label": "Agency administrator",
+      "kind": "user",
+      "admin": true,
+      "x": 0.931,
+      "y": 0.705,
+      "degree": 1,
+      "note": "Agency break-glass account.",
+      "arn": "arn:aws:iam::777700005555:user/gc-admin",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "gc-auditor",
+      "label": "Inspector general",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0635,
+      "y": 0.336,
+      "degree": 1,
+      "note": "Read-only audit access.",
+      "arn": "arn:aws:iam::777700005555:user/gc-auditor",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "gc-change-manager",
+      "label": "Change manager",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0669,
+      "y": 0.5,
+      "degree": 1,
+      "note": "Can promote an older helpdesk policy version.",
+      "arn": "arn:aws:iam::777700005555:user/gc-change-manager",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "gc-helpdesk",
+      "label": "Helpdesk technician",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0635,
+      "y": 0.664,
+      "degree": 1,
+      "note": "Looks up user records.",
+      "arn": "arn:aws:iam::777700005555:user/gc-helpdesk",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "gc-support",
+      "label": "Service desk",
+      "kind": "user",
+      "admin": false,
+      "x": 0.8066,
+      "y": 0.705,
+      "degree": 5,
+      "note": "Issues keys for locked accounts.",
+      "arn": "arn:aws:iam::777700005555:user/gc-support",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "gc-vendor",
+      "label": "Portal vendor",
+      "kind": "user",
+      "admin": false,
+      "x": 0.1949,
+      "y": 0.5,
+      "degree": 2,
+      "note": "Contractor account for the benefits portal build.",
+      "arn": "arn:aws:iam::777700005555:user/gc-vendor",
+      "groups": [],
+      "trust": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "source": "gc-build",
+      "target": "gc-fleet",
+      "technique": "ssm_send_command",
+      "name": "Shell through SSM",
+      "severity": "high",
+      "mitre": "T1651",
+      "actions": [
+        "ssm:SendCommand",
+        "ec2:DescribeInstances"
+      ],
+      "conditional": false,
+      "evidence": "gc-build-policy allows ssm:SendCommand on arn:aws:ec2:ca-central-1:777700005555:instance/gc-batch-ec2; gc-build-policy allows ec2:DescribeInstances on *",
+      "narration": "Run a command on an instance and use its instance profile.",
+      "fix": "Scope ssm:SendCommand to document ARNs and tag-gated instances."
+    },
+    {
+      "id": "e1",
+      "source": "gc-data",
+      "target": "gc-archive",
+      "technique": "passrole_ec2",
+      "name": "PassRole into EC2",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:PassRole",
+        "ec2:RunInstances"
+      ],
+      "conditional": false,
+      "evidence": "gc-data-policy allows iam:PassRole on arn:aws:iam::777700005555:role/gc-archive; gc-data-policy allows ec2:RunInstances on *",
+      "narration": "Launch an instance with an instance profile and read its metadata credentials.",
+      "fix": "Deny iam:PassRole for EC2 unless the caller owns the instance profile."
+    },
+    {
+      "id": "e2",
+      "source": "gc-deploy",
+      "target": "gc-release",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "gc-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-release",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e3",
+      "source": "gc-fleet",
+      "target": "gc-deploy",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "gc-fleet-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-deploy",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e4",
+      "source": "gc-pipeline",
+      "target": "__admin__",
+      "technique": "iam_create_policy_version",
+      "name": "New version of an attached policy",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:CreatePolicyVersion"
+      ],
+      "conditional": false,
+      "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700005555:policy/gc-pipeline-policy",
+      "narration": "Publish a new policy version that grants more than the current one.",
+      "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant."
+    },
+    {
+      "id": "e5",
+      "source": "gc-release",
+      "target": "gc-pipeline",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-pipeline",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e6",
+      "source": "gc-support",
+      "target": "gc-admin",
+      "technique": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateAccessKey"
+      ],
+      "conditional": false,
+      "evidence": "gc-support-policy allows iam:CreateAccessKey on arn:aws:iam::777700005555:user/gc-admin",
+      "narration": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
+    },
+    {
+      "id": "e7",
+      "source": "gc-support",
+      "target": "gc-auditor",
+      "technique": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateAccessKey"
+      ],
+      "conditional": false,
+      "evidence": "gc-support-policy allows iam:CreateAccessKey on arn:aws:iam::777700005555:user/gc-auditor",
+      "narration": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
+    },
+    {
+      "id": "e8",
+      "source": "gc-support",
+      "target": "gc-change-manager",
+      "technique": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateAccessKey"
+      ],
+      "conditional": false,
+      "evidence": "gc-support-policy allows iam:CreateAccessKey on arn:aws:iam::777700005555:user/gc-change-manager",
+      "narration": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
+    },
+    {
+      "id": "e9",
+      "source": "gc-support",
+      "target": "gc-helpdesk",
+      "technique": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateAccessKey"
+      ],
+      "conditional": false,
+      "evidence": "gc-support-policy allows iam:CreateAccessKey on arn:aws:iam::777700005555:user/gc-helpdesk",
+      "narration": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
+    },
+    {
+      "id": "e10",
+      "source": "gc-support",
+      "target": "gc-vendor",
+      "technique": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateAccessKey"
+      ],
+      "conditional": false,
+      "evidence": "gc-support-policy allows iam:CreateAccessKey on arn:aws:iam::777700005555:user/gc-vendor",
+      "narration": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
+    },
+    {
+      "id": "e11",
+      "source": "gc-vendor",
+      "target": "gc-build",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "gc-vendor-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-build",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    }
+  ],
+  "paths": {
+    "gc-vendor": [
+      {
+        "hops": 6,
+        "nodes": [
+          "gc-vendor",
+          "gc-build",
+          "gc-fleet",
+          "gc-deploy",
+          "gc-release",
+          "gc-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e11",
+          "e0",
+          "e3",
+          "e2",
+          "e5",
+          "e4"
+        ],
+        "labels": [
+          "Portal vendor",
+          "Build role",
+          "Batch fleet role",
+          "Deploy role",
+          "Release role",
+          "Pipeline role",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e11",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "gc-vendor-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-build",
+            "conditional": false
+          },
+          {
+            "edge": "e0",
+            "technique": "ssm_send_command",
+            "name": "Shell through SSM",
+            "narration": "Run a command on an instance and use its instance profile.",
+            "actions": [
+              "ssm:SendCommand",
+              "ec2:DescribeInstances"
+            ],
+            "mitre": "T1651",
+            "evidence": "gc-build-policy allows ssm:SendCommand on arn:aws:ec2:ca-central-1:777700005555:instance/gc-batch-ec2; gc-build-policy allows ec2:DescribeInstances on *",
+            "conditional": false
+          },
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "gc-fleet-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-deploy",
+            "conditional": false
+          },
+          {
+            "edge": "e2",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "gc-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-release",
+            "conditional": false
+          },
+          {
+            "edge": "e5",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e4",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700005555:policy/gc-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "gc-build": [
+      {
+        "hops": 5,
+        "nodes": [
+          "gc-build",
+          "gc-fleet",
+          "gc-deploy",
+          "gc-release",
+          "gc-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e0",
+          "e3",
+          "e2",
+          "e5",
+          "e4"
+        ],
+        "labels": [
+          "Build role",
+          "Batch fleet role",
+          "Deploy role",
+          "Release role",
+          "Pipeline role",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e0",
+            "technique": "ssm_send_command",
+            "name": "Shell through SSM",
+            "narration": "Run a command on an instance and use its instance profile.",
+            "actions": [
+              "ssm:SendCommand",
+              "ec2:DescribeInstances"
+            ],
+            "mitre": "T1651",
+            "evidence": "gc-build-policy allows ssm:SendCommand on arn:aws:ec2:ca-central-1:777700005555:instance/gc-batch-ec2; gc-build-policy allows ec2:DescribeInstances on *",
+            "conditional": false
+          },
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "gc-fleet-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-deploy",
+            "conditional": false
+          },
+          {
+            "edge": "e2",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "gc-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-release",
+            "conditional": false
+          },
+          {
+            "edge": "e5",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e4",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700005555:policy/gc-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "gc-fleet": [
+      {
+        "hops": 4,
+        "nodes": [
+          "gc-fleet",
+          "gc-deploy",
+          "gc-release",
+          "gc-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e3",
+          "e2",
+          "e5",
+          "e4"
+        ],
+        "labels": [
+          "Batch fleet role",
+          "Deploy role",
+          "Release role",
+          "Pipeline role",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "gc-fleet-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-deploy",
+            "conditional": false
+          },
+          {
+            "edge": "e2",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "gc-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-release",
+            "conditional": false
+          },
+          {
+            "edge": "e5",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e4",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700005555:policy/gc-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "gc-deploy": [
+      {
+        "hops": 3,
+        "nodes": [
+          "gc-deploy",
+          "gc-release",
+          "gc-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e2",
+          "e5",
+          "e4"
+        ],
+        "labels": [
+          "Deploy role",
+          "Release role",
+          "Pipeline role",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e2",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "gc-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-release",
+            "conditional": false
+          },
+          {
+            "edge": "e5",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e4",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700005555:policy/gc-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "gc-release": [
+      {
+        "hops": 2,
+        "nodes": [
+          "gc-release",
+          "gc-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e5",
+          "e4"
+        ],
+        "labels": [
+          "Release role",
+          "Pipeline role",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e5",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-pipeline",
+            "conditional": false
+          },
+          {
+            "edge": "e4",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700005555:policy/gc-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "gc-pipeline": [
+      {
+        "hops": 1,
+        "nodes": [
+          "gc-pipeline",
+          "__admin__"
+        ],
+        "edges": [
+          "e4"
+        ],
+        "labels": [
+          "Pipeline role",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e4",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700005555:policy/gc-pipeline-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "gc-support": [
+      {
+        "hops": 1,
+        "nodes": [
+          "gc-support",
+          "gc-admin"
+        ],
+        "edges": [
+          "e6"
+        ],
+        "labels": [
+          "Service desk",
+          "Agency administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e6",
+            "technique": "iam_create_access_key",
+            "name": "Mint credentials for another user",
+            "narration": "Create an access key for a user with more access than you.",
+            "actions": [
+              "iam:CreateAccessKey"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "gc-support-policy allows iam:CreateAccessKey on arn:aws:iam::777700005555:user/gc-admin",
+            "conditional": false
+          }
+        ]
+      }
+    ]
+  },
+  "sever": {
+    "routesBefore": 7,
+    "routesAfter": 0,
+    "closed": true,
+    "edgeCut": {
+      "edges": [
+        "e4",
+        "e6"
+      ],
+      "byTechnique": {
+        "iam_create_policy_version": 1,
+        "iam_create_access_key": 1
+      },
+      "byAction": {
+        "iam:CreatePolicyVersion": 1,
+        "iam:CreateAccessKey": 1
+      }
+    },
+    "permissionSteps": [
+      {
+        "action": "iam:CreatePolicyVersion",
+        "edgesRemoved": 1,
+        "routesKilled": 6
+      },
+      {
+        "action": "iam:CreateAccessKey",
+        "edgesRemoved": 5,
+        "routesKilled": 1
+      }
+    ]
+  },
+  "signature": {
+    "hops": 6,
+    "nodes": [
+      "gc-vendor",
+      "gc-build",
+      "gc-fleet",
+      "gc-deploy",
+      "gc-release",
+      "gc-pipeline",
+      "__admin__"
+    ],
+    "edges": [
+      "e11",
+      "e0",
+      "e3",
+      "e2",
+      "e5",
+      "e4"
+    ],
+    "labels": [
+      "Portal vendor",
+      "Build role",
+      "Batch fleet role",
+      "Deploy role",
+      "Release role",
+      "Pipeline role",
+      "Administrator"
+    ],
+    "steps": [
+      {
+        "edge": "e11",
+        "technique": "assume_role",
+        "name": "Cross-role assumption",
+        "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1078.004",
+        "evidence": "gc-vendor-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-build",
+        "conditional": false
+      },
+      {
+        "edge": "e0",
+        "technique": "ssm_send_command",
+        "name": "Shell through SSM",
+        "narration": "Run a command on an instance and use its instance profile.",
+        "actions": [
+          "ssm:SendCommand",
+          "ec2:DescribeInstances"
+        ],
+        "mitre": "T1651",
+        "evidence": "gc-build-policy allows ssm:SendCommand on arn:aws:ec2:ca-central-1:777700005555:instance/gc-batch-ec2; gc-build-policy allows ec2:DescribeInstances on *",
+        "conditional": false
+      },
+      {
+        "edge": "e3",
+        "technique": "assume_role",
+        "name": "Cross-role assumption",
+        "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1078.004",
+        "evidence": "gc-fleet-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-deploy",
+        "conditional": false
+      },
+      {
+        "edge": "e2",
+        "technique": "assume_role",
+        "name": "Cross-role assumption",
+        "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1078.004",
+        "evidence": "gc-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-release",
+        "conditional": false
+      },
+      {
+        "edge": "e5",
+        "technique": "assume_role",
+        "name": "Cross-role assumption",
+        "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1078.004",
+        "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::777700005555:role/gc-pipeline",
+        "conditional": false
+      },
+      {
+        "edge": "e4",
+        "technique": "iam_create_policy_version",
+        "name": "New version of an attached policy",
+        "narration": "Publish a new policy version that grants more than the current one.",
+        "actions": [
+          "iam:CreatePolicyVersion"
+        ],
+        "mitre": "T1098.003",
+        "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700005555:policy/gc-pipeline-policy",
+        "conditional": false
+      }
+    ]
+  },
+  "registry": [
+    {
+      "id": "assume_role",
+      "name": "Cross-role assumption",
+      "category": "trust",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "summary": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root.",
+      "actions": [
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "passrole_lambda",
+      "name": "PassRole into Lambda",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Pass a privileged role to a new function, then invoke it.",
+      "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist.",
+      "actions": [
+        "iam:PassRole",
+        "lambda:CreateFunction",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "passrole_ec2",
+      "name": "PassRole into EC2",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Launch an instance with an instance profile and read its metadata credentials.",
+      "fix": "Deny iam:PassRole for EC2 unless the caller owns the instance profile.",
+      "actions": [
+        "iam:PassRole",
+        "ec2:RunInstances"
+      ]
+    },
+    {
+      "id": "passrole_cloudformation",
+      "name": "PassRole into CloudFormation",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a stack with a service role and let the template call IAM.",
+      "fix": "Deny cloudformation:CreateStack with a RoleARN outside the team boundary.",
+      "actions": [
+        "iam:PassRole",
+        "cloudformation:CreateStack"
+      ]
+    },
+    {
+      "id": "passrole_glue",
+      "name": "PassRole into Glue",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a development endpoint that runs with the passed role.",
+      "fix": "Block glue:CreateDevEndpoint, or pin iam:PassRole to a known role.",
+      "actions": [
+        "iam:PassRole",
+        "glue:CreateDevEndpoint"
+      ]
+    },
+    {
+      "id": "passrole_sagemaker",
+      "name": "PassRole into SageMaker",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a notebook instance with the passed role, then open its terminal.",
+      "fix": "Deny sagemaker:CreateNotebookInstance with an arbitrary execution role.",
+      "actions": [
+        "iam:PassRole",
+        "sagemaker:CreateNotebookInstance"
+      ]
+    },
+    {
+      "id": "lambda_update_code",
+      "name": "Rewrite a function's code",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1648",
+      "summary": "Replace the handler of an existing function that already holds a strong role.",
+      "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions.",
+      "actions": [
+        "lambda:UpdateFunctionCode",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "ssm_send_command",
+      "name": "Shell through SSM",
+      "category": "compute",
+      "severity": "high",
+      "mitre": "T1651",
+      "summary": "Run a command on an instance and use its instance profile.",
+      "fix": "Scope ssm:SendCommand to document ARNs and tag-gated instances.",
+      "actions": [
+        "ssm:SendCommand",
+        "ec2:DescribeInstances"
+      ]
+    },
+    {
+      "id": "iam_attach_user_policy",
+      "name": "Attach a policy to yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach AdministratorAccess to your own user and inherit it.",
+      "fix": "No human or machine identity should hold iam:AttachUserPolicy on its own ARN.",
+      "actions": [
+        "iam:AttachUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_put_user_policy",
+      "name": "Write an inline policy on yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add an inline administrator statement to your own user.",
+      "fix": "Treat iam:PutUserPolicy on self as equivalent to administrator.",
+      "actions": [
+        "iam:PutUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_create_policy_version",
+      "name": "New version of an attached policy",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Publish a new policy version that grants more than the current one.",
+      "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant.",
+      "actions": [
+        "iam:CreatePolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_set_default_policy_version",
+      "name": "Activate a dormant policy version",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Promote an older, wider policy version that is still stored.",
+      "fix": "Delete unused policy versions and block SetDefaultPolicyVersion.",
+      "actions": [
+        "iam:SetDefaultPolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_attach_role_policy",
+      "name": "Attach a policy to a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach an administrator policy to a role you can already assume.",
+      "fix": "Only a break-glass pipeline should hold iam:AttachRolePolicy.",
+      "actions": [
+        "iam:AttachRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_put_role_policy",
+      "name": "Inline policy on a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Write an inline administrator statement onto a role you can assume.",
+      "fix": "Block iam:PutRolePolicy outside the IAM administration role.",
+      "actions": [
+        "iam:PutRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_update_assume_role_policy",
+      "name": "Rewrite a trust policy",
+      "category": "trust",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a role's trust policy, then assume it.",
+      "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads.",
+      "actions": [
+        "iam:UpdateAssumeRolePolicy",
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role.",
+      "actions": [
+        "iam:CreateAccessKey"
+      ]
+    },
+    {
+      "id": "iam_create_login_profile",
+      "name": "Set a console password for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create a console login for a stronger identity without touching its keys.",
+      "fix": "Alert on CreateLoginProfile and UpdateLoginProfile outside the IdP flow.",
+      "actions": [
+        "iam:CreateLoginProfile"
+      ]
+    },
+    {
+      "id": "iam_add_user_to_group",
+      "name": "Join a more privileged group",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a group that carries wider policies.",
+      "fix": "Group membership changes are privilege changes; route them through review.",
+      "actions": [
+        "iam:AddUserToGroup"
+      ]
+    }
+  ]
+}

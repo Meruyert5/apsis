@@ -1,0 +1,558 @@
+/* ==================================================== ORBITAL CONSOLE PASS
+   Two cold accents — iris and electric blue — with gold used only as a
+   live-signal fleck. The recorded log returns to the dark console.
+   ========================================================================== */
+
+:root {
+  --accent: #8f7bf2;
+  --accent-2: #6f9cff;
+  --violet: #8f7bf2;
+  --blue: #6f9cff;
+  --gold: #d9b36a;
+  --blue-lit: #67d4e2;
+  --violet-lit: #b9a6ff;
+  --solar: #7f9dff;
+}
+
+/* --- dark console shelf ------------------------------------------------- */
+
+.mast {
+  border-color: rgb(124 144 255 / 26%);
+  background: linear-gradient(180deg, rgb(10 13 30 / 96%), rgb(6 8 18 / 97%));
+  box-shadow:
+    inset 0 1px 0 rgb(180 190 255 / 6%),
+    0 22px 60px -50px #000;
+}
+
+.mast__progress {
+  background: linear-gradient(90deg, transparent, var(--violet), var(--blue), transparent);
+  box-shadow: 0 0 12px rgb(143 123 242 / 55%);
+}
+
+.mast__step {
+  color: var(--gold);
+}
+
+.mast__status::before {
+  background: var(--blue);
+  box-shadow: 0 0 8px rgb(111 156 255 / 75%);
+}
+
+.mast__status::after {
+  background: repeating-linear-gradient(
+    90deg,
+    rgb(143 123 242 / 80%) 0 2px,
+    rgb(111 156 255 / 55%) 2px 4px,
+    transparent 4px 6px
+  );
+}
+
+.mast__link[aria-current="true"] {
+  background: linear-gradient(135deg, rgb(143 123 242 / 16%), rgb(111 156 255 / 10%));
+  box-shadow: inset 0 0 0 1px rgb(143 123 242 / 32%);
+}
+
+.mast__link[aria-current="true"]::before {
+  background: var(--violet);
+}
+
+/* --- console slabs ------------------------------------------------------ */
+
+.survey__aside,
+.atlas__inspect,
+.atlas__panel,
+.commands__builder,
+.commands__note,
+.hero__hud {
+  border-color: rgb(124 144 255 / 26%);
+  background:
+    linear-gradient(rgb(120 140 255 / 2.4%) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(90deg, rgb(120 140 255 / 2.4%) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(165deg, rgb(14 18 40 / 94%), rgb(5 7 16 / 97%) 56%, rgb(4 6 13 / 99%));
+  box-shadow:
+    inset 0 0 70px -30px rgb(80 100 255 / 30%),
+    0 34px 90px -72px #000;
+}
+
+.atlas__inspect,
+.commands__builder {
+  position: relative;
+}
+
+.survey__aside::after,
+.atlas__inspect::after,
+.commands__builder::after {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 7px;
+  z-index: 2;
+  border-radius: 12px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--blue), var(--blue)) left top / 14px 1px no-repeat,
+    linear-gradient(var(--blue), var(--blue)) left top / 1px 14px no-repeat,
+    linear-gradient(var(--violet), var(--violet)) right bottom / 14px 1px no-repeat,
+    linear-gradient(var(--violet), var(--violet)) right bottom / 1px 14px no-repeat;
+  opacity: 0.55;
+}
+
+.survey__aside:hover,
+.atlas__inspect:hover {
+  border-color: rgb(143 123 242 / 42%);
+  box-shadow:
+    inset 0 0 80px -30px rgb(90 110 255 / 38%),
+    0 36px 100px -72px rgb(30 30 90 / 45%);
+}
+
+/* --- dark recorded log -------------------------------------------------- */
+
+.terminal {
+  background:
+    linear-gradient(rgb(120 150 255 / 2.2%) 1px, transparent 1px) 0 0 / 26px 26px,
+    linear-gradient(90deg, rgb(120 150 255 / 2.2%) 1px, transparent 1px) 0 0 / 26px 26px,
+    radial-gradient(120% 80% at 82% 0%, rgb(80 70 190 / 18%), transparent 62%),
+    #080b18;
+  border-color: rgb(124 144 255 / 30%);
+  box-shadow:
+    inset 0 0 80px -34px rgb(80 100 255 / 40%),
+    0 34px 90px -72px #000;
+}
+
+.terminal::after {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    180deg,
+    rgb(150 170 255 / 4%) 0 1px,
+    transparent 1px 3px
+  );
+  mix-blend-mode: screen;
+  opacity: 0.55;
+}
+
+.terminal__bar {
+  background: linear-gradient(180deg, #0b1024, #080c1b);
+  border-bottom: 1px solid rgb(124 144 255 / 22%);
+  box-shadow: 0 1px 0 rgb(143 123 242 / 20%), 0 0 28px -14px rgb(111 156 255 / 45%);
+}
+
+.terminal__title {
+  color: #e3e8ff;
+}
+
+.terminal__chip {
+  border-color: rgb(124 144 255 / 22%);
+  background: rgb(124 144 255 / 7%);
+  color: #a9b4d8;
+}
+
+.terminal__rec {
+  border-color: rgb(217 179 106 / 55%);
+  background: rgb(217 179 106 / 7%);
+  color: var(--gold);
+}
+
+.terminal__rec span {
+  background: var(--gold);
+  box-shadow: 0 0 9px rgb(217 179 106 / 70%);
+}
+
+.terminal__body,
+.terminal__pre,
+.terminal__line {
+  color: #e2e8fb;
+}
+
+.terminal__line::before {
+  color: #5d6a92;
+}
+
+.terminal__line[data-tone="arn"] {
+  color: #a3add2;
+}
+
+.terminal__line[data-tone="grant"] {
+  color: #c9b8ff;
+}
+
+.terminal__line[data-tone="path"] {
+  color: #9cc4ff;
+}
+
+.terminal__pre [data-tone="signal"] {
+  color: #f0a0b8;
+}
+
+.terminal__pre [data-tone="clean"] {
+  color: #a9c0ff;
+}
+
+.terminal__foot {
+  border-top: 1px solid rgb(124 144 255 / 20%);
+  background: rgb(8 11 24 / 70%);
+  color: #8d9ac4;
+}
+
+.terminal__foot strong {
+  color: #e7ecff;
+}
+
+.terminal__receipt {
+  color: #7f8db8;
+}
+
+.terminal__body:focus-visible {
+  outline-color: var(--violet);
+}
+
+/* --- iridescent controls ------------------------------------------------ */
+
+.btn--signal {
+  border-color: rgb(143 123 242 / 55%);
+  background: linear-gradient(135deg, #2a2470, #3a4fb0 62%, #4b5fd0);
+  color: #f0eeff;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 16%),
+    0 14px 38px -26px rgb(90 80 220 / 80%);
+}
+
+.btn--signal:hover {
+  border-color: rgb(170 156 255 / 75%);
+  background: linear-gradient(135deg, #352d8a, #4a63d0 60%, #6076e6);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 20%),
+    0 18px 46px -24px rgb(110 100 240 / 85%);
+}
+
+.hoprail__play {
+  border-color: rgb(143 123 242 / 60%);
+  background: linear-gradient(135deg, #2a2470, #3a4fb0);
+  color: #f0eeff;
+  box-shadow: 0 0 24px -12px rgb(111 156 255 / 80%);
+}
+
+.hoprail__hop[aria-current="true"] {
+  border-color: rgb(143 123 242 / 65%);
+  background: linear-gradient(135deg, #2a2470, #34479f);
+  color: #f0eeff;
+  box-shadow: 0 0 24px -14px rgb(143 123 242 / 90%);
+}
+
+.survey__sever {
+  border-color: rgb(224 121 154 / 55%);
+  color: var(--oxide);
+}
+
+.survey__sever:hover,
+.survey__sever[aria-pressed="true"] {
+  background: linear-gradient(135deg, #5c2236, #8e3b56);
+  border-color: rgb(224 121 154 / 65%);
+  color: #ffeef3;
+}
+
+.atlas__filter[aria-pressed="true"] {
+  background: linear-gradient(135deg, rgb(143 123 242 / 16%), rgb(111 156 255 / 10%));
+  box-shadow: inset 0 0 0 1px rgb(143 123 242 / 34%);
+}
+
+.commands__verb[aria-pressed="true"] {
+  border-color: rgb(143 123 242 / 55%);
+  background: linear-gradient(135deg, rgb(143 123 242 / 12%), rgb(111 156 255 / 7%));
+}
+
+.commands__format[aria-pressed="true"],
+.commands__format[data-on="true"] {
+  border-color: rgb(143 123 242 / 50%);
+  background: linear-gradient(135deg, rgb(143 123 242 / 12%), rgb(111 156 255 / 7%));
+}
+
+.atlas__cell[data-picked="true"] {
+  background: linear-gradient(135deg, rgb(143 123 242 / 12%), rgb(111 156 255 / 7%));
+  box-shadow: inset 0 0 0 1px rgb(143 123 242 / 75%);
+}
+
+/* --- console instruments ------------------------------------------------ */
+
+.atlas__dial::after {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 64%,
+    var(--blue) 72%,
+    var(--violet) 81%,
+    transparent 88%
+  );
+}
+
+.hero__hudKicker {
+  background: linear-gradient(90deg, #241d5c, #34479f);
+  color: #ece9ff;
+  border-bottom: 1px solid rgb(143 123 242 / 38%);
+}
+
+.hero__telemetry i {
+  background: var(--gold);
+  box-shadow: 0 0 9px rgb(217 179 106 / 55%);
+}
+
+.close__zeroLabel {
+  color: var(--violet-lit);
+}
+
+.close__zeroLabel b {
+  color: var(--gold);
+}
+
+.atlas__inspect::before,
+.survey__aside::before {
+  background: linear-gradient(90deg, var(--violet), var(--blue));
+  box-shadow: 0 0 16px rgb(143 123 242 / 55%);
+}
+
+.atlas__metrics dd {
+  text-shadow: 0 0 34px rgb(111 156 255 / 22%);
+}
+
+h1,
+h2 {
+  text-shadow: 0 0 52px rgb(111 156 255 / 10%);
+}
+
+/* --- gold flecks only --------------------------------------------------- */
+
+.survey__stamp {
+  border-color: rgb(217 179 106 / 55%);
+  color: var(--gold);
+}
+
+.survey__stampCore {
+  background: var(--gold);
+}
+
+.hoprail__legend .hoprail__dot[data-tone="live"] {
+  background: var(--gold);
+  box-shadow: 0 0 8px rgb(217 179 106 / 55%);
+}
+
+/* --- no green remaining ------------------------------------------------- */
+
+.atlas__row[data-selected="true"] {
+  background: rgb(143 123 242 / 7%);
+}
+
+.atlas__cell:hover {
+  background: rgb(111 156 255 / 7%);
+  box-shadow: inset 0 -1px 0 rgb(111 156 255 / 55%);
+}
+
+.constellation__label[data-active="true"],
+.constellation__label[data-selected="true"],
+.constellation__label[data-admin="true"] {
+  border-color: rgb(143 123 242 / 62%);
+  box-shadow: 0 0 22px -14px rgb(143 123 242 / 65%);
+}
+
+.constellation__leaders line {
+  stroke: rgb(143 123 242 / 42%);
+}
+
+html[data-motion="off"] .terminal::after {
+  display: block;
+  animation: none;
+}
+
+.terminal__dots span {
+  background: #4a5578;
+}
+
+.terminal__dots span:first-child {
+  background: var(--oxide);
+}
+
+.terminal__dots span:nth-child(2) {
+  background: var(--violet);
+}
+
+.terminal__dots span:nth-child(3) {
+  background: var(--blue);
+}
+.terminal__body,
+.terminal__pre,
+.terminal__line {
+  color: #eef2ff;
+}
+
+.terminal__pre {
+  font-weight: 500;
+}
+
+.terminal__line[data-tone="arn"] {
+  color: #b4bfe0;
+}
+/* The console output must never fade: it is evidence, not an entrance. */
+.terminal__body,
+.terminal__pre,
+.commands__cmd {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+:root {
+  --solar: #8f7bf2;
+  --blue-lit: #6f9cff;
+  --violet-lit: #c9b8ff;
+  --mint: #8fa8ff;
+  --sage: #9aa8e8;
+}
+/* --------------------------------------------------------- smoothness pass */
+
+body::after {
+  display: none;
+}
+
+body::before {
+  filter: none;
+  will-change: transform;
+}
+
+.hero__stage::after {
+  filter: none;
+  will-change: transform;
+}
+
+.terminal::after {
+  mix-blend-mode: normal;
+  opacity: 0.35;
+}
+
+.terminal__line::before {
+  color: #7f8cb5;
+}
+
+@media (min-width: 901px) and (max-width: 1180px) {
+  .mast__issue,
+  .mast__status,
+  .mast__step {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  body::before,
+  .hero__stage::after {
+    animation: none;
+  }
+
+  body::before {
+    opacity: 0.85;
+  }
+}
+.terminal__pre {
+  font-size: 0.9375rem;
+  line-height: 1.62;
+}
+
+.terminal__body,
+.terminal__pre,
+.terminal__line {
+  color: #f5f7ff;
+}
+
+.terminal__line[data-tone="arn"] {
+  color: #c3ccee;
+}
+
+.terminal__line[data-tone="grant"] {
+  color: #d4c6ff;
+}
+
+.terminal__line[data-tone="path"] {
+  color: #aecfff;
+}
+/* Performance: static atmosphere, no full-page painted animation. */
+body::before,
+.hero__stage::after {
+  animation: none;
+}
+
+/* The old gradient-text sweep repaints every heading forever. */
+.accent-text {
+  background: none;
+  animation: none !important;
+}
+.terminal__body {
+  mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 26px), transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 26px), transparent 100%);
+}
+/* Readable process on tablets and phones: stack the Five moves instead of
+   clipping a horizontal rail. */
+@media (max-width: 1180px) {
+  .method {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+    padding-bottom: 0;
+    scroll-snap-type: none;
+    border-top: 1px solid var(--steel);
+  }
+
+  .method__step {
+    padding: 16px;
+    border-left: 1px solid var(--steel);
+    border-top: 1px solid var(--steel);
+  }
+
+  .method__step:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .method__step:first-child {
+    padding-left: 16px;
+    border-left: 0;
+  }
+
+  .method__step:last-child {
+    padding-right: 16px;
+  }
+}
+
+@media (max-width: 720px) {
+  .method {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .method__step,
+  .method__step:nth-child(odd),
+  .method__step:first-child {
+    padding: 16px 0;
+    border-left: 0;
+  }
+
+  .hoprail__name {
+    display: none;
+  }
+}
+.terminal__body {
+  padding-bottom: 34px;
+}
+.terminal__body {
+  position: relative;
+}
+
+.terminal__body::after {
+  content: "";
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 30px;
+  margin-top: -30px;
+  background: linear-gradient(180deg, transparent, #080b18 92%);
+  pointer-events: none;
+}

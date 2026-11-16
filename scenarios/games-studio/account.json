@@ -1,0 +1,338 @@
+{
+  "name": "games-studio",
+  "title": "Games studio, live services",
+  "account_id": "555566667777",
+  "region": "eu-west-2",
+  "severity": "critical",
+  "summary": "Seven hops separate an intern laptop from the live-ops administrator. Each role trusts exactly the next one, so the chain is invisible to a policy diff.",
+  "signature_source": "gs-intern",
+  "policies": {
+    "gs-admin-access": {
+      "Name": "gs-admin-access",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [{ "Effect": "Allow", "Action": "*", "Resource": "*" }]
+      }
+    },
+    "gs-intern-policy": {
+      "Name": "gs-intern-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["s3:GetObject", "s3:ListBucket"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::555566667777:role/gs-build"
+          }
+        ]
+      }
+    },
+    "gs-build-policy": {
+      "Name": "gs-build-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::555566667777:role/gs-art"
+          },
+          { "Effect": "Allow", "Action": "lambda:CreateFunction", "Resource": "*" }
+        ]
+      }
+    },
+    "gs-art-policy": {
+      "Name": "gs-art-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["s3:*"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::555566667777:role/gs-server"
+          }
+        ]
+      }
+    },
+    "gs-server-policy": {
+      "Name": "gs-server-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["ec2:DescribeInstances", "ecs:ListTasks"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::555566667777:role/gs-live"
+          }
+        ]
+      }
+    },
+    "gs-live-policy": {
+      "Name": "gs-live-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": ["iam:UpdateAssumeRolePolicy", "sts:AssumeRole"],
+            "Resource": "arn:aws:iam::555566667777:role/gs-ops"
+          }
+        ]
+      }
+    },
+    "gs-ops-policy": {
+      "Name": "gs-ops-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["cloudwatch:*", "logs:*"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::555566667777:role/gs-backup"
+          }
+        ]
+      }
+    },
+    "gs-backup-policy": {
+      "Name": "gs-backup-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "iam:CreatePolicyVersion",
+            "Resource": "arn:aws:iam::555566667777:policy/gs-backup-policy"
+          },
+          { "Effect": "Allow", "Action": ["backup:*"], "Resource": "*" }
+        ]
+      }
+    },
+    "gs-contractor-policy": {
+      "Name": "gs-contractor-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::555566667777:role/gs-build"
+          }
+        ]
+      }
+    },
+    "gs-support-policy": {
+      "Name": "gs-support-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["iam:CreateAccessKey", "iam:ListUsers"], "Resource": "*" }
+        ]
+      }
+    },
+    "gs-player-policy": {
+      "Name": "gs-player-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["dynamodb:*", "kinesis:*"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::555566667777:role/gs-telemetry"
+          },
+          { "Effect": "Allow", "Action": "ec2:RunInstances", "Resource": "*" }
+        ]
+      }
+    },
+    "gs-telemetry-policy": {
+      "Name": "gs-telemetry-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["firehose:*", "s3:PutObject"], "Resource": "*" }
+        ]
+      }
+    },
+    "gs-mod-policy": {
+      "Name": "gs-mod-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["iam:AddUserToGroup"], "Resource": "*" }
+        ]
+      }
+    },
+    "gs-powerusers-policy": {
+      "Name": "gs-powerusers-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::555566667777:role/gs-live"
+          }
+        ]
+      }
+    },
+    "gs-analyst-policy": {
+      "Name": "gs-analyst-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [{ "Effect": "Allow", "Action": ["*:Get*", "*:List*"], "Resource": "*" }]
+      }
+    }
+  },
+  "identities": [
+    {
+      "id": "gs-intern",
+      "name": "gs-intern",
+      "label": "Tools intern",
+      "kind": "user",
+      "attached": ["gs-intern-policy"],
+      "note": "Builds internal tools. Assumes the build role to publish them."
+    },
+    {
+      "id": "gs-build",
+      "name": "gs-build",
+      "label": "Build role",
+      "kind": "role",
+      "attached": ["gs-build-policy"],
+      "trust": ["arn:aws:iam::555566667777:user/gs-intern", "arn:aws:iam::555566667777:user/gs-contractor"],
+      "note": "Passes the art role into a new function."
+    },
+    {
+      "id": "gs-art",
+      "name": "gs-art",
+      "label": "Art pipeline role",
+      "kind": "role",
+      "attached": ["gs-art-policy"],
+      "trust": ["lambda.amazonaws.com"],
+      "note": "Processes art assets and can assume the server role."
+    },
+    {
+      "id": "gs-server",
+      "name": "gs-server",
+      "label": "Game server role",
+      "kind": "role",
+      "attached": ["gs-server-policy"],
+      "trust": ["arn:aws:iam::555566667777:role/gs-art"],
+      "note": "Runs the session servers and can assume the live role."
+    },
+    {
+      "id": "gs-live",
+      "name": "gs-live",
+      "label": "Live services role",
+      "kind": "role",
+      "attached": ["gs-live-policy"],
+      "trust": ["arn:aws:iam::555566667777:role/gs-server", "arn:aws:iam::555566667777:role/gs-powerusers"],
+      "note": "Can rewrite the ops role's trust policy, then assume it."
+    },
+    {
+      "id": "gs-ops",
+      "name": "gs-ops",
+      "label": "Live-ops engineer",
+      "kind": "role",
+      "attached": ["gs-ops-policy"],
+      "trust": ["arn:aws:iam::555566667777:role/gs-live"],
+      "note": "On-call operator. Assumes the backup role for restores."
+    },
+    {
+      "id": "gs-backup",
+      "name": "gs-backup",
+      "label": "Backup role",
+      "kind": "role",
+      "attached": ["gs-backup-policy"],
+      "trust": ["arn:aws:iam::555566667777:role/gs-ops"],
+      "note": "Runs restores. Publishes versions of its own policy."
+    },
+    {
+      "id": "gs-admin",
+      "name": "gs-admin",
+      "label": "Studio administrator",
+      "kind": "user",
+      "attached": ["gs-admin-access"],
+      "note": "Studio owner account, console login without MFA."
+    },
+    {
+      "id": "gs-contractor",
+      "name": "gs-contractor",
+      "label": "Outsource artist",
+      "kind": "user",
+      "attached": ["gs-contractor-policy"],
+      "note": "External art vendor with build access."
+    },
+    {
+      "id": "gs-support",
+      "name": "gs-support",
+      "label": "Player support",
+      "kind": "user",
+      "attached": ["gs-support-policy"],
+      "note": "Issues keys for support tooling."
+    },
+    {
+      "id": "gs-player",
+      "name": "gs-player",
+      "label": "Player services role",
+      "kind": "role",
+      "attached": ["gs-player-policy"],
+      "trust": ["ec2.amazonaws.com"],
+      "note": "Passes the telemetry role into instances."
+    },
+    {
+      "id": "gs-telemetry",
+      "name": "gs-telemetry",
+      "label": "Telemetry role",
+      "kind": "role",
+      "attached": ["gs-telemetry-policy"],
+      "trust": ["ec2.amazonaws.com"],
+      "note": "Writes session telemetry."
+    },
+    {
+      "id": "gs-mod",
+      "name": "gs-mod",
+      "label": "Moderation lead",
+      "kind": "user",
+      "attached": ["gs-mod-policy"],
+      "note": "Adds moderators to the power users group."
+    },
+    {
+      "id": "gs-powerusers",
+      "name": "gs-powerusers",
+      "label": "Power users",
+      "kind": "group",
+      "attached": ["gs-powerusers-policy"],
+      "note": "Group that can assume the live services role."
+    },
+    {
+      "id": "gs-analyst",
+      "name": "gs-analyst",
+      "label": "Player insights",
+      "kind": "user",
+      "attached": ["gs-analyst-policy"],
+      "note": "Read-only analytics access."
+    }
+  ],
+  "resources": [
+    {
+      "id": "gs-art-fn",
+      "name": "gs-art-fn",
+      "label": "Art importer",
+      "kind": "lambda",
+      "role": "gs-art",
+      "note": "Imports artist submissions."
+    },
+    {
+      "id": "gs-player-ec2",
+      "name": "gs-player-ec2",
+      "label": "Session host",
+      "kind": "ec2",
+      "role": "gs-player",
+      "note": "One of the session servers."
+    }
+  ]
+}

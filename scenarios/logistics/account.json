@@ -1,0 +1,88 @@
+{
+  "name": "logistics",
+  "title": "Logistics network, 24/7 operations",
+  "account_id": "777700004444",
+  "region": "us-east-2",
+  "severity": "critical",
+  "summary": "A multi-account logistics platform where a vendor audit role and a break-glass user meet in the same trust graph.",
+  "signature_source": "vendor-consultant",
+  "policies": {
+    "admin": {
+      "Name": "AdministratorAccess",
+      "Document": { "Version": "2012-10-17", "Statement": [{ "Effect": "Allow", "Action": "*", "Resource": "*" }] }
+    },
+    "read-only": {
+      "Name": "ReadOnlyAccess",
+      "Document": { "Version": "2012-10-17", "Statement": [{ "Effect": "Allow", "Action": ["*:Get*", "*:List*", "*:Describe*"], "Resource": "*" }] }
+    },
+    "terraform": {
+      "Name": "terraform-platform",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": "sts:AssumeRole", "Resource": "arn:aws:iam::777700004444:role/org-admin" },
+          { "Effect": "Allow", "Action": ["iam:UpdateAssumeRolePolicy", "iam:GetRole"], "Resource": "arn:aws:iam::777700004444:role/org-admin" }
+        ]
+      }
+    },
+    "audit": {
+      "Name": "vendor-audit",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["iam:CreateAccessKey", "iam:ListAccessKeys"], "Resource": "arn:aws:iam::777700004444:user/break-glass" },
+          { "Effect": "Allow", "Action": ["s3:GetObject", "s3:ListBucket"], "Resource": "arn:aws:s3:::audit-bundle" }
+        ]
+      }
+    },
+    "vendor": {
+      "Name": "vendor-audit-assume",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [{ "Effect": "Allow", "Action": "sts:AssumeRole", "Resource": "arn:aws:iam::777700004444:role/audit-role" }]
+      }
+    },
+    "ops-group": {
+      "Name": "ops-group",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": "iam:PassRole", "Resource": "arn:aws:iam::777700004444:role/deploy-role" },
+          { "Effect": "Allow", "Action": ["lambda:CreateFunction", "lambda:InvokeFunction"], "Resource": "*" }
+        ]
+      }
+    },
+    "deploy-policy": {
+      "Name": "deploy-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["lambda:UpdateFunctionCode", "lambda:InvokeFunction"], "Resource": "*" },
+          { "Effect": "Allow", "Action": "iam:PutRolePolicy", "Resource": "arn:aws:iam::777700004444:role/deploy-role" }
+        ]
+      }
+    },
+    "self-service": {
+      "Name": "platform-self-service",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [{ "Effect": "Allow", "Action": "iam:AddUserToGroup", "Resource": "arn:aws:iam::777700004444:group/ops" }]
+      }
+    }
+  },
+  "identities": [
+    { "id": "terraform-ci", "name": "terraform-ci", "label": "Terraform CI", "kind": "role", "attached": ["terraform"], "trust": ["arn:aws:iam::777700004444:root"], "note": "Applies every infrastructure change. Can rewrite the admin role's trust policy." },
+    { "id": "org-admin", "name": "org-admin", "label": "Org admin", "kind": "role", "attached": ["admin"], "trust": ["arn:aws:iam::777700004444:role/terraform-ci", "arn:aws:iam::777700004444:root"], "note": "Organization administrator role." },
+    { "id": "vendor-consultant", "name": "vendor-consultant", "label": "Vendor consultant", "kind": "user", "attached": ["vendor"], "note": "External auditor with a standing key." },
+    { "id": "audit-role", "name": "audit-role", "label": "Audit role", "kind": "role", "attached": ["audit"], "trust": ["arn:aws:iam::777700004444:root"], "note": "Reads the audit bundle and rotates the break-glass key." },
+    { "id": "break-glass", "name": "break-glass", "label": "Break glass user", "kind": "user", "attached": ["admin"], "note": "Human emergency account. Access key rotated quarterly by the audit role." },
+    { "id": "platform-lead", "name": "platform-lead", "label": "Platform lead", "kind": "user", "attached": ["self-service"], "note": "Can add itself to the ops group for on-call." },
+    { "id": "ops", "name": "ops", "label": "Ops group", "kind": "group", "attached": ["ops-group"], "note": "On-call deploy group." },
+    { "id": "svc-deploy", "name": "svc-deploy", "label": "Deploy service", "kind": "user", "groups": ["ops"], "note": "Legacy deploy user, still uses an access key." },
+    { "id": "deploy-role", "name": "deploy-role", "label": "Deploy role", "kind": "role", "attached": ["deploy-policy"], "trust": ["arn:aws:iam::777700004444:root"], "note": "Deployment role. Can write its own inline policy." },
+    { "id": "app-runtime", "name": "app-runtime", "label": "App runtime", "kind": "role", "attached": ["read-only"], "trust": ["lambda.amazonaws.com"], "note": "Application execution role." },
+    { "id": "worker", "name": "worker", "label": "worker", "kind": "lambda", "role": "app-runtime" },
+    { "id": "intern", "name": "intern", "label": "Intern", "kind": "user", "attached": ["read-only"], "note": "Read-only." }
+  ],
+  "resources": [{ "id": "worker-res", "name": "worker", "label": "worker", "kind": "lambda", "role": "app-runtime" }]
+}

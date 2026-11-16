@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Node and site build
+console/node_modules/
+console/dist/
+console/.cdp-*/
+console/.cdp-profile/
+shots/
+.npmcache/
+.npmlogs/
+
+# Local tool profiles and captures
+.chrome-profile/
+.cdp-profile/
+.superpowers/
+*.log
+*.tsbuildinfo
+
+# Generated reports
+apsis-report.md
+apsis.sarif
+apsis.mmd
+*.sarif
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# IAM authorization dumps describe a real account; never commit them.
+*.authz.json
+*authorization-details*.json
+
+# OS
+.DS_Store
+Thumbs.db

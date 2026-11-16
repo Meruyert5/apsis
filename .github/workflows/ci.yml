@@ -1,0 +1,69 @@
+name: ci
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  engine:
+    name: engine (python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Test
+        run: python -m unittest discover -s tests -v
+
+      - name: Gate a clean account
+        run: python -m apsis check --scenario scenarios/ci-cd
+
+      - name: Report the startup fixture
+        run: |
+          python -m apsis scan --scenario scenarios/startup \
+            --markdown apsis-report.md \
+            --sarif apsis.sarif \
+            --mermaid apsis.mmd \
+            --no-color || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apsis-report-${{ matrix.python }}
+          path: |
+            apsis-report.md
+            apsis.sarif
+            apsis.mmd
+
+  site:
+    name: site
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: console
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: console/package-lock.json
+      - run: npm ci
+      - run: npm audit --omit=dev
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: console/dist
+

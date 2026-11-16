@@ -1,0 +1,324 @@
+{
+  "name": "fintech",
+  "title": "Fintech ledger, post-series-C",
+  "account_id": "333344445555",
+  "region": "us-east-1",
+  "severity": "critical",
+  "summary": "A payments platform where the analytics chain reaches administrator in six hops. The pipeline can publish a new version of the policy that governs it.",
+  "signature_source": "fin-analyst",
+  "policies": {
+    "fin-admin-access": {
+      "Name": "fin-admin-access",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [{ "Effect": "Allow", "Action": "*", "Resource": "*" }]
+      }
+    },
+    "fin-analyst-read": {
+      "Name": "fin-analyst-read",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["s3:GetObject", "athena:StartQueryExecution"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::333344445555:role/fin-ci"
+          }
+        ]
+      }
+    },
+    "fin-ci-policy": {
+      "Name": "fin-ci-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::333344445555:role/fin-build"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::333344445555:role/fin-data"
+          }
+        ]
+      }
+    },
+    "fin-build-policy": {
+      "Name": "fin-build-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::333344445555:role/fin-deploy"
+          },
+          { "Effect": "Allow", "Action": "lambda:CreateFunction", "Resource": "*" }
+        ]
+      }
+    },
+    "fin-deploy-policy": {
+      "Name": "fin-deploy-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::333344445555:role/fin-release"
+          }
+        ]
+      }
+    },
+    "fin-release-policy": {
+      "Name": "fin-release-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": ["iam:UpdateAssumeRolePolicy", "sts:AssumeRole"],
+            "Resource": "arn:aws:iam::333344445555:role/fin-pipeline"
+          }
+        ]
+      }
+    },
+    "fin-pipeline-policy": {
+      "Name": "fin-pipeline-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "iam:CreatePolicyVersion",
+            "Resource": "arn:aws:iam::333344445555:policy/fin-pipeline-policy"
+          }
+        ]
+      }
+    },
+    "fin-support-policy": {
+      "Name": "fin-support-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["iam:CreateAccessKey", "iam:ListUsers"], "Resource": "*" }
+        ]
+      }
+    },
+    "fin-data-policy": {
+      "Name": "fin-data-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["s3:*", "glue:*"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::333344445555:role/fin-etl"
+          },
+          { "Effect": "Allow", "Action": "glue:CreateDevEndpoint", "Resource": "*" }
+        ]
+      }
+    },
+    "fin-etl-policy": {
+      "Name": "fin-etl-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["s3:*"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::333344445555:role/fin-reporting"
+          }
+        ]
+      }
+    },
+    "fin-reporting-policy": {
+      "Name": "fin-reporting-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["quicksight:*", "s3:GetObject"], "Resource": "*" }
+        ]
+      }
+    },
+    "fin-ops-policy": {
+      "Name": "fin-ops-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "iam:AttachUserPolicy",
+            "Resource": "arn:aws:iam::333344445555:user/fin-ops"
+          }
+        ]
+      }
+    },
+    "fin-vendor-policy": {
+      "Name": "fin-vendor-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::333344445555:role/fin-data"
+          }
+        ]
+      }
+    },
+    "fin-auditor-policy": {
+      "Name": "fin-auditor-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [{ "Effect": "Allow", "Action": ["*:Get*", "*:List*"], "Resource": "*" }]
+      }
+    }
+  },
+  "identities": [
+    {
+      "id": "fin-analyst",
+      "name": "fin-analyst",
+      "label": "Ledger analyst",
+      "kind": "user",
+      "attached": ["fin-analyst-read"],
+      "note": "Reads the ledger. Can also assume the CI role for report builds."
+    },
+    {
+      "id": "fin-ci",
+      "name": "fin-ci",
+      "label": "CI runner",
+      "kind": "role",
+      "attached": ["fin-ci-policy"],
+      "trust": ["arn:aws:iam::333344445555:user/fin-analyst"],
+      "note": "CI role. Assumes the build role and the data role."
+    },
+    {
+      "id": "fin-build",
+      "name": "fin-build",
+      "label": "Build role",
+      "kind": "role",
+      "attached": ["fin-build-policy"],
+      "trust": ["arn:aws:iam::333344445555:role/fin-ci"],
+      "note": "Passes the deploy role into new functions."
+    },
+    {
+      "id": "fin-deploy",
+      "name": "fin-deploy",
+      "label": "Deploy role",
+      "kind": "role",
+      "attached": ["fin-deploy-policy"],
+      "trust": ["lambda.amazonaws.com"],
+      "note": "Holds the release role in reach."
+    },
+    {
+      "id": "fin-release",
+      "name": "fin-release",
+      "label": "Release role",
+      "kind": "role",
+      "attached": ["fin-release-policy"],
+      "trust": ["arn:aws:iam::333344445555:role/fin-deploy"],
+      "note": "Can rewrite the pipeline's trust policy and then assume it."
+    },
+    {
+      "id": "fin-pipeline",
+      "name": "fin-pipeline",
+      "label": "Payments pipeline",
+      "kind": "role",
+      "attached": ["fin-pipeline-policy"],
+      "trust": ["arn:aws:iam::333344445555:role/fin-release"],
+      "note": "Publishes versions of its own policy. That is the last step to administrator."
+    },
+    {
+      "id": "fin-admin",
+      "name": "fin-admin",
+      "label": "Platform administrator",
+      "kind": "role",
+      "attached": ["fin-admin-access"],
+      "trust": ["arn:aws:iam::333344445555:root"],
+      "note": "Break-glass administrator role for the ledger."
+    },
+    {
+      "id": "fin-support",
+      "name": "fin-support",
+      "label": "Support desk",
+      "kind": "user",
+      "attached": ["fin-support-policy"],
+      "note": "Mints access keys when a merchant cannot log in."
+    },
+    {
+      "id": "fin-data",
+      "name": "fin-data",
+      "label": "Data engineering",
+      "kind": "role",
+      "attached": ["fin-data-policy"],
+      "trust": ["arn:aws:iam::333344445555:role/fin-ci", "arn:aws:iam::333344445555:user/fin-vendor"],
+      "note": "Passes the ETL role into a development endpoint."
+    },
+    {
+      "id": "fin-etl",
+      "name": "fin-etl",
+      "label": "ETL role",
+      "kind": "role",
+      "attached": ["fin-etl-policy"],
+      "trust": ["glue.amazonaws.com"],
+      "note": "Nightly settlement job. Assumes the reporting role."
+    },
+    {
+      "id": "fin-reporting",
+      "name": "fin-reporting",
+      "label": "Reporting role",
+      "kind": "role",
+      "attached": ["fin-reporting-policy"],
+      "trust": ["arn:aws:iam::333344445555:role/fin-etl"],
+      "note": "Reads settlement data for dashboards."
+    },
+    {
+      "id": "fin-ops",
+      "name": "fin-ops",
+      "label": "Operations engineer",
+      "kind": "user",
+      "attached": ["fin-ops-policy"],
+      "note": "Can attach a policy to their own user."
+    },
+    {
+      "id": "fin-vendor",
+      "name": "fin-vendor",
+      "label": "Settlement vendor",
+      "kind": "user",
+      "attached": ["fin-vendor-policy"],
+      "note": "Third-party contractor. Assumes the data role."
+    },
+    {
+      "id": "fin-auditor",
+      "name": "fin-auditor",
+      "label": "External auditor",
+      "kind": "user",
+      "attached": ["fin-auditor-policy"],
+      "note": "Read-only quarterly access."
+    },
+    {
+      "id": "fin-finance",
+      "name": "fin-finance",
+      "label": "Finance team",
+      "kind": "group",
+      "attached": ["fin-auditor-policy"],
+      "note": "Group used for billing dashboards."
+    }
+  ],
+  "resources": [
+    {
+      "id": "fin-settlement",
+      "name": "fin-settlement",
+      "label": "Settlement writer",
+      "kind": "lambda",
+      "role": "fin-reporting",
+      "note": "Writes the daily settlement file."
+    }
+  ]
+}

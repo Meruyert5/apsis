@@ -1,0 +1,2281 @@
+{
+  "generated": "2026-11-16T18:48:43+00:00",
+  "engine": {
+    "name": "apsis",
+    "version": "0.2.0"
+  },
+  "scenario": {
+    "name": "research",
+    "title": "Research lab, grant funded",
+    "summary": "A grant-funded lab with a claims-style data chain and a warehouse role that can write onto the administrator role it assumes.",
+    "accountId": "777700003333",
+    "region": "eu-central-1",
+    "severity": "critical"
+  },
+  "stats": {
+    "identities": 14,
+    "resources": 1,
+    "edges": 15,
+    "sourcesWithPath": 8,
+    "sources": 12,
+    "routes": 18,
+    "shortest": 1,
+    "admins": [
+      "Health platform admin"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "__admin__",
+      "label": "Administrator",
+      "kind": "admin",
+      "admin": true,
+      "x": 0.931,
+      "y": 0.705,
+      "degree": 0,
+      "note": "",
+      "arn": "",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "hc-clinicians",
+      "label": "Clinicians",
+      "kind": "group",
+      "admin": false,
+      "x": 0.0731,
+      "y": 0.828,
+      "degree": 0,
+      "note": "Group for clinical read access.",
+      "arn": "arn:aws:iam::777700003333:group/hc-clinicians",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "hc-admin",
+      "label": "Health platform admin",
+      "kind": "role",
+      "admin": true,
+      "x": 0.9292,
+      "y": 0.295,
+      "degree": 2,
+      "note": "Administrator for the claims platform.",
+      "arn": "arn:aws:iam::777700003333:role/hc-admin",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700003333:root"
+      ]
+    },
+    {
+      "id": "hc-claims",
+      "label": "Claims service",
+      "kind": "role",
+      "admin": false,
+      "x": 0.075,
+      "y": 0.664,
+      "degree": 1,
+      "note": "Adjudicates claims in real time.",
+      "arn": "arn:aws:iam::777700003333:role/hc-claims",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700003333:role/hc-integration"
+      ]
+    },
+    {
+      "id": "hc-etl",
+      "label": "Nightly ETL role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.5616,
+      "y": 0.5,
+      "degree": 2,
+      "note": "Passes the staging role into a development endpoint.",
+      "arn": "arn:aws:iam::777700003333:role/hc-etl",
+      "groups": [],
+      "trust": [
+        "glue.amazonaws.com"
+      ]
+    },
+    {
+      "id": "hc-integration",
+      "label": "Integration role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.3159,
+      "y": 0.705,
+      "degree": 3,
+      "note": "Bridges the clearing house into the claims lake.",
+      "arn": "arn:aws:iam::777700003333:role/hc-integration",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700003333:user/hc-vendor"
+      ]
+    },
+    {
+      "id": "hc-ops-admin",
+      "label": "Operations admin",
+      "kind": "role",
+      "admin": false,
+      "x": 0.0635,
+      "y": 0.5,
+      "degree": 2,
+      "note": "Monitors the claims pipeline.",
+      "arn": "arn:aws:iam::777700003333:role/hc-ops-admin",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700003333:user/hc-ops"
+      ]
+    },
+    {
+      "id": "hc-reader",
+      "label": "Reporting reader",
+      "kind": "role",
+      "admin": false,
+      "x": 0.44,
+      "y": 0.5,
+      "degree": 3,
+      "note": "Reads the claims lake and can assume the ETL role.",
+      "arn": "arn:aws:iam::777700003333:role/hc-reader",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700003333:user/hc-analyst",
+        "arn:aws:iam::777700003333:role/hc-integration"
+      ]
+    },
+    {
+      "id": "hc-stage",
+      "label": "Staging role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.6837,
+      "y": 0.5,
+      "degree": 2,
+      "note": "Holds the warehouse role in reach.",
+      "arn": "arn:aws:iam::777700003333:role/hc-stage",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700003333:role/hc-etl"
+      ]
+    },
+    {
+      "id": "hc-warehouse",
+      "label": "Warehouse role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.8139,
+      "y": 0.5,
+      "degree": 3,
+      "note": "Writes an inline policy onto the administrator role and assumes it.",
+      "arn": "arn:aws:iam::777700003333:role/hc-warehouse",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::777700003333:role/hc-stage"
+      ]
+    },
+    {
+      "id": "hc-analyst",
+      "label": "Claims analyst",
+      "kind": "user",
+      "admin": false,
+      "x": 0.3107,
+      "y": 0.295,
+      "degree": 2,
+      "note": "Reads claim volumes. Assumes the reader role for scheduled extracts.",
+      "arn": "arn:aws:iam::777700003333:user/hc-analyst",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "hc-auditor",
+      "label": "Compliance auditor",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0635,
+      "y": 0.172,
+      "degree": 1,
+      "note": "Read-only access for the annual audit.",
+      "arn": "arn:aws:iam::777700003333:user/hc-auditor",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "hc-ops",
+      "label": "Platform operations",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0669,
+      "y": 0.336,
+      "degree": 3,
+      "note": "Attaches a policy to the operations admin role it can already assume.",
+      "arn": "arn:aws:iam::777700003333:user/hc-ops",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "hc-support",
+      "label": "Member support",
+      "kind": "user",
+      "admin": false,
+      "x": 0.1949,
+      "y": 0.295,
+      "degree": 4,
+      "note": "Sets console passwords when a clinician is locked out.",
+      "arn": "arn:aws:iam::777700003333:user/hc-support",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "hc-vendor",
+      "label": "Clearing house vendor",
+      "kind": "user",
+      "admin": false,
+      "x": 0.1975,
+      "y": 0.705,
+      "degree": 2,
+      "note": "Third-party integration account.",
+      "arn": "arn:aws:iam::777700003333:user/hc-vendor",
+      "groups": [],
+      "trust": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "source": "hc-analyst",
+      "target": "hc-reader",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "hc-analyst-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-reader",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e1",
+      "source": "hc-etl",
+      "target": "hc-stage",
+      "technique": "passrole_glue",
+      "name": "PassRole into Glue",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:PassRole",
+        "glue:CreateDevEndpoint"
+      ],
+      "conditional": false,
+      "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+      "narration": "Create a development endpoint that runs with the passed role.",
+      "fix": "Block glue:CreateDevEndpoint, or pin iam:PassRole to a known role."
+    },
+    {
+      "id": "e2",
+      "source": "hc-integration",
+      "target": "hc-claims",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "hc-integration-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-claims",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e3",
+      "source": "hc-integration",
+      "target": "hc-reader",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "hc-integration-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-reader",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e4",
+      "source": "hc-ops",
+      "target": "hc-ops-admin",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "hc-ops-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-ops-admin",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e5",
+      "source": "hc-ops",
+      "target": "hc-ops-admin",
+      "technique": "iam_attach_role_policy",
+      "name": "Attach a policy to a trusted role",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:AttachRolePolicy"
+      ],
+      "conditional": false,
+      "evidence": "hc-ops-policy allows iam:AttachRolePolicy on arn:aws:iam::777700003333:role/hc-ops-admin",
+      "narration": "Attach an administrator policy to a role you can already assume.",
+      "fix": "Only a break-glass pipeline should hold iam:AttachRolePolicy."
+    },
+    {
+      "id": "e6",
+      "source": "hc-reader",
+      "target": "hc-etl",
+      "technique": "passrole_glue",
+      "name": "PassRole into Glue",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:PassRole",
+        "glue:CreateDevEndpoint"
+      ],
+      "conditional": false,
+      "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+      "narration": "Create a development endpoint that runs with the passed role.",
+      "fix": "Block glue:CreateDevEndpoint, or pin iam:PassRole to a known role."
+    },
+    {
+      "id": "e7",
+      "source": "hc-stage",
+      "target": "hc-warehouse",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e8",
+      "source": "hc-support",
+      "target": "hc-analyst",
+      "technique": "iam_create_login_profile",
+      "name": "Set a console password for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateLoginProfile"
+      ],
+      "conditional": false,
+      "evidence": "hc-support-policy allows iam:CreateLoginProfile on arn:aws:iam::777700003333:user/hc-analyst",
+      "narration": "Create a console login for a stronger identity without touching its keys.",
+      "fix": "Alert on CreateLoginProfile and UpdateLoginProfile outside the IdP flow."
+    },
+    {
+      "id": "e9",
+      "source": "hc-support",
+      "target": "hc-auditor",
+      "technique": "iam_create_login_profile",
+      "name": "Set a console password for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateLoginProfile"
+      ],
+      "conditional": false,
+      "evidence": "hc-support-policy allows iam:CreateLoginProfile on arn:aws:iam::777700003333:user/hc-auditor",
+      "narration": "Create a console login for a stronger identity without touching its keys.",
+      "fix": "Alert on CreateLoginProfile and UpdateLoginProfile outside the IdP flow."
+    },
+    {
+      "id": "e10",
+      "source": "hc-support",
+      "target": "hc-ops",
+      "technique": "iam_create_login_profile",
+      "name": "Set a console password for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateLoginProfile"
+      ],
+      "conditional": false,
+      "evidence": "hc-support-policy allows iam:CreateLoginProfile on arn:aws:iam::777700003333:user/hc-ops",
+      "narration": "Create a console login for a stronger identity without touching its keys.",
+      "fix": "Alert on CreateLoginProfile and UpdateLoginProfile outside the IdP flow."
+    },
+    {
+      "id": "e11",
+      "source": "hc-support",
+      "target": "hc-vendor",
+      "technique": "iam_create_login_profile",
+      "name": "Set a console password for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateLoginProfile"
+      ],
+      "conditional": false,
+      "evidence": "hc-support-policy allows iam:CreateLoginProfile on arn:aws:iam::777700003333:user/hc-vendor",
+      "narration": "Create a console login for a stronger identity without touching its keys.",
+      "fix": "Alert on CreateLoginProfile and UpdateLoginProfile outside the IdP flow."
+    },
+    {
+      "id": "e12",
+      "source": "hc-vendor",
+      "target": "hc-integration",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "hc-vendor-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-integration",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e13",
+      "source": "hc-warehouse",
+      "target": "hc-admin",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "hc-warehouse-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-admin",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e14",
+      "source": "hc-warehouse",
+      "target": "hc-admin",
+      "technique": "iam_put_role_policy",
+      "name": "Inline policy on a trusted role",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:PutRolePolicy"
+      ],
+      "conditional": false,
+      "evidence": "hc-warehouse-policy allows iam:PutRolePolicy on arn:aws:iam::777700003333:role/hc-admin",
+      "narration": "Write an inline administrator statement onto a role you can assume.",
+      "fix": "Block iam:PutRolePolicy outside the IAM administration role."
+    }
+  ],
+  "paths": {
+    "hc-analyst": [
+      {
+        "hops": 5,
+        "nodes": [
+          "hc-analyst",
+          "hc-reader",
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e0",
+          "e6",
+          "e1",
+          "e7",
+          "e13"
+        ],
+        "labels": [
+          "Claims analyst",
+          "Reporting reader",
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-analyst-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-reader",
+            "conditional": false
+          },
+          {
+            "edge": "e6",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e13",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-warehouse-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 5,
+        "nodes": [
+          "hc-analyst",
+          "hc-reader",
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e0",
+          "e6",
+          "e1",
+          "e7",
+          "e14"
+        ],
+        "labels": [
+          "Claims analyst",
+          "Reporting reader",
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-analyst-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-reader",
+            "conditional": false
+          },
+          {
+            "edge": "e6",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e14",
+            "technique": "iam_put_role_policy",
+            "name": "Inline policy on a trusted role",
+            "narration": "Write an inline administrator statement onto a role you can assume.",
+            "actions": [
+              "iam:PutRolePolicy"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "hc-warehouse-policy allows iam:PutRolePolicy on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "hc-reader": [
+      {
+        "hops": 4,
+        "nodes": [
+          "hc-reader",
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e6",
+          "e1",
+          "e7",
+          "e13"
+        ],
+        "labels": [
+          "Reporting reader",
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e6",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e13",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-warehouse-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 4,
+        "nodes": [
+          "hc-reader",
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e6",
+          "e1",
+          "e7",
+          "e14"
+        ],
+        "labels": [
+          "Reporting reader",
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e6",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e14",
+            "technique": "iam_put_role_policy",
+            "name": "Inline policy on a trusted role",
+            "narration": "Write an inline administrator statement onto a role you can assume.",
+            "actions": [
+              "iam:PutRolePolicy"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "hc-warehouse-policy allows iam:PutRolePolicy on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "hc-etl": [
+      {
+        "hops": 3,
+        "nodes": [
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e1",
+          "e7",
+          "e13"
+        ],
+        "labels": [
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e13",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-warehouse-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 3,
+        "nodes": [
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e1",
+          "e7",
+          "e14"
+        ],
+        "labels": [
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e14",
+            "technique": "iam_put_role_policy",
+            "name": "Inline policy on a trusted role",
+            "narration": "Write an inline administrator statement onto a role you can assume.",
+            "actions": [
+              "iam:PutRolePolicy"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "hc-warehouse-policy allows iam:PutRolePolicy on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "hc-stage": [
+      {
+        "hops": 2,
+        "nodes": [
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e7",
+          "e13"
+        ],
+        "labels": [
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e13",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-warehouse-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 2,
+        "nodes": [
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e7",
+          "e14"
+        ],
+        "labels": [
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e14",
+            "technique": "iam_put_role_policy",
+            "name": "Inline policy on a trusted role",
+            "narration": "Write an inline administrator statement onto a role you can assume.",
+            "actions": [
+              "iam:PutRolePolicy"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "hc-warehouse-policy allows iam:PutRolePolicy on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "hc-warehouse": [
+      {
+        "hops": 1,
+        "nodes": [
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e13"
+        ],
+        "labels": [
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e13",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-warehouse-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 1,
+        "nodes": [
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e14"
+        ],
+        "labels": [
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e14",
+            "technique": "iam_put_role_policy",
+            "name": "Inline policy on a trusted role",
+            "narration": "Write an inline administrator statement onto a role you can assume.",
+            "actions": [
+              "iam:PutRolePolicy"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "hc-warehouse-policy allows iam:PutRolePolicy on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "hc-support": [
+      {
+        "hops": 6,
+        "nodes": [
+          "hc-support",
+          "hc-analyst",
+          "hc-reader",
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e8",
+          "e0",
+          "e6",
+          "e1",
+          "e7",
+          "e13"
+        ],
+        "labels": [
+          "Member support",
+          "Claims analyst",
+          "Reporting reader",
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e8",
+            "technique": "iam_create_login_profile",
+            "name": "Set a console password for another user",
+            "narration": "Create a console login for a stronger identity without touching its keys.",
+            "actions": [
+              "iam:CreateLoginProfile"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-support-policy allows iam:CreateLoginProfile on arn:aws:iam::777700003333:user/hc-analyst",
+            "conditional": false
+          },
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-analyst-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-reader",
+            "conditional": false
+          },
+          {
+            "edge": "e6",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e13",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-warehouse-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 6,
+        "nodes": [
+          "hc-support",
+          "hc-analyst",
+          "hc-reader",
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e8",
+          "e0",
+          "e6",
+          "e1",
+          "e7",
+          "e14"
+        ],
+        "labels": [
+          "Member support",
+          "Claims analyst",
+          "Reporting reader",
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e8",
+            "technique": "iam_create_login_profile",
+            "name": "Set a console password for another user",
+            "narration": "Create a console login for a stronger identity without touching its keys.",
+            "actions": [
+              "iam:CreateLoginProfile"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-support-policy allows iam:CreateLoginProfile on arn:aws:iam::777700003333:user/hc-analyst",
+            "conditional": false
+          },
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-analyst-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-reader",
+            "conditional": false
+          },
+          {
+            "edge": "e6",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e14",
+            "technique": "iam_put_role_policy",
+            "name": "Inline policy on a trusted role",
+            "narration": "Write an inline administrator statement onto a role you can assume.",
+            "actions": [
+              "iam:PutRolePolicy"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "hc-warehouse-policy allows iam:PutRolePolicy on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 7,
+        "nodes": [
+          "hc-support",
+          "hc-vendor",
+          "hc-integration",
+          "hc-reader",
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e11",
+          "e12",
+          "e3",
+          "e6",
+          "e1",
+          "e7",
+          "e13"
+        ],
+        "labels": [
+          "Member support",
+          "Clearing house vendor",
+          "Integration role",
+          "Reporting reader",
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e11",
+            "technique": "iam_create_login_profile",
+            "name": "Set a console password for another user",
+            "narration": "Create a console login for a stronger identity without touching its keys.",
+            "actions": [
+              "iam:CreateLoginProfile"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-support-policy allows iam:CreateLoginProfile on arn:aws:iam::777700003333:user/hc-vendor",
+            "conditional": false
+          },
+          {
+            "edge": "e12",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-vendor-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-integration",
+            "conditional": false
+          },
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-integration-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-reader",
+            "conditional": false
+          },
+          {
+            "edge": "e6",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e13",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-warehouse-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 7,
+        "nodes": [
+          "hc-support",
+          "hc-vendor",
+          "hc-integration",
+          "hc-reader",
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e11",
+          "e12",
+          "e3",
+          "e6",
+          "e1",
+          "e7",
+          "e14"
+        ],
+        "labels": [
+          "Member support",
+          "Clearing house vendor",
+          "Integration role",
+          "Reporting reader",
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e11",
+            "technique": "iam_create_login_profile",
+            "name": "Set a console password for another user",
+            "narration": "Create a console login for a stronger identity without touching its keys.",
+            "actions": [
+              "iam:CreateLoginProfile"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-support-policy allows iam:CreateLoginProfile on arn:aws:iam::777700003333:user/hc-vendor",
+            "conditional": false
+          },
+          {
+            "edge": "e12",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-vendor-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-integration",
+            "conditional": false
+          },
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-integration-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-reader",
+            "conditional": false
+          },
+          {
+            "edge": "e6",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e14",
+            "technique": "iam_put_role_policy",
+            "name": "Inline policy on a trusted role",
+            "narration": "Write an inline administrator statement onto a role you can assume.",
+            "actions": [
+              "iam:PutRolePolicy"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "hc-warehouse-policy allows iam:PutRolePolicy on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "hc-integration": [
+      {
+        "hops": 5,
+        "nodes": [
+          "hc-integration",
+          "hc-reader",
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e3",
+          "e6",
+          "e1",
+          "e7",
+          "e13"
+        ],
+        "labels": [
+          "Integration role",
+          "Reporting reader",
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-integration-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-reader",
+            "conditional": false
+          },
+          {
+            "edge": "e6",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e13",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-warehouse-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 5,
+        "nodes": [
+          "hc-integration",
+          "hc-reader",
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e3",
+          "e6",
+          "e1",
+          "e7",
+          "e14"
+        ],
+        "labels": [
+          "Integration role",
+          "Reporting reader",
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-integration-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-reader",
+            "conditional": false
+          },
+          {
+            "edge": "e6",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e14",
+            "technique": "iam_put_role_policy",
+            "name": "Inline policy on a trusted role",
+            "narration": "Write an inline administrator statement onto a role you can assume.",
+            "actions": [
+              "iam:PutRolePolicy"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "hc-warehouse-policy allows iam:PutRolePolicy on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "hc-vendor": [
+      {
+        "hops": 6,
+        "nodes": [
+          "hc-vendor",
+          "hc-integration",
+          "hc-reader",
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e12",
+          "e3",
+          "e6",
+          "e1",
+          "e7",
+          "e13"
+        ],
+        "labels": [
+          "Clearing house vendor",
+          "Integration role",
+          "Reporting reader",
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e12",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-vendor-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-integration",
+            "conditional": false
+          },
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-integration-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-reader",
+            "conditional": false
+          },
+          {
+            "edge": "e6",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e13",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-warehouse-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 6,
+        "nodes": [
+          "hc-vendor",
+          "hc-integration",
+          "hc-reader",
+          "hc-etl",
+          "hc-stage",
+          "hc-warehouse",
+          "hc-admin"
+        ],
+        "edges": [
+          "e12",
+          "e3",
+          "e6",
+          "e1",
+          "e7",
+          "e14"
+        ],
+        "labels": [
+          "Clearing house vendor",
+          "Integration role",
+          "Reporting reader",
+          "Nightly ETL role",
+          "Staging role",
+          "Warehouse role",
+          "Health platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e12",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-vendor-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-integration",
+            "conditional": false
+          },
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-integration-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-reader",
+            "conditional": false
+          },
+          {
+            "edge": "e6",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e1",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+            "conditional": false
+          },
+          {
+            "edge": "e14",
+            "technique": "iam_put_role_policy",
+            "name": "Inline policy on a trusted role",
+            "narration": "Write an inline administrator statement onto a role you can assume.",
+            "actions": [
+              "iam:PutRolePolicy"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "hc-warehouse-policy allows iam:PutRolePolicy on arn:aws:iam::777700003333:role/hc-admin",
+            "conditional": false
+          }
+        ]
+      }
+    ]
+  },
+  "sever": {
+    "routesBefore": 8,
+    "routesAfter": 0,
+    "closed": true,
+    "edgeCut": {
+      "edges": [
+        "e13",
+        "e14"
+      ],
+      "byTechnique": {
+        "assume_role": 1,
+        "iam_put_role_policy": 1
+      },
+      "byAction": {
+        "sts:AssumeRole": 1,
+        "iam:PutRolePolicy": 1
+      }
+    },
+    "permissionSteps": [
+      {
+        "action": "sts:AssumeRole",
+        "edgesRemoved": 7,
+        "routesKilled": 7
+      },
+      {
+        "action": "iam:PutRolePolicy",
+        "edgesRemoved": 1,
+        "routesKilled": 1
+      }
+    ]
+  },
+  "signature": {
+    "hops": 5,
+    "nodes": [
+      "hc-analyst",
+      "hc-reader",
+      "hc-etl",
+      "hc-stage",
+      "hc-warehouse",
+      "hc-admin"
+    ],
+    "edges": [
+      "e0",
+      "e6",
+      "e1",
+      "e7",
+      "e13"
+    ],
+    "labels": [
+      "Claims analyst",
+      "Reporting reader",
+      "Nightly ETL role",
+      "Staging role",
+      "Warehouse role",
+      "Health platform admin"
+    ],
+    "steps": [
+      {
+        "edge": "e0",
+        "technique": "assume_role",
+        "name": "Cross-role assumption",
+        "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1078.004",
+        "evidence": "hc-analyst-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-reader",
+        "conditional": false
+      },
+      {
+        "edge": "e6",
+        "technique": "passrole_glue",
+        "name": "PassRole into Glue",
+        "narration": "Create a development endpoint that runs with the passed role.",
+        "actions": [
+          "iam:PassRole",
+          "glue:CreateDevEndpoint"
+        ],
+        "mitre": "T1098.001",
+        "evidence": "hc-reader-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-etl; hc-reader-policy allows glue:CreateDevEndpoint on *",
+        "conditional": false
+      },
+      {
+        "edge": "e1",
+        "technique": "passrole_glue",
+        "name": "PassRole into Glue",
+        "narration": "Create a development endpoint that runs with the passed role.",
+        "actions": [
+          "iam:PassRole",
+          "glue:CreateDevEndpoint"
+        ],
+        "mitre": "T1098.001",
+        "evidence": "hc-etl-policy allows iam:PassRole on arn:aws:iam::777700003333:role/hc-stage; hc-etl-policy allows glue:CreateDevEndpoint on *",
+        "conditional": false
+      },
+      {
+        "edge": "e7",
+        "technique": "assume_role",
+        "name": "Cross-role assumption",
+        "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1078.004",
+        "evidence": "hc-stage-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-warehouse",
+        "conditional": false
+      },
+      {
+        "edge": "e13",
+        "technique": "assume_role",
+        "name": "Cross-role assumption",
+        "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1078.004",
+        "evidence": "hc-warehouse-policy allows sts:AssumeRole on arn:aws:iam::777700003333:role/hc-admin",
+        "conditional": false
+      }
+    ]
+  },
+  "registry": [
+    {
+      "id": "assume_role",
+      "name": "Cross-role assumption",
+      "category": "trust",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "summary": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root.",
+      "actions": [
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "passrole_lambda",
+      "name": "PassRole into Lambda",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Pass a privileged role to a new function, then invoke it.",
+      "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist.",
+      "actions": [
+        "iam:PassRole",
+        "lambda:CreateFunction",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "passrole_ec2",
+      "name": "PassRole into EC2",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Launch an instance with an instance profile and read its metadata credentials.",
+      "fix": "Deny iam:PassRole for EC2 unless the caller owns the instance profile.",
+      "actions": [
+        "iam:PassRole",
+        "ec2:RunInstances"
+      ]
+    },
+    {
+      "id": "passrole_cloudformation",
+      "name": "PassRole into CloudFormation",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a stack with a service role and let the template call IAM.",
+      "fix": "Deny cloudformation:CreateStack with a RoleARN outside the team boundary.",
+      "actions": [
+        "iam:PassRole",
+        "cloudformation:CreateStack"
+      ]
+    },
+    {
+      "id": "passrole_glue",
+      "name": "PassRole into Glue",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a development endpoint that runs with the passed role.",
+      "fix": "Block glue:CreateDevEndpoint, or pin iam:PassRole to a known role.",
+      "actions": [
+        "iam:PassRole",
+        "glue:CreateDevEndpoint"
+      ]
+    },
+    {
+      "id": "passrole_sagemaker",
+      "name": "PassRole into SageMaker",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a notebook instance with the passed role, then open its terminal.",
+      "fix": "Deny sagemaker:CreateNotebookInstance with an arbitrary execution role.",
+      "actions": [
+        "iam:PassRole",
+        "sagemaker:CreateNotebookInstance"
+      ]
+    },
+    {
+      "id": "lambda_update_code",
+      "name": "Rewrite a function's code",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1648",
+      "summary": "Replace the handler of an existing function that already holds a strong role.",
+      "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions.",
+      "actions": [
+        "lambda:UpdateFunctionCode",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "ssm_send_command",
+      "name": "Shell through SSM",
+      "category": "compute",
+      "severity": "high",
+      "mitre": "T1651",
+      "summary": "Run a command on an instance and use its instance profile.",
+      "fix": "Scope ssm:SendCommand to document ARNs and tag-gated instances.",
+      "actions": [
+        "ssm:SendCommand",
+        "ec2:DescribeInstances"
+      ]
+    },
+    {
+      "id": "iam_attach_user_policy",
+      "name": "Attach a policy to yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach AdministratorAccess to your own user and inherit it.",
+      "fix": "No human or machine identity should hold iam:AttachUserPolicy on its own ARN.",
+      "actions": [
+        "iam:AttachUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_put_user_policy",
+      "name": "Write an inline policy on yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add an inline administrator statement to your own user.",
+      "fix": "Treat iam:PutUserPolicy on self as equivalent to administrator.",
+      "actions": [
+        "iam:PutUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_create_policy_version",
+      "name": "New version of an attached policy",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Publish a new policy version that grants more than the current one.",
+      "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant.",
+      "actions": [
+        "iam:CreatePolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_set_default_policy_version",
+      "name": "Activate a dormant policy version",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Promote an older, wider policy version that is still stored.",
+      "fix": "Delete unused policy versions and block SetDefaultPolicyVersion.",
+      "actions": [
+        "iam:SetDefaultPolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_attach_role_policy",
+      "name": "Attach a policy to a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach an administrator policy to a role you can already assume.",
+      "fix": "Only a break-glass pipeline should hold iam:AttachRolePolicy.",
+      "actions": [
+        "iam:AttachRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_put_role_policy",
+      "name": "Inline policy on a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Write an inline administrator statement onto a role you can assume.",
+      "fix": "Block iam:PutRolePolicy outside the IAM administration role.",
+      "actions": [
+        "iam:PutRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_update_assume_role_policy",
+      "name": "Rewrite a trust policy",
+      "category": "trust",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a role's trust policy, then assume it.",
+      "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads.",
+      "actions": [
+        "iam:UpdateAssumeRolePolicy",
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role.",
+      "actions": [
+        "iam:CreateAccessKey"
+      ]
+    },
+    {
+      "id": "iam_create_login_profile",
+      "name": "Set a console password for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create a console login for a stronger identity without touching its keys.",
+      "fix": "Alert on CreateLoginProfile and UpdateLoginProfile outside the IdP flow.",
+      "actions": [
+        "iam:CreateLoginProfile"
+      ]
+    },
+    {
+      "id": "iam_add_user_to_group",
+      "name": "Join a more privileged group",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a group that carries wider policies.",
+      "fix": "Group membership changes are privilege changes; route them through review.",
+      "actions": [
+        "iam:AddUserToGroup"
+      ]
+    }
+  ]
+}

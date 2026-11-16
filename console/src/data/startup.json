@@ -1,0 +1,1505 @@
+{
+  "generated": "2026-11-16T18:48:43+00:00",
+  "engine": {
+    "name": "apsis",
+    "version": "0.2.0"
+  },
+  "scenario": {
+    "name": "startup",
+    "title": "Series A SaaS startup",
+    "summary": "Eleven identities, four years of growth, no IAM review. Every grant below was reasonable on the day somebody made it.",
+    "accountId": "111122223333",
+    "region": "us-east-1",
+    "severity": "critical"
+  },
+  "stats": {
+    "identities": 11,
+    "resources": 2,
+    "edges": 9,
+    "sourcesWithPath": 6,
+    "sources": 8,
+    "routes": 15,
+    "shortest": 1,
+    "admins": [
+      "Platform admin",
+      "Security admin"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "__admin__",
+      "label": "Administrator",
+      "kind": "admin",
+      "admin": true,
+      "x": 0.931,
+      "y": 0.5,
+      "degree": 1,
+      "note": "",
+      "arn": "",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "platform",
+      "label": "Platform group",
+      "kind": "group",
+      "admin": false,
+      "x": 0.0669,
+      "y": 0.7733,
+      "degree": 0,
+      "note": "Read access for the platform team.",
+      "arn": "arn:aws:iam::111122223333:group/platform",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "app-runtime",
+      "label": "App runtime",
+      "kind": "role",
+      "admin": false,
+      "x": 0.5874,
+      "y": 0.295,
+      "degree": 4,
+      "note": "Execution role for the customer-facing worker.",
+      "arn": "arn:aws:iam::111122223333:role/app-runtime",
+      "groups": [],
+      "trust": [
+        "lambda.amazonaws.com"
+      ]
+    },
+    {
+      "id": "data-eng",
+      "label": "Data engineering",
+      "kind": "role",
+      "admin": false,
+      "x": 0.7581,
+      "y": 0.705,
+      "degree": 3,
+      "note": "Nightly batch jobs. Runs with an ExternalId taken from the pipeline config.",
+      "arn": "arn:aws:iam::111122223333:role/data-eng",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::111122223333:root"
+      ]
+    },
+    {
+      "id": "deploy-role",
+      "label": "Deploy role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.7575,
+      "y": 0.295,
+      "degree": 3,
+      "note": "GitHub Actions assumes this on every merge to main.",
+      "arn": "arn:aws:iam::111122223333:role/deploy-role",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::111122223333:root"
+      ]
+    },
+    {
+      "id": "ops-bastion",
+      "label": "Bastion role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.0635,
+      "y": 0.5,
+      "degree": 0,
+      "note": "Instance profile for the jump host.",
+      "arn": "arn:aws:iam::111122223333:role/ops-bastion",
+      "groups": [],
+      "trust": [
+        "ec2.amazonaws.com"
+      ]
+    },
+    {
+      "id": "platform-admin",
+      "label": "Platform admin",
+      "kind": "role",
+      "admin": true,
+      "x": 0.9292,
+      "y": 0.2267,
+      "degree": 2,
+      "note": "The role that can do anything. Assumed by the platform team through SSO.",
+      "arn": "arn:aws:iam::111122223333:role/platform-admin",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::111122223333:role/data-eng",
+        "arn:aws:iam::111122223333:root"
+      ]
+    },
+    {
+      "id": "billing-analyst",
+      "label": "Billing analyst",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0747,
+      "y": 0.2267,
+      "degree": 0,
+      "note": "Reads invoices. Has no route to anything.",
+      "arn": "arn:aws:iam::111122223333:user/billing-analyst",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "ci-runner",
+      "label": "CI deploy key",
+      "kind": "user",
+      "admin": false,
+      "x": 0.581,
+      "y": 0.705,
+      "degree": 2,
+      "note": "Long-lived access key committed to a private repo in 2021.",
+      "arn": "arn:aws:iam::111122223333:user/ci-runner",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "platform-oncall",
+      "label": "Platform on-call",
+      "kind": "user",
+      "admin": false,
+      "x": 0.4142,
+      "y": 0.5,
+      "degree": 2,
+      "note": "Shared on-call identity. Rotated by whoever is on shift.",
+      "arn": "arn:aws:iam::111122223333:user/platform-oncall",
+      "groups": [
+        "platform"
+      ],
+      "trust": []
+    },
+    {
+      "id": "secops-admin",
+      "label": "Security admin",
+      "kind": "user",
+      "admin": true,
+      "x": 0.9368,
+      "y": 0.7733,
+      "degree": 0,
+      "note": "Break-glass administrator. No access key, hardware key only.",
+      "arn": "arn:aws:iam::111122223333:user/secops-admin",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "support-contractor",
+      "label": "Support contractor",
+      "kind": "user",
+      "admin": false,
+      "x": 0.2441,
+      "y": 0.5,
+      "degree": 1,
+      "note": "External contractor. Key issued for a two-week migration in 2023 and never closed.",
+      "arn": "arn:aws:iam::111122223333:user/support-contractor",
+      "groups": [],
+      "trust": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "source": "app-runtime",
+      "target": "data-eng",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e1",
+      "source": "ci-runner",
+      "target": "app-runtime",
+      "technique": "lambda_update_code",
+      "name": "Rewrite a function's code",
+      "severity": "critical",
+      "mitre": "T1648",
+      "actions": [
+        "lambda:UpdateFunctionCode",
+        "lambda:InvokeFunction"
+      ],
+      "conditional": false,
+      "evidence": "ci-deploy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; ci-deploy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
+      "narration": "Replace the handler of an existing function that already holds a strong role.",
+      "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions."
+    },
+    {
+      "id": "e2",
+      "source": "ci-runner",
+      "target": "deploy-role",
+      "technique": "passrole_lambda",
+      "name": "PassRole into Lambda",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:PassRole",
+        "lambda:CreateFunction",
+        "lambda:InvokeFunction"
+      ],
+      "conditional": false,
+      "evidence": "ci-deploy allows iam:PassRole on arn:aws:iam::111122223333:role/deploy-role; ci-deploy allows lambda:CreateFunction on *",
+      "narration": "Pass a privileged role to a new function, then invoke it.",
+      "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist."
+    },
+    {
+      "id": "e3",
+      "source": "data-eng",
+      "target": "platform-admin",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": true,
+      "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    },
+    {
+      "id": "e4",
+      "source": "data-eng",
+      "target": "platform-admin",
+      "technique": "iam_update_assume_role_policy",
+      "name": "Rewrite a trust policy",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:UpdateAssumeRolePolicy",
+        "sts:AssumeRole"
+      ],
+      "conditional": true,
+      "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+      "narration": "Add yourself to a role's trust policy, then assume it.",
+      "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads."
+    },
+    {
+      "id": "e5",
+      "source": "deploy-role",
+      "target": "__admin__",
+      "technique": "iam_create_policy_version",
+      "name": "New version of an attached policy",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:CreatePolicyVersion"
+      ],
+      "conditional": false,
+      "evidence": "deploy-role-policy allows iam:CreatePolicyVersion on arn:aws:iam::111122223333:policy/deploy-role-policy",
+      "narration": "Publish a new policy version that grants more than the current one.",
+      "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant."
+    },
+    {
+      "id": "e6",
+      "source": "deploy-role",
+      "target": "app-runtime",
+      "technique": "lambda_update_code",
+      "name": "Rewrite a function's code",
+      "severity": "critical",
+      "mitre": "T1648",
+      "actions": [
+        "lambda:UpdateFunctionCode",
+        "lambda:InvokeFunction"
+      ],
+      "conditional": false,
+      "evidence": "deploy-role-policy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; deploy-role-policy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
+      "narration": "Replace the handler of an existing function that already holds a strong role.",
+      "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions."
+    },
+    {
+      "id": "e7",
+      "source": "platform-oncall",
+      "target": "app-runtime",
+      "technique": "passrole_lambda",
+      "name": "PassRole into Lambda",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:PassRole",
+        "lambda:CreateFunction",
+        "lambda:InvokeFunction"
+      ],
+      "conditional": false,
+      "evidence": "oncall-deploy-worker allows iam:PassRole on arn:aws:iam::111122223333:role/app-runtime; oncall-deploy-worker allows lambda:CreateFunction on *",
+      "narration": "Pass a privileged role to a new function, then invoke it.",
+      "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist."
+    },
+    {
+      "id": "e8",
+      "source": "support-contractor",
+      "target": "platform-oncall",
+      "technique": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateAccessKey"
+      ],
+      "conditional": false,
+      "evidence": "support-rotate-oncall-key allows iam:CreateAccessKey on arn:aws:iam::111122223333:user/platform-oncall",
+      "narration": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
+    }
+  ],
+  "paths": {
+    "support-contractor": [
+      {
+        "hops": 4,
+        "nodes": [
+          "support-contractor",
+          "platform-oncall",
+          "app-runtime",
+          "data-eng",
+          "platform-admin"
+        ],
+        "edges": [
+          "e8",
+          "e7",
+          "e0",
+          "e3"
+        ],
+        "labels": [
+          "Support contractor",
+          "Platform on-call",
+          "App runtime",
+          "Data engineering",
+          "Platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e8",
+            "technique": "iam_create_access_key",
+            "name": "Mint credentials for another user",
+            "narration": "Create an access key for a user with more access than you.",
+            "actions": [
+              "iam:CreateAccessKey"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "support-rotate-oncall-key allows iam:CreateAccessKey on arn:aws:iam::111122223333:user/platform-oncall",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "passrole_lambda",
+            "name": "PassRole into Lambda",
+            "narration": "Pass a privileged role to a new function, then invoke it.",
+            "actions": [
+              "iam:PassRole",
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "oncall-deploy-worker allows iam:PassRole on arn:aws:iam::111122223333:role/app-runtime; oncall-deploy-worker allows lambda:CreateFunction on *",
+            "conditional": false
+          },
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
+            "conditional": false
+          },
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+            "conditional": true
+          }
+        ]
+      },
+      {
+        "hops": 4,
+        "nodes": [
+          "support-contractor",
+          "platform-oncall",
+          "app-runtime",
+          "data-eng",
+          "platform-admin"
+        ],
+        "edges": [
+          "e8",
+          "e7",
+          "e0",
+          "e4"
+        ],
+        "labels": [
+          "Support contractor",
+          "Platform on-call",
+          "App runtime",
+          "Data engineering",
+          "Platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e8",
+            "technique": "iam_create_access_key",
+            "name": "Mint credentials for another user",
+            "narration": "Create an access key for a user with more access than you.",
+            "actions": [
+              "iam:CreateAccessKey"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "support-rotate-oncall-key allows iam:CreateAccessKey on arn:aws:iam::111122223333:user/platform-oncall",
+            "conditional": false
+          },
+          {
+            "edge": "e7",
+            "technique": "passrole_lambda",
+            "name": "PassRole into Lambda",
+            "narration": "Pass a privileged role to a new function, then invoke it.",
+            "actions": [
+              "iam:PassRole",
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "oncall-deploy-worker allows iam:PassRole on arn:aws:iam::111122223333:role/app-runtime; oncall-deploy-worker allows lambda:CreateFunction on *",
+            "conditional": false
+          },
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
+            "conditional": false
+          },
+          {
+            "edge": "e4",
+            "technique": "iam_update_assume_role_policy",
+            "name": "Rewrite a trust policy",
+            "narration": "Add yourself to a role's trust policy, then assume it.",
+            "actions": [
+              "iam:UpdateAssumeRolePolicy",
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+            "conditional": true
+          }
+        ]
+      }
+    ],
+    "platform-oncall": [
+      {
+        "hops": 3,
+        "nodes": [
+          "platform-oncall",
+          "app-runtime",
+          "data-eng",
+          "platform-admin"
+        ],
+        "edges": [
+          "e7",
+          "e0",
+          "e3"
+        ],
+        "labels": [
+          "Platform on-call",
+          "App runtime",
+          "Data engineering",
+          "Platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e7",
+            "technique": "passrole_lambda",
+            "name": "PassRole into Lambda",
+            "narration": "Pass a privileged role to a new function, then invoke it.",
+            "actions": [
+              "iam:PassRole",
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "oncall-deploy-worker allows iam:PassRole on arn:aws:iam::111122223333:role/app-runtime; oncall-deploy-worker allows lambda:CreateFunction on *",
+            "conditional": false
+          },
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
+            "conditional": false
+          },
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+            "conditional": true
+          }
+        ]
+      },
+      {
+        "hops": 3,
+        "nodes": [
+          "platform-oncall",
+          "app-runtime",
+          "data-eng",
+          "platform-admin"
+        ],
+        "edges": [
+          "e7",
+          "e0",
+          "e4"
+        ],
+        "labels": [
+          "Platform on-call",
+          "App runtime",
+          "Data engineering",
+          "Platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e7",
+            "technique": "passrole_lambda",
+            "name": "PassRole into Lambda",
+            "narration": "Pass a privileged role to a new function, then invoke it.",
+            "actions": [
+              "iam:PassRole",
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "oncall-deploy-worker allows iam:PassRole on arn:aws:iam::111122223333:role/app-runtime; oncall-deploy-worker allows lambda:CreateFunction on *",
+            "conditional": false
+          },
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
+            "conditional": false
+          },
+          {
+            "edge": "e4",
+            "technique": "iam_update_assume_role_policy",
+            "name": "Rewrite a trust policy",
+            "narration": "Add yourself to a role's trust policy, then assume it.",
+            "actions": [
+              "iam:UpdateAssumeRolePolicy",
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+            "conditional": true
+          }
+        ]
+      }
+    ],
+    "app-runtime": [
+      {
+        "hops": 2,
+        "nodes": [
+          "app-runtime",
+          "data-eng",
+          "platform-admin"
+        ],
+        "edges": [
+          "e0",
+          "e3"
+        ],
+        "labels": [
+          "App runtime",
+          "Data engineering",
+          "Platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
+            "conditional": false
+          },
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+            "conditional": true
+          }
+        ]
+      },
+      {
+        "hops": 2,
+        "nodes": [
+          "app-runtime",
+          "data-eng",
+          "platform-admin"
+        ],
+        "edges": [
+          "e0",
+          "e4"
+        ],
+        "labels": [
+          "App runtime",
+          "Data engineering",
+          "Platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
+            "conditional": false
+          },
+          {
+            "edge": "e4",
+            "technique": "iam_update_assume_role_policy",
+            "name": "Rewrite a trust policy",
+            "narration": "Add yourself to a role's trust policy, then assume it.",
+            "actions": [
+              "iam:UpdateAssumeRolePolicy",
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+            "conditional": true
+          }
+        ]
+      }
+    ],
+    "data-eng": [
+      {
+        "hops": 1,
+        "nodes": [
+          "data-eng",
+          "platform-admin"
+        ],
+        "edges": [
+          "e3"
+        ],
+        "labels": [
+          "Data engineering",
+          "Platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+            "conditional": true
+          }
+        ]
+      },
+      {
+        "hops": 1,
+        "nodes": [
+          "data-eng",
+          "platform-admin"
+        ],
+        "edges": [
+          "e4"
+        ],
+        "labels": [
+          "Data engineering",
+          "Platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e4",
+            "technique": "iam_update_assume_role_policy",
+            "name": "Rewrite a trust policy",
+            "narration": "Add yourself to a role's trust policy, then assume it.",
+            "actions": [
+              "iam:UpdateAssumeRolePolicy",
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+            "conditional": true
+          }
+        ]
+      }
+    ],
+    "ci-runner": [
+      {
+        "hops": 2,
+        "nodes": [
+          "ci-runner",
+          "deploy-role",
+          "__admin__"
+        ],
+        "edges": [
+          "e2",
+          "e5"
+        ],
+        "labels": [
+          "CI deploy key",
+          "Deploy role",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e2",
+            "technique": "passrole_lambda",
+            "name": "PassRole into Lambda",
+            "narration": "Pass a privileged role to a new function, then invoke it.",
+            "actions": [
+              "iam:PassRole",
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "ci-deploy allows iam:PassRole on arn:aws:iam::111122223333:role/deploy-role; ci-deploy allows lambda:CreateFunction on *",
+            "conditional": false
+          },
+          {
+            "edge": "e5",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "deploy-role-policy allows iam:CreatePolicyVersion on arn:aws:iam::111122223333:policy/deploy-role-policy",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 3,
+        "nodes": [
+          "ci-runner",
+          "app-runtime",
+          "data-eng",
+          "platform-admin"
+        ],
+        "edges": [
+          "e1",
+          "e0",
+          "e3"
+        ],
+        "labels": [
+          "CI deploy key",
+          "App runtime",
+          "Data engineering",
+          "Platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e1",
+            "technique": "lambda_update_code",
+            "name": "Rewrite a function's code",
+            "narration": "Replace the handler of an existing function that already holds a strong role.",
+            "actions": [
+              "lambda:UpdateFunctionCode",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1648",
+            "evidence": "ci-deploy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; ci-deploy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
+            "conditional": false
+          },
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
+            "conditional": false
+          },
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+            "conditional": true
+          }
+        ]
+      },
+      {
+        "hops": 3,
+        "nodes": [
+          "ci-runner",
+          "app-runtime",
+          "data-eng",
+          "platform-admin"
+        ],
+        "edges": [
+          "e1",
+          "e0",
+          "e4"
+        ],
+        "labels": [
+          "CI deploy key",
+          "App runtime",
+          "Data engineering",
+          "Platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e1",
+            "technique": "lambda_update_code",
+            "name": "Rewrite a function's code",
+            "narration": "Replace the handler of an existing function that already holds a strong role.",
+            "actions": [
+              "lambda:UpdateFunctionCode",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1648",
+            "evidence": "ci-deploy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; ci-deploy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
+            "conditional": false
+          },
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
+            "conditional": false
+          },
+          {
+            "edge": "e4",
+            "technique": "iam_update_assume_role_policy",
+            "name": "Rewrite a trust policy",
+            "narration": "Add yourself to a role's trust policy, then assume it.",
+            "actions": [
+              "iam:UpdateAssumeRolePolicy",
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+            "conditional": true
+          }
+        ]
+      },
+      {
+        "hops": 4,
+        "nodes": [
+          "ci-runner",
+          "deploy-role",
+          "app-runtime",
+          "data-eng",
+          "platform-admin"
+        ],
+        "edges": [
+          "e2",
+          "e6",
+          "e0",
+          "e3"
+        ],
+        "labels": [
+          "CI deploy key",
+          "Deploy role",
+          "App runtime",
+          "Data engineering",
+          "Platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e2",
+            "technique": "passrole_lambda",
+            "name": "PassRole into Lambda",
+            "narration": "Pass a privileged role to a new function, then invoke it.",
+            "actions": [
+              "iam:PassRole",
+              "lambda:CreateFunction",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "ci-deploy allows iam:PassRole on arn:aws:iam::111122223333:role/deploy-role; ci-deploy allows lambda:CreateFunction on *",
+            "conditional": false
+          },
+          {
+            "edge": "e6",
+            "technique": "lambda_update_code",
+            "name": "Rewrite a function's code",
+            "narration": "Replace the handler of an existing function that already holds a strong role.",
+            "actions": [
+              "lambda:UpdateFunctionCode",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1648",
+            "evidence": "deploy-role-policy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; deploy-role-policy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
+            "conditional": false
+          },
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
+            "conditional": false
+          },
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+            "conditional": true
+          }
+        ]
+      }
+    ],
+    "deploy-role": [
+      {
+        "hops": 1,
+        "nodes": [
+          "deploy-role",
+          "__admin__"
+        ],
+        "edges": [
+          "e5"
+        ],
+        "labels": [
+          "Deploy role",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e5",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "deploy-role-policy allows iam:CreatePolicyVersion on arn:aws:iam::111122223333:policy/deploy-role-policy",
+            "conditional": false
+          }
+        ]
+      },
+      {
+        "hops": 3,
+        "nodes": [
+          "deploy-role",
+          "app-runtime",
+          "data-eng",
+          "platform-admin"
+        ],
+        "edges": [
+          "e6",
+          "e0",
+          "e3"
+        ],
+        "labels": [
+          "Deploy role",
+          "App runtime",
+          "Data engineering",
+          "Platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e6",
+            "technique": "lambda_update_code",
+            "name": "Rewrite a function's code",
+            "narration": "Replace the handler of an existing function that already holds a strong role.",
+            "actions": [
+              "lambda:UpdateFunctionCode",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1648",
+            "evidence": "deploy-role-policy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; deploy-role-policy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
+            "conditional": false
+          },
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
+            "conditional": false
+          },
+          {
+            "edge": "e3",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+            "conditional": true
+          }
+        ]
+      },
+      {
+        "hops": 3,
+        "nodes": [
+          "deploy-role",
+          "app-runtime",
+          "data-eng",
+          "platform-admin"
+        ],
+        "edges": [
+          "e6",
+          "e0",
+          "e4"
+        ],
+        "labels": [
+          "Deploy role",
+          "App runtime",
+          "Data engineering",
+          "Platform admin"
+        ],
+        "steps": [
+          {
+            "edge": "e6",
+            "technique": "lambda_update_code",
+            "name": "Rewrite a function's code",
+            "narration": "Replace the handler of an existing function that already holds a strong role.",
+            "actions": [
+              "lambda:UpdateFunctionCode",
+              "lambda:InvokeFunction"
+            ],
+            "mitre": "T1648",
+            "evidence": "deploy-role-policy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; deploy-role-policy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
+            "conditional": false
+          },
+          {
+            "edge": "e0",
+            "technique": "assume_role",
+            "name": "Cross-role assumption",
+            "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+            "actions": [
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1078.004",
+            "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
+            "conditional": false
+          },
+          {
+            "edge": "e4",
+            "technique": "iam_update_assume_role_policy",
+            "name": "Rewrite a trust policy",
+            "narration": "Add yourself to a role's trust policy, then assume it.",
+            "actions": [
+              "iam:UpdateAssumeRolePolicy",
+              "sts:AssumeRole"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+            "conditional": true
+          }
+        ]
+      }
+    ]
+  },
+  "sever": {
+    "routesBefore": 6,
+    "routesAfter": 0,
+    "closed": true,
+    "edgeCut": {
+      "edges": [
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "byTechnique": {
+        "assume_role": 1,
+        "iam_update_assume_role_policy": 1,
+        "iam_create_policy_version": 1
+      },
+      "byAction": {
+        "sts:AssumeRole": 2,
+        "iam:UpdateAssumeRolePolicy": 1,
+        "iam:CreatePolicyVersion": 1
+      }
+    },
+    "permissionSteps": [
+      {
+        "action": "sts:AssumeRole",
+        "edgesRemoved": 3,
+        "routesKilled": 4
+      },
+      {
+        "action": "iam:CreatePolicyVersion",
+        "edgesRemoved": 1,
+        "routesKilled": 2
+      }
+    ]
+  },
+  "signature": {
+    "hops": 4,
+    "nodes": [
+      "support-contractor",
+      "platform-oncall",
+      "app-runtime",
+      "data-eng",
+      "platform-admin"
+    ],
+    "edges": [
+      "e8",
+      "e7",
+      "e0",
+      "e3"
+    ],
+    "labels": [
+      "Support contractor",
+      "Platform on-call",
+      "App runtime",
+      "Data engineering",
+      "Platform admin"
+    ],
+    "steps": [
+      {
+        "edge": "e8",
+        "technique": "iam_create_access_key",
+        "name": "Mint credentials for another user",
+        "narration": "Create an access key for a user with more access than you.",
+        "actions": [
+          "iam:CreateAccessKey"
+        ],
+        "mitre": "T1098.001",
+        "evidence": "support-rotate-oncall-key allows iam:CreateAccessKey on arn:aws:iam::111122223333:user/platform-oncall",
+        "conditional": false
+      },
+      {
+        "edge": "e7",
+        "technique": "passrole_lambda",
+        "name": "PassRole into Lambda",
+        "narration": "Pass a privileged role to a new function, then invoke it.",
+        "actions": [
+          "iam:PassRole",
+          "lambda:CreateFunction",
+          "lambda:InvokeFunction"
+        ],
+        "mitre": "T1098.001",
+        "evidence": "oncall-deploy-worker allows iam:PassRole on arn:aws:iam::111122223333:role/app-runtime; oncall-deploy-worker allows lambda:CreateFunction on *",
+        "conditional": false
+      },
+      {
+        "edge": "e0",
+        "technique": "assume_role",
+        "name": "Cross-role assumption",
+        "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1078.004",
+        "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
+        "conditional": false
+      },
+      {
+        "edge": "e3",
+        "technique": "assume_role",
+        "name": "Cross-role assumption",
+        "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "mitre": "T1078.004",
+        "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
+        "conditional": true
+      }
+    ]
+  },
+  "registry": [
+    {
+      "id": "assume_role",
+      "name": "Cross-role assumption",
+      "category": "trust",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "summary": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root.",
+      "actions": [
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "passrole_lambda",
+      "name": "PassRole into Lambda",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Pass a privileged role to a new function, then invoke it.",
+      "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist.",
+      "actions": [
+        "iam:PassRole",
+        "lambda:CreateFunction",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "passrole_ec2",
+      "name": "PassRole into EC2",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Launch an instance with an instance profile and read its metadata credentials.",
+      "fix": "Deny iam:PassRole for EC2 unless the caller owns the instance profile.",
+      "actions": [
+        "iam:PassRole",
+        "ec2:RunInstances"
+      ]
+    },
+    {
+      "id": "passrole_cloudformation",
+      "name": "PassRole into CloudFormation",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a stack with a service role and let the template call IAM.",
+      "fix": "Deny cloudformation:CreateStack with a RoleARN outside the team boundary.",
+      "actions": [
+        "iam:PassRole",
+        "cloudformation:CreateStack"
+      ]
+    },
+    {
+      "id": "passrole_glue",
+      "name": "PassRole into Glue",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a development endpoint that runs with the passed role.",
+      "fix": "Block glue:CreateDevEndpoint, or pin iam:PassRole to a known role.",
+      "actions": [
+        "iam:PassRole",
+        "glue:CreateDevEndpoint"
+      ]
+    },
+    {
+      "id": "passrole_sagemaker",
+      "name": "PassRole into SageMaker",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a notebook instance with the passed role, then open its terminal.",
+      "fix": "Deny sagemaker:CreateNotebookInstance with an arbitrary execution role.",
+      "actions": [
+        "iam:PassRole",
+        "sagemaker:CreateNotebookInstance"
+      ]
+    },
+    {
+      "id": "lambda_update_code",
+      "name": "Rewrite a function's code",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1648",
+      "summary": "Replace the handler of an existing function that already holds a strong role.",
+      "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions.",
+      "actions": [
+        "lambda:UpdateFunctionCode",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "ssm_send_command",
+      "name": "Shell through SSM",
+      "category": "compute",
+      "severity": "high",
+      "mitre": "T1651",
+      "summary": "Run a command on an instance and use its instance profile.",
+      "fix": "Scope ssm:SendCommand to document ARNs and tag-gated instances.",
+      "actions": [
+        "ssm:SendCommand",
+        "ec2:DescribeInstances"
+      ]
+    },
+    {
+      "id": "iam_attach_user_policy",
+      "name": "Attach a policy to yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach AdministratorAccess to your own user and inherit it.",
+      "fix": "No human or machine identity should hold iam:AttachUserPolicy on its own ARN.",
+      "actions": [
+        "iam:AttachUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_put_user_policy",
+      "name": "Write an inline policy on yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add an inline administrator statement to your own user.",
+      "fix": "Treat iam:PutUserPolicy on self as equivalent to administrator.",
+      "actions": [
+        "iam:PutUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_create_policy_version",
+      "name": "New version of an attached policy",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Publish a new policy version that grants more than the current one.",
+      "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant.",
+      "actions": [
+        "iam:CreatePolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_set_default_policy_version",
+      "name": "Activate a dormant policy version",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Promote an older, wider policy version that is still stored.",
+      "fix": "Delete unused policy versions and block SetDefaultPolicyVersion.",
+      "actions": [
+        "iam:SetDefaultPolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_attach_role_policy",
+      "name": "Attach a policy to a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach an administrator policy to a role you can already assume.",
+      "fix": "Only a break-glass pipeline should hold iam:AttachRolePolicy.",
+      "actions": [
+        "iam:AttachRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_put_role_policy",
+      "name": "Inline policy on a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Write an inline administrator statement onto a role you can assume.",
+      "fix": "Block iam:PutRolePolicy outside the IAM administration role.",
+      "actions": [
+        "iam:PutRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_update_assume_role_policy",
+      "name": "Rewrite a trust policy",
+      "category": "trust",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a role's trust policy, then assume it.",
+      "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads.",
+      "actions": [
+        "iam:UpdateAssumeRolePolicy",
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role.",
+      "actions": [
+        "iam:CreateAccessKey"
+      ]
+    },
+    {
+      "id": "iam_create_login_profile",
+      "name": "Set a console password for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create a console login for a stronger identity without touching its keys.",
+      "fix": "Alert on CreateLoginProfile and UpdateLoginProfile outside the IdP flow.",
+      "actions": [
+        "iam:CreateLoginProfile"
+      ]
+    },
+    {
+      "id": "iam_add_user_to_group",
+      "name": "Join a more privileged group",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a group that carries wider policies.",
+      "fix": "Group membership changes are privilege changes; route them through review.",
+      "actions": [
+        "iam:AddUserToGroup"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,815 @@
+{
+  "generated": "2026-11-16T18:48:43+00:00",
+  "engine": {
+    "name": "apsis",
+    "version": "0.2.0"
+  },
+  "scenario": {
+    "name": "ml-platform",
+    "title": "ML platform, outsourced labeling",
+    "summary": "A data team, a labeling vendor, and a feature store nobody owns. Three routes to administrator, all built from grants that shipped with a feature.",
+    "accountId": "333344445555",
+    "region": "us-east-1",
+    "severity": "critical"
+  },
+  "stats": {
+    "identities": 12,
+    "resources": 1,
+    "edges": 9,
+    "sourcesWithPath": 4,
+    "sources": 9,
+    "routes": 4,
+    "shortest": 1,
+    "admins": [
+      "ML admins group",
+      "Platform admin"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "__admin__",
+      "label": "Administrator",
+      "kind": "admin",
+      "admin": true,
+      "x": 0.9292,
+      "y": 0.2267,
+      "degree": 3,
+      "note": "",
+      "arn": "",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "labeling",
+      "label": "Labeling group",
+      "kind": "group",
+      "admin": false,
+      "x": 0.0635,
+      "y": 0.8417,
+      "degree": 0,
+      "note": "Runs the labeling function. Was given group-add rights during an incident.",
+      "arn": "arn:aws:iam::333344445555:group/labeling",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "ml-admins",
+      "label": "ML admins group",
+      "kind": "group",
+      "admin": true,
+      "x": 0.931,
+      "y": 0.5,
+      "degree": 3,
+      "note": "Administrator group for the ML platform team.",
+      "arn": "arn:aws:iam::333344445555:group/ml-admins",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "etl-role",
+      "label": "ETL role",
+      "kind": "role",
+      "admin": false,
+      "x": 0.6428,
+      "y": 0.295,
+      "degree": 2,
+      "note": "Nightly Glue job. Publishes new versions of its own policy.",
+      "arn": "arn:aws:iam::333344445555:role/etl-role",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::333344445555:root"
+      ]
+    },
+    {
+      "id": "feature-store",
+      "label": "Feature store",
+      "kind": "role",
+      "admin": false,
+      "x": 0.0702,
+      "y": 0.1583,
+      "degree": 1,
+      "note": "Owns the feature tables. Can attach policies to itself for schema migrations.",
+      "arn": "arn:aws:iam::333344445555:role/feature-store",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::333344445555:root"
+      ]
+    },
+    {
+      "id": "labeling-role",
+      "label": "Labeling execution",
+      "kind": "role",
+      "admin": false,
+      "x": 0.0721,
+      "y": 0.295,
+      "degree": 1,
+      "note": "Execution role for the labeling function.",
+      "arn": "arn:aws:iam::333344445555:role/labeling-role",
+      "groups": [],
+      "trust": [
+        "lambda.amazonaws.com"
+      ]
+    },
+    {
+      "id": "ml-runtime",
+      "label": "ML runtime",
+      "kind": "role",
+      "admin": false,
+      "x": 0.0747,
+      "y": 0.4317,
+      "degree": 2,
+      "note": "Training and notebook execution.",
+      "arn": "arn:aws:iam::333344445555:role/ml-runtime",
+      "groups": [],
+      "trust": [
+        "sagemaker.amazonaws.com"
+      ]
+    },
+    {
+      "id": "platform-admin",
+      "label": "Platform admin",
+      "kind": "role",
+      "admin": true,
+      "x": 0.9368,
+      "y": 0.7733,
+      "degree": 0,
+      "note": "Break-glass platform role.",
+      "arn": "arn:aws:iam::333344445555:role/platform-admin",
+      "groups": [],
+      "trust": [
+        "arn:aws:iam::333344445555:root"
+      ]
+    },
+    {
+      "id": "analyst",
+      "label": "Analyst",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0635,
+      "y": 0.5683,
+      "degree": 0,
+      "note": "Dashboards only.",
+      "arn": "arn:aws:iam::333344445555:user/analyst",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "ci-builder",
+      "label": "CI builder",
+      "kind": "user",
+      "admin": false,
+      "x": 0.3581,
+      "y": 0.295,
+      "degree": 1,
+      "note": "Runs the nightly ETL job build.",
+      "arn": "arn:aws:iam::333344445555:user/ci-builder",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "data-scientist",
+      "label": "Data scientist",
+      "kind": "user",
+      "admin": false,
+      "x": 0.0669,
+      "y": 0.705,
+      "degree": 1,
+      "note": "Notebook access for the ranking model. Onboarded in a day.",
+      "arn": "arn:aws:iam::333344445555:user/data-scientist",
+      "groups": [],
+      "trust": []
+    },
+    {
+      "id": "labeler",
+      "label": "Labeler",
+      "kind": "user",
+      "admin": false,
+      "x": 0.6435,
+      "y": 0.705,
+      "degree": 3,
+      "note": "Shared vendor account for the labeling console.",
+      "arn": "arn:aws:iam::333344445555:user/labeler",
+      "groups": [
+        "labeling"
+      ],
+      "trust": []
+    },
+    {
+      "id": "labeling-vendor",
+      "label": "Labeling vendor",
+      "kind": "user",
+      "admin": false,
+      "x": 0.3516,
+      "y": 0.705,
+      "degree": 1,
+      "note": "External annotation team. Issues keys to its own staff.",
+      "arn": "arn:aws:iam::333344445555:user/labeling-vendor",
+      "groups": [],
+      "trust": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "source": "ci-builder",
+      "target": "etl-role",
+      "technique": "passrole_glue",
+      "name": "PassRole into Glue",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:PassRole",
+        "glue:CreateDevEndpoint"
+      ],
+      "conditional": false,
+      "evidence": "ci-glue-etl allows iam:PassRole on arn:aws:iam::333344445555:role/etl-role; ci-glue-etl allows glue:CreateDevEndpoint on *",
+      "narration": "Create a development endpoint that runs with the passed role.",
+      "fix": "Block glue:CreateDevEndpoint, or pin iam:PassRole to a known role."
+    },
+    {
+      "id": "e1",
+      "source": "data-scientist",
+      "target": "ml-runtime",
+      "technique": "passrole_sagemaker",
+      "name": "PassRole into SageMaker",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:PassRole",
+        "sagemaker:CreateNotebookInstance"
+      ],
+      "conditional": false,
+      "evidence": "scientist-notebooks allows iam:PassRole on arn:aws:iam::333344445555:role/ml-runtime; scientist-notebooks allows sagemaker:CreateNotebookInstance on *",
+      "narration": "Create a notebook instance with the passed role, then open its terminal.",
+      "fix": "Deny sagemaker:CreateNotebookInstance with an arbitrary execution role."
+    },
+    {
+      "id": "e2",
+      "source": "etl-role",
+      "target": "__admin__",
+      "technique": "iam_create_policy_version",
+      "name": "New version of an attached policy",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:CreatePolicyVersion"
+      ],
+      "conditional": false,
+      "evidence": "etl-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/etl-policy",
+      "narration": "Publish a new policy version that grants more than the current one.",
+      "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant."
+    },
+    {
+      "id": "e3",
+      "source": "labeler",
+      "target": "labeling-role",
+      "technique": "lambda_update_code",
+      "name": "Rewrite a function's code",
+      "severity": "critical",
+      "mitre": "T1648",
+      "actions": [
+        "lambda:UpdateFunctionCode",
+        "lambda:InvokeFunction"
+      ],
+      "conditional": false,
+      "evidence": "Labeling group/labeling-group allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:333344445555:function:labeler-fn; Labeling group/labeling-group allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:333344445555:function:labeler-fn",
+      "narration": "Replace the handler of an existing function that already holds a strong role.",
+      "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions."
+    },
+    {
+      "id": "e4",
+      "source": "labeler",
+      "target": "ml-admins",
+      "technique": "iam_add_user_to_group",
+      "name": "Join a more privileged group",
+      "severity": "high",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:AddUserToGroup"
+      ],
+      "conditional": false,
+      "evidence": "Labeling group/labeling-group allows iam:AddUserToGroup on arn:aws:iam::333344445555:group/ml-admins",
+      "narration": "Add yourself to a group that carries wider policies.",
+      "fix": "Group membership changes are privilege changes; route them through review."
+    },
+    {
+      "id": "e5",
+      "source": "labeling-vendor",
+      "target": "labeler",
+      "technique": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "actions": [
+        "iam:CreateAccessKey"
+      ],
+      "conditional": false,
+      "evidence": "labeling-vendor allows iam:CreateAccessKey on arn:aws:iam::333344445555:user/labeler",
+      "narration": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
+    },
+    {
+      "id": "e6",
+      "source": "ml-admins",
+      "target": "__admin__",
+      "technique": "iam_attach_user_policy",
+      "name": "Attach a policy to yourself",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:AttachUserPolicy"
+      ],
+      "conditional": false,
+      "evidence": "AdministratorAccess allows iam:AttachUserPolicy on *",
+      "narration": "Attach AdministratorAccess to your own user and inherit it.",
+      "fix": "No human or machine identity should hold iam:AttachUserPolicy on its own ARN."
+    },
+    {
+      "id": "e7",
+      "source": "ml-admins",
+      "target": "__admin__",
+      "technique": "iam_put_user_policy",
+      "name": "Write an inline policy on yourself",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "actions": [
+        "iam:PutUserPolicy"
+      ],
+      "conditional": false,
+      "evidence": "AdministratorAccess allows iam:PutUserPolicy on *",
+      "narration": "Add an inline administrator statement to your own user.",
+      "fix": "Treat iam:PutUserPolicy on self as equivalent to administrator."
+    },
+    {
+      "id": "e8",
+      "source": "ml-runtime",
+      "target": "feature-store",
+      "technique": "assume_role",
+      "name": "Cross-role assumption",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "actions": [
+        "sts:AssumeRole"
+      ],
+      "conditional": false,
+      "evidence": "ml-runtime allows sts:AssumeRole on arn:aws:iam::333344445555:role/feature-store",
+      "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
+    }
+  ],
+  "paths": {
+    "ci-builder": [
+      {
+        "hops": 2,
+        "nodes": [
+          "ci-builder",
+          "etl-role",
+          "__admin__"
+        ],
+        "edges": [
+          "e0",
+          "e2"
+        ],
+        "labels": [
+          "CI builder",
+          "ETL role",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e0",
+            "technique": "passrole_glue",
+            "name": "PassRole into Glue",
+            "narration": "Create a development endpoint that runs with the passed role.",
+            "actions": [
+              "iam:PassRole",
+              "glue:CreateDevEndpoint"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "ci-glue-etl allows iam:PassRole on arn:aws:iam::333344445555:role/etl-role; ci-glue-etl allows glue:CreateDevEndpoint on *",
+            "conditional": false
+          },
+          {
+            "edge": "e2",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "etl-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/etl-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "etl-role": [
+      {
+        "hops": 1,
+        "nodes": [
+          "etl-role",
+          "__admin__"
+        ],
+        "edges": [
+          "e2"
+        ],
+        "labels": [
+          "ETL role",
+          "Administrator"
+        ],
+        "steps": [
+          {
+            "edge": "e2",
+            "technique": "iam_create_policy_version",
+            "name": "New version of an attached policy",
+            "narration": "Publish a new policy version that grants more than the current one.",
+            "actions": [
+              "iam:CreatePolicyVersion"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "etl-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/etl-policy",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "labeling-vendor": [
+      {
+        "hops": 2,
+        "nodes": [
+          "labeling-vendor",
+          "labeler",
+          "ml-admins"
+        ],
+        "edges": [
+          "e5",
+          "e4"
+        ],
+        "labels": [
+          "Labeling vendor",
+          "Labeler",
+          "ML admins group"
+        ],
+        "steps": [
+          {
+            "edge": "e5",
+            "technique": "iam_create_access_key",
+            "name": "Mint credentials for another user",
+            "narration": "Create an access key for a user with more access than you.",
+            "actions": [
+              "iam:CreateAccessKey"
+            ],
+            "mitre": "T1098.001",
+            "evidence": "labeling-vendor allows iam:CreateAccessKey on arn:aws:iam::333344445555:user/labeler",
+            "conditional": false
+          },
+          {
+            "edge": "e4",
+            "technique": "iam_add_user_to_group",
+            "name": "Join a more privileged group",
+            "narration": "Add yourself to a group that carries wider policies.",
+            "actions": [
+              "iam:AddUserToGroup"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "Labeling group/labeling-group allows iam:AddUserToGroup on arn:aws:iam::333344445555:group/ml-admins",
+            "conditional": false
+          }
+        ]
+      }
+    ],
+    "labeler": [
+      {
+        "hops": 1,
+        "nodes": [
+          "labeler",
+          "ml-admins"
+        ],
+        "edges": [
+          "e4"
+        ],
+        "labels": [
+          "Labeler",
+          "ML admins group"
+        ],
+        "steps": [
+          {
+            "edge": "e4",
+            "technique": "iam_add_user_to_group",
+            "name": "Join a more privileged group",
+            "narration": "Add yourself to a group that carries wider policies.",
+            "actions": [
+              "iam:AddUserToGroup"
+            ],
+            "mitre": "T1098.003",
+            "evidence": "Labeling group/labeling-group allows iam:AddUserToGroup on arn:aws:iam::333344445555:group/ml-admins",
+            "conditional": false
+          }
+        ]
+      }
+    ]
+  },
+  "sever": {
+    "routesBefore": 4,
+    "routesAfter": 0,
+    "closed": true,
+    "edgeCut": {
+      "edges": [
+        "e2",
+        "e4"
+      ],
+      "byTechnique": {
+        "iam_create_policy_version": 1,
+        "iam_add_user_to_group": 1
+      },
+      "byAction": {
+        "iam:CreatePolicyVersion": 1,
+        "iam:AddUserToGroup": 1
+      }
+    },
+    "permissionSteps": [
+      {
+        "action": "iam:AddUserToGroup",
+        "edgesRemoved": 1,
+        "routesKilled": 2
+      },
+      {
+        "action": "iam:CreatePolicyVersion",
+        "edgesRemoved": 1,
+        "routesKilled": 2
+      }
+    ]
+  },
+  "signature": {
+    "hops": 2,
+    "nodes": [
+      "ci-builder",
+      "etl-role",
+      "__admin__"
+    ],
+    "edges": [
+      "e0",
+      "e2"
+    ],
+    "labels": [
+      "CI builder",
+      "ETL role",
+      "Administrator"
+    ],
+    "steps": [
+      {
+        "edge": "e0",
+        "technique": "passrole_glue",
+        "name": "PassRole into Glue",
+        "narration": "Create a development endpoint that runs with the passed role.",
+        "actions": [
+          "iam:PassRole",
+          "glue:CreateDevEndpoint"
+        ],
+        "mitre": "T1098.001",
+        "evidence": "ci-glue-etl allows iam:PassRole on arn:aws:iam::333344445555:role/etl-role; ci-glue-etl allows glue:CreateDevEndpoint on *",
+        "conditional": false
+      },
+      {
+        "edge": "e2",
+        "technique": "iam_create_policy_version",
+        "name": "New version of an attached policy",
+        "narration": "Publish a new policy version that grants more than the current one.",
+        "actions": [
+          "iam:CreatePolicyVersion"
+        ],
+        "mitre": "T1098.003",
+        "evidence": "etl-policy allows iam:CreatePolicyVersion on arn:aws:iam::333344445555:policy/etl-policy",
+        "conditional": false
+      }
+    ]
+  },
+  "registry": [
+    {
+      "id": "assume_role",
+      "name": "Cross-role assumption",
+      "category": "trust",
+      "severity": "medium",
+      "mitre": "T1078.004",
+      "summary": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
+      "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root.",
+      "actions": [
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "passrole_lambda",
+      "name": "PassRole into Lambda",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Pass a privileged role to a new function, then invoke it.",
+      "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist.",
+      "actions": [
+        "iam:PassRole",
+        "lambda:CreateFunction",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "passrole_ec2",
+      "name": "PassRole into EC2",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Launch an instance with an instance profile and read its metadata credentials.",
+      "fix": "Deny iam:PassRole for EC2 unless the caller owns the instance profile.",
+      "actions": [
+        "iam:PassRole",
+        "ec2:RunInstances"
+      ]
+    },
+    {
+      "id": "passrole_cloudformation",
+      "name": "PassRole into CloudFormation",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a stack with a service role and let the template call IAM.",
+      "fix": "Deny cloudformation:CreateStack with a RoleARN outside the team boundary.",
+      "actions": [
+        "iam:PassRole",
+        "cloudformation:CreateStack"
+      ]
+    },
+    {
+      "id": "passrole_glue",
+      "name": "PassRole into Glue",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a development endpoint that runs with the passed role.",
+      "fix": "Block glue:CreateDevEndpoint, or pin iam:PassRole to a known role.",
+      "actions": [
+        "iam:PassRole",
+        "glue:CreateDevEndpoint"
+      ]
+    },
+    {
+      "id": "passrole_sagemaker",
+      "name": "PassRole into SageMaker",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1098.001",
+      "summary": "Create a notebook instance with the passed role, then open its terminal.",
+      "fix": "Deny sagemaker:CreateNotebookInstance with an arbitrary execution role.",
+      "actions": [
+        "iam:PassRole",
+        "sagemaker:CreateNotebookInstance"
+      ]
+    },
+    {
+      "id": "lambda_update_code",
+      "name": "Rewrite a function's code",
+      "category": "compute",
+      "severity": "critical",
+      "mitre": "T1648",
+      "summary": "Replace the handler of an existing function that already holds a strong role.",
+      "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions.",
+      "actions": [
+        "lambda:UpdateFunctionCode",
+        "lambda:InvokeFunction"
+      ]
+    },
+    {
+      "id": "ssm_send_command",
+      "name": "Shell through SSM",
+      "category": "compute",
+      "severity": "high",
+      "mitre": "T1651",
+      "summary": "Run a command on an instance and use its instance profile.",
+      "fix": "Scope ssm:SendCommand to document ARNs and tag-gated instances.",
+      "actions": [
+        "ssm:SendCommand",
+        "ec2:DescribeInstances"
+      ]
+    },
+    {
+      "id": "iam_attach_user_policy",
+      "name": "Attach a policy to yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach AdministratorAccess to your own user and inherit it.",
+      "fix": "No human or machine identity should hold iam:AttachUserPolicy on its own ARN.",
+      "actions": [
+        "iam:AttachUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_put_user_policy",
+      "name": "Write an inline policy on yourself",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add an inline administrator statement to your own user.",
+      "fix": "Treat iam:PutUserPolicy on self as equivalent to administrator.",
+      "actions": [
+        "iam:PutUserPolicy"
+      ]
+    },
+    {
+      "id": "iam_create_policy_version",
+      "name": "New version of an attached policy",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Publish a new policy version that grants more than the current one.",
+      "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant.",
+      "actions": [
+        "iam:CreatePolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_set_default_policy_version",
+      "name": "Activate a dormant policy version",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Promote an older, wider policy version that is still stored.",
+      "fix": "Delete unused policy versions and block SetDefaultPolicyVersion.",
+      "actions": [
+        "iam:SetDefaultPolicyVersion"
+      ]
+    },
+    {
+      "id": "iam_attach_role_policy",
+      "name": "Attach a policy to a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Attach an administrator policy to a role you can already assume.",
+      "fix": "Only a break-glass pipeline should hold iam:AttachRolePolicy.",
+      "actions": [
+        "iam:AttachRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_put_role_policy",
+      "name": "Inline policy on a trusted role",
+      "category": "identity",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Write an inline administrator statement onto a role you can assume.",
+      "fix": "Block iam:PutRolePolicy outside the IAM administration role.",
+      "actions": [
+        "iam:PutRolePolicy"
+      ]
+    },
+    {
+      "id": "iam_update_assume_role_policy",
+      "name": "Rewrite a trust policy",
+      "category": "trust",
+      "severity": "critical",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a role's trust policy, then assume it.",
+      "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads.",
+      "actions": [
+        "iam:UpdateAssumeRolePolicy",
+        "sts:AssumeRole"
+      ]
+    },
+    {
+      "id": "iam_create_access_key",
+      "name": "Mint credentials for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create an access key for a user with more access than you.",
+      "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role.",
+      "actions": [
+        "iam:CreateAccessKey"
+      ]
+    },
+    {
+      "id": "iam_create_login_profile",
+      "name": "Set a console password for another user",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.001",
+      "summary": "Create a console login for a stronger identity without touching its keys.",
+      "fix": "Alert on CreateLoginProfile and UpdateLoginProfile outside the IdP flow.",
+      "actions": [
+        "iam:CreateLoginProfile"
+      ]
+    },
+    {
+      "id": "iam_add_user_to_group",
+      "name": "Join a more privileged group",
+      "category": "identity",
+      "severity": "high",
+      "mitre": "T1098.003",
+      "summary": "Add yourself to a group that carries wider policies.",
+      "fix": "Group membership changes are privilege changes; route them through review.",
+      "actions": [
+        "iam:AddUserToGroup"
+      ]
+    }
+  ]
+}

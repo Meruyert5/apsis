@@ -1,0 +1,434 @@
+{
+  "name": "retail",
+  "title": "Retail marketplace, post-acquisition",
+  "account_id": "777700001111",
+  "region": "eu-west-2",
+  "severity": "critical",
+  "summary": "Two commerce platforms merged and inherited each other's role chains. The catalogue team can still reach account administration through a legacy onboarding role.",
+  "policies": {
+    "admin": {
+      "Name": "AdministratorAccess",
+      "Source": "aws",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "read-only": {
+      "Name": "ReadOnlyAccess",
+      "Source": "aws",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "*:Describe*",
+              "*:Get*",
+              "*:List*"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "vendor-audit": {
+      "Name": "vendor-audit-access",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "JoinSecurityForEvidence",
+            "Effect": "Allow",
+            "Action": "iam:AddUserToGroup",
+            "Resource": "arn:aws:iam::777700001111:group/security"
+          },
+          {
+            "Sid": "ReadEvidence",
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:ListBucket"
+            ],
+            "Resource": [
+              "arn:aws:s3:::audit-evidence",
+              "arn:aws:s3:::audit-evidence/*"
+            ]
+          }
+        ]
+      }
+    },
+    "sec-tooling": {
+      "Name": "security-incident-tooling",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "GrantDuringIncident",
+            "Effect": "Allow",
+            "Action": [
+              "iam:AttachUserPolicy",
+              "iam:ListUsers",
+              "iam:ListPolicies"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "ml-intern": {
+      "Name": "ml-intern",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "Notebook",
+            "Effect": "Allow",
+            "Action": [
+              "sagemaker:CreateNotebookInstance",
+              "sagemaker:CreatePresignedNotebookInstanceUrl"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "PassTrainingRole",
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::777700001111:role/ml-runtime"
+          }
+        ]
+      }
+    },
+    "ml-runtime": {
+      "Name": "ml-runtime-access",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "ModelsAndFeatures",
+            "Effect": "Allow",
+            "Action": [
+              "s3:*"
+            ],
+            "Resource": [
+              "arn:aws:s3:::ml-features",
+              "arn:aws:s3:::ml-features/*"
+            ]
+          },
+          {
+            "Sid": "BatchDataPlatform",
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::777700001111:role/data-platform"
+          }
+        ]
+      }
+    },
+    "data-platform-policy": {
+      "Name": "data-platform-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "RunPipelines",
+            "Effect": "Allow",
+            "Action": [
+              "glue:*",
+              "athena:*"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "ShipNewPolicyVersions",
+            "Effect": "Allow",
+            "Action": [
+              "iam:CreatePolicyVersion",
+              "iam:GetPolicyVersion"
+            ],
+            "Resource": "arn:aws:iam::777700001111:policy/data-platform-policy"
+          }
+        ]
+      }
+    },
+    "contractor-dev": {
+      "Name": "contractor-dev",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "ShellOnBuildHosts",
+            "Effect": "Allow",
+            "Action": [
+              "ssm:SendCommand",
+              "ec2:DescribeInstances"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Sid": "ReadLogs",
+            "Effect": "Allow",
+            "Action": [
+              "logs:GetLogEvents",
+              "logs:DescribeLogGroups"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "build-role": {
+      "Name": "build-role",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "RepairDeployTrust",
+            "Effect": "Allow",
+            "Action": "iam:UpdateAssumeRolePolicy",
+            "Resource": "arn:aws:iam::777700001111:role/deploy-admin"
+          },
+          {
+            "Sid": "AssumeDeploy",
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::777700001111:role/deploy-admin"
+          },
+          {
+            "Sid": "ReadArtifacts",
+            "Effect": "Allow",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::build-artifacts/*"
+          }
+        ]
+      }
+    },
+    "finance-read": {
+      "Name": "finance-read",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:ListBucket"
+            ],
+            "Resource": [
+              "arn:aws:s3:::finance-archive",
+              "arn:aws:s3:::finance-archive/*"
+            ]
+          }
+        ]
+      }
+    },
+    "hr-keys": {
+      "Name": "hr-onboarding",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "RotateFinanceKey",
+            "Effect": "Allow",
+            "Action": [
+              "iam:CreateAccessKey",
+              "iam:ListAccessKeys"
+            ],
+            "Resource": "arn:aws:iam::777700001111:user/finance-reader"
+          }
+        ]
+      }
+    },
+    "deploy-release": {
+      "Name": "deploy-release",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::777700001111:role/build-role"
+          }
+        ]
+      }
+    }
+  },
+  "identities": [
+    {
+      "id": "vendor-auditor",
+      "name": "vendor-auditor",
+      "label": "Audit vendor",
+      "kind": "user",
+      "attached": [
+        "vendor-audit"
+      ],
+      "note": "External audit firm. Given group access so it could collect evidence without waiting on IT."
+    },
+    {
+      "id": "security",
+      "name": "security",
+      "label": "Security group",
+      "kind": "group",
+      "attached": [
+        "read-only",
+        "sec-tooling"
+      ],
+      "note": "Incident-response group. Can attach policies to any user while an incident is open."
+    },
+    {
+      "id": "secops-lead",
+      "name": "secops-lead",
+      "label": "SecOps lead",
+      "kind": "user",
+      "attached": [
+        "admin"
+      ],
+      "note": "Break-glass. Hardware key held by two people."
+    },
+    {
+      "id": "ml-intern",
+      "name": "ml-intern",
+      "label": "ML intern",
+      "kind": "user",
+      "attached": [
+        "ml-intern"
+      ],
+      "note": "Summer intern, 2023. Account still active."
+    },
+    {
+      "id": "ml-runtime",
+      "name": "ml-runtime",
+      "label": "ML runtime",
+      "kind": "role",
+      "attached": [
+        "ml-runtime"
+      ],
+      "trust": [
+        "sagemaker.amazonaws.com"
+      ],
+      "note": "Training job execution role."
+    },
+    {
+      "id": "data-platform",
+      "name": "data-platform",
+      "label": "Data platform",
+      "kind": "role",
+      "attached": [
+        "data-platform-policy"
+      ],
+      "trust": [
+        "arn:aws:iam::777700001111:root"
+      ],
+      "note": "Runs every pipeline. Can publish new versions of its own policy."
+    },
+    {
+      "id": "deploy-admin",
+      "name": "deploy-admin",
+      "label": "Deploy admin",
+      "kind": "role",
+      "attached": [
+        "admin"
+      ],
+      "trust": [
+        "arn:aws:iam::777700001111:role/build-role",
+        "arn:aws:iam::777700001111:role/break-glass"
+      ],
+      "note": "Deployment superuser. Trust includes the build role so pipelines can deploy."
+    },
+    {
+      "id": "break-glass",
+      "name": "break-glass",
+      "label": "Break glass",
+      "kind": "role",
+      "attached": [
+        "admin"
+      ],
+      "trust": [
+        "arn:aws:iam::777700001111:user/secops-lead"
+      ],
+      "note": "Emergency access, alarmed on every assumption."
+    },
+    {
+      "id": "contractor-dev",
+      "name": "contractor-dev",
+      "label": "Contract developer",
+      "kind": "user",
+      "attached": [
+        "contractor-dev"
+      ],
+      "note": "Agency developer retained after handover."
+    },
+    {
+      "id": "build-role",
+      "name": "build-role",
+      "label": "Build role",
+      "kind": "role",
+      "attached": [
+        "build-role"
+      ],
+      "trust": [
+        "ec2.amazonaws.com",
+        "arn:aws:iam::777700001111:role/release-manager"
+      ],
+      "note": "Instance profile on the build fleet."
+    },
+    {
+      "id": "release-manager",
+      "name": "release-manager",
+      "label": "Release manager",
+      "kind": "role",
+      "attached": [
+        "deploy-release"
+      ],
+      "trust": [
+        "arn:aws:iam::777700001111:root"
+      ],
+      "note": "Used by the release workflow."
+    },
+    {
+      "id": "finance-reader",
+      "name": "finance-reader",
+      "label": "Finance reader",
+      "kind": "user",
+      "attached": [
+        "finance-read"
+      ],
+      "note": "Reads archived invoices. No console access."
+    },
+    {
+      "id": "hr-coordinator",
+      "name": "hr-coordinator",
+      "label": "HR coordinator",
+      "kind": "user",
+      "attached": [
+        "hr-keys"
+      ],
+      "note": "Onboarding. Rotates the finance key every quarter."
+    },
+    {
+      "id": "legacy-svc",
+      "name": "legacy-svc",
+      "label": "Legacy service account",
+      "kind": "user",
+      "attached": [
+        "read-only"
+      ],
+      "note": "Access key from 2019, last used 2021."
+    }
+  ],
+  "resources": [
+    {
+      "id": "build-host",
+      "name": "i-0f9e8d7c6b5a",
+      "label": "build-host-01",
+      "kind": "ec2",
+      "role": "build-role"
+    }
+  ],
+  "signature_source": "vendor-auditor"
+}

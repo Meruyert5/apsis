@@ -1,0 +1,292 @@
+{
+  "name": "platform",
+  "title": "Platform group, regulated workloads",
+  "account_id": "777700005555",
+  "region": "ca-central-1",
+  "severity": "critical",
+  "summary": "A regulated platform account with a vendor shell path, a batch host, and a pipeline role that can rewrite its own policy.",
+  "signature_source": "gc-vendor",
+  "policies": {
+    "gc-admin-access": {
+      "Name": "gc-admin-access",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [{ "Effect": "Allow", "Action": "*", "Resource": "*" }]
+      }
+    },
+    "gc-vendor-policy": {
+      "Name": "gc-vendor-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["s3:GetObject"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::777700005555:role/gc-build"
+          }
+        ]
+      }
+    },
+    "gc-build-policy": {
+      "Name": "gc-build-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": "ssm:SendCommand", "Resource": "*" },
+          { "Effect": "Allow", "Action": "ec2:DescribeInstances", "Resource": "*" }
+        ]
+      }
+    },
+    "gc-fleet-policy": {
+      "Name": "gc-fleet-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["s3:GetObject", "s3:PutObject"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::777700005555:role/gc-deploy"
+          }
+        ]
+      }
+    },
+    "gc-deploy-policy": {
+      "Name": "gc-deploy-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["codebuild:StartBuild"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::777700005555:role/gc-release"
+          }
+        ]
+      }
+    },
+    "gc-release-policy": {
+      "Name": "gc-release-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["ecr:*"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::777700005555:role/gc-pipeline"
+          }
+        ]
+      }
+    },
+    "gc-pipeline-policy": {
+      "Name": "gc-pipeline-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "iam:CreatePolicyVersion",
+            "Resource": "arn:aws:iam::777700005555:policy/gc-pipeline-policy"
+          },
+          { "Effect": "Allow", "Action": ["codepipeline:*"], "Resource": "*" }
+        ]
+      }
+    },
+    "gc-support-policy": {
+      "Name": "gc-support-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["iam:CreateAccessKey", "iam:ListUsers"], "Resource": "*" }
+        ]
+      }
+    },
+    "gc-data-policy": {
+      "Name": "gc-data-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::777700005555:role/gc-archive"
+          },
+          { "Effect": "Allow", "Action": "ec2:RunInstances", "Resource": "*" }
+        ]
+      }
+    },
+    "gc-archive-policy": {
+      "Name": "gc-archive-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["s3:*", "glacier:*"], "Resource": "*" }
+        ]
+      }
+    },
+    "gc-legacy-policy": {
+      "Name": "gc-legacy-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "iam:SetDefaultPolicyVersion",
+            "Resource": "arn:aws:iam::777700005555:policy/gc-helpdesk-policy"
+          }
+        ]
+      }
+    },
+    "gc-helpdesk-policy": {
+      "Name": "gc-helpdesk-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["iam:ListUsers", "iam:GetUser"], "Resource": "*" }
+        ]
+      }
+    },
+    "gc-auditor-policy": {
+      "Name": "gc-auditor-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["cloudtrail:LookupEvents", "s3:GetObject"], "Resource": "*" }
+        ]
+      }
+    }
+  },
+  "identities": [
+    {
+      "id": "gc-vendor",
+      "name": "gc-vendor",
+      "label": "Portal vendor",
+      "kind": "user",
+      "attached": ["gc-vendor-policy"],
+      "note": "Contractor account for the benefits portal build."
+    },
+    {
+      "id": "gc-build",
+      "name": "gc-build",
+      "label": "Build role",
+      "kind": "role",
+      "attached": ["gc-build-policy"],
+      "trust": ["arn:aws:iam::777700005555:user/gc-vendor"],
+      "note": "Sends commands to the batch fleet."
+    },
+    {
+      "id": "gc-fleet",
+      "name": "gc-fleet",
+      "label": "Batch fleet role",
+      "kind": "role",
+      "attached": ["gc-fleet-policy"],
+      "trust": ["ec2.amazonaws.com"],
+      "note": "Instance profile on the batch hosts. Assumes the deploy role."
+    },
+    {
+      "id": "gc-deploy",
+      "name": "gc-deploy",
+      "label": "Deploy role",
+      "kind": "role",
+      "attached": ["gc-deploy-policy"],
+      "trust": ["arn:aws:iam::777700005555:role/gc-fleet"],
+      "note": "Starts builds and can assume the release role."
+    },
+    {
+      "id": "gc-release",
+      "name": "gc-release",
+      "label": "Release role",
+      "kind": "role",
+      "attached": ["gc-release-policy"],
+      "trust": ["arn:aws:iam::777700005555:role/gc-deploy"],
+      "note": "Pushes images and can assume the pipeline role."
+    },
+    {
+      "id": "gc-pipeline",
+      "name": "gc-pipeline",
+      "label": "Pipeline role",
+      "kind": "role",
+      "attached": ["gc-pipeline-policy"],
+      "trust": ["arn:aws:iam::777700005555:role/gc-release"],
+      "note": "Publishes versions of the policy attached to itself."
+    },
+    {
+      "id": "gc-admin",
+      "name": "gc-admin",
+      "label": "Agency administrator",
+      "kind": "user",
+      "attached": ["gc-admin-access"],
+      "note": "Agency break-glass account."
+    },
+    {
+      "id": "gc-support",
+      "name": "gc-support",
+      "label": "Service desk",
+      "kind": "user",
+      "attached": ["gc-support-policy"],
+      "note": "Issues keys for locked accounts."
+    },
+    {
+      "id": "gc-data",
+      "name": "gc-data",
+      "label": "Data platform role",
+      "kind": "role",
+      "attached": ["gc-data-policy"],
+      "trust": ["ec2.amazonaws.com"],
+      "note": "Passes the archive role into instances."
+    },
+    {
+      "id": "gc-archive",
+      "name": "gc-archive",
+      "label": "Archive role",
+      "kind": "role",
+      "attached": ["gc-archive-policy"],
+      "trust": ["ec2.amazonaws.com"],
+      "note": "Moves records into long-term storage."
+    },
+    {
+      "id": "gc-helpdesk",
+      "name": "gc-helpdesk",
+      "label": "Helpdesk technician",
+      "kind": "user",
+      "attached": ["gc-helpdesk-policy"],
+      "note": "Looks up user records."
+    },
+    {
+      "id": "gc-change-manager",
+      "name": "gc-change-manager",
+      "label": "Change manager",
+      "kind": "user",
+      "attached": ["gc-legacy-policy"],
+      "note": "Can promote an older helpdesk policy version."
+    },
+    {
+      "id": "gc-auditor",
+      "name": "gc-auditor",
+      "label": "Inspector general",
+      "kind": "user",
+      "attached": ["gc-auditor-policy"],
+      "note": "Read-only audit access."
+    }
+  ],
+  "resources": [
+    {
+      "id": "gc-batch-ec2",
+      "name": "gc-batch-ec2",
+      "label": "Batch host",
+      "kind": "ec2",
+      "role": "gc-fleet",
+      "note": "Runs the nightly eligibility batch."
+    },
+    {
+      "id": "gc-archive-fn",
+      "name": "gc-archive-fn",
+      "label": "Archive writer",
+      "kind": "lambda",
+      "role": "gc-archive",
+      "note": "Writes closed case files."
+    }
+  ]
+}

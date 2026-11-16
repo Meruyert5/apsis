@@ -1,0 +1,139 @@
+{
+  "name": "ci-cd",
+  "title": "Delivery pipeline, before the PR",
+  "account_id": "999900001111",
+  "region": "us-west-2",
+  "severity": "medium",
+  "summary": "A small delivery account. No identity reaches administrator. This is the baseline the drift check compares against.",
+  "policies": {
+    "admin": {
+      "Name": "AdministratorAccess",
+      "Source": "aws",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [{ "Effect": "Allow", "Action": "*", "Resource": "*" }]
+      }
+    },
+    "read-only": {
+      "Name": "ReadOnlyAccess",
+      "Source": "aws",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [{ "Effect": "Allow", "Action": ["*:Describe*", "*:Get*", "*:List*"], "Resource": "*" }]
+      }
+    },
+    "gha-deploy": {
+      "Name": "gha-deploy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "ShipFunctions",
+            "Effect": "Allow",
+            "Action": ["lambda:UpdateFunctionCode", "lambda:InvokeFunction"],
+            "Resource": "*"
+          },
+          {
+            "Sid": "Artifacts",
+            "Effect": "Allow",
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::delivery-artifacts/*"
+          }
+        ]
+      }
+    },
+    "app-runtime": {
+      "Name": "app-runtime",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": ["s3:GetObject", "s3:PutObject"],
+            "Resource": "arn:aws:s3:::delivery-app/*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "secretsmanager:GetSecretValue",
+            "Resource": "arn:aws:secretsmanager:us-west-2:999900001111:secret:app/*"
+          }
+        ]
+      }
+    },
+    "release-manager": {
+      "Name": "release-manager",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::999900001111:role/gha-deploy"
+          }
+        ]
+      }
+    }
+  },
+  "identities": [
+    {
+      "id": "release-bot",
+      "name": "release-bot",
+      "label": "Release bot",
+      "kind": "user",
+      "attached": ["release-manager"],
+      "note": "Assumes the deploy role from the release workflow."
+    },
+    {
+      "id": "gha-deploy",
+      "name": "gha-deploy",
+      "label": "GitHub deploy role",
+      "kind": "role",
+      "attached": ["gha-deploy"],
+      "trust": ["arn:aws:iam::999900001111:role/release-manager", "arn:aws:iam::999900001111:root"],
+      "note": "OIDC deploy role. Scoped to one repository."
+    },
+    {
+      "id": "app-runtime",
+      "name": "app-runtime",
+      "label": "App runtime",
+      "kind": "role",
+      "attached": ["app-runtime"],
+      "trust": ["lambda.amazonaws.com"],
+      "note": "Execution role for the delivery service."
+    },
+    {
+      "id": "platform-admin",
+      "name": "platform-admin",
+      "label": "Platform admin",
+      "kind": "role",
+      "attached": ["admin"],
+      "trust": ["arn:aws:iam::999900001111:user/break-glass"],
+      "note": "Administrator. Assumed by a human, never by CI."
+    },
+    {
+      "id": "break-glass",
+      "name": "break-glass",
+      "label": "Break glass",
+      "kind": "user",
+      "attached": ["admin"],
+      "note": "Human emergency account."
+    },
+    {
+      "id": "auditor",
+      "name": "auditor",
+      "label": "Auditor",
+      "kind": "user",
+      "attached": ["read-only"],
+      "note": "Read-only review account."
+    }
+  ],
+  "resources": [
+    {
+      "id": "delivery-worker",
+      "name": "delivery-worker",
+      "label": "delivery-worker",
+      "kind": "lambda",
+      "role": "app-runtime"
+    }
+  ]
+}

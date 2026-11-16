@@ -1,0 +1,304 @@
+{
+  "name": "research",
+  "title": "Research lab, grant funded",
+  "account_id": "777700003333",
+  "region": "eu-central-1",
+  "severity": "critical",
+  "summary": "A grant-funded lab with a claims-style data chain and a warehouse role that can write onto the administrator role it assumes.",
+  "signature_source": "hc-analyst",
+  "policies": {
+    "hc-admin-access": {
+      "Name": "hc-admin-access",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [{ "Effect": "Allow", "Action": "*", "Resource": "*" }]
+      }
+    },
+    "hc-analyst-policy": {
+      "Name": "hc-analyst-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["s3:GetObject", "athena:GetQueryResults"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::777700003333:role/hc-reader"
+          }
+        ]
+      }
+    },
+    "hc-reader-policy": {
+      "Name": "hc-reader-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["s3:GetObject", "glue:GetTable"], "Resource": "*" },
+          {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::777700003333:role/hc-etl"
+          },
+          { "Effect": "Allow", "Action": "glue:CreateDevEndpoint", "Resource": "*" }
+        ]
+      }
+    },
+    "hc-etl-policy": {
+      "Name": "hc-etl-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::777700003333:role/hc-stage"
+          },
+          { "Effect": "Allow", "Action": "glue:CreateDevEndpoint", "Resource": "*" }
+        ]
+      }
+    },
+    "hc-stage-policy": {
+      "Name": "hc-stage-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::777700003333:role/hc-warehouse"
+          }
+        ]
+      }
+    },
+    "hc-warehouse-policy": {
+      "Name": "hc-warehouse-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": ["iam:PutRolePolicy", "sts:AssumeRole"],
+            "Resource": "arn:aws:iam::777700003333:role/hc-admin"
+          },
+          { "Effect": "Allow", "Action": "s3:*", "Resource": "*" }
+        ]
+      }
+    },
+    "hc-support-policy": {
+      "Name": "hc-support-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["iam:CreateLoginProfile", "iam:ListUsers"], "Resource": "*" }
+        ]
+      }
+    },
+    "hc-claims-policy": {
+      "Name": "hc-claims-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["dynamodb:*", "sqs:*"], "Resource": "*" }
+        ]
+      }
+    },
+    "hc-integration-policy": {
+      "Name": "hc-integration-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::777700003333:role/hc-claims"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::777700003333:role/hc-reader"
+          }
+        ]
+      }
+    },
+    "hc-vendor-policy": {
+      "Name": "hc-vendor-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::777700003333:role/hc-integration"
+          }
+        ]
+      }
+    },
+    "hc-ops-policy": {
+      "Name": "hc-ops-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "iam:AttachRolePolicy",
+            "Resource": "arn:aws:iam::777700003333:role/hc-ops-admin"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::777700003333:role/hc-ops-admin"
+          }
+        ]
+      }
+    },
+    "hc-ops-admin-policy": {
+      "Name": "hc-ops-admin-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Action": ["cloudwatch:*", "logs:*"], "Resource": "*" }
+        ]
+      }
+    },
+    "hc-auditor-policy": {
+      "Name": "hc-auditor-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [{ "Effect": "Allow", "Action": ["*:Get*", "*:List*"], "Resource": "*" }]
+      }
+    }
+  },
+  "identities": [
+    {
+      "id": "hc-analyst",
+      "name": "hc-analyst",
+      "label": "Claims analyst",
+      "kind": "user",
+      "attached": ["hc-analyst-policy"],
+      "note": "Reads claim volumes. Assumes the reader role for scheduled extracts."
+    },
+    {
+      "id": "hc-reader",
+      "name": "hc-reader",
+      "label": "Reporting reader",
+      "kind": "role",
+      "attached": ["hc-reader-policy"],
+      "trust": ["arn:aws:iam::777700003333:user/hc-analyst", "arn:aws:iam::777700003333:role/hc-integration"],
+      "note": "Reads the claims lake and can assume the ETL role."
+    },
+    {
+      "id": "hc-etl",
+      "name": "hc-etl",
+      "label": "Nightly ETL role",
+      "kind": "role",
+      "attached": ["hc-etl-policy"],
+      "trust": ["glue.amazonaws.com"],
+      "note": "Passes the staging role into a development endpoint."
+    },
+    {
+      "id": "hc-stage",
+      "name": "hc-stage",
+      "label": "Staging role",
+      "kind": "role",
+      "attached": ["hc-stage-policy"],
+      "trust": ["arn:aws:iam::777700003333:role/hc-etl"],
+      "note": "Holds the warehouse role in reach."
+    },
+    {
+      "id": "hc-warehouse",
+      "name": "hc-warehouse",
+      "label": "Warehouse role",
+      "kind": "role",
+      "attached": ["hc-warehouse-policy"],
+      "trust": ["arn:aws:iam::777700003333:role/hc-stage"],
+      "note": "Writes an inline policy onto the administrator role and assumes it."
+    },
+    {
+      "id": "hc-admin",
+      "name": "hc-admin",
+      "label": "Health platform admin",
+      "kind": "role",
+      "attached": ["hc-admin-access"],
+      "trust": ["arn:aws:iam::777700003333:root"],
+      "note": "Administrator for the claims platform."
+    },
+    {
+      "id": "hc-support",
+      "name": "hc-support",
+      "label": "Member support",
+      "kind": "user",
+      "attached": ["hc-support-policy"],
+      "note": "Sets console passwords when a clinician is locked out."
+    },
+    {
+      "id": "hc-claims",
+      "name": "hc-claims",
+      "label": "Claims service",
+      "kind": "role",
+      "attached": ["hc-claims-policy"],
+      "trust": ["arn:aws:iam::777700003333:role/hc-integration"],
+      "note": "Adjudicates claims in real time."
+    },
+    {
+      "id": "hc-integration",
+      "name": "hc-integration",
+      "label": "Integration role",
+      "kind": "role",
+      "attached": ["hc-integration-policy"],
+      "trust": ["arn:aws:iam::777700003333:user/hc-vendor"],
+      "note": "Bridges the clearing house into the claims lake."
+    },
+    {
+      "id": "hc-vendor",
+      "name": "hc-vendor",
+      "label": "Clearing house vendor",
+      "kind": "user",
+      "attached": ["hc-vendor-policy"],
+      "note": "Third-party integration account."
+    },
+    {
+      "id": "hc-ops",
+      "name": "hc-ops",
+      "label": "Platform operations",
+      "kind": "user",
+      "attached": ["hc-ops-policy"],
+      "note": "Attaches a policy to the operations admin role it can already assume."
+    },
+    {
+      "id": "hc-ops-admin",
+      "name": "hc-ops-admin",
+      "label": "Operations admin",
+      "kind": "role",
+      "attached": ["hc-ops-admin-policy"],
+      "trust": ["arn:aws:iam::777700003333:user/hc-ops"],
+      "note": "Monitors the claims pipeline."
+    },
+    {
+      "id": "hc-auditor",
+      "name": "hc-auditor",
+      "label": "Compliance auditor",
+      "kind": "user",
+      "attached": ["hc-auditor-policy"],
+      "note": "Read-only access for the annual audit."
+    },
+    {
+      "id": "hc-clinicians",
+      "name": "hc-clinicians",
+      "label": "Clinicians",
+      "kind": "group",
+      "attached": ["hc-auditor-policy"],
+      "note": "Group for clinical read access."
+    }
+  ],
+  "resources": [
+    {
+      "id": "hc-claims-ec2",
+      "name": "hc-claims-ec2",
+      "label": "Claims batch host",
+      "kind": "ec2",
+      "role": "hc-claims",
+      "note": "Batch host for nightly adjudication."
+    }
+  ]
+}
+

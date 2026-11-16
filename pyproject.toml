@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "apsis-iam"
+version = "0.2.0"
+description = "Find every route from a low-privilege AWS principal to administrator, then close them."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [{ name = "Meruyert Oshayeva" }]
+keywords = ["aws", "iam", "security", "privilege-escalation", "graph", "min-cut"]
+classifiers = [
+  "Environment :: Console",
+  "Intended Audience :: Information Technology",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Security",
+]
+
+[project.urls]
+Homepage = "https://meruyert5.github.io/apsis/"
+Repository = "https://github.com/Meruyert5/apsis"
+Issues = "https://github.com/Meruyert5/apsis/issues"
+
+[project.scripts]
+apsis = "apsis.cli:main"
+
+[tool.setuptools]
+packages = ["apsis"]

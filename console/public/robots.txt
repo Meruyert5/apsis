@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://meruyert5.github.io/apsis/sitemap.xml

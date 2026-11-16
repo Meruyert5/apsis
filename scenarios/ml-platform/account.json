@@ -1,0 +1,355 @@
+{
+  "name": "ml-platform",
+  "title": "ML platform, outsourced labeling",
+  "account_id": "333344445555",
+  "region": "us-east-1",
+  "severity": "critical",
+  "summary": "A data team, a labeling vendor, and a feature store nobody owns. Three routes to administrator, all built from grants that shipped with a feature.",
+  "signature_source": "data-scientist",
+  "policies": {
+    "admin": {
+      "Name": "AdministratorAccess",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "read-only": {
+      "Name": "ReadOnlyAccess",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "*:Get*",
+              "*:List*",
+              "*:Describe*"
+            ],
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "scientist": {
+      "Name": "scientist-notebooks",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "sagemaker:CreateNotebookInstance",
+              "sagemaker:CreatePresignedNotebookInstanceUrl"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::333344445555:role/ml-runtime"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:*"
+            ],
+            "Resource": [
+              "arn:aws:s3:::ml-features",
+              "arn:aws:s3:::ml-features/*"
+            ]
+          }
+        ]
+      }
+    },
+    "ml-runtime": {
+      "Name": "ml-runtime",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::ml-features/*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::333344445555:role/feature-store"
+          }
+        ]
+      }
+    },
+    "feature-store": {
+      "Name": "feature-store",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "dynamodb:*",
+              "glue:GetTable",
+              "glue:GetDatabase"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "iam:AttachRolePolicy",
+            "Resource": "arn:aws:iam::333344445555:role/feature-store"
+          }
+        ]
+      }
+    },
+    "ci-glue": {
+      "Name": "ci-glue-etl",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::333344445555:role/etl-role"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "glue:CreateDevEndpoint",
+            "Resource": "*"
+          }
+        ]
+      }
+    },
+    "etl-policy": {
+      "Name": "etl-policy",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "glue:*",
+              "s3:*"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "iam:CreatePolicyVersion"
+            ],
+            "Resource": "arn:aws:iam::333344445555:policy/etl-policy"
+          }
+        ]
+      }
+    },
+    "labeling-vendor": {
+      "Name": "labeling-vendor",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "iam:CreateAccessKey",
+              "iam:ListAccessKeys"
+            ],
+            "Resource": "arn:aws:iam::333344445555:user/labeler"
+          }
+        ]
+      }
+    },
+    "labeling-group": {
+      "Name": "labeling-group",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "lambda:UpdateFunctionCode",
+              "lambda:InvokeFunction"
+            ],
+            "Resource": "arn:aws:lambda:us-east-1:333344445555:function:labeler-fn"
+          },
+          {
+            "Effect": "Allow",
+            "Action": "iam:AddUserToGroup",
+            "Resource": "arn:aws:iam::333344445555:group/ml-admins"
+          }
+        ]
+      }
+    },
+    "labeling-role": {
+      "Name": "labeling-role",
+      "Document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::labeling-inbox/*"
+          }
+        ]
+      }
+    }
+  },
+  "identities": [
+    {
+      "id": "data-scientist",
+      "name": "data-scientist",
+      "label": "Data scientist",
+      "kind": "user",
+      "attached": [
+        "scientist"
+      ],
+      "note": "Notebook access for the ranking model. Onboarded in a day."
+    },
+    {
+      "id": "ml-runtime",
+      "name": "ml-runtime",
+      "label": "ML runtime",
+      "kind": "role",
+      "attached": [
+        "ml-runtime"
+      ],
+      "trust": [
+        "sagemaker.amazonaws.com"
+      ],
+      "note": "Training and notebook execution."
+    },
+    {
+      "id": "feature-store",
+      "name": "feature-store",
+      "label": "Feature store",
+      "kind": "role",
+      "attached": [
+        "feature-store"
+      ],
+      "trust": [
+        "arn:aws:iam::333344445555:root"
+      ],
+      "note": "Owns the feature tables. Can attach policies to itself for schema migrations."
+    },
+    {
+      "id": "ci-builder",
+      "name": "ci-builder",
+      "label": "CI builder",
+      "kind": "user",
+      "attached": [
+        "ci-glue"
+      ],
+      "note": "Runs the nightly ETL job build."
+    },
+    {
+      "id": "etl-role",
+      "name": "etl-role",
+      "label": "ETL role",
+      "kind": "role",
+      "attached": [
+        "etl-policy"
+      ],
+      "trust": [
+        "arn:aws:iam::333344445555:root"
+      ],
+      "note": "Nightly Glue job. Publishes new versions of its own policy."
+    },
+    {
+      "id": "labeling-vendor",
+      "name": "labeling-vendor",
+      "label": "Labeling vendor",
+      "kind": "user",
+      "attached": [
+        "labeling-vendor"
+      ],
+      "note": "External annotation team. Issues keys to its own staff."
+    },
+    {
+      "id": "labeler",
+      "name": "labeler",
+      "label": "Labeler",
+      "kind": "user",
+      "groups": [
+        "labeling"
+      ],
+      "note": "Shared vendor account for the labeling console."
+    },
+    {
+      "id": "labeling",
+      "name": "labeling",
+      "label": "Labeling group",
+      "kind": "group",
+      "attached": [
+        "labeling-group"
+      ],
+      "note": "Runs the labeling function. Was given group-add rights during an incident."
+    },
+    {
+      "id": "labeling-role",
+      "name": "labeling-role",
+      "label": "Labeling execution",
+      "kind": "role",
+      "attached": [
+        "labeling-role"
+      ],
+      "trust": [
+        "lambda.amazonaws.com"
+      ],
+      "note": "Execution role for the labeling function."
+    },
+    {
+      "id": "ml-admins",
+      "name": "ml-admins",
+      "label": "ML admins group",
+      "kind": "group",
+      "attached": [
+        "admin"
+      ],
+      "note": "Administrator group for the ML platform team."
+    },
+    {
+      "id": "platform-admin",
+      "name": "platform-admin",
+      "label": "Platform admin",
+      "kind": "role",
+      "attached": [
+        "admin"
+      ],
+      "trust": [
+        "arn:aws:iam::333344445555:root"
+      ],
+      "note": "Break-glass platform role."
+    },
+    {
+      "id": "analyst",
+      "name": "analyst",
+      "label": "Analyst",
+      "kind": "user",
+      "attached": [
+        "read-only"
+      ],
+      "note": "Dashboards only."
+    }
+  ],
+  "resources": [
+    {
+      "id": "labeler-fn-res",
+      "name": "labeler-fn",
+      "label": "labeler-fn",
+      "kind": "lambda",
+      "role": "labeling-role"
+    }
+  ]
+}
