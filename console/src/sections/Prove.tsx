@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { ActHeader } from "../components/ActHeader";
+import { FieldCollapse } from "../prove/FieldCollapse";
 import rawCommands from "../data/commands.json";
 import { bundles, index, totals } from "../lib/data";
+import { uniqueGuardrails } from "../lib/guardrails";
 import type { CommandRecord } from "../lib/types";
 
 type Verb = CommandRecord["verb"];
@@ -61,6 +63,7 @@ export function Prove() {
   const [scenario, setScenario] = useState("games-studio");
   const [format, setFormat] = useState<Format>("text");
   const [copied, setCopied] = useState(false);
+  const [handoffCopied, setHandoffCopied] = useState(false);
 
   const record = useMemo(() => {
     const key = `${verb === "techniques" ? "all" : scenario}|${verb}|${format}`;
@@ -77,6 +80,16 @@ export function Prove() {
     return () => window.clearTimeout(timer);
   }, [copied]);
 
+  const copyAlert = async () => {
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(alert, null, 2));
+      setHandoffCopied(true);
+      window.setTimeout(() => setHandoffCopied(false), 1600);
+    } catch {
+      setHandoffCopied(false);
+    }
+  };
+
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(record.command);
@@ -87,6 +100,21 @@ export function Prove() {
   };
 
   const lines = record.output.split("\n");
+  const focusBundle = bundles.find((entry) => entry.key === scenario)?.bundle ?? bundles[0].bundle;
+  const signature = focusBundle.signature;
+  const alert = {
+    schema: "penumbra.alert/v1",
+    kind: "path.opened",
+    source: "apsis",
+    generated: index.generated,
+    account: focusBundle.scenario.accountId,
+    principal: signature?.nodes?.[0] ?? null,
+    route: signature?.labels ?? [],
+    edges: signature?.steps?.map((step) => step.edge) ?? [],
+    cut: focusBundle.sever.permissionSteps.map((step) => step.action),
+    guardrails: uniqueGuardrails(focusBundle.sever.permissionSteps.map((step) => step.action)).map((item) => item.control),
+    evidence: "evidence.json",
+  };
 
   return (
     <section className="bio-act" id="prove" aria-labelledby="prove-title">
@@ -193,6 +221,26 @@ export function Prove() {
               </div>
             ))}
             <p className="bio-meta" style={{ marginTop: 12 }}>Printed, not applied. One action can remove several edges.</p>
+          </div>
+
+          <div className="bio-guardrails">
+            <h3>Guardrails</h3>
+            <p className="sub">Prevent recurrence</p>
+            {uniqueGuardrails(focusBundle.sever.permissionSteps.map((step) => step.action)).slice(0, 3).map((item) => (
+              <div className="bio-guardrail-row" key={item.control}>
+                <span>{item.control}</span>
+                <em>{item.label}</em>
+                <p>{item.note}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="bio-handoff">
+            <h3>Penumbra handoff</h3>
+            <p className="sub">path.opened · schema v1 · {signature?.hops ?? 0} hops</p>
+            <button type="button" className="bio-btn" onClick={copyAlert}>
+              {handoffCopied ? "Copied" : "Copy alert JSON"}
+            </button>
           </div>
 
           <div className="bio-diver" aria-hidden="true">

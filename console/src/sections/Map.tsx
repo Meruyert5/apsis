@@ -4,6 +4,7 @@ import { Organism } from "../map/Organism";
 import { buildOrganism } from "../lib/organism";
 import type { OrganismRoute } from "../lib/organism";
 import { bundles, byKey, index } from "../lib/data";
+import { guardrailForAction } from "../lib/guardrails";
 import type { Bundle, GraphNode } from "../lib/types";
 
 const FEATURED = "games-studio";
@@ -472,6 +473,9 @@ function CutView({ bundle, onRestore }: { bundle: Bundle; onRestore: () => void 
                 {step.edgesRemoved} edge{step.edgesRemoved === 1 ? "" : "s"} removed ·{" "}
                 {step.routesKilled} route{step.routesKilled === 1 ? "" : "s"} killed
               </em>
+              <span className="bio-guardrail">
+                Guardrail: {guardrailForAction(step.action).control} · {guardrailForAction(step.action).label}
+              </span>
             </div>
           </li>
         ))}

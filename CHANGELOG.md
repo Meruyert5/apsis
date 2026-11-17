@@ -20,6 +20,11 @@
   covered by Node tests.
 - A 3D specimen core and a 2D radial alternative.
 - A revocation ledger sourced from `permissionSteps`.
+- A 3D Signal transfer and a 3D field-collapse Prove scene.
+- A guardrail mapping, a guardrail ledger and a Penumbra handoff card.
+- `schema/alert.schema.json`, `schema/evidence.schema.json`,
+  `docs/INTEGRATIONS.md` and the observed-path case study under
+  `cases/01-observed-path/`.
 
 ### Removed
 

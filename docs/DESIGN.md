@@ -54,8 +54,9 @@ drops below 14px.
 
 ## 5. The four acts
 
-**Signal** — a 2D signature vein to an amber nucleus, the fleet readout, and a
-five-stage bus. No WebGL on the first paint.
+**Signal** — a 3D signature transfer spiralling into the amber primary, the
+fleet readout, and a five-stage bus. It pauses offscreen and renders static
+under reduced motion.
 
 **Map** — a Three.js magnetic orrery: a primary star with field lines, hop
 shells, identity bodies, curved flux tubes, a faint field boundary and
@@ -69,8 +70,9 @@ static frame.
 photophores at the intersections. The 2D radial core is the fallback and the
 explicit alternate view. The ledger is the exact reading path.
 
-**Prove** — the recorded terminal, the abyss, the zero, the revocation ledger
-and the diver. The abyss is full-bleed and unframed.
+**Prove** — the recorded terminal, the 3D field collapse, the zero, the
+revocation and guardrail ledgers, the Penumbra handoff and the diver. The
+collapse is full-bleed and unframed.
 
 ## 6. Motion
 

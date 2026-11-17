@@ -1,6 +1,7 @@
 import { byKey, bundles, index, techniques, totals } from "../lib/data";
 import { ActHeader } from "../components/ActHeader";
 import { scrollToSection } from "../lib/useSection";
+import { OrbitHero } from "../signal/OrbitHero";
 
 const FEATURED = "games-studio";
 
@@ -67,6 +68,8 @@ function HeroRoute() {
 }
 
 export function Signal() {
+  const featured = byKey.get(FEATURED);
+  const labels = featured?.signature?.labels ?? ["No route", "Apsis"];
   return (
     <section className="bio-act" id="signal" aria-labelledby="signal-title">
       <ActHeader
@@ -113,7 +116,7 @@ export function Signal() {
           </div>
         </div>
 
-        <HeroRoute />
+        <OrbitHero labels={labels} />
       </div>
 
       <div className="bio-process" aria-label="The five stages">

@@ -152,10 +152,10 @@ npm run audit      # contrast, headings, names, target size
 | Section | What it does |
 | --- | --- |
 | Start | Lit Earth, the signature transit, and the five-move method |
-| Signal | A signature transfer, the fleet readout, and the five-stage bus |
+| Signal | A 3D signature transfer into the star, the fleet readout, and the five-stage bus |
 | Map | The account as a magnetic orrery: primary star, hop shells, bodies, flux tubes; step a route and sever the cut |
 | Decide | 18 techniques × 16 accounts as a containment core, with the exact ledger |
-| Prove | A command builder, the recorded output, the abyss, and the zero |
+| Prove | A command builder, the recorded output, the 3D field collapse, the zero, guardrails and the Penumbra handoff |
 
 ![The Map section](docs/img/map.png)
 

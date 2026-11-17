@@ -613,3 +613,44 @@ input:focus-visible,
   text-decoration: none;
 }
 .skip:focus { top: 10px; }
+
+.bio-routefield canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.bio-route-label {
+  position: absolute; z-index: 2; bottom: 14px;
+  font: 500 14px var(--mono); color: var(--read); pointer-events: none;
+}
+.bio-route-label--start { left: 16px; }
+.bio-route-label--end { right: 16px; color: var(--amber); }
+
+.bio-abyss canvas { display: block; width: 100%; height: 100%; }
+
+.bio-guardrail {
+  display: block; margin-top: 5px; font: 500 14px var(--mono);
+  color: var(--mint); line-height: 1.5;
+}
+.bio-guardrails, .bio-handoff {
+  margin-top: 18px; border-top: 1px solid var(--line); padding-top: 12px;
+  max-width: 420px;
+}
+.bio-guardrails h3, .bio-handoff h3 {
+  margin: 0 0 3px; font: 500 14px var(--mono); letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--mute);
+}
+.bio-guardrails .sub, .bio-handoff .sub {
+  margin: 0 0 10px; font: 500 14px var(--mono); color: var(--faint);
+}
+.bio-guardrail-row {
+  padding: 8px 0; border-top: 1px solid var(--line-2);
+}
+.bio-guardrail-row:first-of-type { border-top: 0; }
+.bio-guardrail-row span {
+  display: block; font: 500 14px var(--mono); color: var(--mint);
+}
+.bio-guardrail-row em {
+  display: block; font: 500 14px var(--mono); color: var(--read);
+  font-style: normal;
+}
+.bio-guardrail-row p {
+  margin: 3px 0 0; font: 500 14px var(--text); color: var(--mute);
+  line-height: 1.5;
+}
