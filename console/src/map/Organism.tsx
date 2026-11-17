@@ -297,6 +297,48 @@ export function Organism({ bundle, model, source, node, route, cut, onSelect }: 
       blending: THREE.AdditiveBlending, depthWrite: false,
     })));
 
+    // magnetic field lines from the primary star
+    const field = new THREE.Group();
+    for (let k = 0; k < 6; k += 1) {
+      const a = (k * Math.PI) / 3;
+      const points: THREE.Vector3[] = [];
+      for (let s = 0; s <= 24; s += 1) {
+        const t = s / 24;
+        const r = 34 + t * 250;
+        const bend = Math.sin(t * Math.PI) * 34;
+        points.push(new THREE.Vector3(
+          Math.cos(a) * r + Math.cos(a + Math.PI / 2) * bend,
+          Math.sin(a) * r + Math.sin(a + Math.PI / 2) * bend,
+          Math.sin(t * Math.PI * 2 + k) * 16,
+        ));
+      }
+      group.add(new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(points),
+        new THREE.LineBasicMaterial({
+          color: k % 2 === 0 ? 0x4fe3c1 : 0x8b7bff,
+          transparent: true,
+          opacity: 0.11,
+          blending: THREE.AdditiveBlending,
+        }),
+      ));
+    }
+    for (let k = 0; k < 3; k += 1) {
+      const torus = new THREE.Mesh(
+        new THREE.TorusGeometry(34 + k * 13, 0.5, 8, 64),
+        new THREE.MeshBasicMaterial({
+          color: k % 2 === 0 ? 0xffd27a : 0x4fe3c1,
+          transparent: true,
+          opacity: 0.22 - k * 0.04,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        }),
+      );
+      torus.rotation.x = Math.PI / 2 + k * 0.22;
+      torus.rotation.y = k * 0.4;
+      group.add(torus);
+    }
+    group.add(field);
+
     const routeIds = new Set(route && !cut ? route.nodes : []);
     const routeEdges = new Set(route && !cut ? route.edges.map((edge: GraphEdge) => edge.id) : []);
     const cutEdges = new Set(cut ? bundle.sever.edgeCut.edges : []);

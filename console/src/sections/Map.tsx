@@ -137,14 +137,14 @@ export function Map() {
         label="Map"
         title={
           <span id="map-title">
-            The account, <em>alive.</em>
+            The account, <em>in orbit.</em>
           </span>
         }
         lede={
           <>
-            The administrator is the nucleus. Every identity is a cell on the growth
-            ring its hops allow; every escalation is a vein. Pick a principal, walk
-            its route, then sever the cut.
+            The administrator is the primary star. Every identity is a body on the
+            orbit its hops allow; every escalation is a flux tube. Pick a principal,
+            walk its route, then sever the cut.
           </>
         }
         meta={
@@ -254,14 +254,14 @@ export function Map() {
             onSelect={select}
           />
           <div className="bio-stagetag">
-            <b>Living account</b>
-            <span>nucleus · growth rings · veins</span>
+            <b>Magnetic orrery</b>
+            <span>star · orbit shells · flux tubes</span>
           </div>
           <div className="bio-legend" aria-hidden="true">
             <span><i style={{ background: "var(--violet)" }} />user</span>
             <span><i style={{ background: "var(--cyan)" }} />role</span>
             <span><i style={{ background: "var(--mint)" }} />group</span>
-            <span><i style={{ background: "var(--amber)" }} />administrator</span>
+            <span><i style={{ background: "var(--amber)" }} />primary star</span>
           </div>
         </div>
 
@@ -342,7 +342,7 @@ export function Map() {
       </div>
 
       <p className="bio-footer" style={{ border: 0, marginTop: 18, paddingTop: 0 }}>
-        <span>Fig. 02 / living account / nucleus · growth rings · veins</span>
+        <span>Fig. 02 / magnetic orrery / star · orbit shells · flux tubes</span>
         <span>source: {index.engine.name} export / {bundle.scenario.accountId}</span>
       </p>
     </section>
@@ -378,7 +378,7 @@ function RouteView({
   }
   return (
     <>
-      <p className="bio-kick">Route / {String(route.hops).padStart(2, "0")} hops</p>
+      <p className="bio-kick">Route / {String(route.hops).padStart(2, "0")} hops · theoretical</p>
       <h2>{item?.label ?? route.nodes[0]}</h2>
       <p className="bio-meta">{item?.kind ?? "principal"} → administrator</p>
       <div className="bio-tags">
@@ -392,13 +392,6 @@ function RouteView({
             <div>
               <span>{edge.name}</span>
               <em>{edge.actions.join(", ")}</em>
-              <button
-                type="button"
-                className="bio-stepbtn"
-                onClick={() => onStep(index)}
-              >
-                Step {index + 1}
-              </button>
             </div>
           </li>
         ))}

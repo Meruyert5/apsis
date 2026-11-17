@@ -2,9 +2,10 @@
 
 ### Changed
 
-- The console is now a bioluminescent deep-sea instrument: a 3D living-account
-  Map, a 3D fleet specimen with a 2D fallback, a merged proof act, and a
-  mission rail. The solar-system survey and planet atlas are retired.
+- The console is now a magnetic bioluminescent orrery: a 3D Map with a primary
+  star, hop shells, identity bodies and flux tubes; a 3D containment core with a
+  2D fallback; a merged proof act; and a mission rail. The planet atlas is
+  retired. The H1 is now “Every route reaches its apsis.”
 - Sora, IBM Plex Sans, and IBM Plex Mono are the only type families; the
   palette is abyss teal, cyan, mint, violet, coral and amber.
 - The Map and Decide sections are Three.js scenes that pause when offscreen and
@@ -12,6 +13,8 @@
 
 ### Added
 
+- Magnetic field lines, guardrail rings and a theoretical/observed route state
+  in the Map.
 - A command palette (`Ctrl/⌘ K`) for acts, accounts and techniques.
 - A living-account model with deterministic depth, route and spiral layout,
   covered by Node tests.

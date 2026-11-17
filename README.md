@@ -5,7 +5,7 @@
 Apsis reads an AWS account as a permission system, finds every route from a
 low-privilege principal to administrator, and computes the smallest set of grants
 to revoke so that no route remains. Apsis turns that output into a
-living-account console you can inspect, step, and sever.
+orbital console you can inspect, step, and sever.
 
 [![CI](https://github.com/Meruyert5/apsis/actions/workflows/ci.yml/badge.svg)](https://github.com/Meruyert5/apsis/actions/workflows/ci.yml)
 [![Pages](https://github.com/Meruyert5/apsis/actions/workflows/pages.yml/badge.svg)](https://github.com/Meruyert5/apsis/actions/workflows/pages.yml)
@@ -14,7 +14,7 @@ living-account console you can inspect, step, and sever.
 [![Console: React + Vite](https://img.shields.io/badge/console-React%20%2B%20Vite-d9b36a)](console/package.json)
 [![Data: synthetic](https://img.shields.io/badge/data-synthetic%20fixtures-e0799a)](docs/RESEARCH.md)
 
-![Apsis: a signature vein ending at the nucleus, and the fleet readout](docs/img/signal.png)
+![Apsis: a signature transfer ending at the primary star, and the fleet readout](docs/img/signal.png)
 
 ## What this is
 
@@ -50,12 +50,12 @@ with `iam:PassRole` and `lambda:CreateFunction` is not obviously dangerous until
 you see that it can hand a role to a function and invoke it. Apsis composes
 those steps into edges and searches for the shortest walk to an administrator.
 
-The living-account console is an explanatory layer over that graph:
+The orbital console is an explanatory layer over that graph:
 
-- the administrator is the nucleus;
-- each principal is a cell on the growth ring its hop count allows;
-- the bright vein is the selected route;
-- severing the cut darkens the organism.
+- the administrator is the primary star;
+- each principal is a body on the orbit its hop count allows;
+- the bright flux tube is the selected route;
+- severing the cut collapses the field.
 
 The specimen is a second view of the same export: 18 escalation primitives as
 ribs against the 16 fixture accounts as rings. A photophore is an edge the
@@ -152,18 +152,18 @@ npm run audit      # contrast, headings, names, target size
 | Section | What it does |
 | --- | --- |
 | Start | Lit Earth, the signature transit, and the five-move method |
-| Signal | A signature vein, the fleet readout, and the five-stage bus |
-| Map | The account as a living organism: nucleus, growth rings, cells, veins; step a route and sever the cut |
-| Decide | 18 techniques × 16 accounts as a specimen core, with the exact ledger |
+| Signal | A signature transfer, the fleet readout, and the five-stage bus |
+| Map | The account as a magnetic orrery: primary star, hop shells, bodies, flux tubes; step a route and sever the cut |
+| Decide | 18 techniques × 16 accounts as a containment core, with the exact ledger |
 | Prove | A command builder, the recorded output, the abyss, and the zero |
 
 ![The Map section](docs/img/map.png)
 
-The design is a bioluminescent deep-sea instrument: a dark abyss, membrane
-panels, a living-account organism in 3D, a 3D fleet specimen with a 2D fallback,
-and an abyss that closes the page. Amber marks the nucleus and the live signal;
-coral marks severance. The full system is in
-[docs/superpowers/specs/2026-11-17-apsis-bioluminescent-design.md](docs/superpowers/specs/2026-11-17-apsis-bioluminescent-design.md).
+The design is a magnetic bioluminescent orrery: a primary star, hop shells,
+bodies, flux tubes, a containment core, and an abyss that closes the page. The
+title is the information design: every route reaches its apsis. Amber marks the
+star and the live signal; coral marks severance. The full system is in
+[docs/superpowers/specs/2026-11-17-apsis-magnetic-orrery-design.md](docs/superpowers/specs/2026-11-17-apsis-magnetic-orrery-design.md).
 
 ## Data and scope
 

@@ -149,7 +149,7 @@ try {
     fleet: [...document.querySelectorAll('.bio-fleet b')].map(el => el.textContent),
   }))()`);
   check("five process nodes", signal.bus === 5, String(signal.bus));
-  check("signal names the nucleus", signal.h1?.includes("nucleus"), signal.h1);
+  check("signal names the apsis", signal.h1?.includes("apsis"), signal.h1);
   check("fleet readout has four values", signal.fleet.length === 4, signal.fleet.join(","));
 
   await scrollTo("map");

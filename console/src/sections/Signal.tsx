@@ -38,7 +38,7 @@ function HeroRoute() {
 
   return (
     <div className="bio-routefield" aria-label={route ? `Signature route: ${labels.join(" to ")}` : "No route to an administrator"}>
-      <span className="tag">Signature vein / {FEATURED}</span>
+      <span className="tag">Signature transfer / {FEATURED}</span>
       <svg viewBox="0 0 600 400" role="img" aria-hidden="true">
         <ellipse cx="300" cy="210" rx="238" ry="148" fill="none" stroke="rgba(79,227,193,.12)" />
         <ellipse cx="300" cy="210" rx="188" ry="112" fill="none" stroke="rgba(79,227,193,.08)" />
@@ -59,7 +59,7 @@ function HeroRoute() {
           {labels[0]}
         </text>
         <text x={last.x} y={last.y - 22} fill="#ffd27a" fontFamily="IBM Plex Mono" fontSize="14" textAnchor="middle">
-          Nucleus
+          Apsis
         </text>
       </svg>
     </div>
@@ -75,13 +75,13 @@ export function Signal() {
         label="Signal"
         title={
           <span id="signal-title">
-            Every route ends at the <em>nucleus.</em>
+            Every route reaches its <em>apsis.</em>
           </span>
         }
         lede={
           <>
-            Apsis reads an AWS account as a living system: cells on growth rings,
-            the administrator at the nucleus. It finds every route a stolen
+            Apsis reads an AWS account as an orbital system: bodies on hop shells,
+            the administrator at the primary. It finds every route a stolen
             credential could walk, then the fewest actions that close them all.
           </>
         }

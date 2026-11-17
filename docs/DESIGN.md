@@ -1,16 +1,17 @@
 # Apsis — design system
 
-The console is one bioluminescent instrument: a living-account Map, a fleet
-specimen, and a proof act in the abyss. The binding spec is
+The console is one magnetic bioluminescent instrument: a living orrery, a fleet
+containment core, and a proof act in the abyss. The title is the design: every
+route reaches its apsis. The binding spec is
 `docs/superpowers/specs/2026-11-17-apsis-bioluminescent-design.md`; this page
 records the system a reviewer needs to extend it.
 
 ## 1. Concept
 
-One account is one organism. The administrator is the nucleus; identities are
-cells on growth rings; escalations are veins. The fleet is the ecosystem: the
-Decide core is the specimen of all 16 organisms, and the Prove act is the
-environment they live in.
+One account is one orrery. The administrator is the primary star; identities are
+bodies on hop shells; escalations are flux tubes. The fleet is the ecosystem:
+the Decide core is the containment specimen of all 16 accounts, and the Prove
+act is the field collapse.
 
 Every glow has a data job. Nothing in the interface is a decorative chart.
 
@@ -56,11 +57,13 @@ drops below 14px.
 **Signal** — a 2D signature vein to an amber nucleus, the fleet readout, and a
 five-stage bus. No WebGL on the first paint.
 
-**Map** — a Three.js organism: nucleus lobes, organic growth rings, identity
-cells, curved veins, a fresnel membrane and plankton. The selected route is a
-tube with two travelling pulses. Severing turns the cut veins coral and dims the
-organism. The workbench adds a principal rail, Route/Node/Cut readout, hop bar
-and account selector. Reduced motion renders a static frame.
+**Map** — a Three.js magnetic orrery: a primary star with field lines, hop
+shells, identity bodies, curved flux tubes, a faint field boundary and
+plankton. The selected route is a tube with two travelling pulses and a
+theoretical/observed state. Severing turns the cut tubes coral, adds mint
+guardrail rings and dims the star. The workbench adds a principal rail,
+Route/Node/Cut readout, hop bar and account selector. Reduced motion renders a
+static frame.
 
 **Decide** — a Three.js specimen of 16 account rings and 18 technique ribs with
 photophores at the intersections. The 2D radial core is the fallback and the
