@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FleetTable, type SortKey } from "./FleetTable";
-import { OrbitFigure } from "./OrbitFigure";
+import { MascotOrb } from "./MascotOrb";
 import { RouteAtlas } from "./RouteAtlas";
+import { WaveMesh } from "./WaveMesh";
 import {
   downloadSnapshot,
   fleet,
@@ -23,7 +24,7 @@ type IconName =
   | "menu"
   | "close";
 
-function Icon({ name, size = 16 }: { name: IconName; size?: number }) {
+function Icon({ name, size = 17 }: { name: IconName; size?: number }) {
   const common = {
     width: size,
     height: size,
@@ -116,47 +117,79 @@ const NAV = [
   { id: "evidence", label: "Evidence", icon: "evidence" as const },
 ];
 
-const KPI = [
+const KPIS = [
   { label: "Accounts", value: snapshot.accounts, foot: "monitored", tone: "" },
   { label: "Identities", value: snapshot.identities, foot: "fleet-wide", tone: "" },
   { label: "Routes", value: snapshot.routes, foot: "to administrator", tone: "" },
-  { label: "Edges cut", value: snapshot.cut, foot: "minimum cut", tone: "lime" },
-  { label: "Deepest", value: snapshot.deepest, foot: "hops to admin", tone: "magenta" },
+  { label: "Edges cut", value: snapshot.cut, foot: "minimum cut", tone: "blue" },
+  { label: "Deepest", value: snapshot.deepest, foot: "hops to admin", tone: "accent" },
+  { label: "Writes", value: snapshot.writes, foot: "read-only", tone: "ink" },
 ];
 
 const EVENTS = [
-  {
-    label: "Snapshot",
-    detail: `${snapshot.identities} identities across ${snapshot.accounts} accounts`,
-    tone: "ice",
-  },
-  {
-    label: "Analysis",
-    detail: `${snapshot.routes} routes found; deepest ${String(snapshot.deepest).padStart(2, "0")} hops`,
-    tone: "lime",
-  },
-  {
-    label: "Decision",
-    detail: `${snapshot.cut} edges cut; no routes remain`,
-    tone: "magenta",
-  },
-  {
-    label: "Guardrail",
-    detail: "0 writes; read-only preserved",
-    tone: "ice",
-  },
+  { label: "Snapshot", detail: `${snapshot.identities} identities across ${snapshot.accounts} accounts`, tone: "blue" },
+  { label: "Analysis", detail: `${snapshot.routes} routes found; deepest ${String(snapshot.deepest).padStart(2, "0")} hops`, tone: "ink" },
+  { label: "Decision", detail: `${snapshot.cut} edges cut; no routes remain`, tone: "blue" },
+  { label: "Guardrail", detail: "0 writes; read-only preserved", tone: "ink" },
+  { label: "Seal", detail: "Snapshot sealed; nothing written back", tone: "blue" },
 ];
 
-function PanelHead({ title, meta }: { title: string; meta: string }) {
+function PanelHead({
+  title,
+  meta,
+  chevrons = false,
+  titleId,
+}: {
+  title: string;
+  meta: string;
+  chevrons?: boolean;
+  titleId?: string;
+}) {
   return (
     <header className="panel-head">
-      <h2>{title}</h2>
+      <h2 id={titleId}>{title}</h2>
       <span className="panel-meta">{meta}</span>
+      {chevrons ? <span className="panel-chevrons" aria-hidden="true">‹‹‹‹</span> : null}
     </header>
   );
 }
 
-export function NeonDashboard() {
+function Badge() {
+  return (
+    <svg className="hero-badge" viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="94" fill="none" stroke="#fff" strokeOpacity=".5" />
+      <circle cx="100" cy="100" r="84" fill="none" stroke="#1a1aff" strokeWidth="1" strokeDasharray="3 6" />
+      <g className="badge-ring">
+        <defs>
+          <path id="hero-badge-path" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" />
+        </defs>
+        <text>
+          <textPath href="#hero-badge-path" startOffset="0">
+            EVERY ROUTE REACHES ITS APSIS / READ-ONLY / 16 ACCOUNTS / 07 HOPS /
+          </textPath>
+        </text>
+      </g>
+      <path className="badge-star" d="M100 46 L104 96 L154 100 L104 104 L100 154 L96 104 L46 100 L96 96 Z" />
+      <text className="badge-word" x="100" y="105" textAnchor="middle">APSIS</text>
+    </svg>
+  );
+}
+
+function GlobeStamp() {
+  return (
+    <svg className="globe-stamp" viewBox="0 0 120 120" aria-hidden="true">
+      <g fill="none" stroke="currentColor" strokeWidth="1">
+        <circle cx="60" cy="60" r="42" />
+        <ellipse cx="60" cy="60" rx="42" ry="15" />
+        <ellipse cx="60" cy="60" rx="15" ry="42" />
+        <ellipse cx="60" cy="60" rx="42" ry="15" transform="rotate(55 60 60)" />
+      </g>
+      <circle cx="60" cy="60" r="3" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function Y2kDashboard() {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<{ key: SortKey; dir: 1 | -1 }>({ key: "routes", dir: -1 });
   const [active, setActive] = useState("overview");
@@ -186,9 +219,7 @@ export function NeonDashboard() {
         event.preventDefault();
         searchRef.current?.focus();
       }
-      if (event.key === "Escape") {
-        setRail(false);
-      }
+      if (event.key === "Escape") setRail(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -201,7 +232,7 @@ export function NeonDashboard() {
     if (!sections.length) return;
     const observer = new IntersectionObserver(
       (entries) => {
-        if (window.scrollY < 190) {
+        if (window.scrollY < 220) {
           setActive("overview");
           return;
         }
@@ -240,7 +271,7 @@ export function NeonDashboard() {
 
   const exportSnapshot = () => {
     downloadSnapshot();
-    flash("Snapshot exported as JSON");
+    flash("Snapshot exported");
   };
 
   const clearSearch = () => {
@@ -249,36 +280,33 @@ export function NeonDashboard() {
   };
 
   return (
-    <div className={`neon ${rail ? "rail-open" : ""}`}>
-      <div className="neon-frame" aria-hidden="true">
-        <span className="crop tl" /><span className="crop tr" />
-        <span className="crop bl" /><span className="crop br" />
+    <div className={`y2k ${rail ? "rail-open" : ""}`}>
+      <div className="screen-frame" aria-hidden="true">
+        <span className="corner tl" /><span className="corner tr" />
+        <span className="corner bl" /><span className="corner br" />
       </div>
 
       <a className="skip" href="#overview">Skip to dashboard</a>
 
       <aside className="rail" aria-label="Primary">
         <div className="rail-head">
-          <div className="wordmark">
-            <span className="glyph" aria-hidden="true">A</span>
-            <div>
-              <b>APSIS</b>
-              <i>Fleet console</i>
-            </div>
+          <div className="brand">
+            <b>APSIS</b>
+            <i>Path + Atlas</i>
           </div>
           <button type="button" className="rail-close" onClick={() => setRail(false)} aria-label="Close navigation">
             <Icon name="close" />
           </button>
         </div>
 
-        <div className="rail-account">
+        <div className="account">
           <span>Focus account</span>
           <b>{showcase.scenario.title}</b>
           <em>{showcase.scenario.accountId} / {showcase.scenario.region}</em>
         </div>
 
         <nav className="rail-nav">
-          {NAV.map((item) => (
+          {NAV.map((item, index) => (
             <button
               key={item.id}
               type="button"
@@ -286,6 +314,7 @@ export function NeonDashboard() {
               aria-current={active === item.id ? "true" : undefined}
               onClick={() => go(item.id)}
             >
+              <em>0{index + 1}</em>
               <Icon name={item.icon} />
               <span>{item.label}</span>
             </button>
@@ -294,10 +323,16 @@ export function NeonDashboard() {
 
         <div className="rail-spacer" />
 
+        <div className="rail-stamp" aria-hidden="true">
+          <div className="rail-barcode" />
+          <span className="rail-chevrons">‹‹‹‹</span>
+          <span className="rail-star">✦</span>
+        </div>
+
         <div className="rail-status">
-          <div><i className="pulse" />Read-only</div>
+          <div><i className="dot" />Read-only</div>
           <p>{generatedLabel}</p>
-          <p>0 writes</p>
+          <p>0 writes / 16 accounts</p>
         </div>
       </aside>
 
@@ -305,19 +340,19 @@ export function NeonDashboard() {
         <button type="button" className="rail-scrim" onClick={() => setRail(false)} aria-label="Close navigation overlay" />
       ) : null}
 
-      <div className="neon-main">
+      <div className="main">
         <header className="topbar">
-          <div className="topbar-crumb">
+          <div className="crumb">
             <button type="button" className="rail-toggle" onClick={() => setRail(true)} aria-label="Open navigation">
               <Icon name="menu" />
             </button>
-            <span className="crumb-kicker">Apsis</span>
-            <span className="crumb-sep">/</span>
-            <span>Games studio</span>
+            <b>APSIS</b>
+            <span>/</span>
+            <span>GAMES STUDIO</span>
           </div>
 
-          <div className="searchbox">
-            <Icon name="search" size={15} />
+          <div className="search">
+            <Icon name="search" size={16} />
             <input
               ref={searchRef}
               type="search"
@@ -329,62 +364,98 @@ export function NeonDashboard() {
             <kbd>⌘K</kbd>
           </div>
 
-          <div className="topbar-meta">
+          <div className="topmeta">
             <span className="snapshot"><i />Snapshot</span>
             <span className="avatar" aria-hidden="true">MO</span>
           </div>
         </header>
 
         <main className="content">
-          <section id="overview" className="page-head" aria-labelledby="page-title">
-            <div className="head-copy">
-              <p className="eyebrow"><i />Fleet overview</p>
-              <h1 id="page-title">Every route reaches its <em>apsis.</em></h1>
+          <section id="overview" className="hero" aria-labelledby="title">
+            <div className="hero-copy">
+              <p className="eyebrow"><i />Fleet overview / Path + Atlas</p>
+              <h1 id="title" aria-label="Apsis">
+                <span className="solid">APSIS</span>
+                <span className="outline">APSIS</span>
+              </h1>
               <p className="lede">
                 Read-only. {snapshot.identities} identities resolve into {snapshot.routes} routes
                 to administrator. The minimum cut is {snapshot.cut} edges; the closest route is{" "}
                 {String(shortest).padStart(2, "0")} hop, the deepest {String(snapshot.deepest).padStart(2, "0")}.
               </p>
+              <div className="hero-actions">
+                <button type="button" className="btn primary" onClick={() => go("evidence")}>
+                  <Icon name="shield" />Review evidence
+                </button>
+                <button type="button" className="btn" onClick={exportSnapshot}>
+                  <Icon name="download" />Export snapshot
+                </button>
+              </div>
             </div>
-            <div className="head-actions">
-              <button type="button" className="btn primary" onClick={() => go("evidence")}>
-                <Icon name="shield" />Review evidence
-              </button>
-              <button type="button" className="btn" onClick={exportSnapshot}>
-                <Icon name="download" />Export snapshot
-              </button>
+
+            <div className="mascot">
+              <p className="sr-only">
+                Interactive 3D mascot: a wireframe globe atlas with a seven-node orbit path.
+                Drag to rotate, scroll to zoom, double-click to reset. Use 2D for a static fallback.
+              </p>
+              <div className="mascot-frame">
+                <MascotOrb />
+                <Badge />
+                <span className="mascot-tag">Mascot / Path + Atlas</span>
+                <span className="mascot-note">07 nodes / 01 path</span>
+              </div>
+              <p className="mascot-caption">Atlas = wireframe shell / path = 07-hop orbit</p>
             </div>
           </section>
 
           <section className="kpis" aria-label="Fleet figures">
-            {KPI.map((item) => (
-              <article key={item.label} className={`kpi ${item.tone}`}>
-                <div className="kpi-head">{item.label}</div>
-                <div className="kpi-value">{String(item.value).padStart(2, "0")}</div>
-                <div className="kpi-foot">{item.foot}</div>
-              </article>
+            {KPIS.map((item) => (
+              <div key={item.label} className={`kpi ${item.tone}`}>
+                <span>{item.label}</span>
+                <b>{item.value === 0 ? "0" : String(item.value).padStart(2, "0")}</b>
+                <em>{item.foot}</em>
+              </div>
             ))}
           </section>
 
-          <div className="dash-grid">
+          <div className="wave-band">
+            <WaveMesh />
+            <span className="wave-label">Atlas field / {snapshot.identities} identities</span>
+            <span className="wave-barcode" aria-hidden="true" />
+          </div>
+
+          <div className="panels">
             <section id="atlas" className="panel atlas-panel" aria-labelledby="atlas-title">
-              <PanelHead title="Route atlas" meta="Games studio / 07 hops" />
+              <PanelHead title="Route atlas" meta="Games studio / 07 hops" chevrons titleId="atlas-title" />
               <div className="atlas-intro">
-                <p>
-                  The signature path from a tools intern to the studio administrator. Seven
-                  hops, eight identities, closed by the minimum cut.
-                </p>
+                <p>The signature path from a tools intern to the studio administrator, closed by the minimum cut.</p>
               </div>
               <RouteAtlas route={showcaseRoute} account={showcase.scenario.title} />
             </section>
 
-            <section className="panel figure-panel" aria-labelledby="figure-title">
-              <PanelHead title="Figure / Apsis" meta="Perigee / apogee" />
-              <OrbitFigure shortest={shortest} deepest={snapshot.deepest} accounts={snapshot.accounts} />
+            <section className="panel paper posture" aria-labelledby="posture-title">
+              <PanelHead title="Posture" meta="Minimum cut" titleId="posture-title" />
+              <GlobeStamp />
+              <div className="posture-main">
+                <b>{String(snapshot.cut).padStart(2, "0")}</b>
+                <span>edges<br />cut</span>
+              </div>
+              <div className="posture-bar" aria-hidden="true"><i /></div>
+              <p className="posture-note">{snapshot.routes} routes closed. 0 remain. 0 writes.</p>
+              <dl className="posture-list">
+                <div><dt>Routes before</dt><dd>{snapshot.routes}</dd></div>
+                <div><dt>Routes after</dt><dd>00</dd></div>
+                <div><dt>Writes</dt><dd>00</dd></div>
+                <div><dt>Mode</dt><dd>Read-only</dd></div>
+              </dl>
+              <div className="posture-foot">
+                <span>Atlas / {snapshot.accounts} accounts</span>
+                <b>{snapshot.cut} cuts / 0 routes</b>
+              </div>
             </section>
 
-            <section id="fleet" className="panel fleet-panel" aria-labelledby="fleet-title">
-              <PanelHead title="Fleet" meta={`${rows.length} of ${snapshot.accounts} accounts`} />
+            <section id="fleet" className="panel paper fleet-panel" aria-labelledby="fleet-title">
+              <PanelHead title="Fleet" meta={`${rows.length} of ${snapshot.accounts} accounts`} titleId="fleet-title" />
               <FleetTable
                 rows={rows}
                 query={query}
@@ -394,44 +465,30 @@ export function NeonDashboard() {
               />
             </section>
 
-            <div className="side">
-              <section className="panel posture" aria-labelledby="posture-title">
-                <PanelHead title="Posture" meta="Minimum cut" />
-                <div className="posture-main">
-                  <b>{String(snapshot.cut).padStart(2, "0")}</b>
-                  <span>edges<br />cut</span>
-                </div>
-                <div className="posture-bar" aria-hidden="true"><i /></div>
-                <p className="posture-note">{snapshot.routes} routes closed. 0 remain. 0 writes.</p>
-                <dl className="posture-list">
-                  <div><dt>Routes before</dt><dd>{snapshot.routes}</dd></div>
-                  <div><dt>Routes after</dt><dd>00</dd></div>
-                  <div><dt>Writes</dt><dd>00</dd></div>
-                  <div><dt>Mode</dt><dd className="lime">Read-only</dd></div>
-                </dl>
-              </section>
-
-              <section id="evidence" className="panel evidence" aria-labelledby="evidence-title">
-                <PanelHead title="Evidence" meta={generatedLabel} />
-                <ol className="timeline">
-                  {EVENTS.map((event) => (
-                    <li key={event.label} className={event.tone}>
-                      <b>{event.label}</b>
-                      <p>{event.detail}</p>
-                    </li>
-                  ))}
-                </ol>
-                <button type="button" className="evidence-export" onClick={exportSnapshot}>
+            <section id="evidence" className="panel paper evidence" aria-labelledby="evidence-title">
+              <PanelHead title="Evidence" meta={generatedLabel} titleId="evidence-title" />
+              <ol className="timeline">
+                {EVENTS.map((event) => (
+                  <li key={event.label} className={event.tone}>
+                    <b>{event.label}</b>
+                    <p>{event.detail}</p>
+                  </li>
+                ))}
+              </ol>
+                <button type="button" className="export-run" onClick={exportSnapshot}>
                   <Icon name="download" />Export the run
                 </button>
+                <div className="evidence-foot">
+                  <span>Run / {generatedLabel}</span>
+                  <span>{showcase.engine.name} {showcase.engine.version} / read-only / 0 writes</span>
+                </div>
               </section>
-            </div>
           </div>
 
           <footer className="content-foot">
-            <span>APSIS</span>
+            <span>APSIS / PATH + ATLAS / 2026</span>
             <span>{snapshot.accounts} accounts · {snapshot.identities} identities · {snapshot.routes} routes · {snapshot.cut} edges cut</span>
-            <span>{generatedLabel}</span>
+            <span>{generatedLabel} / READ-ONLY</span>
           </footer>
         </main>
       </div>

@@ -29,7 +29,7 @@ export function FleetTable({
 
   return (
     <div className="fleet">
-      <div className="table-wrap">
+      <div className="table-scroll">
         <table>
           <caption className="sr-only">Fleet accounts, identities, routes and minimum-cut edges</caption>
           <thead>
@@ -58,7 +58,7 @@ export function FleetTable({
             {rows.map((row) => (
               <tr key={row.key} className={row.key === "games-studio" ? "focus" : undefined}>
                 <th scope="row" className="account-col">
-                  <span className={`sev-swatch ${row.severity}`} aria-hidden="true" />
+                  <span className={`mark ${row.severity}`} aria-hidden="true" />
                   <div>
                     <b>{row.short}</b>
                     <span>{row.key} / {row.accountId}</span>
@@ -79,7 +79,7 @@ export function FleetTable({
                 <td>{totals.identities}</td>
                 <td>{totals.routes}</td>
                 <td>{String(totals.cut).padStart(2, "0")}</td>
-                <td colSpan={2}>READ-ONLY / 0 WRITES</td>
+                <td colSpan={2}>Read-only / 0 writes</td>
               </tr>
             </tfoot>
           ) : null}

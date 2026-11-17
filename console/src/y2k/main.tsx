@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { NeonDashboard } from "./NeonDashboard";
-import "./neon.css";
+import { Y2kDashboard } from "./Y2kDashboard";
+import "./y2k.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <NeonDashboard />
+    <Y2kDashboard />
   </StrictMode>,
 );

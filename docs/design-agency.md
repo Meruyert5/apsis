@@ -289,3 +289,15 @@ A clean departure at `/design-lab/v7/`: pure black, white linework and electric 
 The 3D mascot is built from two inputs. The **path** is a Catmull-Rom orbit with seven nodes; the **atlas** is a wireframe globe shell, a 420-point dust field and a polar grid around a liquid-cobalt shader core. It orbits, drags, zooms, resets and has a 2D SVG fallback. A separate dotted waveform mesh sits in the lower left.
 
 This direction drops the emerald/crimson editorial system and the Neon Luxe dashboard palette. It is a poster/mascot study first; the product surface can be derived from it after the direction is chosen.
+
+---
+
+## Revision 9 - Path + Atlas dashboard
+
+The Y2K direction is now the dashboard. `/dashboard.html` renders a new entry at `console/src/y2k/`; the Neon Luxe dashboard implementation has been retired.
+
+The shell is black with a blue grid, white linework and electric ultramarine. The header repeats APSIS in solid white and a blue outline. The hero carries the real WebGL mascot - a 7-node orbit (path) around a wireframe globe, dust field and liquid-cobalt core (atlas) - with drag, zoom, reset and a 2D fallback. A second WebGL point mesh forms the atlas field strip.
+
+The data moves onto white paper panels: a six-cell KPI strip (16 / 194 / 144 / 37 / 07 / 0), the real Games Studio route atlas, the 16-account fleet table, posture and evidence. Black headers, white bodies, blue state accents. The fleet table is sortable and searchable, totals are sticky, and the snapshot exports as JSON. The layout collapses to 390px with a drawer rail and a four-column mobile table.
+
+This build keeps the Y2K vector language but treats it as a control surface, not a poster: fewer stamps, larger type, paper panels for the dense data.

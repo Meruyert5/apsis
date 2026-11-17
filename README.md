@@ -217,23 +217,27 @@ point-cloud cluster and route - and re-grades it three ways:
 
 Only the palette, background light and surface noise change. No new objects.
 
-### Neon Luxe dashboard (build)
+### Path + Atlas dashboard (current build)
 
-`/dashboard.html` is the first build of the chosen Neon Luxe product surface. It
-is a separate entry with its own shell, components and CSS - the old console
-markup and styles are not reused. It reads the real bundles for the figures and
-the Games Studio signature route.
+`/dashboard.html` is the Y2K / Path + Atlas dashboard. It is a separate Vite
+entry with its own shell, components and stylesheet; the old console and the
+Neon Luxe dashboard are not reused. It reads the real bundles for the figures
+and the Games Studio signature route.
 
-- Sidebar with focus account, section nav, palette card and snapshot status.
-- Five figures: 16 accounts, 194 identities, 144 routes, 37 edges cut, 07 deep.
+- Black shell with white linework and electric ultramarine accents.
+- White paper KPI strip: 16 accounts, 194 identities, 144 routes, 37 edges cut,
+  07 deep, 0 writes.
 - Route atlas of the real 7-hop Games Studio path, with the cut marked.
-- Figure / Apsis: an orbit that maps perigee to the 1-hop route and apogee to
-  the 7-hop route, testing the project name as a visual system.
-- Sortable, searchable 16-account fleet table.
-- Posture and evidence panels; JSON snapshot export; read-only throughout.
+- A real WebGL mascot built from a **path** and an **atlas**: a 7-node orbit
+  around a wireframe globe, dust field and liquid-cobalt core. Drag, zoom,
+  reset and a 2D fallback.
+- A dotted atlas field rendered as a second WebGL point mesh.
+- Sortable, searchable 16-account fleet table, posture and evidence panels,
+  JSON snapshot export.
+- Responsive to 390px; the rail becomes a drawer and the table drops the
+  identities/severity columns.
 
-The layout is responsive to 390px, the sidebar becomes a drawer, and the table
-columns collapse. This entry is not yet the default console route.
+The Neon Luxe dashboard is retired. This replaces it as the dashboard build.
 
 ### Y2K / Acid Graphics mascot (current mock)
 
