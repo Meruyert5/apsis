@@ -10,6 +10,7 @@ interface Props {
   node: string | null;
   route: OrganismRoute | null;
   cut: boolean;
+  showField: boolean;
   onSelect: (id: string) => void;
 }
 
@@ -86,7 +87,7 @@ function disposeGroup(group: THREE.Group) {
   }
 }
 
-export function Organism({ bundle, model, source, node, route, cut, onSelect }: Props) {
+export function Organism({ bundle, model, source, node, route, cut, showField, onSelect }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
   const runtimeRef = useRef<Runtime | null>(null);
@@ -298,6 +299,7 @@ export function Organism({ bundle, model, source, node, route, cut, onSelect }: 
     })));
 
     // magnetic field lines from the primary star
+    if (showField) {
     const field = new THREE.Group();
     for (let k = 0; k < 6; k += 1) {
       const a = (k * Math.PI) / 3;
@@ -338,6 +340,7 @@ export function Organism({ bundle, model, source, node, route, cut, onSelect }: 
       group.add(torus);
     }
     group.add(field);
+    }
 
     const routeIds = new Set(route && !cut ? route.nodes : []);
     const routeEdges = new Set(route && !cut ? route.edges.map((edge: GraphEdge) => edge.id) : []);
@@ -483,7 +486,7 @@ export function Organism({ bundle, model, source, node, route, cut, onSelect }: 
 
     group.rotation.set(runtime.rotX, runtime.rotY, 0);
     renderer.render(scene, camera);
-  }, [bundle, model, source, node, route, cut, onSelect]);
+  }, [bundle, model, source, node, route, cut, showField, onSelect]);
 
   return (
     <>

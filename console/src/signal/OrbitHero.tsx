@@ -3,6 +3,7 @@ import * as THREE from "three";
 
 interface Props {
   labels: string[];
+  phase: number;
 }
 
 function glowTexture(): THREE.Texture {
@@ -30,8 +31,10 @@ function glowTexture(): THREE.Texture {
  * spirals into the primary star. It is decorative on the Signal act; the
  * accessible route is the text and the Map.
  */
-export function OrbitHero({ labels }: Props) {
+export function OrbitHero({ labels, phase }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const phaseRef = useRef(phase);
+  useEffect(() => { phaseRef.current = phase; }, [phase]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -122,6 +125,29 @@ export function OrbitHero({ labels }: Props) {
       group.userData.pulse = pulse;
       group.userData.pulse2 = pulse2;
     }
+
+    // a comet on a long ellipse, with a tail and a belt
+    const comet = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: 0xd6fff2, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false }));
+    comet.scale.set(34, 34, 1);
+    group.add(comet);
+    const tailGeo = new THREE.BufferGeometry();
+    tailGeo.setAttribute("position", new THREE.Float32BufferAttribute(new Float32Array(12 * 3), 3));
+    const tail = new THREE.Line(tailGeo, new THREE.LineBasicMaterial({ color: 0x4fe3c1, transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending }));
+    group.add(tail);
+    const beltPositions = new Float32Array(120 * 3);
+    for (let i = 0; i < 120; i += 1) {
+      const a = Math.random() * Math.PI * 2;
+      const r = 330 + Math.random() * 40;
+      beltPositions[i * 3] = Math.cos(a) * r;
+      beltPositions[i * 3 + 1] = Math.sin(a) * r * 0.48;
+      beltPositions[i * 3 + 2] = (Math.random() - 0.5) * 30;
+    }
+    const beltGeo = new THREE.BufferGeometry();
+    beltGeo.setAttribute("position", new THREE.BufferAttribute(beltPositions, 3));
+    group.add(new THREE.Points(beltGeo, new THREE.PointsMaterial({ color: 0x9fe8ff, size: 1.2, transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending, depthWrite: false })));
+    const flare = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: 0xffd27a, transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending, depthWrite: false }));
+    flare.scale.set(260, 260, 1);
+    group.add(flare);
 
     const star = new THREE.Sprite(new THREE.SpriteMaterial({
       map: glow, color: 0xffd27a, transparent: true, opacity: 0.9,

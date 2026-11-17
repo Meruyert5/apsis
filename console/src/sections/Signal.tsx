@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { byKey, bundles, index, techniques, totals } from "../lib/data";
 import { ActHeader } from "../components/ActHeader";
 import { scrollToSection } from "../lib/useSection";
@@ -70,6 +71,12 @@ function HeroRoute() {
 export function Signal() {
   const featured = byKey.get(FEATURED);
   const labels = featured?.signature?.labels ?? ["No route", "Apsis"];
+  const [phase, setPhase] = useState(0.56);
+  const curve = Array.from({ length: 120 }, (_, i) => {
+    const x = (i / 119) * 600;
+    const y = 46 - Math.sin((i / 119) * Math.PI * 2.4) * 10 - Math.exp(-Math.pow(((i / 119 - 0.72) * 18), 2)) * 28;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(" ");
   return (
     <section className="bio-act" id="signal" aria-labelledby="signal-title">
       <ActHeader
@@ -116,7 +123,32 @@ export function Signal() {
           </div>
         </div>
 
-        <OrbitHero labels={labels} />
+        <OrbitHero labels={labels} phase={phase} />
+      </div>
+
+      <div className="bio-instrument">
+        <div className="bio-lightcurve">
+          <span>Light curve / signature transfer</span>
+          <svg viewBox="0 0 600 92" preserveAspectRatio="none" aria-hidden="true">
+            <polyline points={curve} fill="none" stroke="rgba(79,227,193,.7)" strokeWidth="1.4" />
+            <line x1={phase * 600} y1="8" x2={phase * 600} y2="84" stroke="rgba(255,210,122,.6)" strokeWidth="1" />
+            <circle cx={phase * 600} cy="46" r="3" fill="#ffd27a" />
+          </svg>
+        </div>
+        <label className="bio-scrub">
+          <span>T−</span>
+          <input type="range" min="0" max="1" step="0.01" value={phase} onChange={(event) => setPhase(Number(event.target.value))} aria-label="Scrub the signature transfer" />
+          <span>APSIS</span>
+        </label>
+        <div className="bio-observer" aria-hidden="true">
+          <svg viewBox="0 0 90 70" fill="none" stroke="rgba(214,255,242,.55)" strokeWidth="1.2">
+            <circle cx="30" cy="16" r="6" />
+            <path d="M30 22 L30 42 L20 60 M30 42 L40 60 M22 30 L12 42 M38 30 L56 26" />
+            <path d="M54 18 L74 10 L78 18 L58 26 Z" />
+            <path d="M74 10 L86 6" />
+          </svg>
+          <p>Observer / AP-01</p>
+        </div>
       </div>
 
       <div className="bio-process" aria-label="The five stages">

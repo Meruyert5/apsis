@@ -355,7 +355,7 @@ input:focus-visible,
 .bio-coretools em { margin-left: auto; font: 500 14px var(--mono); color: var(--faint); font-style: normal; }
 .bio-corewrap { position: relative; min-width: 0; aspect-ratio: 1; align-self: center; }
 .bio-corewrap[data-view="3d"]::before { content: ""; position: absolute; inset: 3%; border-radius: 50%; background: radial-gradient(circle, rgb(2 12 10 / 82%) 0 56%, rgb(2 12 10 / 32%) 66%, transparent 76%); z-index: 0; pointer-events: none; }
-.bio-corewrap svg, .bio-corewrap canvas { display: block; width: 100%; height: 100%; }
+.bio-corewrap svg, .bio-corewrap canvas { display: block; width: 100%; height: 100%; position: relative; z-index: 1; }
 .bio-corewrap[data-view="3d"] svg { display: none; }
 .bio-corewrap[data-view="2d"] canvas { display: none; }
 .bio-corewrap canvas { position: relative; z-index: 1; touch-action: none; cursor: grab; border-radius: 50%; }
@@ -653,4 +653,142 @@ input:focus-visible,
 .bio-guardrail-row p {
   margin: 3px 0 0; font: 500 14px var(--text); color: var(--mute);
   line-height: 1.5;
+}
+
+.bio-instrument {
+  display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(200px, 0.7fr) auto;
+  gap: 24px; align-items: center; margin-top: 22px;
+  padding: 14px 0 16px; border-top: 1px solid var(--line-2);
+}
+.bio-lightcurve span {
+  display: block; margin-bottom: 6px; font: 500 14px var(--mono);
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint);
+}
+.bio-lightcurve svg { display: block; width: 100%; height: 72px; }
+.bio-scrub {
+  display: flex; align-items: center; gap: 10px;
+  font: 500 14px var(--mono); color: var(--faint);
+}
+.bio-scrub input {
+  flex: 1; min-width: 120px; accent-color: var(--cyan);
+}
+.bio-observer { display: flex; align-items: center; gap: 8px; }
+.bio-observer svg { width: 54px; height: 42px; }
+.bio-observer p {
+  margin: 0; font: 500 14px var(--mono); color: var(--faint);
+  writing-mode: vertical-rl; letter-spacing: 0.12em; text-transform: uppercase;
+}
+@media (max-width: 860px) {
+  .bio-instrument { grid-template-columns: 1fr; gap: 14px; }
+  .bio-observer { display: none; }
+}
+
+.bio-decide-grid { position: relative; }
+.bio-corecol, .bio-ledger { position: relative; z-index: 1; }
+.bio-whale {
+  position: absolute; left: -120px; bottom: -90px; z-index: 0;
+  width: min(500px, 55%); opacity: 0.5; pointer-events: none;
+}
+.bio-sonar {
+  position: absolute; inset: 4%; z-index: 0; pointer-events: none;
+}
+.bio-sonar i {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 1px solid rgba(79, 227, 193, 0.55); box-shadow: 0 0 18px rgba(79, 227, 193, 0.18);
+  animation: bio-ping 2.8s var(--ease) infinite;
+}
+.bio-sonar i:nth-child(2) { animation-delay: 0.9s; }
+.bio-sonar i:nth-child(3) { animation-delay: 1.8s; }
+@keyframes bio-ping {
+  0% { transform: scale(0.55); opacity: 0; }
+  20% { opacity: 0.55; }
+  100% { transform: scale(1.08); opacity: 0; }
+}
+.bio-tendrils {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+}
+.bio-species {
+  grid-column: 1 / -1; display: flex; gap: 12px; flex-wrap: wrap;
+  margin-top: 2px; font: 500 14px var(--mono); color: var(--faint);
+}
+.bio-species span::before {
+  content: ""; display: inline-block; width: 5px; height: 5px;
+  margin-right: 6px; border-radius: 50%; background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+.bio-species span:nth-child(2)::before { background: var(--violet); box-shadow: 0 0 8px var(--violet); }
+.bio-species span:nth-child(3)::before { background: var(--mint); box-shadow: 0 0 8px var(--mint); }
+.bio-species span:nth-child(4)::before { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+@media (max-width: 860px) {
+  .bio-whale { display: none; }
+}
+
+.bio-wave { border-top: 1px solid var(--line-2); padding: 10px 14px 12px; }
+.bio-wavehead {
+  display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  font: 500 14px var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--faint);
+}
+.bio-wavehead button {
+  border: 1px solid var(--line-2); background: var(--well); border-radius: 5px;
+  padding: 4px 8px; font: 500 14px var(--mono); color: var(--read); cursor: pointer;
+}
+.bio-wavetrack { position: relative; margin-top: 6px; height: 52px; overflow: hidden; }
+.bio-wavetrack svg { display: block; width: 100%; height: 52px; }
+.bio-wavescan {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 1px;
+  background: var(--amber); box-shadow: 0 0 10px var(--amber); opacity: 0.5;
+}
+.bio-wavescan[data-playing="true"] { animation: bio-scan 3.6s linear infinite; opacity: 1; }
+@keyframes bio-scan { from { transform: translateX(0); } to { transform: translateX(600px); } }
+.bio-wavering {
+  position: absolute; left: 50%; top: 50%; width: 34%; aspect-ratio: 1;
+  transform: translate(-50%, -50%); border-radius: 50%;
+  border: 1px solid rgba(79, 227, 193, 0.18);
+  animation: bio-ring 7s var(--ease) infinite;
+}
+.bio-wavering:nth-of-type(3) { animation-delay: 2.3s; }
+.bio-wavering:nth-of-type(4) { animation-delay: 4.6s; }
+@keyframes bio-ring {
+  0% { transform: translate(-50%, -50%) scale(0.75); opacity: 0; }
+  25% { opacity: 0.5; }
+  100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bio-wavescan, .bio-wavering { animation: none; }
+}
+
+.bio-compass {
+  position: absolute; left: 14px; bottom: 12px; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font: 500 14px var(--mono); color: var(--faint); pointer-events: none;
+}
+.bio-compass svg { width: 64px; height: 64px; }
+.bio-compass-rose { font: 500 14px var(--mono); color: var(--mute); }
+.bio-compass-needle { transform-origin: 40px 40px; animation: bio-needle 9s ease-in-out infinite alternate; }
+@keyframes bio-needle { from { transform: rotate(-12deg); } to { transform: rotate(18deg); } }
+.bio-fieldmeter {
+  position: absolute; right: 14px; top: 12px; z-index: 2; width: 150px;
+  display: flex; flex-direction: column; gap: 4px;
+  font: 500 14px var(--mono); color: var(--faint); pointer-events: none;
+}
+.bio-fieldmeter b { color: var(--read); font-weight: 500; }
+.bio-fieldmeter div { height: 3px; background: rgb(120 255 220 / 14%); border-radius: 2px; overflow: hidden; }
+.bio-fieldmeter div i { display: block; height: 100%; background: linear-gradient(90deg, var(--cyan), var(--violet)); }
+.bio-fieldmeter em { font-style: normal; color: var(--faint); }
+@media (max-width: 860px) { .bio-compass, .bio-fieldmeter { display: none; } }
+@media (prefers-reduced-motion: reduce) { .bio-compass-needle { animation: none; } }
+
+.bio-coretools { grid-column: 1 / -1; grid-row: 1; }
+.bio-corewrap { grid-column: 1; grid-row: 2; }
+.bio-rings { grid-column: 2; grid-row: 2; }
+.bio-species { grid-row: 3; }
+@media (max-width: 860px) {
+  .bio-corewrap { grid-column: 1; grid-row: auto; }
+  .bio-rings { grid-column: 1; grid-row: auto; }
+  .bio-species { grid-row: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bio-sonar i { animation: none; opacity: 0.25; }
 }

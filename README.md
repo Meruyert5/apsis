@@ -157,6 +157,11 @@ npm run audit      # contrast, headings, names, target size
 | Decide | 18 techniques × 16 accounts as a containment core, with the exact ledger |
 | Prove | A command builder, the recorded output, the 3D field collapse, the zero, guardrails and the Penumbra handoff |
 
+Each act has its own instrument, not just a recolour: Signal carries a light
+curve and a transfer scrubber; Map a compass and a field-strength meter; Decide
+a sonar ping, a species legend and the specimen core; Prove a recorded waveform
+and the field collapse.
+
 ![The Map section](docs/img/map.png)
 
 The design is a magnetic bioluminescent orrery: a primary star, hop shells,

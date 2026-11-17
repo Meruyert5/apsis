@@ -43,6 +43,7 @@ export function Decide() {
   const [accountKey, setAccountKey] = useState<string | null>("games-studio");
   const [category, setCategory] = useState<Category>("all");
   const [query, setQuery] = useState("");
+  const [ping, setPing] = useState(0);
   const [view, setView] = useState<"2d" | "3d">(() => {
     if (typeof window === "undefined") return "2d";
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -129,11 +130,19 @@ export function Decide() {
       />
 
       <div className="bio-decide-grid">
+        <svg className="bio-whale" viewBox="0 0 600 220" aria-hidden="true">
+          <path d="M40 130 Q150 40 330 58 Q440 68 520 40 L500 96 L570 74 L520 128 L550 172 L470 150 Q330 205 190 172 Q100 152 40 130 Z" fill="none" stroke="rgba(79,227,193,.2)" strokeWidth="1.4" />
+          <path d="M150 118 Q190 108 230 118" fill="none" stroke="rgba(79,227,193,.16)" strokeWidth="1.2" />
+          <circle cx="120" cy="112" r="3" fill="rgba(214,255,242,.35)" />
+          <circle cx="86" cy="78" r="2" fill="rgba(214,255,242,.25)" />
+          <circle cx="70" cy="56" r="1.5" fill="rgba(214,255,242,.2)" />
+        </svg>
         <div className="bio-corecol">
           <div className="bio-coretools">
             <span>Specimen</span>
             <button type="button" aria-pressed={view === "2d"} onClick={() => setView("2d")}>2D radial</button>
             <button type="button" aria-pressed={view === "3d"} onClick={() => setView("3d")}>3D specimen</button>
+            <button type="button" onClick={() => setPing((value) => value + 1)}>Sonar ping</button>
             <em>{view === "3d" ? "drag to orbit · scroll to zoom" : "flat overview · exact counts in the ledger"}</em>
           </div>
           <div className="bio-corewrap" data-view={view}>
@@ -250,6 +259,15 @@ export function Decide() {
                 onSelect={selectCell}
               />
             )}
+            <div className="bio-sonar" key={ping} aria-hidden="true"><i /><i /><i /></div>
+            <svg className="bio-tendrils" viewBox="0 0 100 100" aria-hidden="true">
+              {Array.from({ length: 9 }, (_, i) => (
+                <path key={i} d={`M${18 + i * 8} 76 Q${8 + i * 9} 88 ${16 + i * 8} 100`} fill="none" stroke="rgba(79,227,193,.3)" strokeWidth="0.5" />
+              ))}
+            </svg>
+          </div>
+          <div className="bio-species" aria-hidden="true">
+            <span>bell</span><span>photophore</span><span>tendril</span><span>sonar</span>
           </div>
           <div className="bio-rings">
             <h3><span>Accounts</span><span>Routes</span></h3>

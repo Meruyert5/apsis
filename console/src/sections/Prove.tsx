@@ -64,6 +64,7 @@ export function Prove() {
   const [format, setFormat] = useState<Format>("text");
   const [copied, setCopied] = useState(false);
   const [handoffCopied, setHandoffCopied] = useState(false);
+  const [playingWave, setPlayingWave] = useState(false);
 
   const record = useMemo(() => {
     const key = `${verb === "techniques" ? "all" : scenario}|${verb}|${format}`;
@@ -100,6 +101,11 @@ export function Prove() {
   };
 
   const lines = record.output.split("\n");
+  const wave = Array.from({ length: 160 }, (_, i) => {
+    const x = (i / 159) * 600;
+    const y = 30 + Math.sin(i * 0.52) * 8 + Math.sin(i * 1.71) * 4 + (i % 23 === 0 ? -12 : 0);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(" ");
   const focusBundle = bundles.find((entry) => entry.key === scenario)?.bundle ?? bundles[0].bundle;
   const signature = focusBundle.signature;
   const alert = {
@@ -144,8 +150,10 @@ export function Prove() {
 
       <div className="bio-prove-stage">
         <div className="bio-abyss" aria-hidden="true">
-          <span className="glow" /><span className="swirl" /><span className="rays" />
-          <span className="core" /><span className="ring" />
+          <FieldCollapse />
+          <span className="bio-wavering" />
+          <span className="bio-wavering" />
+          <span className="bio-wavering" />
         </div>
 
         <article className="bio-terminal">
@@ -198,6 +206,20 @@ export function Prove() {
             <span><b>{FORMAT_LABEL[record.format]}</b> output</span>
             <span>recorded <b>{rawCommands.generated.slice(0, 10)}</b></span>
             <em>{record.key}</em>
+          </div>
+          <div className="bio-wave">
+            <div className="bio-wavehead">
+              <span>Waveform / recorded output</span>
+              <button type="button" onClick={() => setPlayingWave((value) => !value)}>
+                {playingWave ? "Pause" : "Play"}
+              </button>
+            </div>
+            <div className="bio-wavetrack">
+              <svg viewBox="0 0 600 60" preserveAspectRatio="none" aria-hidden="true">
+                <polyline points={wave} fill="none" stroke="rgba(79,227,193,.7)" strokeWidth="1.2" />
+              </svg>
+              <span className="bio-wavescan" data-playing={playingWave ? "true" : undefined} />
+            </div>
           </div>
         </article>
 

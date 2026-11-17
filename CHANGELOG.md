@@ -21,6 +21,9 @@
 - A 3D specimen core and a 2D radial alternative.
 - A revocation ledger sourced from `permissionSteps`.
 - A 3D Signal transfer and a 3D field-collapse Prove scene.
+- A light curve and scrubber in Signal; a compass, field meter and field toggle
+  in Map; sonar rings, a ping, a whale and a species legend in Decide; a
+  playable recorded waveform in Prove.
 - A guardrail mapping, a guardrail ledger and a Penumbra handoff card.
 - `schema/alert.schema.json`, `schema/evidence.schema.json`,
   `docs/INTEGRATIONS.md` and the observed-path case study under

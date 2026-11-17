@@ -27,6 +27,7 @@ export function Map() {
   const [query, setQuery] = useState("");
   const [kind, setKind] = useState<"all" | "user" | "role">("all");
   const [playing, setPlaying] = useState(false);
+  const [showField, setShowField] = useState(true);
   const [copied, setCopied] = useState(false);
 
   const effectiveTab = cut ? "cut" : tab;
@@ -183,6 +184,10 @@ export function Map() {
           <span><b>{bundle.sever.permissionSteps.length}</b> actions</span>
         </div>
 
+        <button type="button" className="bio-btn" onClick={() => setShowField((value) => !value)}>
+          {showField ? "Field on" : "Field off"}
+        </button>
+
         <button
           type="button"
           className="bio-sever"
@@ -252,11 +257,23 @@ export function Map() {
             node={node}
             route={route}
             cut={cut}
+            showField={showField}
             onSelect={select}
           />
           <div className="bio-stagetag">
             <b>Magnetic orrery</b>
             <span>star · orbit shells · flux tubes</span>
+          </div>
+          <div className="bio-compass" aria-hidden="true">
+            <span className="bio-compass-rose">N</span>
+            <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="rgba(79,227,193,.22)" /><circle cx="40" cy="40" r="2" fill="#ffd27a" /><path className="bio-compass-needle" d="M40 14 L46 40 L40 66 L34 40 Z" fill="rgba(214,255,242,.5)" /></svg>
+            <span>field / primary</span>
+          </div>
+          <div className="bio-fieldmeter" aria-hidden="true">
+            <span>field strength</span>
+            <b>{String(model.maxDepth).padStart(2, "0")} shells</b>
+            <div><i style={{ width: `${((route?.hops ?? 0) / Math.max(1, model.maxDepth)) * 100}%` }} /></div>
+            <em>{route ? "theoretical" : "quiet"}</em>
           </div>
           <div className="bio-legend" aria-hidden="true">
             <span><i style={{ background: "var(--violet)" }} />user</span>

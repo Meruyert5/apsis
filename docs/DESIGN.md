@@ -54,25 +54,27 @@ drops below 14px.
 
 ## 5. The four acts
 
-**Signal** — a 3D signature transfer spiralling into the amber primary, the
-fleet readout, and a five-stage bus. It pauses offscreen and renders static
-under reduced motion.
+**Signal** — a 3D signature transfer spiralling into the amber primary, a light
+curve, a transfer scrubber and an observer figure, plus the fleet readout and
+the five-stage bus. It pauses offscreen and renders static under reduced motion.
 
 **Map** — a Three.js magnetic orrery: a primary star with field lines, hop
-shells, identity bodies, curved flux tubes, a faint field boundary and
-plankton. The selected route is a tube with two travelling pulses and a
+shells, identity bodies, curved flux tubes, a faint field boundary, plankton, a
+compass and a field-strength meter. The field can be switched off without
+losing the route. The selected route is a tube with two travelling pulses and a
 theoretical/observed state. Severing turns the cut tubes coral, adds mint
 guardrail rings and dims the star. The workbench adds a principal rail,
 Route/Node/Cut readout, hop bar and account selector. Reduced motion renders a
 static frame.
 
-**Decide** — a Three.js specimen of 16 account rings and 18 technique ribs with
-photophores at the intersections. The 2D radial core is the fallback and the
-explicit alternate view. The ledger is the exact reading path.
+**Decide** - a Three.js specimen of 16 account rings and 18 technique ribs with
+photophores at the intersections, wrapped in sonar rings, a whale silhouette and
+a species legend; **Sonar ping** restarts the pulse. The 2D radial core is the
+fallback and explicit alternate view. The ledger is the exact reading path.
 
-**Prove** — the recorded terminal, the 3D field collapse, the zero, the
-revocation and guardrail ledgers, the Penumbra handoff and the diver. The
-collapse is full-bleed and unframed.
+**Prove** - the recorded terminal, a playable waveform of the recorded output, the
+3D field collapse, the zero, the revocation and guardrail ledgers, the Penumbra
+handoff and the diver. The collapse is full-bleed and unframed.
 
 ## 6. Motion
 
