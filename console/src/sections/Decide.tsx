@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ActHeader } from "../components/ActHeader";
 import { SpecimenCore } from "../decide/SpecimenCore";
+import { MissionFigure } from "../components/MissionFigure";
 import { bundles, coverage, techniques, categoryOrder, categoryLabel } from "../lib/data";
 import type { Category } from "../lib/data";
 
@@ -268,6 +269,10 @@ export function Decide() {
           </div>
           <div className="bio-species" aria-hidden="true">
             <span>bell</span><span>photophore</span><span>tendril</span><span>sonar</span>
+          </div>
+          <div className="bio-biologist" aria-hidden="true">
+            <MissionFigure variant="biologist" />
+            <p>FIELD BIOLOGIST<br />SPECIMEN 03</p>
           </div>
           <div className="bio-rings">
             <h3><span>Accounts</span><span>Routes</span></h3>

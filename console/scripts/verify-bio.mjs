@@ -230,7 +230,7 @@ try {
     verbs: document.querySelectorAll('.bio-verb').length,
     revs: document.querySelectorAll('.bio-rev').length,
     zero: document.querySelector('.bio-zero')?.textContent,
-    diver: !!document.querySelector('.bio-diver'),
+    diver: !!document.querySelector('.bio-crew .mission-figure--diver'),
   }))()`);
   check("four command verbs", prove.verbs === 4, String(prove.verbs));
   check("six revocation rows", prove.revs === 6, String(prove.revs));

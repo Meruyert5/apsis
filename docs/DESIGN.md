@@ -76,7 +76,23 @@ fallback and explicit alternate view. The ledger is the exact reading path.
 3D field collapse, the zero, the revocation and guardrail ledgers, the Penumbra
 handoff and the diver. The collapse is full-bleed and unframed.
 
-## 6. Motion
+## 6. People
+
+Three crew figures, all line art, all in the console palette and all
+`aria-hidden` because the data lives in the surrounding text:
+
+- **Observer / AP-01** in Signal: seated at a curved telemetry console with a
+  headset and a light-curve screen.
+- **Field biologist / Specimen 03** in Decide: coat, headlamp, satchel and a
+  glowing specimen jar.
+- **DIVE-01** in Prove: a full suit with visor, chest panel, tanks, lamp,
+  articulated limbs and a tether, paired with a ROLE / DEPTH / TETHER / STATUS
+  telemetry card.
+
+They float slowly and stop for reduced motion. They are the human scale of the
+instrument, not mascots.
+
+## 7. Motion
 
 - Pulses travel along the selected vein; the membrane breathes; the specimen
   rotates slowly.
@@ -85,7 +101,7 @@ handoff and the diver. The collapse is full-bleed and unframed.
   static Map, no countdown and no drift.
 - Durations: 120 press, 180 hover, 280 state, 620 scene.
 
-## 7. Accessibility
+## 8. Accessibility
 
 - The Map canvas and the 3D core are `aria-hidden`; the principal rail, readout
   and ledger carry every value.
@@ -94,7 +110,7 @@ handoff and the diver. The collapse is full-bleed and unframed.
 - Contrast 4.5:1, 14px floor, 24px targets, visible focus, no overflow at 390.
 - Amber is never the only carrier of meaning.
 
-## 8. Performance
+## 9. Performance
 
 - Map: ~16 cells, 16 veins, 8 rings, 220 plankton; one rAF, paused offscreen.
 - Decide: 288 photophores, 16 rings, 18 ribs; one rAF, disposed on rebuild.
@@ -102,7 +118,7 @@ handoff and the diver. The collapse is full-bleed and unframed.
 - Sky: a single fixed canvas with the fleet graph at 8–14% opacity.
 - DPR capped at 1.5. The old theme CSS and unused textures are removed.
 
-## 9. Ownership
+## 10. Ownership
 
 The design, wordmark, and screenshots are © 2026 Meruyert Oshayeva. The source
 code is MIT; the visual identity is reserved. See `NOTICE.md`.

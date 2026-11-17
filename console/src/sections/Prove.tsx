@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ActHeader } from "../components/ActHeader";
 import { FieldCollapse } from "../prove/FieldCollapse";
+import { MissionFigure } from "../components/MissionFigure";
 import rawCommands from "../data/commands.json";
 import { bundles, index, totals } from "../lib/data";
 import { uniqueGuardrails } from "../lib/guardrails";
@@ -233,6 +234,20 @@ export function Prove() {
             <span className="linebar" />
             <span>routes</span>
           </div>
+          <div className="bio-crew">
+            <MissionFigure variant="diver" />
+            <div className="bio-crewmeta">
+              <p className="bio-kick">Crew / EVA</p>
+              <h3>DIVE-01</h3>
+              <dl>
+                <div><dt>Role</dt><dd>abyss observer</dd></div>
+                <div><dt>Depth</dt><dd>07 shells</dd></div>
+                <div><dt>Tether</dt><dd>secure</dd></div>
+                <div><dt>Status</dt><dd>read-only</dd></div>
+              </dl>
+              <p>Records the field, never touches the account.</p>
+            </div>
+          </div>
           <div className="bio-revledger">
             <h3>Revocations / {REVOCATIONS} actions</h3>
             <p className="sub">{EDGES_CUT} edges cut across {totals.accounts} accounts</p>
@@ -266,24 +281,7 @@ export function Prove() {
             </button>
           </div>
 
-          <div className="bio-diver" aria-hidden="true">
-            <svg viewBox="0 0 170 210" fill="none" stroke="#bfffe9" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="86" cy="46" r="24" />
-              <path d="M70 42 Q86 33 102 42" stroke="rgba(214,255,242,.75)" />
-              <rect x="70" y="70" width="32" height="44" rx="10" />
-              <rect x="52" y="70" width="14" height="34" rx="5" />
-              <path d="M70 82 L50 102 L54 124" />
-              <path d="M102 82 L122 102 L118 124" />
-              <path d="M76 114 L72 146 L54 164 L76 154" />
-              <path d="M96 114 L100 146 L118 164 L96 154" />
-              <path d="M86 22 L86 34" />
-              <circle cx="86" cy="16" r="2.5" fill="#bfffe9" />
-              <circle cx="104" cy="46" r="3.5" fill="#ffd27a" stroke="none" />
-              <path d="M52 78 Q28 94 8 82" stroke="rgba(191,255,233,.35)" strokeDasharray="3 6" />
-              <path d="M60 140 Q30 176 0 154" stroke="rgba(191,255,233,.32)" strokeDasharray="3 6" />
-            </svg>
-            <p>DIVE-01<br />read-only</p>
-          </div>
+
         </aside>
       </div>
 

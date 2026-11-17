@@ -27,6 +27,8 @@
 - Act-specific palettes and architecture: a warm full-bleed observatory,
   a blue magnetic workbench, an emerald organic lab and a rose field recording,
   with ghost act numerals, unique grids, panel radii and motion.
+- Detailed crew figures: an observatory controller in Signal, a field
+  biologist in Decide and an EVA diver with a telemetry card in Prove.
 - A guardrail mapping, a guardrail ledger and a Penumbra handoff card.
 - `schema/alert.schema.json`, `schema/evidence.schema.json`,
   `docs/INTEGRATIONS.md` and the observed-path case study under

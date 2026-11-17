@@ -3,6 +3,7 @@ import { byKey, bundles, index, techniques, totals } from "../lib/data";
 import { ActHeader } from "../components/ActHeader";
 import { scrollToSection } from "../lib/useSection";
 import { OrbitHero } from "../signal/OrbitHero";
+import { MissionFigure } from "../components/MissionFigure";
 
 const FEATURED = "games-studio";
 
@@ -141,12 +142,7 @@ export function Signal() {
           <span>APSIS</span>
         </label>
         <div className="bio-observer" aria-hidden="true">
-          <svg viewBox="0 0 90 70" fill="none" stroke="rgba(214,255,242,.55)" strokeWidth="1.2">
-            <circle cx="30" cy="16" r="6" />
-            <path d="M30 22 L30 42 L20 60 M30 42 L40 60 M22 30 L12 42 M38 30 L56 26" />
-            <path d="M54 18 L74 10 L78 18 L58 26 Z" />
-            <path d="M74 10 L86 6" />
-          </svg>
+          <MissionFigure variant="observer" />
           <p>Observer / AP-01</p>
         </div>
       </div>
