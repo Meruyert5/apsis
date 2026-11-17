@@ -8,10 +8,12 @@ import { Map } from "./sections/Map";
 import { Decide } from "./sections/Decide";
 import { Prove } from "./sections/Prove";
 import { useSection } from "./lib/useSection";
+import { byKey } from "./lib/data";
 
 export default function App() {
   const current = useSection();
   const [palette, setPalette] = useState(false);
+  const [focusTitle, setFocusTitle] = useState("Games studio");
   const only = new URLSearchParams(window.location.search).get("only");
 
   useEffect(() => {
@@ -19,6 +21,11 @@ export default function App() {
       const target = document.querySelector(window.location.hash);
       if (target) requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
     }
+    const onFocus = (event: Event) => {
+      const title = byKey.get((event as CustomEvent<string>).detail)?.scenario.title;
+      if (title) setFocusTitle(title);
+    };
+    window.addEventListener("apsis:focus", onFocus);
     const onKey = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
@@ -26,7 +33,10 @@ export default function App() {
       }
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("apsis:focus", onFocus);
+    };
   }, []);
 
   return (
@@ -34,7 +44,7 @@ export default function App() {
       <BioSky />
       <TopBar
         current={current}
-        focusTitle="Games studio"
+        focusTitle={focusTitle}
         onFocus={() => document.getElementById("map")?.scrollIntoView({ behavior: "smooth", block: "start" })}
         onPalette={() => setPalette(true)}
       />
