@@ -235,6 +235,19 @@ the Games Studio signature route.
 The layout is responsive to 390px, the sidebar becomes a drawer, and the table
 columns collapse. This entry is not yet the default console route.
 
+### Y2K / Acid Graphics mascot (current mock)
+
+`/design-lab/v7/` is a clean departure from the previous poster directions:
+pure black, white linework and electric ultramarine. The title `APSIS` repeats
+three times - solid fill, white outline, blue outline - over a liquid chrome
+wave, Y2K stamps, a circular badge, a swoosh and a vertical barcode.
+
+The mascot is a real WebGL object built from two inputs: a **path** (a
+Catmull-Rom orbit with seven nodes) and an **atlas** (a wireframe globe shell,
+a 420-point dust field and a polar grid) around a liquid-cobalt core. It drags,
+zooms, resets and falls back to an SVG wireframe illustration. A separate
+dotted waveform mesh runs along the lower left.
+
 ### Previous explorations
 
 The first five-direction lab is at `/design-lab/`, the five worlds at

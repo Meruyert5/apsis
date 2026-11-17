@@ -45,6 +45,11 @@
   posture, evidence and JSON export. It reads the real bundle totals and the
   real Games Studio 7-hop route. The Figure / Apsis panel tests the project name
   as an orbit: perigee = 1-hop route, apogee = 7-hop route.
+- A Y2K / Acid Graphics poster at `console/public/design-lab/v7/`: pure black,
+  white linework, electric ultramarine, repeated outline title, liquid chrome
+  band and Y2K vector stamps. The 3D mascot is a real WebGL object built from a
+  path (7-node orbit) and an atlas (wireframe globe, dust field, polar grid),
+  with drag/zoom/reset and an SVG fallback.
 - A live Signal instrument: auto-advancing phase, gradient light curve with
   area fill and echo, T−/phase readout, and a hold control that stops on scrub.
 - A hop rail with a flowing gradient progress bar, a pulsing play head and a

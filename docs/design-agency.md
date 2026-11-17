@@ -279,3 +279,13 @@ The old console is untouched. This entry is the base for the next product pass; 
 ### Dashboard refinement
 
 Second pass on the Neon Luxe dashboard. Removed the palette card and every style label. The base is now neutral charcoal (#0E0F11 / #16181B) with off-white reading type; lime and crimson are accents only, for the primary action, the cut figure, the shortest route and critical state. Type sizes and spacing were raised across the shell, figures, atlas, table and evidence. Table severity became a dot plus word, route step techniques moved to hover titles, and duplicate metadata was removed. The dashboard URL is unchanged: `/dashboard.html`.
+
+---
+
+## Revision 8 - Y2K / Acid Graphics mascot
+
+A clean departure at `/design-lab/v7/`: pure black, white linework and electric ultramarine. The title APSIS repeats three times - solid white, white outline, blue outline - over a liquid chrome band, with a circular badge, stacked wireframe globes, chevrons, an atom/flower stamp, thin frames, a swoosh and a vertical barcode.
+
+The 3D mascot is built from two inputs. The **path** is a Catmull-Rom orbit with seven nodes; the **atlas** is a wireframe globe shell, a 420-point dust field and a polar grid around a liquid-cobalt shader core. It orbits, drags, zooms, resets and has a 2D SVG fallback. A separate dotted waveform mesh sits in the lower left.
+
+This direction drops the emerald/crimson editorial system and the Neon Luxe dashboard palette. It is a poster/mascot study first; the product surface can be derived from it after the direction is chosen.

@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apsis — Path + Atlas / wireframe mascot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../lab.css" />
+  <style>
+    :root {
+      --blue: #1a1aff;
+      --blue-soft: #6a6aff;
+      --ink: #000000;
+      --paper: #ffffff;
+      --dim: rgb(255 255 255 / .58);
+      --faint: rgb(255 255 255 / .28);
+      --line: rgb(255 255 255 / .32);
+      --display: "Archivo Black", Impact, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: #000; color: var(--paper); font-family: var(--mono); overflow-x: hidden; }
+    .sr { position: absolute; left: -9999px; }
+
+    .poster {
+      position: relative;
+      min-height: 100vh;
+      margin: 12px;
+      border: 1px solid rgb(255 255 255 / 22%);
+      background: var(--ink);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .poster::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(42% 38% at 74% 34%, rgb(26 26 255 / .18), transparent 68%),
+        radial-gradient(34% 30% at 22% 82%, rgb(26 26 255 / .08), transparent 70%);
+    }
+    .grid {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(90deg, rgb(26 26 255 / .19) 1px, transparent 1px),
+        linear-gradient(0deg, rgb(26 26 255 / .19) 1px, transparent 1px);
+      background-size: 5% 5%;
+      mask-image: radial-gradient(ellipse at 52% 46%, #000 34%, rgb(0 0 0 / .45) 74%, transparent 100%);
+      opacity: .55;
+    }
+    .grid::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgb(255 255 255 / 34%) .5px, transparent .7px);
+      background-size: 18px 18px;
+      opacity: .4;
+    }
+
+    /* ---------------------------------------------------------------- chrome */
+    .chrome-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: .62;
+      mask-image: linear-gradient(180deg, transparent 0%, #000 20%, #000 62%, transparent 84%);
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 20%, #000 62%, transparent 84%);
+    }
+    .chrome { width: 100%; height: 100%; display: block; animation: drift 18s ease-in-out infinite alternate; }
+    @keyframes drift {
+      0% { transform: translate3d(-1.2%, .4%, 0) scale(1.01); }
+      100% { transform: translate3d(1.4%, -1%, 0) scale(1.035); }
+    }
+
+    /* ---------------------------------------------------------------- micro bar */
+    .top {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      top: 17px;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 8px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .top b { color: var(--paper); font-weight: 500; }
+    .top-left, .top-right { display: flex; gap: 18px; align-items: center; }
+    .top-left span:first-child { display: flex; align-items: center; gap: 8px; }
+    .top-left span:first-child::before { content: ""; width: 6px; height: 6px; background: var(--blue); display: inline-block; }
+
+    /* ---------------------------------------------------------------- title */
+    .title {
+      position: absolute;
+      left: 4.4%;
+      top: 11%;
+      z-index: 4;
+      width: 64%;
+      pointer-events: none;
+    }
+    .kicker {
+      margin: 0 0 14px;
+      font-size: 8.5px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--blue-soft);
+    }
+    .title h1 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(86px, 16.3vw, 236px);
+      font-weight: 400;
+      line-height: .71;
+      letter-spacing: -.075em;
+      text-transform: uppercase;
+    }
+    .title h1 span { display: block; white-space: nowrap; }
+    .title h1 .solid {
+      color: var(--paper);
+      text-shadow: 5px 5px 0 var(--blue), 12px 12px 0 rgb(26 26 255 / .18);
+    }
+    .title h1 .outline {
+      color: transparent;
+      -webkit-text-stroke: 1.4px var(--paper);
+      text-shadow: none;
+    }
+    .title h1 .outline.blue {
+      -webkit-text-stroke-color: var(--blue);
+      margin-top: -.075em;
+    }
+    .title-meta {
+      margin: 22px 0 0;
+      font-size: 8.5px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-shadow: 0 1px 10px #000, 0 0 4px #000;
+    }
+    .title-star {
+      position: absolute;
+      right: 2%;
+      top: 16%;
+      width: 62px;
+      height: 62px;
+      color: var(--blue);
+    }
+
+    /* ---------------------------------------------------------------- orb */
+    .orb {
+      position: absolute;
+      right: 3%;
+      top: 8.5%;
+      z-index: 2;
+      width: 51%;
+      height: 72%;
+    }
+    .orb-stage { position: absolute; inset: 0; }
+    .orb canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+    .orb-stage[data-mode="fallback"] canvas { display: none; }
+    .orb-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+    }
+    .orb-fallback[hidden] { display: none; }
+    .orb-fallback svg { width: 100%; height: 100%; }
+    .orb-hud { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+    .orb-hud .tag, .orb-hud .hint, .orb-hud .legend {
+      position: absolute;
+      font-size: 7.5px;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+      background: rgb(0 0 0 / .56);
+      padding: 4px 6px;
+      border: 1px solid rgb(255 255 255 / .16);
+    }
+    .orb-hud .tag { left: 14px; bottom: 44px; color: var(--paper); }
+    .orb-hud .tag b { color: var(--blue-soft); font-weight: 500; }
+    .orb-hud .hint { left: 14px; bottom: 16px; color: var(--faint); border-color: transparent; background: none; padding-left: 0; }
+    .orb-hud .legend { right: 14px; bottom: 16px; display: flex; gap: 12px; color: var(--dim); }
+    .orb-hud .legend i { width: 5px; height: 5px; display: inline-block; margin-right: 5px; vertical-align: 1px; }
+    .orb-hud .legend .l1 i { background: var(--blue); }
+    .orb-hud .legend .l2 i { background: var(--paper); }
+    .orb-toggle {
+      position: absolute;
+      right: 14px;
+      bottom: 74px;
+      z-index: 4;
+      min-height: 30px;
+      padding: 0 9px;
+      border: 1px solid rgb(255 255 255 / .38);
+      background: rgb(0 0 0 / .6);
+      color: var(--paper);
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .orb-toggle:hover { border-color: var(--blue); color: var(--blue-soft); }
+    .orb-caption {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      margin: 0;
+      max-width: 25ch;
+      font-size: 7.5px;
+      line-height: 1.7;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--dim);
+      pointer-events: none;
+    }
+
+    /* ---------------------------------------------------------------- badge */
+    .badge {
+      position: absolute;
+      right: 4.6%;
+      top: 6.6%;
+      z-index: 6;
+      width: 168px;
+      height: 168px;
+      pointer-events: none;
+    }
+    .badge svg { width: 100%; height: 100%; overflow: visible; }
+    .badge .ring { animation: spin 60s linear infinite; transform-origin: 100px 100px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .badge .ring text {
+      fill: var(--paper);
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: .16em;
+    }
+    .badge .outline { fill: none; stroke: rgb(255 255 255 / .4); }
+    .badge .outline-inner { fill: none; stroke: var(--blue); stroke-width: 1; stroke-dasharray: 2 5; }
+    .badge-center { fill: var(--paper); font-family: var(--display); font-size: 15px; letter-spacing: .04em; }
+    .badge-center-star { fill: var(--blue); }
+
+    /* ---------------------------------------------------------------- stamps */
+    .stamp { position: absolute; z-index: 5; pointer-events: none; }
+    .stamp.globes { left: 66.5%; top: 29%; width: 86px; opacity: .85; transform: rotate(5deg); }
+    .stamp.globes svg { width: 100%; height: auto; }
+    .stamp.flower { left: 30.5%; bottom: 37%; width: 64px; opacity: .8; }
+    .stamp.flower svg { width: 100%; height: auto; }
+    .stamp.chevrons {
+      left: 36%;
+      bottom: 31%;
+      font-family: var(--display);
+      font-size: 30px;
+      letter-spacing: .03em;
+      color: var(--blue);
+      transform: skewX(-12deg);
+      text-shadow: 2px 2px 0 rgb(255 255 255 / .18);
+    }
+    .stamp.barcode {
+      right: 2.4%;
+      top: 35%;
+      width: 17px;
+      height: 210px;
+      background: repeating-linear-gradient(180deg, var(--paper) 0 2px, transparent 2px 5px, var(--paper) 5px 7px, transparent 7px 13px, var(--paper) 13px 16px, transparent 16px 22px);
+      opacity: .8;
+    }
+    .stamp.barcode::after {
+      content: "07 01 26";
+      position: absolute;
+      left: 50%;
+      bottom: -22px;
+      transform: translateX(-50%);
+      font-size: 6px;
+      letter-spacing: .1em;
+      color: var(--dim);
+      white-space: nowrap;
+    }
+    .stamp.swoosh { right: 4.4%; bottom: 19%; width: 205px; opacity: .9; }
+    .stamp.swoosh svg { width: 100%; height: auto; }
+    .stamp.swoosh span {
+      display: block;
+      margin-top: 3px;
+      text-align: right;
+      font-size: 7px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .star { position: absolute; z-index: 5; color: var(--paper); pointer-events: none; }
+    .star svg { width: 100%; height: 100%; display: block; }
+    .star.one { left: 62%; top: 14%; width: 34px; color: var(--paper); }
+    .star.two { left: 70%; top: 57%; width: 20px; color: var(--blue-soft); }
+    .star.three { left: 13%; top: 66%; width: 16px; color: var(--blue); }
+    .star.four { right: 29%; bottom: 34%; width: 26px; color: var(--paper); }
+
+    .frame {
+      position: absolute;
+      z-index: 5;
+      border: 1px solid rgb(255 255 255 / .32);
+      pointer-events: none;
+    }
+    .frame.f1 { left: 58.5%; top: 12.5%; width: 160px; height: 228px; transform: rotate(7deg); }
+    .frame.f2 { right: 18%; bottom: 30%; width: 195px; height: 110px; transform: rotate(-4deg); border-color: rgb(26 26 255 / .5); }
+    .frame::before {
+      content: "";
+      position: absolute;
+      left: -4px;
+      top: -4px;
+      width: 6px;
+      height: 6px;
+      border-left: 1px solid var(--paper);
+      border-top: 1px solid var(--paper);
+    }
+
+    /* ---------------------------------------------------------------- wave */
+    .wave-stage {
+      position: absolute;
+      left: 4.4%;
+      bottom: 8.5%;
+      z-index: 3;
+      width: 31%;
+      height: 16%;
+    }
+    .wave-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 0 10px rgb(26 26 255 / .45)); }
+    .wave-label {
+      position: absolute;
+      left: 0;
+      top: -18px;
+      font-size: 7px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    /* ---------------------------------------------------------------- micro */
+    .micro {
+      position: absolute;
+      left: 4.4%;
+      bottom: 30%;
+      z-index: 6;
+      width: 26%;
+      padding: 11px 13px 12px;
+      border-left: 2px solid var(--blue);
+      background: rgb(0 0 0 / .72);
+      backdrop-filter: blur(6px);
+      pointer-events: none;
+    }
+    .micro-kicker {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 9px;
+      font-size: 8px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--blue-soft);
+    }
+    .micro-kicker::before { content: ""; width: 18px; height: 1px; background: var(--blue); }
+    .micro p {
+      margin: 0;
+      font-size: 9.5px;
+      line-height: 1.8;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .micro .micro-sig {
+      margin-top: 12px;
+      color: var(--paper);
+      font-size: 10px;
+      letter-spacing: .16em;
+    }
+    .micro .micro-sig b { color: var(--blue-soft); font-weight: 500; }
+
+    /* ---------------------------------------------------------------- data */
+    .data {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 38px;
+      z-index: 8;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      border-top: 1px solid rgb(255 255 255 / .26);
+      background: rgb(0 0 0 / .74);
+      backdrop-filter: blur(6px);
+    }
+    .data div { padding: 9px 12px 8px; border-right: 1px solid rgb(255 255 255 / .14); }
+    .data div:last-child { border-right: 0; }
+    .data b { display: block; font-family: var(--display); font-size: 22px; font-weight: 400; line-height: 1; letter-spacing: -.02em; }
+    .data span { display: block; margin-top: 3px; font-size: 6.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+    .data div:nth-child(5) b { color: var(--blue-soft); }
+
+    .foot {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 12px;
+      z-index: 8;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      font-size: 6.5px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgb(255 255 255 / .34);
+    }
+    .foot span:last-child { display: none; }
+
+    .lab-back {
+      left: auto;
+      right: 12px;
+      bottom: 8px;
+      padding: 6px 8px;
+      border-color: rgb(255 255 255 / .55);
+      background: #000;
+      color: #fff;
+      font-size: 9px;
+    }
+    .lab-back:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+    /* ---------------------------------------------------------------- responsive */
+    @media (max-width: 1100px) {
+      .title { width: 72%; }
+      .orb { width: 58%; right: -3%; }
+      .badge { width: 140px; height: 140px; }
+      .stamp.globes { left: 72%; top: 32%; }
+      .stamp.swoosh { right: 4%; bottom: 22%; width: 170px; }
+    }
+    @media (max-width: 900px) {
+      .poster { margin: 8px; }
+      .top { left: 16px; right: 16px; top: 14px; font-size: 7px; gap: 10px; }
+      .top-left span:nth-child(2), .top-right span:first-child { display: none; }
+      .title { top: 9%; left: 6%; width: 88%; }
+      .title h1 { font-size: clamp(66px, 20.5vw, 150px); }
+      .title-meta { font-size: 7px; margin-top: 16px; }
+      .title-star { display: none; }
+      .badge { width: 104px; height: 104px; right: 5%; top: 7%; }
+      .orb { top: 27%; right: -3%; width: 106%; height: 45%; }
+      .orb-caption { display: none; }
+      .orb-hud .tag { left: 12%; bottom: 34px; }
+      .orb-hud .hint { display: none; }
+      .orb-hud .legend { display: none; }
+      .orb-toggle { display: none; }
+      .stamp.globes, .stamp.flower, .stamp.swoosh, .frame, .star.two, .star.four { display: none; }
+      .stamp.chevrons { left: 8%; bottom: 42%; font-size: 24px; }
+      .stamp.barcode { right: 3%; top: 41%; height: 140px; width: 13px; }
+      .micro { left: 6%; right: 6%; bottom: 21%; width: auto; }
+      .micro p { font-size: 8px; line-height: 1.8; }
+      .wave-stage { left: 6%; right: 6%; bottom: 9.5%; width: auto; height: 11%; }
+      .data { grid-template-columns: repeat(3, 1fr); bottom: 34px; }
+      .data div { padding: 7px 10px 6px; }
+      .data div:nth-child(3) { border-right: 0; }
+      .data div:nth-child(-n+3) { border-bottom: 1px solid rgb(255 255 255 / .14); }
+      .data b { font-size: 18px; }
+      .data span { font-size: 6px; }
+      .foot { left: 16px; right: 16px; bottom: 11px; font-size: 6px; }
+      .foot span:nth-child(2) { display: none; }
+    }
+    @media (max-width: 620px) {
+      .title { top: 8.5%; }
+      .title h1 { font-size: clamp(62px, 21.8vw, 96px); }
+      .kicker { font-size: 7px; letter-spacing: .12em; margin-bottom: 10px; }
+      .badge { width: 86px; height: 86px; top: 6.6%; }
+      .orb { top: 28%; height: 42%; }
+      .micro { bottom: 23%; }
+      .micro p { font-size: 7.5px; }
+      .micro .micro-sig { font-size: 8px; }
+      .wave-stage { bottom: 12%; height: 9%; }
+      .stamp.barcode { display: none; }
+      .stamp.chevrons { bottom: 46%; font-size: 20px; }
+      .star.one { left: 78%; top: 23%; width: 24px; }
+      .star.three { left: 8%; top: 64%; width: 13px; }
+      .data { bottom: 30px; }
+      .data div { padding: 6px 8px; }
+      .data b { font-size: 16px; }
+      .foot { bottom: 9px; }
+      .foot span:last-child { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .chrome, .badge .ring { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="sr" href="#main">Skip to content</a>
+  <a class="lab-back" href="../">← design lab</a>
+
+  <main id="main" class="poster">
+    <div class="grid" aria-hidden="true"></div>
+
+    <div class="chrome-wrap" aria-hidden="true">
+      <svg class="chrome" viewBox="0 0 1440 1000" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="chrome-grad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#04040c" />
+            <stop offset=".18" stop-color="#1a1aff" />
+            <stop offset=".34" stop-color="#8c8cff" />
+            <stop offset=".48" stop-color="#ffffff" />
+            <stop offset=".6" stop-color="#1a1aff" />
+            <stop offset=".78" stop-color="#050510" />
+            <stop offset=".9" stop-color="#1a1aff" />
+            <stop offset="1" stop-color="#04040c" />
+          </linearGradient>
+          <linearGradient id="chrome-edge" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffffff" stop-opacity=".85" />
+            <stop offset=".5" stop-color="#1a1aff" stop-opacity=".2" />
+            <stop offset="1" stop-color="#ffffff" stop-opacity=".5" />
+          </linearGradient>
+          <filter id="marble" x="-25%" y="-25%" width="150%" height="150%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.006 0.018" numOctaves="4" seed="9" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="40" xChannelSelector="R" yChannelSelector="G" />
+            <feGaussianBlur stdDeviation=".6" />
+          </filter>
+        </defs>
+        <path
+          d="M-120 590 C 100 470, 290 436, 448 508 C 592 574, 664 638, 820 610 C 970 584, 1010 476, 1170 458 C 1300 444, 1410 500, 1560 556 L1560 700 C 1410 656, 1300 628, 1160 654 C 1000 686, 930 744, 786 730 C 626 714, 560 650, 430 638 C 286 624, 110 700, -120 792 Z"
+          fill="url(#chrome-grad)"
+          filter="url(#marble)"
+          opacity=".9"
+        />
+        <path
+          d="M-100 604 C 130 486, 300 454, 456 520 C 600 584, 672 650, 826 622 C 972 596, 1012 494, 1172 476 C 1302 462, 1412 518, 1560 574"
+          fill="none"
+          stroke="url(#chrome-edge)"
+          stroke-width="2.2"
+          filter="url(#marble)"
+          opacity=".7"
+        />
+        <path
+          d="M-80 640 C 160 520, 330 490, 476 548 C 620 606, 690 676, 836 650 C 982 624, 1024 526, 1180 508 C 1310 492, 1418 548, 1560 602"
+          fill="none"
+          stroke="#ffffff"
+          stroke-width=".8"
+          opacity=".35"
+        />
+      </svg>
+    </div>
+
+    <header class="top">
+      <div class="top-left">
+        <span><b>APSIS</b> / PATH + ATLAS</span>
+        <span>WIREFRAME MASCOT / 2026</span>
+      </div>
+      <div class="top-right">
+        <span>READ-ONLY</span>
+        <span>0 WRITES</span>
+        <span>16.11.26</span>
+      </div>
+    </header>
+
+    <div class="title">
+      <p class="kicker">A permission system, drawn as a path.</p>
+      <h1 aria-label="Apsis">
+        <span class="solid">APSIS</span>
+        <span class="outline">APSIS</span>
+        <span class="outline blue">APSIS</span>
+      </h1>
+      <p class="title-meta">16 ACCOUNTS / 194 IDENTITIES / 144 ROUTES / 37 EDGES CUT</p>
+      <svg class="title-star" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="currentColor" />
+      </svg>
+    </div>
+
+    <section class="orb" aria-label="Wireframe path and atlas mascot">
+      <div class="orb-stage" data-orb>
+        <canvas aria-hidden="true"></canvas>
+        <div class="orb-fallback" data-orb-fallback hidden>
+          <svg viewBox="0 0 800 760" role="img" aria-label="Wireframe globe with a seven-node orbit">
+            <defs>
+              <radialGradient id="fallback-core" cx="36%" cy="30%" r="72%">
+                <stop offset="0" stop-color="#d8dcff" />
+                <stop offset=".18" stop-color="#4c4cff" />
+                <stop offset=".55" stop-color="#1010a8" />
+                <stop offset="1" stop-color="#03030c" />
+              </radialGradient>
+              <filter id="fallback-glow"><feGaussianBlur stdDeviation="7" /></filter>
+            </defs>
+            <circle cx="400" cy="380" r="250" fill="#1a1aff" opacity=".1" filter="url(#fallback-glow)" />
+            <circle cx="400" cy="380" r="148" fill="url(#fallback-core)" />
+            <g fill="none" stroke="#1a1aff" stroke-width="1" opacity=".75">
+              <circle cx="400" cy="380" r="222" />
+              <ellipse cx="400" cy="380" rx="222" ry="74" />
+              <ellipse cx="400" cy="380" rx="74" ry="222" />
+              <ellipse cx="400" cy="380" rx="222" ry="74" transform="rotate(45 400 380)" />
+              <ellipse cx="400" cy="380" rx="222" ry="74" transform="rotate(-45 400 380)" />
+            </g>
+            <g fill="none" stroke="#ffffff" stroke-width=".7" opacity=".5">
+              <circle cx="400" cy="380" r="262" stroke-dasharray="2 6" />
+              <ellipse cx="400" cy="380" rx="304" ry="92" transform="rotate(-18 400 380)" />
+            </g>
+            <path d="M126 292 C 220 220, 330 236, 400 300 C 480 372, 552 454, 676 414" fill="none" stroke="#ffffff" stroke-width="1.4" />
+            <g fill="#ffffff">
+              <circle cx="126" cy="292" r="4" /><circle cx="212" cy="236" r="4" /><circle cx="312" cy="248" r="4" /><circle cx="400" cy="300" r="5" /><circle cx="488" cy="362" r="4" /><circle cx="576" cy="424" r="4" /><circle cx="676" cy="414" r="6" />
+            </g>
+            <g fill="none" stroke="#ffffff" stroke-width="1.2" opacity=".8">
+              <path d="M640 170 L646 196 L672 202 L646 208 L640 234 L634 208 L608 202 L634 196 Z" />
+              <path d="M216 506 L220 522 L236 526 L220 530 L216 546 L212 530 L196 526 L212 522 Z" opacity=".7" />
+            </g>
+          </svg>
+        </div>
+        <p class="orb-caption">THE ORB IS THE ATLAS.<br />THE RING IS THE PATH.<br />SEVEN NODES / ONE ADMIN.</p>
+        <div class="orb-hud" aria-hidden="true">
+          <span class="tag">MASCOT / <b>PATH + ATLAS</b></span>
+          <span class="hint">DRAG / SCROLL / DBL-CLICK RESET</span>
+          <span class="legend"><span class="l1"><i></i>ATLAS</span><span class="l2"><i></i>PATH / 07</span></span>
+        </div>
+        <button class="orb-toggle" type="button" data-orb-toggle>USE 2D</button>
+      </div>
+    </section>
+
+    <svg class="badge" viewBox="0 0 200 200" aria-hidden="true">
+      <circle class="outline" cx="100" cy="100" r="92" />
+      <circle class="outline-inner" cx="100" cy="100" r="82" />
+      <g class="ring">
+        <defs>
+          <path id="badge-path" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0" />
+        </defs>
+        <text>
+          <textPath href="#badge-path" startOffset="0">EVERY ROUTE REACHES ITS APSIS / READ-ONLY / 16 ACCOUNTS / 07 HOPS /</textPath>
+        </text>
+      </g>
+      <path class="badge-center-star" d="M100 50 L104 96 L150 100 L104 104 L100 150 L96 104 L50 100 L96 96 Z" />
+      <text class="badge-center" x="100" y="105" text-anchor="middle">APSIS</text>
+    </svg>
+
+    <span class="stamp globes" aria-hidden="true">
+      <svg viewBox="0 0 120 190">
+        <g fill="none" stroke="#ffffff" stroke-width="1">
+          <circle cx="60" cy="52" r="38" />
+          <ellipse cx="60" cy="52" rx="38" ry="13" />
+          <ellipse cx="60" cy="52" rx="13" ry="38" />
+          <ellipse cx="60" cy="52" rx="38" ry="13" transform="rotate(55 60 52)" />
+          <circle cx="60" cy="142" r="26" opacity=".7" />
+          <ellipse cx="60" cy="142" rx="26" ry="9" opacity=".7" />
+          <ellipse cx="60" cy="142" rx="9" ry="26" opacity=".7" />
+        </g>
+        <circle cx="60" cy="52" r="2.4" fill="#1a1aff" />
+        <circle cx="60" cy="142" r="2" fill="#1a1aff" />
+        <path d="M60 83 L62 94 L73 96 L62 98 L60 109 L58 98 L47 96 L58 94 Z" fill="#ffffff" />
+      </svg>
+    </span>
+
+    <span class="stamp flower" aria-hidden="true">
+      <svg viewBox="0 0 120 120">
+        <g fill="none" stroke="#ffffff" stroke-width="1">
+          <circle cx="60" cy="60" r="42" />
+          <ellipse cx="60" cy="60" rx="42" ry="16" />
+          <ellipse cx="60" cy="60" rx="42" ry="16" transform="rotate(60 60 60)" />
+          <ellipse cx="60" cy="60" rx="42" ry="16" transform="rotate(120 60 60)" />
+          <circle cx="60" cy="60" r="15" />
+        </g>
+        <circle cx="60" cy="60" r="3.5" fill="#1a1aff" />
+      </svg>
+    </span>
+
+    <span class="stamp chevrons" aria-hidden="true">&lt;&lt;&lt;&lt;</span>
+    <span class="stamp barcode" aria-hidden="true"></span>
+
+    <span class="stamp swoosh" aria-hidden="true">
+      <svg viewBox="0 0 220 62">
+        <path d="M8 46 C 58 8, 150 4, 210 30" fill="none" stroke="#ffffff" stroke-width="2.4" />
+        <path d="M26 54 C 76 20, 154 16, 206 38" fill="none" stroke="#1a1aff" stroke-width="1.6" />
+        <path d="M44 60 C 90 32, 160 28, 202 46" fill="none" stroke="#ffffff" stroke-width=".8" opacity=".5" />
+        <path d="M184 8 L187 20 L199 23 L187 26 L184 38 L181 26 L169 23 L181 20 Z" fill="#ffffff" />
+      </svg>
+      <span>STARS / APSIS 2026</span>
+    </span>
+
+    <span class="frame f1" aria-hidden="true"></span>
+    <span class="frame f2" aria-hidden="true"></span>
+
+    <span class="star one" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="currentColor" /></svg></span>
+    <span class="star two" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="currentColor" /></svg></span>
+    <span class="star three" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="currentColor" /></svg></span>
+    <span class="star four" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 0 L14.4 9.6 L24 12 L14.4 14.4 L12 24 L9.6 14.4 L0 12 L9.6 9.6 Z" fill="currentColor" /></svg></span>
+
+    <div class="micro">
+      <p class="micro-kicker">What it does</p>
+      <p>
+        Apsis reads an AWS account as a permission system. It finds every route from a
+        low-privilege principal to administrator, then computes the fewest grants to revoke.
+        Nothing is written.
+      </p>
+      <p class="micro-sig"><b>16</b> / 194 / 144 / 37 / 07 / 0</p>
+    </div>
+
+    <div class="wave-stage" data-wave>
+      <canvas aria-hidden="true"></canvas>
+      <span class="wave-label">Dotted atlas / 194 identities</span>
+    </div>
+
+    <div class="data" aria-label="Fleet readout">
+      <div><b>16</b><span>accounts</span></div>
+      <div><b>194</b><span>identities</span></div>
+      <div><b>144</b><span>routes</span></div>
+      <div><b>37</b><span>edges cut</span></div>
+      <div><b>07</b><span>hops</span></div>
+      <div><b>0</b><span>writes</span></div>
+    </div>
+
+    <footer class="foot">
+      <span>APSIS / PATH + ATLAS / 2026</span>
+      <span>WIREFRAME MASCOT / 07 NODES / ONE PATH</span>
+      <span>READ-ONLY / 0 WRITES</span>
+    </footer>
+  </main>
+
+  <script type="module" src="./scene.js"></script>
+</body>
+</html>
