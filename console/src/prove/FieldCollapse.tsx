@@ -56,11 +56,11 @@ export function FieldCollapse() {
     // the primary
     const core = new THREE.Mesh(
       new THREE.SphereGeometry(120, 48, 48),
-      new THREE.MeshBasicMaterial({ color: 0x010403 }),
+      new THREE.MeshBasicMaterial({ color: 0x070706 }),
     );
     group.add(core);
     const halo = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: glow, color: 0x4fe3c1, transparent: true, opacity: 0.4,
+      map: glow, color: 0xe09a7a, transparent: true, opacity: 0.32,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }));
     halo.scale.set(520, 520, 1);
@@ -69,14 +69,14 @@ export function FieldCollapse() {
     // accretion ring
     const ring = new THREE.Mesh(
       new THREE.TorusGeometry(190, 2.2, 8, 160),
-      new THREE.MeshBasicMaterial({ color: 0xd6fff2, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false }),
+      new THREE.MeshBasicMaterial({ color: 0xece6d8, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false }),
     );
     ring.rotation.x = 1.25;
     ring.rotation.z = -0.2;
     group.add(ring);
     const ring2 = new THREE.Mesh(
       new THREE.TorusGeometry(222, 0.8, 8, 160),
-      new THREE.MeshBasicMaterial({ color: 0x8b7bff, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending, depthWrite: false }),
+      new THREE.MeshBasicMaterial({ color: 0xd8b25e, transparent: true, opacity: 0.32, blending: THREE.AdditiveBlending, depthWrite: false }),
     );
     ring2.rotation.x = 1.12;
     ring2.rotation.z = 0.3;
@@ -98,7 +98,7 @@ export function FieldCollapse() {
       group.add(new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(pts),
         new THREE.LineBasicMaterial({
-          color: k % 2 === 0 ? 0x4fe3c1 : 0x8b7bff,
+          color: k % 2 === 0 ? 0xe09a7a : 0xd8b25e,
           transparent: true,
           opacity: 0.14,
           blending: THREE.AdditiveBlending,
@@ -119,7 +119,7 @@ export function FieldCollapse() {
     const pg = new THREE.BufferGeometry();
     pg.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     const charges = new THREE.Points(pg, new THREE.PointsMaterial({
-      color: 0xa9e6d6, size: 1.8, map: glow, transparent: true, opacity: 0.65,
+      color: 0xb9b2a2, size: 1.6, map: glow, transparent: true, opacity: 0.65,
       blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true,
     }));
     group.add(charges);

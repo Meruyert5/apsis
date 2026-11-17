@@ -15,7 +15,7 @@ export function ActHeader({ index, label, title, lede, meta, as = "h2" }: Props)
     <header className="bio-head">
       <div>
         <p className="bio-eyebrow">
-          <b>{index}</b> / {label} <i />
+          <b>Deck {index}</b> / {label} <i />
         </p>
         <Title className="bio-title">{title}</Title>
         <p className="bio-lede">{lede}</p>

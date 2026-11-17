@@ -76,7 +76,7 @@ export function BioSky() {
         const a = coords[edge.a];
         const b = coords[edge.b];
         if (!a || !b) return;
-        ctx.strokeStyle = index % 7 === 0 ? "rgba(139,123,255,.10)" : "rgba(79,227,193,.06)";
+        ctx.strokeStyle = index % 7 === 0 ? "rgba(216,178,94,.08)" : "rgba(236,230,216,.045)";
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
@@ -85,8 +85,8 @@ export function BioSky() {
       coords.forEach((point, index) => {
         const pulse = animate ? 0.55 + 0.45 * Math.sin(t * 0.7 + index) : 0.7;
         ctx.fillStyle = point.violet
-          ? `rgba(139,123,255,${0.13 * pulse})`
-          : `rgba(120,255,220,${0.12 * pulse})`;
+          ? `rgba(216,178,94,${0.15 * pulse})`
+          : `rgba(236,230,216,${0.14 * pulse})`;
         ctx.beginPath();
         ctx.arc(point.x, point.y, point.r, 0, Math.PI * 2);
         ctx.fill();

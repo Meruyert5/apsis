@@ -69,7 +69,7 @@ export function OrbitHero({ labels, phase }: Props) {
     }
     group.add(new THREE.LineLoop(
       new THREE.BufferGeometry().setFromPoints(orbit),
-      new THREE.LineBasicMaterial({ color: 0x4fe3c1, transparent: true, opacity: 0.14, blending: THREE.AdditiveBlending }),
+      new THREE.LineBasicMaterial({ color: 0x4fe3ff, transparent: true, opacity: 0.16, blending: THREE.AdditiveBlending }),
     ));
 
     // the signature transfer
@@ -88,17 +88,17 @@ export function OrbitHero({ labels, phase }: Props) {
       const curve = new THREE.CatmullRomCurve3(points);
       group.add(new THREE.Mesh(
         new THREE.TubeGeometry(curve, 64, 1.8, 8, false),
-        new THREE.MeshBasicMaterial({ color: 0xd6fff2, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending, depthWrite: false }),
+        new THREE.MeshBasicMaterial({ color: 0xeaf7ff, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false }),
       ));
       group.add(new THREE.Mesh(
         new THREE.TubeGeometry(curve, 64, 6, 8, false),
-        new THREE.MeshBasicMaterial({ color: 0x4fe3c1, transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending, depthWrite: false }),
+        new THREE.MeshBasicMaterial({ color: 0x4fe3ff, transparent: true, opacity: 0.14, blending: THREE.AdditiveBlending, depthWrite: false }),
       ));
       points.forEach((point, index) => {
         const last = index === points.length - 1;
         const node = new THREE.Sprite(new THREE.SpriteMaterial({
           map: glow,
-          color: last ? 0xffd27a : 0xd6fff2,
+          color: last ? 0xffc46b : 0x4fe3ff,
           transparent: true,
           opacity: last ? 0.9 : 0.55,
           blending: THREE.AdditiveBlending,
@@ -110,13 +110,13 @@ export function OrbitHero({ labels, phase }: Props) {
         group.add(node);
       });
       const pulse = new THREE.Sprite(new THREE.SpriteMaterial({
-        map: glow, color: 0xffd27a, transparent: true, opacity: 0.9,
+        map: glow, color: 0xffc46b, transparent: true, opacity: 0.95,
         blending: THREE.AdditiveBlending, depthWrite: false,
       }));
       pulse.scale.set(22, 22, 1);
       group.add(pulse);
       const pulse2 = new THREE.Sprite(new THREE.SpriteMaterial({
-        map: glow, color: 0x4fe3c1, transparent: true, opacity: 0.5,
+        map: glow, color: 0x4fe3ff, transparent: true, opacity: 0.6,
         blending: THREE.AdditiveBlending, depthWrite: false,
       }));
       pulse2.scale.set(14, 14, 1);
@@ -127,12 +127,12 @@ export function OrbitHero({ labels, phase }: Props) {
     }
 
     // a comet on a long ellipse, with a tail and a belt
-    const comet = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: 0xd6fff2, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false }));
+    const comet = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: 0x9fefff, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false }));
     comet.scale.set(34, 34, 1);
     group.add(comet);
     const tailGeo = new THREE.BufferGeometry();
     tailGeo.setAttribute("position", new THREE.Float32BufferAttribute(new Float32Array(12 * 3), 3));
-    const tail = new THREE.Line(tailGeo, new THREE.LineBasicMaterial({ color: 0x4fe3c1, transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending }));
+    const tail = new THREE.Line(tailGeo, new THREE.LineBasicMaterial({ color: 0x4fe3ff, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending }));
     group.add(tail);
     const beltPositions = new Float32Array(120 * 3);
     for (let i = 0; i < 120; i += 1) {
@@ -144,20 +144,20 @@ export function OrbitHero({ labels, phase }: Props) {
     }
     const beltGeo = new THREE.BufferGeometry();
     beltGeo.setAttribute("position", new THREE.BufferAttribute(beltPositions, 3));
-    group.add(new THREE.Points(beltGeo, new THREE.PointsMaterial({ color: 0x9fe8ff, size: 1.2, transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending, depthWrite: false })));
-    const flare = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: 0xffd27a, transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending, depthWrite: false }));
+    group.add(new THREE.Points(beltGeo, new THREE.PointsMaterial({ color: 0x9fd8ff, size: 1.1, transparent: true, opacity: 0.42, blending: THREE.AdditiveBlending, depthWrite: false })));
+    const flare = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: 0xffc46b, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending, depthWrite: false }));
     flare.scale.set(260, 260, 1);
     group.add(flare);
 
     const star = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: glow, color: 0xffd27a, transparent: true, opacity: 0.9,
+      map: glow, color: 0xffc46b, transparent: true, opacity: 0.95,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }));
     star.scale.set(190, 190, 1);
     group.add(star);
     const starCore = new THREE.Mesh(
       new THREE.SphereGeometry(10, 24, 24),
-      new THREE.MeshBasicMaterial({ color: 0xfff0d0 }),
+      new THREE.MeshBasicMaterial({ color: 0xfff3dc }),
     );
     group.add(starCore);
 

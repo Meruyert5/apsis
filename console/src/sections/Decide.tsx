@@ -11,7 +11,7 @@ const ACCOUNT_SHORT: Record<string, string> = {
   healthcare: "Hlth", "games-studio": "Game", "gov-contractor": "Gov", retail: "Ret",
   media: "Media", research: "R&D", logistics: "Logi", platform: "Plat",
 };
-const COLORS: Record<string, string> = { identity: "#8b7bff", compute: "#4fe3c1", trust: "#d6fff2" };
+const COLORS: Record<string, string> = { identity: "#ff6fa5", compute: "#3ff0b0", trust: "#4fe3ff" };
 const CX = 380;
 const CY = 380;
 const R0 = 90;
@@ -132,11 +132,11 @@ export function Decide() {
 
       <div className="bio-decide-grid">
         <svg className="bio-whale" viewBox="0 0 600 220" aria-hidden="true">
-          <path d="M40 130 Q150 40 330 58 Q440 68 520 40 L500 96 L570 74 L520 128 L550 172 L470 150 Q330 205 190 172 Q100 152 40 130 Z" fill="none" stroke="rgba(79,227,193,.2)" strokeWidth="1.4" />
-          <path d="M150 118 Q190 108 230 118" fill="none" stroke="rgba(79,227,193,.16)" strokeWidth="1.2" />
-          <circle cx="120" cy="112" r="3" fill="rgba(214,255,242,.35)" />
-          <circle cx="86" cy="78" r="2" fill="rgba(214,255,242,.25)" />
-          <circle cx="70" cy="56" r="1.5" fill="rgba(214,255,242,.2)" />
+          <path d="M40 130 Q150 40 330 58 Q440 68 520 40 L500 96 L570 74 L520 128 L550 172 L470 150 Q330 205 190 172 Q100 152 40 130 Z" fill="none" stroke="rgba(236,230,216,.16)" strokeWidth="1.4" />
+          <path d="M150 118 Q190 108 230 118" fill="none" stroke="rgba(236,230,216,.12)" strokeWidth="1.2" />
+          <circle cx="120" cy="112" r="3" fill="rgba(236,230,216,.3)" />
+          <circle cx="86" cy="78" r="2" fill="rgba(236,230,216,.22)" />
+          <circle cx="70" cy="56" r="1.5" fill="rgba(236,230,216,.18)" />
         </svg>
         <div className="bio-corecol">
           <div className="bio-coretools">
@@ -151,9 +151,9 @@ export function Decide() {
             <svg className="bio-radial" viewBox="0 0 760 760" role="img" aria-label="Radial coverage core: 16 accounts by 18 techniques">
               <defs>
                 <radialGradient id="bioCoreBed" cx="50%" cy="50%" r="50%">
-                  <stop offset="0" stopColor="#4fe3c1" stopOpacity="0.08" />
-                  <stop offset="0.7" stopColor="#4fe3c1" stopOpacity="0.02" />
-                  <stop offset="1" stopColor="#4fe3c1" stopOpacity="0" />
+                  <stop offset="0" stopColor="#3ff0b0" stopOpacity="0.08" />
+                  <stop offset="0.7" stopColor="#3ff0b0" stopOpacity="0.02" />
+                  <stop offset="1" stopColor="#3ff0b0" stopOpacity="0" />
                 </radialGradient>
               </defs>
               <circle cx={CX} cy={CY} r={R1 + 26} fill="url(#bioCoreBed)" />
@@ -199,7 +199,7 @@ export function Decide() {
                   cy={CY}
                   r={ringR(index)}
                   fill="none"
-                  stroke={account.key === accountKey ? "rgba(214,255,242,.6)" : "rgba(120,255,220,.12)"}
+                  stroke={account.key === accountKey ? "rgba(79,227,255,.6)" : "rgba(63,240,176,.16)"}
                   strokeWidth={account.key === accountKey ? 1.6 : 1}
                 />
               ))}
@@ -210,7 +210,7 @@ export function Decide() {
                   <line
                     key={item.id}
                     x1={x1} y1={y1} x2={x2} y2={y2}
-                    stroke={index === selectedIndex ? "rgba(79,227,193,.8)" : "rgba(120,255,220,.1)"}
+                    stroke={index === selectedIndex ? "#3ff0b0" : "rgba(63,240,176,.12)"}
                     strokeWidth={index === selectedIndex ? 2 : 1}
                   />
                 );
@@ -218,7 +218,7 @@ export function Decide() {
               {techniques.map((item, index) => {
                 const [x, y] = polar(324, angle(index));
                 return (
-                  <text key={item.id} x={x} y={y} fill="#3f7d72" fontFamily="IBM Plex Mono" fontSize="14" textAnchor="middle" dominantBaseline="middle">
+                  <text key={item.id} x={x} y={y} fill="#6f93ad" fontFamily="IBM Plex Mono" fontSize="14" textAnchor="middle" dominantBaseline="middle">
                     {String(index + 1).padStart(2, "0")}
                   </text>
                 );
@@ -246,9 +246,9 @@ export function Decide() {
                   return <circle key={`${account.key}-${item.id}`} cx={x} cy={y} r={size} fill={color} {...common} />;
                 }),
               )}
-              <circle cx={CX} cy={CY} r="42" fill="rgba(79,227,193,.06)" stroke="rgba(191,255,233,.24)" />
-              <text x={CX} y={CY - 4} fill="#eafff8" fontFamily="Sora" fontSize="26" fontWeight="600" textAnchor="middle" dominantBaseline="middle">{observed}</text>
-              <text x={CX} y={CY + 18} fill="#6fb8a8" fontFamily="IBM Plex Mono" fontSize="14" letterSpacing="1.6" textAnchor="middle" dominantBaseline="middle">EDGES</text>
+              <circle cx={CX} cy={CY} r="42" fill="rgba(63,240,176,.08)" stroke="rgba(79,227,255,.24)" />
+              <text x={CX} y={CY - 4} fill="#ece6d8" fontFamily="Sora" fontSize="26" fontWeight="600" textAnchor="middle" dominantBaseline="middle">{observed}</text>
+              <text x={CX} y={CY + 18} fill="#6f93ad" fontFamily="IBM Plex Mono" fontSize="14" letterSpacing="1.6" textAnchor="middle" dominantBaseline="middle">EDGES</text>
             </svg>
             ) : (
               <SpecimenCore
@@ -263,7 +263,7 @@ export function Decide() {
             <div className="bio-sonar" key={ping} aria-hidden="true"><i /><i /><i /></div>
             <svg className="bio-tendrils" viewBox="0 0 100 100" aria-hidden="true">
               {Array.from({ length: 9 }, (_, i) => (
-                <path key={i} d={`M${18 + i * 8} 76 Q${8 + i * 9} 88 ${16 + i * 8} 100`} fill="none" stroke="rgba(79,227,193,.3)" strokeWidth="0.5" />
+                <path key={i} d={`M${18 + i * 8} 76 Q${8 + i * 9} 88 ${16 + i * 8} 100`} fill="none" stroke="rgba(63,240,176,.3)" strokeWidth="0.5" />
               ))}
             </svg>
           </div>

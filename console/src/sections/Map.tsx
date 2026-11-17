@@ -268,7 +268,7 @@ export function Map() {
           </div>
           <div className="bio-compass" aria-hidden="true">
             <span className="bio-compass-rose">N</span>
-            <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="rgba(79,227,193,.22)" /><circle cx="40" cy="40" r="2" fill="#ffd27a" /><path className="bio-compass-needle" d="M40 14 L46 40 L40 66 L34 40 Z" fill="rgba(214,255,242,.5)" /></svg>
+            <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="rgba(236,230,216,.2)" /><circle cx="40" cy="40" r="2" fill="#d8b25e" /><path className="bio-compass-needle" d="M40 14 L46 40 L40 66 L34 40 Z" fill="rgba(236,230,216,.5)" /></svg>
             <span>field / primary</span>
           </div>
           <div className="bio-fieldmeter" aria-hidden="true">

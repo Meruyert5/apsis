@@ -20,7 +20,7 @@ interface Props {
   onSelect: (techId: string, accountKey: string) => void;
 }
 
-const COLORS: Record<string, number> = { identity: 0x8b7bff, compute: 0x4fe3c1, trust: 0xd6fff2 };
+const COLORS: Record<string, number> = { identity: 0xff6fa5, compute: 0x3ff0b0, trust: 0x4fe3ff };
 const R0 = 90;
 const R1 = 310;
 
@@ -224,7 +224,7 @@ export function SpecimenCore({ accounts, techniques, table, techId, accountKey, 
     const rOf = (index: number) => R0 + ((R1 - R0) * index) / Math.max(1, n - 1);
 
     const bed = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: state.glow, color: 0x2fd7b4, transparent: true, opacity: 0.26,
+      map: state.glow, color: 0x3ff0b0, transparent: true, opacity: 0.2,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }));
     bed.scale.set(560, 560, 1);
@@ -243,7 +243,7 @@ export function SpecimenCore({ accounts, techniques, table, techId, accountKey, 
       group.add(new THREE.LineLoop(
         new THREE.BufferGeometry().setFromPoints(points),
         new THREE.LineBasicMaterial({
-          color: i === accountIndex ? 0xd6fff2 : 0x4fe3c1,
+          color: i === accountIndex ? 0x4fe3ff : 0x3ff0b0,
           transparent: true,
           opacity: i === accountIndex ? 0.9 : 0.2,
           blending: THREE.AdditiveBlending,
@@ -266,7 +266,7 @@ export function SpecimenCore({ accounts, techniques, table, techId, accountKey, 
       group.add(new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(points),
         new THREE.LineBasicMaterial({
-          color: j === techIndex ? 0x8b7bff : COLORS[tech.category] ?? 0x2f9f8a,
+          color: j === techIndex ? 0xff6fa5 : COLORS[tech.category] ?? 0x2a4a52,
           transparent: true,
           opacity: j === techIndex ? 0.95 : 0.18,
           blending: THREE.AdditiveBlending,
@@ -283,7 +283,7 @@ export function SpecimenCore({ accounts, techniques, table, techId, accountKey, 
         const count = table.get(account.key)?.get(tech.id) ?? 0;
         const a = ((-90 + (ti * 360) / m) * Math.PI) / 180;
         positions.push(Math.cos(a) * rOf(ai), Math.sin(a) * rOf(ai), zOf(ai));
-        const color = new THREE.Color(COLORS[tech.category] ?? 0x4fe3c1);
+        const color = new THREE.Color(COLORS[tech.category] ?? 0x3ff0b0);
         const selected = ti === techIndex || ai === accountIndex;
         const dim = ti !== techIndex && (accountIndex < 0 || ai !== accountIndex);
         color.multiplyScalar(count === 0 ? 0.5 : selected ? 1 : dim ? 0.4 : 0.85);
@@ -315,7 +315,7 @@ export function SpecimenCore({ accounts, techniques, table, techId, accountKey, 
       if (count > 0) {
         const a = ((-90 + (techIndex * 360) / m) * Math.PI) / 180;
         const mark = new THREE.Sprite(new THREE.SpriteMaterial({
-          map: state.glow, color: COLORS[selectedTech.category] ?? 0xd6fff2,
+          map: state.glow, color: COLORS[selectedTech.category] ?? 0x4fe3ff,
           transparent: true, opacity: 0.75, blending: THREE.AdditiveBlending, depthWrite: false,
         }));
         mark.position.set(Math.cos(a) * rOf(accountIndex), Math.sin(a) * rOf(accountIndex), zOf(accountIndex));
@@ -325,7 +325,7 @@ export function SpecimenCore({ accounts, techniques, table, techId, accountKey, 
     }
 
     const centre = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: state.glow, color: 0xd6fff2, transparent: true, opacity: 0.6,
+      map: state.glow, color: 0x4fe3ff, transparent: true, opacity: 0.6,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }));
     centre.scale.set(150, 150, 1);

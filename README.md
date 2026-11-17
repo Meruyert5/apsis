@@ -149,32 +149,26 @@ npm run audit      # contrast, headings, names, target size
 
 ## The console
 
-| Section | What it does |
+| Deck | What it does |
 | --- | --- |
-| Start | Lit Earth, the signature transit, and the five-move method |
 | Signal | A 3D signature transfer into the star, the fleet readout, and the five-stage bus |
 | Map | The account as a magnetic orrery: primary star, hop shells, bodies, flux tubes; step a route and sever the cut |
 | Decide | 18 techniques × 16 accounts as a containment core, with the exact ledger |
 | Prove | A command builder, the recorded output, the 3D field collapse, the zero, guardrails and the Penumbra handoff |
 
-Each act has its own instrument, palette and architecture, not just a recolour:
-Signal is a warm full-bleed observatory with a live, auto-advancing light curve
-and scrubber; Map is a blue magnetic workbench with a compass, a field meter and
-a flowing hop rail; Decide is an emerald bioluminescent lab with a sonar ping
-and species legend; Prove is a rose field recording with a seekable waveform
-that highlights the line it is playing, plus the collapse.
+Apsis is four cyber decks of one orbital operations console, not a recoloured
+security dashboard. Signal is a holographic uplink in cyan and amber; Map is a
+magnetic array in blue and violet; Decide is a containment bay in emerald and
+magenta; Prove is a flight recorder in rust and amber. Deep navy glass, 1px
+gradient borders, scanlines and HUD labels carry the system. Sora 600 sets the
+display, IBM Plex Mono carries the data, and Sora carries the reading.
 
-The acts use four different gradient families — amber → rose → teal,
-blue → violet → mint, mint → blue → rose, and rose → amber → violet — carried
-through titles, buttons, readouts, instruments and figures.
+![The Map deck](docs/img/map.png)
 
-![The Map section](docs/img/map.png)
-
-The design is a magnetic bioluminescent orrery: a primary star, hop shells,
-bodies, flux tubes, a containment core, and an abyss that closes the page. The
-title is the information design: every route reaches its apsis. Amber marks the
-star and the live signal; coral marks severance. The full system is in
-[docs/superpowers/specs/2026-11-17-apsis-magnetic-orrery-design.md](docs/superpowers/specs/2026-11-17-apsis-magnetic-orrery-design.md).
+The title is the information design: every route reaches its apsis. The full
+system is in [docs/DESIGN.md](docs/DESIGN.md); the Pinterest reference trail and
+the two-pass direction log are in
+[docs/design-research.md](docs/design-research.md).
 
 ## Data and scope
 

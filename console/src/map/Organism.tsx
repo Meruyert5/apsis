@@ -39,16 +39,16 @@ interface Runtime {
 }
 
 const COLORS: Record<string, number> = {
-  user: 0x8b7bff,
-  role: 0x4fe3c1,
-  group: 0xd6fff2,
-  admin: 0xffd27a,
-  lambda: 0x9fe8ff,
-  ec2: 0x9fe8ff,
-  ecs: 0x9fe8ff,
-  glue: 0x9fe8ff,
-  sagemaker: 0x9fe8ff,
-  cloudformation: 0x9fe8ff,
+  user: 0x8ea2ff,
+  role: 0x8fd6e2,
+  group: 0xece6d8,
+  admin: 0xd8b25e,
+  lambda: 0xa39d8f,
+  ec2: 0xa39d8f,
+  ecs: 0xa39d8f,
+  glue: 0xa39d8f,
+  sagemaker: 0xa39d8f,
+  cloudformation: 0xa39d8f,
 };
 
 function glowTexture(): THREE.Texture {
@@ -273,7 +273,7 @@ export function Organism({ bundle, model, source, node, route, cut, showField, o
       new THREE.SphereGeometry(radius, 64, 40),
       new THREE.ShaderMaterial({
         vertexShader: `varying vec3 vN; varying vec3 vV; void main(){ vN=normalize(normalMatrix*normal); vec4 mv=modelViewMatrix*vec4(position,1.0); vV=normalize(-mv.xyz); gl_Position=projectionMatrix*mv; }`,
-        fragmentShader: `varying vec3 vN; varying vec3 vV; void main(){ float rim=pow(1.0-abs(dot(vN,vV)),2.6); gl_FragColor=vec4(vec3(0.31,0.89,0.76),rim*0.3); }`,
+        fragmentShader: `varying vec3 vN; varying vec3 vV; void main(){ float rim=pow(1.0-abs(dot(vN,vV)),2.6); gl_FragColor=vec4(vec3(0.86,0.80,0.66),rim*0.18); }`,
         transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
       }),
     );
@@ -294,7 +294,7 @@ export function Organism({ bundle, model, source, node, route, cut, showField, o
     const planktonGeo = new THREE.BufferGeometry();
     planktonGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     group.add(new THREE.Points(planktonGeo, new THREE.PointsMaterial({
-      color: 0x7ffff0, size: 1.6, map: runtime.glow, transparent: true, opacity: 0.35,
+      color: 0xa39d8f, size: 1.4, map: runtime.glow, transparent: true, opacity: 0.35,
       blending: THREE.AdditiveBlending, depthWrite: false,
     })));
 
@@ -317,7 +317,7 @@ export function Organism({ bundle, model, source, node, route, cut, showField, o
       group.add(new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(points),
         new THREE.LineBasicMaterial({
-          color: k % 2 === 0 ? 0x4fe3c1 : 0x8b7bff,
+          color: k % 2 === 0 ? 0x8ea2ff : 0xd8b25e,
           transparent: true,
           opacity: 0.11,
           blending: THREE.AdditiveBlending,
@@ -328,7 +328,7 @@ export function Organism({ bundle, model, source, node, route, cut, showField, o
       const torus = new THREE.Mesh(
         new THREE.TorusGeometry(34 + k * 13, 0.5, 8, 64),
         new THREE.MeshBasicMaterial({
-          color: k % 2 === 0 ? 0xffd27a : 0x4fe3c1,
+          color: k % 2 === 0 ? 0xd8b25e : 0x8fd6e2,
           transparent: true,
           opacity: 0.22 - k * 0.04,
           blending: THREE.AdditiveBlending,
@@ -361,7 +361,7 @@ export function Organism({ bundle, model, source, node, route, cut, showField, o
       group.add(new THREE.LineLoop(
         new THREE.BufferGeometry().setFromPoints(points),
         new THREE.LineBasicMaterial({
-          color: 0x4fe3c1, transparent: true,
+          color: 0xd8b25e, transparent: true,
           opacity: route?.hops === d ? 0.28 : 0.1,
           blending: THREE.AdditiveBlending,
         }),
@@ -384,7 +384,7 @@ export function Organism({ bundle, model, source, node, route, cut, showField, o
       group.add(new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(curve.getPoints(28)),
         new THREE.LineBasicMaterial({
-          color: cutOn ? 0xff8fa3 : lineOn ? 0xd6fff2 : 0x2f9f8a,
+          color: cutOn ? 0xe09a7a : lineOn ? 0xece6d8 : 0x6f6a60,
           transparent: true,
           opacity: cutOn ? 0.6 : lineOn ? 1 : 0.2,
           blending: THREE.AdditiveBlending,
@@ -393,10 +393,10 @@ export function Organism({ bundle, model, source, node, route, cut, showField, o
       if (cutOn) {
         group.add(new THREE.Mesh(
           new THREE.TubeGeometry(curve, 24, 2.4, 6, false),
-          new THREE.MeshBasicMaterial({ color: 0xff8fa3, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false }),
+          new THREE.MeshBasicMaterial({ color: 0xe09a7a, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false }),
         ));
         const mark = new THREE.Sprite(new THREE.SpriteMaterial({
-          map: runtime.glow, color: 0xff8fa3, transparent: true, opacity: 0.5,
+          map: runtime.glow, color: 0xe09a7a, transparent: true, opacity: 0.5,
           blending: THREE.AdditiveBlending, depthWrite: false,
         }));
         mark.position.copy(curve.getPoint(0.5));
@@ -406,25 +406,25 @@ export function Organism({ bundle, model, source, node, route, cut, showField, o
       if (lineOn) {
         group.add(new THREE.Mesh(
           new THREE.TubeGeometry(curve, 24, 1.3, 6, false),
-          new THREE.MeshBasicMaterial({ color: 0xd6fff2, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, depthWrite: false }),
+          new THREE.MeshBasicMaterial({ color: 0xece6d8, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, depthWrite: false }),
         ));
         group.add(new THREE.Mesh(
           new THREE.TubeGeometry(curve, 24, 4.4, 6, false),
-          new THREE.MeshBasicMaterial({ color: 0x4fe3c1, transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending, depthWrite: false }),
+          new THREE.MeshBasicMaterial({ color: 0xd8b25e, transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending, depthWrite: false }),
         ));
       }
     }
 
     // nucleus
     const nucleus = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: runtime.glow, color: 0xffd27a, transparent: true, opacity: 0.4,
+      map: runtime.glow, color: 0xd8b25e, transparent: true, opacity: 0.4,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }));
     nucleus.scale.set(260, 260, 1);
     group.add(nucleus);
     group.add(new THREE.Mesh(
       new THREE.TorusGeometry(36, 0.8, 8, 64),
-      new THREE.MeshBasicMaterial({ color: 0xffd27a, transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending, depthWrite: false }),
+      new THREE.MeshBasicMaterial({ color: 0xd8b25e, transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending, depthWrite: false }),
     ));
 
     // cells
@@ -435,7 +435,7 @@ export function Organism({ bundle, model, source, node, route, cut, showField, o
       const onRoute = routeIds.has(item.id);
       const base = item.admin ? 10 : 3.6 + item.degree * 1.4;
       const scale = selected ? 1.5 : onRoute ? 1.15 : 0.9;
-      const color = COLORS[item.kind] ?? 0x4fe3c1;
+      const color = COLORS[item.kind] ?? 0x8ea2ff;
       const mesh = new THREE.Mesh(
         new THREE.SphereGeometry(base * scale, 20, 20),
         new THREE.MeshBasicMaterial({
@@ -468,14 +468,14 @@ export function Organism({ bundle, model, source, node, route, cut, showField, o
         const curve = new THREE.CatmullRomCurve3(routePoints);
         runtime.routeCurve = curve;
         const pulse = new THREE.Sprite(new THREE.SpriteMaterial({
-          map: runtime.glow, color: 0xd6fff2, transparent: true, opacity: 0.9,
+          map: runtime.glow, color: 0xece6d8, transparent: true, opacity: 0.9,
           blending: THREE.AdditiveBlending, depthWrite: false,
         }));
         pulse.scale.set(34, 34, 1);
         runtime.pulse = pulse;
         group.add(pulse);
         const pulse2 = new THREE.Sprite(new THREE.SpriteMaterial({
-          map: runtime.glow, color: 0x4fe3c1, transparent: true, opacity: 0.55,
+          map: runtime.glow, color: 0xd8b25e, transparent: true, opacity: 0.55,
           blending: THREE.AdditiveBlending, depthWrite: false,
         }));
         pulse2.scale.set(22, 22, 1);

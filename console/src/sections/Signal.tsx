@@ -58,7 +58,7 @@ export function Signal() {
         <OrbitHero labels={labels} phase={phase} />
 
         <div className="bio-observatory-copy">
-          <p className="bio-eyebrow"><b>01</b> / Signal <i /></p>
+          <p className="bio-eyebrow"><b>Deck 01</b> / Signal <i /></p>
           <h1 className="bio-title" id="signal-title">
             Every route reaches its <em>apsis.</em>
           </h1>
@@ -88,6 +88,8 @@ export function Signal() {
           <b>{totals.routes}</b> routes<br />
           <b>{EDGES_CUT}</b> edges cut
         </div>
+
+        <p className="bio-fig">Fig. 01 — Signature transfer / source {FEATURED}</p>
       </div>
 
       <div className="bio-instrument">
@@ -99,26 +101,26 @@ export function Signal() {
           <svg viewBox="0 0 600 92" preserveAspectRatio="none" aria-hidden="true">
             <defs>
               <linearGradient id="lc-stroke" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stopColor="#ffd27a" />
-                <stop offset=".48" stopColor="#ff8fa3" />
-                <stop offset="1" stopColor="#4fe3c1" />
+                <stop offset="0" stopColor="#4fe3ff" />
+                <stop offset=".55" stopColor="#7aa2ff" />
+                <stop offset="1" stopColor="#ffc46b" />
               </linearGradient>
               <linearGradient id="lc-echo" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stopColor="#8b7bff" stopOpacity=".55" />
-                <stop offset="1" stopColor="#4fe3c1" stopOpacity=".15" />
+                <stop offset="0" stopColor="#7aa2ff" stopOpacity=".5" />
+                <stop offset="1" stopColor="#ffc46b" stopOpacity=".2" />
               </linearGradient>
               <linearGradient id="lc-fill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stopColor="#ff8fa3" stopOpacity=".34" />
-                <stop offset=".55" stopColor="#4fe3c1" stopOpacity=".12" />
-                <stop offset="1" stopColor="#4fe3c1" stopOpacity="0" />
+                <stop offset="0" stopColor="#4fe3ff" stopOpacity=".24" />
+                <stop offset=".6" stopColor="#4fe3ff" stopOpacity=".06" />
+                <stop offset="1" stopColor="#4fe3ff" stopOpacity="0" />
               </linearGradient>
             </defs>
             <polygon points={area} fill="url(#lc-fill)" />
             <polyline points={echo} fill="none" stroke="url(#lc-echo)" strokeWidth="1.2" strokeDasharray="4 6" />
             <polyline points={curve} fill="none" stroke="url(#lc-stroke)" strokeWidth="2" strokeLinecap="round" />
-            <line x1={phase * 600} y1="8" x2={phase * 600} y2="84" stroke="rgba(255,210,122,.6)" strokeWidth="1" />
-            <circle cx={phase * 600} cy={CURVE_Y(phase)} r="4" fill="#ffd27a" />
-            <circle cx={phase * 600} cy={CURVE_Y(phase)} r="9" fill="none" stroke="rgba(255,210,122,.45)" />
+            <line x1={phase * 600} y1="8" x2={phase * 600} y2="84" stroke="rgba(79,227,255,.6)" strokeWidth="1" />
+            <circle cx={phase * 600} cy={CURVE_Y(phase)} r="4" fill="#ffc46b" />
+            <circle cx={phase * 600} cy={CURVE_Y(phase)} r="9" fill="none" stroke="rgba(255,196,107,.45)" />
           </svg>
           <div className="lc-readout">
             <span>T− <b>{((1 - phase) * 10).toFixed(1)}s</b> / phase <b>{String(Math.round(phase * 100)).padStart(2, "0")}%</b></span>

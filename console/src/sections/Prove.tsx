@@ -184,7 +184,8 @@ export function Prove() {
           <span className="bio-wavering" />
         </div>
 
-        <article className="bio-terminal">
+        <div className="bio-terminal-wrap">
+          <article className="bio-terminal">
           <div className="bar">
             <span className="dots" aria-hidden="true"><i /><i /><i /></span>
             <span className="bio-rec"><i />REC</span>
@@ -261,17 +262,17 @@ export function Prove() {
               <svg viewBox="0 0 600 60" preserveAspectRatio="none" aria-hidden="true">
                 <defs>
                   <linearGradient id="wave-stroke" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0" stopColor="#ff8fa3" />
-                    <stop offset=".52" stopColor="#ffd27a" />
-                    <stop offset="1" stopColor="#8b7bff" />
+                    <stop offset="0" stopColor="#ff6f91" />
+                    <stop offset=".52" stopColor="#ff8a6b" />
+                    <stop offset="1" stopColor="#ffc46b" />
                   </linearGradient>
                   <linearGradient id="wave-fill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stopColor="#ff8fa3" stopOpacity=".4" />
-                    <stop offset="1" stopColor="#8b7bff" stopOpacity="0" />
+                    <stop offset="0" stopColor="#ff6f91" stopOpacity=".3" />
+                    <stop offset="1" stopColor="#ffc46b" stopOpacity="0" />
                   </linearGradient>
                 </defs>
                 {[0.25, 0.5, 0.75].map((mark) => (
-                  <line key={mark} x1={mark * 600} y1="0" x2={mark * 600} y2="60" stroke="rgba(255,143,163,.14)" strokeWidth="1" />
+                  <line key={mark} x1={mark * 600} y1="0" x2={mark * 600} y2="60" stroke="rgba(255,138,107,.1)" strokeWidth="1" />
                 ))}
                 <polygon points={waveArea} fill="url(#wave-fill)" />
                 <polyline points={wave} fill="none" stroke="url(#wave-stroke)" strokeWidth="1.6" />
@@ -294,7 +295,12 @@ export function Prove() {
               <span>{lines[activeLine]?.trim().slice(0, 72) || "—"}</span>
             </div>
           </div>
-        </article>
+          </article>
+          <p className="bio-prove-foot">
+            <span>Fig. 04 — Recorded invocation</span>
+            <span>{lines.length} lines · {FORMAT_LABEL[record.format]} · {record.key}</span>
+          </p>
+        </div>
 
         <aside className="bio-closure" aria-label="Closure">
           <p className="bio-zero" aria-label="0 routes remain">0</p>
