@@ -152,6 +152,18 @@ try {
   check("signal names the apsis", signal.h1?.includes("apsis"), signal.h1);
   check("fleet readout has four values", signal.fleet.length === 4, signal.fleet.join(","));
 
+  const instrument = await evaluate(`(() => ({
+    live: document.querySelector('.bio-instrument-head b')?.dataset.playing,
+    button: !!document.querySelector('.bio-scrubplay'),
+    curve: !!document.querySelector('#lc-stroke') && !!document.querySelector('#lc-fill'),
+    observer: !!document.querySelector('.bio-observer .mission-figure'),
+    readout: [...document.querySelectorAll('.lc-readout b')].map((el) => el.textContent).join(","),
+  }))()`);
+  check("signal instrument is live", instrument.live === "true", String(instrument.live));
+  check("signal has a gradient light curve", instrument.curve);
+  check("signal observer renders", instrument.observer);
+  check("signal light curve reports a phase", /%$/.test((instrument.readout ?? "").split(",").pop() ?? ""), instrument.readout);
+
   await scrollTo("map");
   const map = await evaluate(`(() => ({
     rows: document.querySelectorAll('.bio-prow').length,
@@ -163,6 +175,19 @@ try {
   check("signature route has seven hops", map.hops === 7, String(map.hops));
   check("map readout starts on Tools intern", map.title === "Tools intern", map.title);
   check("map canvas renders", map.canvas);
+
+  const replay = await evaluate(`(async () => {
+    const progress = document.querySelector('.bio-hops')?.style.getPropertyValue('--hop-progress');
+    document.querySelector('.bio-play')?.click();
+    await new Promise((resolve) => setTimeout(resolve, 160));
+    const current = document.querySelector('.bio-hop[aria-current="true"]')?.textContent;
+    const playing = document.querySelector('.bio-hopbar')?.dataset.playing;
+    document.querySelector('.bio-play')?.click();
+    return { progress, current, playing };
+  })()`);
+  check("hop rail reports full progress", replay.progress === "100%", String(replay.progress));
+  check("play restarts the walk from the first hop", replay.current === "01", replay.current);
+  check("hopbar exposes its playing state", replay.playing === "true", String(replay.playing));
 
   await evaluate(`document.querySelectorAll('.bio-prow')[2]?.click()`);
   await sleep(400);
@@ -236,6 +261,31 @@ try {
   check("six revocation rows", prove.revs === 6, String(prove.revs));
   check("zero renders", prove.zero === "0", prove.zero);
   check("diver renders", prove.diver);
+
+  const diverDetail = await evaluate(`(() => ({
+    parts: document.querySelectorAll('.bio-crew .mission-figure--diver *').length,
+    gradients: document.querySelectorAll('.bio-crew .mission-figure--diver linearGradient, .bio-crew .mission-figure--diver radialGradient').length,
+  }))()`);
+  check("diver is built from many parts", diverDetail.parts >= 60, String(diverDetail.parts));
+  check("diver has suit and visor gradients", diverDetail.gradients >= 5, String(diverDetail.gradients));
+
+  const waveSeek = await evaluate(`(async () => {
+    const input = document.querySelector('.bio-waveseek');
+    const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
+    setter.call(input, '0.5');
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    await new Promise((resolve) => setTimeout(resolve, 120));
+    const line = document.querySelector('.bio-waveread b')?.textContent;
+    const cursor = document.querySelector('.bio-wavecursor')?.style.left;
+    document.querySelector('.bio-waveplay')?.click();
+    await new Promise((resolve) => setTimeout(resolve, 160));
+    const active = !!document.querySelector('.bio-line[data-active="true"]');
+    document.querySelector('.bio-waveplay')?.click();
+    return { line, cursor, active };
+  })()`);
+  check("waveform seek moves the cursor", waveSeek.cursor === "50%", String(waveSeek.cursor));
+  check("waveform seek reads a middle line", waveSeek.line !== "01", String(waveSeek.line));
+  check("playing the waveform highlights a line", waveSeek.active);
 
   await evaluate(`document.querySelectorAll('.bio-verb')[1]?.click()`);
   await sleep(300);

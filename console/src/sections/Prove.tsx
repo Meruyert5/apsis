@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { PointerEvent as ReactPointerEvent } from "react";
 import { ActHeader } from "../components/ActHeader";
 import { FieldCollapse } from "../prove/FieldCollapse";
 import { MissionFigure } from "../components/MissionFigure";
@@ -66,6 +67,8 @@ export function Prove() {
   const [copied, setCopied] = useState(false);
   const [handoffCopied, setHandoffCopied] = useState(false);
   const [playingWave, setPlayingWave] = useState(false);
+  const [waveIndex, setWaveIndex] = useState(0.18);
+  const outputRef = useRef<HTMLDivElement>(null);
 
   const record = useMemo(() => {
     const key = `${verb === "techniques" ? "all" : scenario}|${verb}|${format}`;
@@ -102,11 +105,35 @@ export function Prove() {
   };
 
   const lines = record.output.split("\n");
-  const wave = Array.from({ length: 160 }, (_, i) => {
+  const wavePoints = Array.from({ length: 160 }, (_, i) => {
     const x = (i / 159) * 600;
     const y = 30 + Math.sin(i * 0.52) * 8 + Math.sin(i * 1.71) * 4 + (i % 23 === 0 ? -12 : 0);
     return `${x.toFixed(1)},${y.toFixed(1)}`;
-  }).join(" ");
+  });
+  const wave = wavePoints.join(" ");
+  const waveArea = `0,60 ${wave} 600,60`;
+  const activeLine = Math.min(lines.length - 1, Math.max(0, Math.floor(waveIndex * lines.length)));
+
+  useEffect(() => {
+    if (!playingWave) return;
+    const timer = window.setInterval(() => {
+      setWaveIndex((value) => (value >= 0.999 ? 0 : Math.min(1, value + 0.0045)));
+    }, 50);
+    return () => window.clearInterval(timer);
+  }, [playingWave]);
+
+  useEffect(() => {
+    if (!playingWave) return;
+    const box = outputRef.current;
+    if (!box) return;
+    const ratio = activeLine / Math.max(1, lines.length - 1);
+    box.scrollTop = ratio * Math.max(0, box.scrollHeight - box.clientHeight);
+  }, [playingWave, activeLine, lines.length]);
+
+  const seekWave = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setWaveIndex(Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width)));
+  };
   const focusBundle = bundles.find((entry) => entry.key === scenario)?.bundle ?? bundles[0].bundle;
   const signature = focusBundle.signature;
   const alert = {
@@ -190,7 +217,7 @@ export function Prove() {
               <span>{record.command}</span>
               <button type="button" className="copy" onClick={copy}>{copied ? "Copied" : "Copy"}</button>
             </div>
-            <div className="bio-output" tabIndex={0} role="region" aria-label="Recorded output">
+            <div className="bio-output" ref={outputRef} tabIndex={0} role="region" aria-label="Recorded output">
               {lines.map((line, lineIndex) => {
                 const tone = line.startsWith("Account closed") ? "ok"
                   : line.startsWith("apsis: clean") ? "ok"
@@ -198,7 +225,15 @@ export function Prove() {
                       : line.trimStart().startsWith("arn:aws:iam") ? "arn"
                         : /^\s{2,}\w+\s+.*allows/.test(line) ? "grant"
                           : undefined;
-                return <span key={lineIndex} className={`bio-line${tone ? ` ${tone}` : ""}`}>{line || " "}</span>;
+                return (
+                  <span
+                    key={lineIndex}
+                    className={`bio-line${tone ? ` ${tone}` : ""}`}
+                    data-active={playingWave && lineIndex === activeLine ? "true" : undefined}
+                  >
+                    {line || " "}
+                  </span>
+                );
               })}
             </div>
           </div>
@@ -212,15 +247,51 @@ export function Prove() {
             <div className="bio-wavehead">
               <span>Waveform / recorded output</span>
               <div className="bio-reels" data-playing={playingWave ? "true" : undefined} aria-hidden="true"><span /><span /></div>
-              <button type="button" onClick={() => setPlayingWave((value) => !value)}>
+              <button
+                type="button"
+                className="bio-waveplay"
+                data-playing={playingWave ? "true" : undefined}
+                aria-pressed={playingWave}
+                onClick={() => setPlayingWave((value) => !value)}
+              >
                 {playingWave ? "Pause" : "Play"}
               </button>
             </div>
-            <div className="bio-wavetrack">
+            <div className="bio-wavetrack" onPointerDown={seekWave}>
               <svg viewBox="0 0 600 60" preserveAspectRatio="none" aria-hidden="true">
-                <polyline points={wave} fill="none" stroke="rgba(79,227,193,.7)" strokeWidth="1.2" />
+                <defs>
+                  <linearGradient id="wave-stroke" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stopColor="#ff8fa3" />
+                    <stop offset=".52" stopColor="#ffd27a" />
+                    <stop offset="1" stopColor="#8b7bff" />
+                  </linearGradient>
+                  <linearGradient id="wave-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stopColor="#ff8fa3" stopOpacity=".4" />
+                    <stop offset="1" stopColor="#8b7bff" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                {[0.25, 0.5, 0.75].map((mark) => (
+                  <line key={mark} x1={mark * 600} y1="0" x2={mark * 600} y2="60" stroke="rgba(255,143,163,.14)" strokeWidth="1" />
+                ))}
+                <polygon points={waveArea} fill="url(#wave-fill)" />
+                <polyline points={wave} fill="none" stroke="url(#wave-stroke)" strokeWidth="1.6" />
               </svg>
               <span className="bio-wavescan" data-playing={playingWave ? "true" : undefined} />
+              <span className="bio-wavecursor" style={{ left: `${waveIndex * 100}%` }} aria-hidden="true" />
+            </div>
+            <input
+              className="bio-waveseek"
+              type="range"
+              min="0"
+              max="1"
+              step="0.001"
+              value={waveIndex}
+              onChange={(event) => setWaveIndex(Number(event.target.value))}
+              aria-label="Seek the recorded waveform"
+            />
+            <div className="bio-waveread">
+              <span>line <b>{String(activeLine + 1).padStart(2, "0")}</b> / {String(lines.length).padStart(2, "0")}</span>
+              <span>{lines[activeLine]?.trim().slice(0, 72) || "—"}</span>
             </div>
           </div>
         </article>

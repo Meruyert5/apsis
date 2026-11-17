@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { byKey, bundles, index, techniques, totals } from "../lib/data";
-import { ActHeader } from "../components/ActHeader";
 import { scrollToSection } from "../lib/useSection";
 import { OrbitHero } from "../signal/OrbitHero";
 import { MissionFigure } from "../components/MissionFigure";
@@ -18,95 +17,56 @@ const STEPS = [
 const EDGES_CUT = bundles.reduce((sum, entry) => sum + entry.bundle.sever.edgeCut.edges.length, 0);
 const REVOCATIONS = bundles.reduce((sum, entry) => sum + entry.bundle.sever.permissionSteps.length, 0);
 
-function routePath(labels: string[]) {
-  const points = labels.map((_, i) => ({
-    x: 48 + i * 66,
-    y: 322 - i * 25 + Math.sin(i * 1.15) * 18,
-  }));
-  let d = `M ${points[0].x} ${points[0].y}`;
-  for (let i = 1; i < points.length; i += 1) {
-    const prev = points[i - 1];
-    const point = points[i];
-    d += ` Q ${(prev.x + point.x) / 2} ${Math.min(prev.y, point.y) - 20} ${point.x} ${point.y}`;
-  }
-  return { points, d };
-}
+const CURVE_Y = (t: number) =>
+  46 - Math.sin(t * Math.PI * 2.4) * 10 - Math.exp(-Math.pow((t - 0.72) * 18, 2)) * 28;
 
-function HeroRoute() {
-  const bundle = byKey.get(FEATURED);
-  const route = bundle?.signature ?? null;
-  const labels = route?.labels ?? ["No route", "Administrator"];
-  const { points, d } = routePath(labels);
-  const last = points[points.length - 1];
-
-  return (
-    <div className="bio-routefield" aria-label={route ? `Signature route: ${labels.join(" to ")}` : "No route to an administrator"}>
-      <span className="tag">Signature transfer / {FEATURED}</span>
-      <svg viewBox="0 0 600 400" role="img" aria-hidden="true">
-        <ellipse cx="300" cy="210" rx="238" ry="148" fill="none" stroke="rgba(79,227,193,.12)" />
-        <ellipse cx="300" cy="210" rx="188" ry="112" fill="none" stroke="rgba(79,227,193,.08)" />
-        <ellipse cx="300" cy="210" rx="132" ry="76" fill="none" stroke="rgba(79,227,193,.06)" />
-        <path d={d} fill="none" stroke="rgba(79,227,193,.24)" strokeWidth="9" strokeLinecap="round" />
-        <path d={d} fill="none" stroke="#d6fff2" strokeWidth="1.5" strokeLinecap="round" />
-        {points.map((point, i) => (
-          <g key={`${labels[i]}-${i}`}>
-            <circle cx={point.x} cy={point.y} r={i === points.length - 1 ? 9 : 5.5} fill={i === points.length - 1 ? "#ffd27a" : "#d6fff2"} />
-            <circle cx={point.x} cy={point.y} r={i === points.length - 1 ? 20 : 12} fill="none" stroke={i === points.length - 1 ? "rgba(255,210,122,.35)" : "rgba(79,227,193,.28)"} />
-            <title>{labels[i]}</title>
-          </g>
-        ))}
-        <circle r="3.4" fill="#ffd27a">
-          <animateMotion dur="4.6s" repeatCount="indefinite" path={d} />
-        </circle>
-        <text x={points[0].x} y={points[0].y + 26} fill="#a9e6d6" fontFamily="IBM Plex Mono" fontSize="14" textAnchor="middle">
-          {labels[0]}
-        </text>
-        <text x={last.x} y={last.y - 22} fill="#ffd27a" fontFamily="IBM Plex Mono" fontSize="14" textAnchor="middle">
-          Apsis
-        </text>
-      </svg>
-    </div>
-  );
-}
+const curveFor = (centre: number) =>
+  Array.from({ length: 120 }, (_, i) => {
+    const t = i / 119;
+    const y = 46 - Math.sin(t * Math.PI * 2.4) * 10 - Math.exp(-Math.pow((t - centre) * 18, 2)) * 28;
+    return `${(t * 600).toFixed(1)},${y.toFixed(1)}`;
+  }).join(" ");
 
 export function Signal() {
   const featured = byKey.get(FEATURED);
   const labels = featured?.signature?.labels ?? ["No route", "Apsis"];
   const [phase, setPhase] = useState(0.56);
-  const curve = Array.from({ length: 120 }, (_, i) => {
-    const x = (i / 119) * 600;
-    const y = 46 - Math.sin((i / 119) * Math.PI * 2.4) * 10 - Math.exp(-Math.pow(((i / 119 - 0.72) * 18), 2)) * 28;
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  }).join(" ");
+  const [playing, setPlaying] = useState(
+    () => !(typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches),
+  );
+
+  useEffect(() => {
+    if (!playing) return;
+    const timer = window.setInterval(() => {
+      setPhase((value) => (value >= 0.999 ? 0 : Math.min(1, value + 0.006)));
+    }, 42);
+    return () => window.clearInterval(timer);
+  }, [playing]);
+
+  const curve = curveFor(0.72);
+  const echo = curveFor(0.34);
+  const area = `0,92 ${curve} 600,92`;
+  const scrub = (value: number) => {
+    setPlaying(false);
+    setPhase(value);
+  };
+  const phaseLabel = phase > 0.96 ? "apsis · transfer" : phase > 0.7 ? "approach · rising" : "inbound · observing";
+
   return (
-    <section className="bio-act" id="signal" aria-labelledby="signal-title">
-      <ActHeader
-        as="h1"
-        index="01"
-        label="Signal"
-        title={
-          <span id="signal-title">
+    <section className="bio-act bio-signal-act" id="signal" aria-labelledby="signal-title">
+      <div className="bio-observatory">
+        <OrbitHero labels={labels} phase={phase} />
+
+        <div className="bio-observatory-copy">
+          <p className="bio-eyebrow"><b>01</b> / Signal <i /></p>
+          <h1 className="bio-title" id="signal-title">
             Every route reaches its <em>apsis.</em>
-          </span>
-        }
-        lede={
-          <>
+          </h1>
+          <p className="bio-lede">
             Apsis reads an AWS account as an orbital system: bodies on hop shells,
             the administrator at the primary. It finds every route a stolen
             credential could walk, then the fewest actions that close them all.
-          </>
-        }
-        meta={
-          <>
-            <b>{totals.accounts}</b> accounts<br />
-            <b>{totals.routes}</b> routes<br />
-            <b>{EDGES_CUT}</b> edges cut
-          </>
-        }
-      />
-
-      <div className="bio-observatory">
-        <div className="bio-observatory-copy">
+          </p>
           <div className="bio-actions">
             <button type="button" className="bio-btn bio-btn--solid" onClick={() => scrollToSection("map")}>
               Open the map →
@@ -115,7 +75,6 @@ export function Signal() {
               Read the evidence
             </button>
           </div>
-
           <div className="bio-fleet">
             <div><b>{totals.accounts}</b><span>accounts</span></div>
             <div><b>{totals.identities}</b><span>identities</span></div>
@@ -124,22 +83,69 @@ export function Signal() {
           </div>
         </div>
 
-        <OrbitHero labels={labels} phase={phase} />
+        <div className="bio-observatory-meta">
+          <b>{totals.accounts}</b> accounts<br />
+          <b>{totals.routes}</b> routes<br />
+          <b>{EDGES_CUT}</b> edges cut
+        </div>
       </div>
 
       <div className="bio-instrument">
         <div className="bio-lightcurve">
-          <span>Light curve / signature transfer</span>
+          <div className="bio-instrument-head">
+            <span>Light curve / signature transfer</span>
+            <b data-playing={playing ? "true" : undefined}>{playing ? "live" : "held"}</b>
+          </div>
           <svg viewBox="0 0 600 92" preserveAspectRatio="none" aria-hidden="true">
-            <polyline points={curve} fill="none" stroke="rgba(79,227,193,.7)" strokeWidth="1.4" />
+            <defs>
+              <linearGradient id="lc-stroke" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stopColor="#ffd27a" />
+                <stop offset=".48" stopColor="#ff8fa3" />
+                <stop offset="1" stopColor="#4fe3c1" />
+              </linearGradient>
+              <linearGradient id="lc-echo" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stopColor="#8b7bff" stopOpacity=".55" />
+                <stop offset="1" stopColor="#4fe3c1" stopOpacity=".15" />
+              </linearGradient>
+              <linearGradient id="lc-fill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stopColor="#ff8fa3" stopOpacity=".34" />
+                <stop offset=".55" stopColor="#4fe3c1" stopOpacity=".12" />
+                <stop offset="1" stopColor="#4fe3c1" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <polygon points={area} fill="url(#lc-fill)" />
+            <polyline points={echo} fill="none" stroke="url(#lc-echo)" strokeWidth="1.2" strokeDasharray="4 6" />
+            <polyline points={curve} fill="none" stroke="url(#lc-stroke)" strokeWidth="2" strokeLinecap="round" />
             <line x1={phase * 600} y1="8" x2={phase * 600} y2="84" stroke="rgba(255,210,122,.6)" strokeWidth="1" />
-            <circle cx={phase * 600} cy="46" r="3" fill="#ffd27a" />
+            <circle cx={phase * 600} cy={CURVE_Y(phase)} r="4" fill="#ffd27a" />
+            <circle cx={phase * 600} cy={CURVE_Y(phase)} r="9" fill="none" stroke="rgba(255,210,122,.45)" />
           </svg>
+          <div className="lc-readout">
+            <span>T− <b>{((1 - phase) * 10).toFixed(1)}s</b> / phase <b>{String(Math.round(phase * 100)).padStart(2, "0")}%</b></span>
+            <span>{phaseLabel}</span>
+          </div>
         </div>
         <label className="bio-scrub">
           <span>T−</span>
-          <input type="range" min="0" max="1" step="0.01" value={phase} onChange={(event) => setPhase(Number(event.target.value))} aria-label="Scrub the signature transfer" />
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={phase}
+            onChange={(event) => scrub(Number(event.target.value))}
+            aria-label="Scrub the signature transfer"
+          />
           <span>APSIS</span>
+          <button
+            type="button"
+            className="bio-scrubplay"
+            data-playing={playing ? "true" : undefined}
+            aria-pressed={playing}
+            onClick={() => setPlaying((value) => !value)}
+          >
+            {playing ? "Hold" : "Play"}
+          </button>
         </label>
         <div className="bio-observer" aria-hidden="true">
           <MissionFigure variant="observer" />

@@ -96,6 +96,10 @@ instrument, not mascots.
 
 - Pulses travel along the selected vein; the membrane breathes; the specimen
   rotates slowly.
+- Signal advances its phase and light curve until held or scrubbed. Map flows a
+  gradient along the hop rail and restarts from the first hop when played at the
+  end. Prove seats a cursor on the waveform and highlights the output line it is
+  playing. The diver's bubbles rise inside the crew card.
 - One visible WebGL scene at a time; each pauses offscreen.
 - `prefers-reduced-motion` and the manual motion switch resolve to the 2D core,
   static Map, no countdown and no drift.

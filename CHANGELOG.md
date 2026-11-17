@@ -29,6 +29,17 @@
   with ghost act numerals, unique grids, panel radii and motion.
 - Detailed crew figures: an observatory controller in Signal, a field
   biologist in Decide and an EVA diver with a telemetry card in Prove.
+- The diver is drawn in full: gradient suit and limbs, twin tanks, harness,
+  chest console, hoses, wrist slate, knee pads, fins, helmet bolts, lamp beam
+  and rising bubbles.
+- A live Signal instrument: an auto-advancing phase, a gradient light curve
+  with area fill and an echo trace, a T−/phase readout, and a hold control
+  that stops when the scrubber is moved.
+- A hop rail with a flowing gradient progress bar, a pulsing play head and a
+  replay from the first hop; a seekable Prove waveform with a cursor, a line
+  readout and an active-line highlight that follows playback.
+- The Signal observatory copy is now a console slab carrying the H1, lede,
+  actions and fleet readout over the 3D transfer.
 - A guardrail mapping, a guardrail ledger and a Penumbra handoff card.
 - `schema/alert.schema.json`, `schema/evidence.schema.json`,
   `docs/INTEGRATIONS.md` and the observed-path case study under

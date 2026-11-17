@@ -1,0 +1,389 @@
+/* ==========================================================================
+   REFINEMENT PASS — gradient families, visible controls, live instruments.
+   ========================================================================== */
+
+#signal {
+  --grad-act: linear-gradient(135deg, #ffd27a 0%, #ff8fa3 46%, #4fe3c1 100%);
+  --grad-soft: linear-gradient(135deg, rgb(255 210 122 / 18%), rgb(255 143 163 / 10%) 46%, rgb(79 227 193 / 14%));
+}
+#map {
+  --grad-act: linear-gradient(135deg, #5b8cff 0%, #8b7bff 52%, #4fe3c1 100%);
+  --grad-soft: linear-gradient(135deg, rgb(91 140 255 / 18%), rgb(139 123 255 / 12%) 52%, rgb(79 227 193 / 12%));
+}
+#decide {
+  --grad-act: linear-gradient(135deg, #4fe3c1 0%, #7aa2ff 48%, #ff8fa3 100%);
+  --grad-soft: linear-gradient(135deg, rgb(79 227 193 / 18%), rgb(122 162 255 / 10%) 48%, rgb(255 143 163 / 12%));
+}
+#prove {
+  --grad-act: linear-gradient(135deg, #ff8fa3 0%, #ffd27a 54%, #8b7bff 100%);
+  --grad-soft: linear-gradient(135deg, rgb(255 143 163 / 18%), rgb(255 210 122 / 10%) 54%, rgb(139 123 255 / 12%));
+}
+
+.bio-btn--solid {
+  background: var(--grad-act) !important;
+  border-color: rgb(255 255 255 / 22%);
+  color: #06110f;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 35%), 0 10px 30px -18px rgb(0 0 0 / 90%);
+}
+.bio-btn--solid:hover { filter: brightness(1.08); }
+
+/* The observatory copy is a real console slab, not text floating on black. */
+.bio-observatory-copy {
+  min-height: 620px;
+  justify-content: center;
+  padding: 58px 56px 54px;
+  border-right: 1px solid rgb(158 188 255 / 16%);
+  border-left: 2px solid transparent;
+  border-image: var(--grad-act) 1;
+  background:
+    linear-gradient(120deg, rgb(255 210 122 / 16%), transparent 40%),
+    linear-gradient(160deg, rgb(6 24 32 / 97%), rgb(4 13 21 / 94%) 58%, rgb(4 9 16 / 72%));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    24px 0 90px -56px rgb(0 0 0 / 95%);
+  backdrop-filter: blur(7px);
+}
+.bio-observatory { min-height: 620px; }
+.bio-observatory > .bio-routefield {
+  left: 41%;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.bio-observatory > .bio-routefield .tag { display: none; }
+.bio-observatory > .bio-routefield::before {
+  inset: 8% 6% 8% 10%;
+  border-color: rgb(255 210 122 / 14%);
+  box-shadow: 0 0 90px rgb(79 227 193 / 12%), inset 0 0 90px rgb(79 227 193 / 8%);
+}
+.bio-observatory-copy .bio-title {
+  max-width: 13ch;
+  font-size: clamp(46px, 5.2vw, 82px);
+  line-height: 0.98;
+}
+.bio-observatory-copy .bio-eyebrow { color: var(--act); }
+.bio-observatory-copy .bio-eyebrow b { color: var(--act); }
+.bio-observatory-copy .bio-fleet {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 6px;
+}
+.bio-observatory-copy .bio-fleet div {
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: rgb(255 255 255 / 3%);
+}
+.bio-observatory-copy .bio-lede { max-width: 46ch; }
+.bio-observatory-copy .bio-lede { color: #dcfff6; }
+.bio-observatory-copy .bio-fleet b {
+  background: var(--grad-act);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+}
+.bio-observatory-copy .bio-fleet span { color: var(--read); }
+.bio-fleet b {
+  background: var(--grad-act);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* The instrument strip is a live control, not a static figure. */
+.bio-instrument {
+  border: 1px solid rgb(158 188 255 / 14%);
+  border-radius: 14px;
+  padding: 14px 16px 16px;
+  background:
+    linear-gradient(90deg, var(--grad-soft), transparent 62%),
+    rgb(3 14 18 / 62%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 7%);
+}
+.bio-lightcurve svg { height: 84px; }
+.bio-instrument-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+  font: 500 14px var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.bio-instrument-head b {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--faint);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+.bio-instrument-head b::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mute);
+}
+.bio-instrument-head b[data-playing="true"] { color: var(--act); }
+.bio-instrument-head b[data-playing="true"]::before {
+  background: var(--act);
+  box-shadow: 0 0 10px var(--act);
+  animation: instrument-led 1.6s ease-in-out infinite;
+}
+.bio-lightcurve .lc-readout {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4px;
+  font: 500 14px var(--mono);
+  color: var(--faint);
+}
+.bio-lightcurve .lc-readout b { color: var(--ink); font-weight: 500; }
+.bio-scrub button {
+  flex: none;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 6px;
+  background: var(--grad-act);
+  color: #06110f;
+  padding: 6px 10px;
+  font: 600 14px var(--mono);
+  cursor: pointer;
+}
+.bio-scrub input { height: 4px; }
+.bio-scrub .bio-scrubplay {
+  background: var(--grad-act);
+  border-color: rgb(255 255 255 / 22%);
+  color: #06110f;
+  font-weight: 600;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 10%), 0 0 18px -8px rgb(255 210 122 / 80%);
+}
+.bio-scrub .bio-scrubplay[data-playing="true"] { animation: play-pulse 1.5s ease-in-out infinite; }
+.bio-scrub input[type="range"] { accent-color: #ffd27a; }
+.bio-observer .mission-figure {
+  width: 150px;
+  filter: drop-shadow(0 0 16px rgb(255 210 122 / 26%));
+}
+@keyframes instrument-led {
+  50% { opacity: 0.35; box-shadow: 0 0 3px var(--act); }
+}
+
+/* Hop rail: a moving track, a glowing active hop, a pulsing play head. */
+.bio-hopbar {
+  border: 1px solid rgb(158 188 255 / 16%);
+  background:
+    linear-gradient(90deg, var(--grad-soft), transparent 55%),
+    rgb(4 14 22 / 64%);
+}
+.bio-hops {
+  position: relative;
+  padding: 3px 0 8px;
+}
+.bio-hops::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1px;
+  height: 2px;
+  background: rgb(158 188 255 / 14%);
+  border-radius: 2px;
+}
+.bio-hops::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 1px;
+  height: 2px;
+  width: var(--hop-progress, 0%);
+  background: var(--grad-act);
+  border-radius: 2px;
+  box-shadow: 0 0 14px rgb(255 210 122 / 55%);
+  transition: width 0.35s var(--ease);
+}
+.bio-hop[aria-current="true"] {
+  border-color: rgb(255 255 255 / 45%);
+  background: var(--grad-act);
+  color: #06110f;
+  font-weight: 600;
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 18%), 0 0 22px -2px rgb(255 210 122 / 65%);
+  animation: hop-pulse 1.9s ease-in-out infinite;
+}
+.bio-hop[data-past="true"] {
+  border-color: rgb(158 188 255 / 38%);
+  background: rgb(158 188 255 / 10%);
+  color: var(--ink);
+}
+.bio-play {
+  border-color: rgb(255 255 255 / 30%);
+  background: var(--grad-act);
+  color: #06110f;
+  font-weight: 600;
+  box-shadow: 0 0 18px -6px rgb(255 210 122 / 80%);
+}
+.bio-play[data-playing="true"] { animation: play-pulse 1.4s ease-in-out infinite; }
+.bio-hoprail {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 3px 10px 3px 0;
+  border-right: 1px solid rgb(158 188 255 / 16%);
+  font: 500 14px var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.15;
+  color: var(--faint);
+}
+.bio-hoprail b { color: var(--ink); font-weight: 500; }
+.bio-hoprail i { font-style: normal; color: var(--act); }
+.bio-hopbar[data-playing="true"] .bio-hops::after {
+  background-size: 220% 100%;
+  animation: hop-sheen 1.15s linear infinite;
+}
+@keyframes hop-sheen {
+  from { background-position: 0 0; }
+  to { background-position: 220% 0; }
+}
+.bio-hopdot {
+  position: absolute;
+  left: var(--hop-progress, 0%);
+  bottom: -3px;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background: var(--grad-act);
+  box-shadow: 0 0 0 2px rgb(3 12 20 / 85%), 0 0 16px 2px rgb(255 210 122 / 75%);
+  transition: left 0.35s var(--ease);
+  pointer-events: none;
+}
+.bio-hopbar[data-playing="true"] .bio-hopdot { animation: hop-dot 1.1s ease-in-out infinite; }
+@keyframes hop-dot {
+  50% { transform: scale(1.5); box-shadow: 0 0 0 2px rgb(3 12 20 / 85%), 0 0 26px 6px rgb(255 210 122 / 95%); }
+}
+@keyframes hop-pulse {
+  50% { box-shadow: 0 0 0 1px rgb(255 255 255 / 28%), 0 0 30px 2px rgb(255 210 122 / 90%); }
+}
+@keyframes play-pulse {
+  50% { box-shadow: 0 0 26px 2px rgb(255 210 122 / 85%); }
+}
+
+/* Waveform becomes a seek bar over the recorded output. */
+.bio-wavehead { gap: 12px; }
+.bio-wavehead .bio-reels { margin-left: auto; }
+.bio-wavehead button {
+  border-color: rgb(255 255 255 / 24%);
+  background: var(--grad-act);
+  color: #06110f;
+  font-weight: 600;
+  padding: 5px 10px;
+}
+.bio-wavetrack { height: 64px; cursor: crosshair; }
+.bio-wavetrack svg { height: 64px; }
+.bio-wavecursor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 2px;
+  margin-left: -1px;
+  background: linear-gradient(180deg, #ffd27a, #ff8fa3);
+  box-shadow: 0 0 14px #ffd27a, 0 0 4px #ff8fa3;
+  pointer-events: none;
+}
+.bio-wavecursor::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 14px var(--amber);
+}
+.bio-waveseek {
+  width: 100%;
+  margin-top: 6px;
+  accent-color: var(--amber);
+}
+.bio-waveread {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+  font: 500 14px var(--mono);
+  color: var(--faint);
+}
+.bio-waveread b { color: var(--ink); font-weight: 500; }
+.bio-waveread span {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 70%;
+}
+.bio-line[data-active="true"] {
+  background: linear-gradient(90deg, rgb(255 143 163 / 20%), rgb(255 210 122 / 8%) 55%, transparent);
+  box-shadow: inset 2px 0 0 var(--amber);
+  color: #ffffff;
+}
+.bio-crew .mission-figure { width: 176px; }
+.bio-crewmeta dl {
+  grid-template-columns: 66px 1fr;
+  gap: 3px 12px;
+}
+.bio-crewmeta dl > div { display: contents; }
+.bio-crewmeta dt { text-align: left; }
+
+/* Diver bubbles rise inside the figure. */
+.mission-figure--diver .diver-bubbles circle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: diver-bubble 5.4s ease-in-out infinite;
+}
+.mission-figure--diver .diver-bubbles circle:nth-child(2) { animation-delay: 1.1s; }
+.mission-figure--diver .diver-bubbles circle:nth-child(3) { animation-delay: 2.3s; }
+.mission-figure--diver .diver-bubbles circle:nth-child(4) { animation-delay: 0.7s; }
+.mission-figure--diver .diver-bubbles circle:nth-child(5) { animation-delay: 1.9s; }
+@keyframes diver-bubble {
+  0%, 100% { transform: translateY(6px); opacity: 0.12; }
+  35% { opacity: 0.6; }
+  70% { transform: translateY(-26px); opacity: 0.22; }
+}
+
+@media (max-width: 860px) {
+  .bio-observatory-copy {
+    min-height: 660px;
+    padding: 40px 24px 34px;
+    justify-content: flex-start;
+    border-right: 0;
+    border-image: none;
+    background:
+      linear-gradient(180deg, rgb(6 24 32 / 97%), rgb(4 13 21 / 90%) 58%, rgb(4 9 16 / 38%));
+  }
+  .bio-observatory > .bio-routefield { left: 0; }
+  .bio-observatory-copy .bio-title { font-size: clamp(40px, 10.5vw, 60px); }
+  .bio-observatory-copy .bio-fleet { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bio-instrument { padding: 12px; }
+  .bio-observer .mission-figure { width: 108px; }
+  .bio-hoprail { display: none; }
+  .bio-waveread span { max-width: 58%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bio-hop[aria-current="true"],
+  .bio-play[data-playing="true"],
+  .bio-scrub .bio-scrubplay[data-playing="true"],
+  .bio-instrument-head b[data-playing="true"]::before,
+  .bio-hopbar[data-playing="true"] .bio-hopdot,
+  .mission-figure--diver .diver-bubbles circle { animation: none; }
+  .bio-hops::after,
+  .bio-hopdot { transition: none; }
+}

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { ActHeader } from "../components/ActHeader";
 import { Organism } from "../map/Organism";
 import { buildOrganism } from "../lib/organism";
@@ -35,6 +36,7 @@ export function Map() {
   const sourceItem: GraphNode | null = source ? model.nodeById.get(source) ?? null : null;
   const hasRoutes = model.principals.length > 0 && bundle.stats.routes > 0;
   const activeStep = route ? Math.min(step, route.hops - 1) : 0;
+  const hopProgress = route && !cut ? ((activeStep + 1) / Math.max(1, route.hops)) * 100 : 0;
 
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -322,17 +324,29 @@ export function Map() {
         </aside>
       </div>
 
-      <div className="bio-hopbar">
+      <div className="bio-hopbar" data-playing={playing ? "true" : undefined}>
         <button
           type="button"
           className="bio-play"
+          data-playing={playing ? "true" : undefined}
+          aria-pressed={playing}
           aria-label={playing ? "Pause the walk" : "Play the walk"}
-          onClick={() => setPlaying((value) => !value)}
+          onClick={() => {
+            if (!playing && route && step >= route.hops - 1) setStep(0);
+            setPlaying((value) => !value);
+          }}
           disabled={!route || cut}
         >
           {playing ? "❚❚" : "▶"}
         </button>
-        <div className="bio-hops">
+        <span className="bio-hoprail">
+          <b>{cut ? "closed" : "walk"}</b>
+          <i>{String(Math.round(hopProgress)).padStart(2, "0")}%</i>
+        </span>
+        <div
+          className="bio-hops"
+          style={{ "--hop-progress": `${hopProgress}%` } as CSSProperties}
+        >
           {route && !cut
             ? route.edges.map((edge, index) => (
                 <button
@@ -348,6 +362,7 @@ export function Map() {
                 </button>
               ))
             : null}
+          <span className="bio-hopdot" aria-hidden="true" />
         </div>
         <span className="bio-hopcount">
           {route && !cut

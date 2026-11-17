@@ -158,10 +158,15 @@ npm run audit      # contrast, headings, names, target size
 | Prove | A command builder, the recorded output, the 3D field collapse, the zero, guardrails and the Penumbra handoff |
 
 Each act has its own instrument, palette and architecture, not just a recolour:
-Signal is a warm full-bleed observatory with a light curve and scrubber; Map is
-a blue magnetic workbench with a compass and field meter; Decide is an emerald
-bioluminescent lab with a sonar ping and species legend; Prove is a rose field
-recording with a playable waveform and collapse.
+Signal is a warm full-bleed observatory with a live, auto-advancing light curve
+and scrubber; Map is a blue magnetic workbench with a compass, a field meter and
+a flowing hop rail; Decide is an emerald bioluminescent lab with a sonar ping
+and species legend; Prove is a rose field recording with a seekable waveform
+that highlights the line it is playing, plus the collapse.
+
+The acts use four different gradient families — amber → rose → teal,
+blue → violet → mint, mint → blue → rose, and rose → amber → violet — carried
+through titles, buttons, readouts, instruments and figures.
 
 ![The Map section](docs/img/map.png)
 
