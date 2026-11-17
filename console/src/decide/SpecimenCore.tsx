@@ -88,7 +88,7 @@ export function SpecimenCore({ accounts, techniques, table, techId, accountKey, 
     renderer.setPixelRatio(Math.min(1.5, window.devicePixelRatio || 1));
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(38, 1, 1, 4000);
-    camera.position.set(0, 170, 1050);
+    camera.position.set(0, 210, 1150);
     camera.lookAt(0, 0, 0);
     const group = new THREE.Group();
     scene.add(group);

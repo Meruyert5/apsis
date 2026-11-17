@@ -1,0 +1,88 @@
+/* ==========================================================================
+   ACT IDENTITIES — one architecture per register, not four recolours.
+   ========================================================================== */
+
+#signal { --act: #ffd27a; --act-2: #4fe3c1; }
+#map { --act: #5b8cff; --act-2: #8b7bff; }
+#decide { --act: #4fe3c1; --act-2: #ff8fa3; }
+#prove { --act: #ff8fa3; --act-2: #ffd27a; }
+
+.bio-act > * { position: relative; z-index: 1; }
+.bio-act::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+}
+.bio-act::after {
+  position: absolute; right: 38px; top: 18px; z-index: 0;
+  font: 600 220px/1 var(--display); letter-spacing: -0.08em;
+  color: rgb(255 255 255 / 2.6%); pointer-events: none;
+}
+#signal::after { content: "01"; }
+#map::after { content: "02"; }
+#decide::after { content: "03"; }
+#prove::after { content: "04"; }
+
+#signal::before {
+  background:
+    radial-gradient(56% 44% at 74% 4%, rgb(255 210 122 / 12%), transparent 68%),
+    radial-gradient(40% 38% at 10% 70%, rgb(79 227 193 / 6%), transparent 72%);
+}
+#map::before {
+  background:
+    linear-gradient(rgb(91 140 255 / 4%) 1px, transparent 1px) 0 0 / 32px 32px,
+    linear-gradient(90deg, rgb(91 140 255 / 4%) 1px, transparent 1px) 0 0 / 32px 32px,
+    radial-gradient(50% 40% at 18% 2%, rgb(91 140 255 / 12%), transparent 70%);
+  mask-image: linear-gradient(180deg, #000, transparent 92%);
+}
+#decide::before {
+  background:
+    radial-gradient(46% 44% at 16% 12%, rgb(79 227 193 / 12%), transparent 70%),
+    radial-gradient(40% 36% at 88% 76%, rgb(255 143 163 / 7%), transparent 72%),
+    radial-gradient(rgb(120 255 220 / 8%) 1px, transparent 1px) 0 0 / 26px 26px;
+}
+#prove::before {
+  background:
+    repeating-linear-gradient(180deg, rgb(255 143 163 / 3.5%) 0 1px, transparent 1px 7px),
+    radial-gradient(52% 44% at 84% 8%, rgb(255 143 163 / 10%), transparent 70%);
+}
+
+#signal .bio-eyebrow b, #signal .bio-process-node b { color: var(--act); }
+#map .bio-eyebrow b, #map .bio-process-node b { color: var(--act); }
+#decide .bio-eyebrow b, #decide .bio-process-node b { color: var(--act); }
+#prove .bio-eyebrow b, #prove .bio-process-node b { color: var(--act); }
+
+#signal .bio-title em { background-image: linear-gradient(100deg, #ffd27a 0%, #4fe3c1 72%, #d6fff2 100%); }
+#map .bio-title em { background-image: linear-gradient(100deg, #9dbbff 0%, #5b8cff 48%, #8b7bff 100%); }
+#decide .bio-title em { background-image: linear-gradient(100deg, #d6fff2 0%, #4fe3c1 46%, #ff8fa3 100%); }
+#prove .bio-title em { background-image: linear-gradient(100deg, #ffc0ca 0%, #ff8fa3 46%, #ffd27a 100%); }
+
+#signal .bio-btn--solid { background: linear-gradient(135deg, #a9651c, #3fa88f); }
+#map .bio-btn--solid { background: linear-gradient(135deg, #2c62ff, #7b5cf0); }
+#decide .bio-btn--solid { background: linear-gradient(135deg, #1c9c80, #a83b5c); }
+#prove .bio-btn--solid { background: linear-gradient(135deg, #8f2444, #b07a2a); }
+
+#map .bio-panel { border-radius: 12px; background: linear-gradient(160deg, rgb(7 22 43 / 88%), rgb(2 8 18 / 95%)); }
+#map .bio-stage { border-radius: 10px; }
+#map .bio-kick { color: var(--act); }
+
+#decide .bio-ledger, #decide .bio-panel { border-radius: 32px 14px 32px 14px; }
+#decide .bio-ledger { background: linear-gradient(160deg, rgb(5 36 31 / 90%), rgb(2 12 11 / 95%)); }
+#decide .bio-tag--cool { border-color: rgb(255 143 163 / 45%); color: #ffc0ca; }
+
+#prove .bio-terminal { border-radius: 4px 22px 4px 22px; border-color: rgb(255 143 163 / 28%); }
+#prove .bio-rev .tr i { background: linear-gradient(90deg, var(--rose), var(--amber)); }
+#prove .bio-tag--hot { border-color: rgb(255 210 122 / 45%); color: var(--amber); }
+
+.bio-reels { display: flex; gap: 10px; align-items: center; }
+.bio-reels span {
+  position: relative; width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid rgb(255 143 163 / 45%);
+  background: radial-gradient(circle, rgb(255 143 163 / 14%) 0 22%, transparent 24%);
+}
+.bio-reels span::before, .bio-reels span::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 18px; height: 1px;
+  background: rgb(255 143 163 / 45%); transform-origin: left center;
+}
+.bio-reels span::before { transform: rotate(30deg); }
+.bio-reels span::after { transform: rotate(120deg); }
+.bio-reels[data-playing="true"] span { animation: bio-reel 3.2s linear infinite; }
+@keyframes bio-reel { to { transform: rotate(360deg); } }

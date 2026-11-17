@@ -210,6 +210,7 @@ export function Prove() {
           <div className="bio-wave">
             <div className="bio-wavehead">
               <span>Waveform / recorded output</span>
+              <div className="bio-reels" data-playing={playingWave ? "true" : undefined} aria-hidden="true"><span /><span /></div>
               <button type="button" onClick={() => setPlayingWave((value) => !value)}>
                 {playingWave ? "Pause" : "Play"}
               </button>

@@ -104,8 +104,8 @@ export function Signal() {
         }
       />
 
-      <div className="bio-signal-grid">
-        <div className="bio-signal-copy">
+      <div className="bio-observatory">
+        <div className="bio-observatory-copy">
           <div className="bio-actions">
             <button type="button" className="bio-btn bio-btn--solid" onClick={() => scrollToSection("map")}>
               Open the map →

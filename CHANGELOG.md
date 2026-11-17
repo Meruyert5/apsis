@@ -24,6 +24,9 @@
 - A light curve and scrubber in Signal; a compass, field meter and field toggle
   in Map; sonar rings, a ping, a whale and a species legend in Decide; a
   playable recorded waveform in Prove.
+- Act-specific palettes and architecture: a warm full-bleed observatory,
+  a blue magnetic workbench, an emerald organic lab and a rose field recording,
+  with ghost act numerals, unique grids, panel radii and motion.
 - A guardrail mapping, a guardrail ledger and a Penumbra handoff card.
 - `schema/alert.schema.json`, `schema/evidence.schema.json`,
   `docs/INTEGRATIONS.md` and the observed-path case study under

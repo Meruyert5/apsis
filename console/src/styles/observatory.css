@@ -1,0 +1,95 @@
+/* Signal is the only full-bleed observatory: copy over the field, not a card. */
+
+.bio-observatory {
+  position: relative;
+  min-height: 560px;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px 34px 4px 34px;
+  overflow: hidden;
+  background: #02090c;
+}
+.bio-observatory-scene,
+.bio-observatory-scene .bio-routefield {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+}
+.bio-observatory-scene .bio-routefield {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.bio-observatory-scene .bio-routefield .tag {
+  left: auto;
+  right: 18px;
+  color: var(--act);
+}
+.bio-observatory-scene .bio-routefield .bio-route-label--start {
+  left: 48%;
+}
+.bio-observatory-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  padding: 54px 48px 44px;
+  background: linear-gradient(90deg, rgb(2 9 12 / 96%) 0%, rgb(2 9 12 / 84%) 58%, transparent 100%);
+}
+.bio-observatory-copy .bio-title {
+  margin: 18px 0 14px;
+  max-width: 15ch;
+  font-size: clamp(44px, 5vw, 74px);
+}
+.bio-observatory-copy .bio-lede {
+  max-width: 54ch;
+}
+.bio-observatory-meta {
+  position: absolute;
+  right: 22px;
+  top: 20px;
+  z-index: 2;
+  text-align: right;
+  font: 500 14px var(--mono);
+  color: var(--mute);
+  line-height: 1.9;
+}
+.bio-observatory-meta b {
+  color: var(--ink);
+  font-weight: 500;
+}
+.bio-signal-act .bio-instrument {
+  margin-top: 14px;
+}
+
+@media (max-width: 900px) {
+  .bio-observatory {
+    min-height: 640px;
+  }
+  .bio-observatory-copy {
+    max-width: none;
+    padding: 34px 24px 30px;
+    background: linear-gradient(180deg, rgb(2 9 12 / 94%) 0%, rgb(2 9 12 / 76%) 52%, rgb(2 9 12 / 20%) 100%);
+  }
+  .bio-observatory-meta {
+    display: none;
+  }
+  .bio-observatory-scene .bio-routefield .bio-route-label--start {
+    left: 24px;
+  }
+  .bio-signal-act .bio-title {
+    font-size: clamp(36px, 10vw, 52px);
+  }
+}
+
+.bio-observatory > .bio-routefield {
+  position: absolute; inset: 0; min-height: 0; border: 0; border-radius: 0;
+  background: transparent;
+}
+.bio-observatory > .bio-routefield .tag { left: auto; right: 18px; }
+.bio-observatory-copy {
+  min-height: 560px; display: flex; flex-direction: column;
+  justify-content: flex-end; padding-bottom: 46px;
+}
+@media (max-width: 900px) {
+  .bio-observatory-copy { min-height: 640px; justify-content: flex-end; }
+}
