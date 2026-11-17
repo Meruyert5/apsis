@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apsis — Towards Limitless / three palettes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:ital,wght@0,400;0,500;0,600;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../lab.css" />
+  <style>
+    :root {
+      --ink: #f2f4f6;
+      --dim: #8b939a;
+      --line: rgb(242 244 246 / 16%);
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --display: "Archivo Black", Impact, sans-serif;
+      --serif: "Bodoni Moda", "Times New Roman", serif;
+      --sans: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #050607; color: var(--ink); font-family: var(--sans); }
+    .wrap { width: min(1400px, calc(100% - 40px)); margin: 0 auto; }
+    .mono { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+    header { padding: 40px 0 30px; border-bottom: 1px solid var(--line); }
+    .mast { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; color: var(--dim); }
+    .mast b { color: var(--ink); font-weight: 500; }
+    h1 { margin: 34px 0 0; max-width: 16ch; font: 600 clamp(38px, 5.2vw, 76px)/.98 var(--sans); letter-spacing: -.045em; }
+    h1 em { font-family: var(--serif); font-style: italic; font-weight: 400; }
+    .deck { max-width: 62ch; margin: 18px 0 0; color: #b6bdc3; font-size: 16px; line-height: 1.6; }
+    .deck b { color: var(--ink); font-weight: 500; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; padding: 26px 0 50px; }
+    .card { display: flex; flex-direction: column; border: 1px solid var(--line); background: #0a0b0c; text-decoration: none; color: inherit; transition: border-color .2s, transform .2s cubic-bezier(.16,1,.3,1); }
+    .card:hover { border-color: rgb(242 244 246 / 42%); transform: translateY(-3px); }
+    .card:focus-visible { outline: 2px solid #7aa2ff; outline-offset: 3px; }
+    .thumb { position: relative; overflow: hidden; aspect-ratio: 16 / 11; border-bottom: 1px solid var(--line); }
+
+    /* thermal thumb */
+    .t-thermal { background: radial-gradient(70% 60% at 70% 30%, rgb(0 240 255 / .18), transparent 70%), radial-gradient(60% 60% at 24% 76%, rgb(90 75 255 / .22), transparent 70%), #080c0e; }
+    .t-thermal::before { content: ""; position: absolute; inset: 0; opacity: .45; mix-blend-mode: overlay;
+      background-image: radial-gradient(rgb(255 255 255 / .85) .5px, transparent .9px); background-size: 3px 3px; }
+    .t-thermal .big { position: absolute; left: 7%; top: 18%; z-index: 2; font: 400 clamp(30px, 3.6vw, 52px)/.8 var(--display); letter-spacing: -.06em; text-transform: uppercase;
+      background: linear-gradient(100deg, #eff8ff, #ffa62b 40%, #ff3b5c 66%, #5a4bff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .t-thermal .it { position: absolute; left: 7%; top: 50%; z-index: 2; font: italic 400 clamp(30px, 3.8vw, 56px)/.8 var(--serif); letter-spacing: -.05em;
+      background: linear-gradient(100deg, #ff3b5c, #ffa62b); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .t-thermal .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: linear-gradient(90deg, #ff3b5c, #ffa62b, #00f0ff, #1eff8e, #5a4bff); }
+    .t-thermal .portal { position: absolute; right: 2%; top: 14%; width: 54%; height: 72%; border: 1px solid rgb(30 255 142 / 34%); border-radius: 50% 50% 0 0 / 65% 65% 0 0; }
+    .t-thermal .core { position: absolute; right: 28%; top: 42%; width: 9px; height: 9px; border-radius: 50%; background: #ffa62b; box-shadow: 0 0 18px #ffa62b; }
+
+    /* luxe thumb */
+    .t-luxe { background: #0d0303; }
+    .t-luxe .big { position: absolute; left: 7%; top: 16%; z-index: 2; font: 400 clamp(30px, 3.6vw, 52px)/.8 var(--display); letter-spacing: -.06em; text-transform: uppercase; color: #eff8ff; }
+    .t-luxe .it { position: absolute; left: 7%; top: 48%; z-index: 2; font: italic 400 clamp(30px, 3.8vw, 56px)/.8 var(--serif); letter-spacing: -.05em; color: #ff0055; text-shadow: 0 0 24px rgb(255 0 85 / .55); }
+    .t-luxe .sws { position: absolute; right: 6%; top: 16%; width: 26%; display: grid; gap: 4px; z-index: 2; }
+    .t-luxe .sws i { display: block; height: 18px; }
+    .t-luxe .sws i:nth-child(1) { background: #eff8ff; }
+    .t-luxe .sws i:nth-child(2) { background: #bbef1f; }
+    .t-luxe .sws i:nth-child(3) { background: #ff0055; }
+    .t-luxe .sws i:nth-child(4) { background: #0d0303; border: 1px solid rgb(239 248 255 / 34%); }
+    .t-luxe .frame { position: absolute; inset: 9px; border: 1px solid rgb(239 248 255 / 20%); }
+    .t-luxe .portal { position: absolute; right: 2%; top: 14%; width: 54%; height: 72%; border: 1px solid rgb(187 239 31 / 34%); border-radius: 50% 50% 0 0 / 65% 65% 0 0; }
+    .t-luxe .core { position: absolute; right: 28%; top: 42%; width: 9px; height: 9px; border-radius: 50%; background: #ff0055; box-shadow: 0 0 18px #ff0055; }
+
+    /* opul thumb */
+    .t-opul { background: radial-gradient(40% 26% at 70% 10%, rgb(255 200 55 / .42), transparent 70%), radial-gradient(42% 26% at 72% 34%, rgb(255 42 157 / .36), transparent 70%), radial-gradient(40% 28% at 66% 64%, rgb(110 123 255 / .32), transparent 70%), radial-gradient(38% 26% at 62% 90%, rgb(44 234 163 / .3), transparent 70%), #0a0708; }
+    .t-opul .big { position: absolute; left: 7%; top: 18%; z-index: 3; font: 400 clamp(30px, 3.6vw, 52px)/.8 var(--display); letter-spacing: -.06em; text-transform: uppercase; color: #fff; }
+    .t-opul .it { position: absolute; left: 7%; top: 50%; z-index: 3; font: italic 400 clamp(30px, 3.8vw, 56px)/.8 var(--serif); letter-spacing: -.05em; color: #fff; }
+    .t-opul .portal { position: absolute; right: 2%; top: 14%; width: 54%; height: 72%; border: 1px solid rgb(255 255 255 / 32%); border-radius: 50% 50% 0 0 / 65% 65% 0 0; }
+    .t-opul .core { position: absolute; right: 28%; top: 42%; width: 9px; height: 9px; border-radius: 50%; background: #ffc837; box-shadow: 0 0 18px #ffc837; }
+    .t-opul .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: linear-gradient(90deg, #ffc837, #ff6b2b, #ff2a9d, #6e7bff, #2ceaa3); }
+
+    .body { display: flex; flex-direction: column; flex: 1; padding: 16px 17px 18px; }
+    .row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .num { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--dim); }
+    .tag { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; padding: 3px 6px; border: 1px solid currentColor; }
+    .tag.a { color: #ffa62b; }
+    .tag.b { color: #bbef1f; }
+    .tag.c { color: #2ceaa3; }
+    .body h2 { margin: 10px 0 6px; font: 600 25px/1.05 var(--sans); letter-spacing: -.03em; }
+    .body p { margin: 0; color: #929aa1; font-size: 14px; line-height: 1.55; }
+    .swatches { display: flex; gap: 3px; margin: 14px 0 0; }
+    .swatches i { width: 22px; height: 7px; display: block; }
+    .open { margin-top: auto; padding-top: 15px; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+    .open::after { content: " ↗"; }
+    footer { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 18px 0 40px; border-top: 1px solid var(--line); color: var(--dim); }
+    footer b { color: var(--ink); font-weight: 500; }
+    @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } .thumb { aspect-ratio: 16 / 8; } }
+    @media (max-width: 600px) { .wrap { width: calc(100% - 28px); } h1 { font-size: clamp(34px, 10vw, 50px); } .thumb { aspect-ratio: 4 / 3; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <a class="lab-back" href="../../">← live console</a>
+
+  <header>
+    <div class="wrap">
+      <div class="mast mono">
+        <span><b>Apsis</b> / Signal 01 / palette studies</span>
+        <span>17 Nov 2026 / read-only</span>
+      </div>
+      <h1>Three palettes. One <em>poster.</em></h1>
+      <p class="deck">
+        The same v5 template, re-graded three ways. Same layout, same point-cloud
+        cluster, same real data —
+        <b>16 accounts, 194 identities, 144 routes, 37 edges cut, 07 hops, 0 writes</b>.
+        Only the palette, light and surface change.
+      </p>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <div class="grid">
+      <a class="card" href="./thermal/">
+        <div class="thumb t-thermal" aria-hidden="true">
+          <span class="big">Towards</span>
+          <span class="it">Limitless</span>
+          <span class="portal"></span><span class="core"></span>
+          <span class="bar"></span>
+        </div>
+        <div class="body">
+          <div class="row"><span class="num">01 / thermal</span><span class="tag a">Iridescent</span></div>
+          <h2>Thermal / Iridescent</h2>
+          <p>The v5 poster in obsidian, coral, amber, cyan, mint and ultraviolet. Heavy stippled noise over the same rainy-street composition.</p>
+          <div class="swatches"><i style="background:#080c0e"></i><i style="background:#ff3b5c"></i><i style="background:#ffa62b"></i><i style="background:#00f0ff"></i><i style="background:#1eff8e"></i><i style="background:#5a4bff"></i></div>
+          <span class="open">Open thermal</span>
+        </div>
+      </a>
+
+      <a class="card" href="./luxe/">
+        <div class="thumb t-luxe" aria-hidden="true">
+          <span class="frame"></span>
+          <span class="big">Towards</span>
+          <span class="it">Limitless</span>
+          <span class="portal"></span><span class="core"></span>
+        </div>
+        <div class="body">
+          <div class="row"><span class="num">02 / neon luxe</span><span class="tag b">Two accents</span></div>
+          <h2>Neon Luxe</h2>
+          <p>The approved v5 poster, recoloured: pitch black, ice off-white, acid lime and hot crimson magenta. Same cluster, same route.</p>
+          <div class="swatches"><i style="background:#0d0303;border:1px solid #333"></i><i style="background:#eff8ff"></i><i style="background:#bbef1f"></i><i style="background:#ff0055"></i></div>
+          <span class="open">Open neon luxe</span>
+        </div>
+      </a>
+
+      <a class="card" href="./opul/">
+        <div class="thumb t-opul" aria-hidden="true">
+          <span class="big">Towards</span>
+          <span class="it">Limitless</span>
+          <span class="portal"></span><span class="core"></span>
+          <span class="bar"></span>
+        </div>
+        <div class="body">
+          <div class="row"><span class="num">03 / opul 77</span><span class="tag c">Gradient</span></div>
+          <h2>OPUL 77</h2>
+          <p>The same poster with a sunset-to-bioluminescent wash: golden yellow, tangerine, hot pink, periwinkle and seafoam against a black void.</p>
+          <div class="swatches"><i style="background:#0a0708;border:1px solid #333"></i><i style="background:#ffc837"></i><i style="background:#ff6b2b"></i><i style="background:#ff2a9d"></i><i style="background:#6e7bff"></i><i style="background:#2ceaa3"></i></div>
+          <span class="open">Open OPUL 77</span>
+        </div>
+      </a>
+    </div>
+  </main>
+
+  <footer class="wrap mono">
+    <span><b>Apsis</b> / towards limitless / three palettes</span>
+    <span>16 accounts · 194 identities · 144 routes · 37 edges cut</span>
+    <span>Designed by Meruyert Oshayeva</span>
+  </footer>
+</body>
+</html>

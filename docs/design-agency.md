@@ -247,3 +247,17 @@ The palette is emerald #03140F, crimson #FF3B1F, orange #FF6B35, acid lime #C8FF
 
 Next: take this Signal mock to the live app, then extend the same world to Map, Decide and Prove.
 
+
+---
+
+## Revision 6 - three palette studies on the v5 template
+
+Three colour grades of the approved v5 poster at `/design-lab/v6/`. The layout, type, grid, portal, copy, data strip and the point-cloud account cluster are unchanged. Only the palette, background light and surface texture move.
+
+01 Thermal / Iridescent - obsidian #080C0E with coral #FF3B5C, amber #FFA62B, cyan #00F0FF, phosphor mint #1EFF8E and ultraviolet #5A4BFF. Heavy stipple rises over the same street composition.
+
+02 Neon Luxe - pitch black #0D0303, ice off-white #EFF8FF, acid lime #BBEF1F and hot crimson magenta #FF0055. Crisp, almost grain-free, two accents and one ice.
+
+03 OPUL 77 - a pitch-black #0A0708 void with a sunset-to-bioluminescent wash: golden yellow #FFC837, tangerine #FF6B2B, hot pink #FF2A9D, periwinkle #6E7BFF and seafoam #2CEAA3. Typography stays white.
+
+No new 3D objects: all three use the v5 cluster and route, recoloured through the shared palette table.

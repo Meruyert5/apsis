@@ -200,8 +200,22 @@ and the other three acts. The revision log is in
 `/design-lab/v5/` combines the chosen languages: **Acid grid + Limbo point
 cloud + Cinematic Lo-fi**. Deep emerald shadows, crimson-orange halation, acid
 lime rules, a wet street, film dust and editorial serif italics. The 3D object
-is a point-cloud account cluster — 16 bodies, 144 routes, a red route — inside
+is a point-cloud account cluster - 16 bodies, 144 routes, a red route - inside
 an acid portal, not an orrery.
+
+### Three palette studies (current)
+
+`/design-lab/v6/` keeps the v5 template untouched - same grid, title, copy,
+point-cloud cluster and route - and re-grades it three ways:
+
+- 01 **Thermal / Iridescent** - obsidian shadows, coral, amber, cyan, mint and
+  ultraviolet, heavy stipple.
+- 02 **Neon Luxe** - pitch black, ice off-white, acid lime and hot crimson
+  magenta, crisp and almost grain-free.
+- 03 **OPUL 77** - a sunset-to-bioluminescent wash behind white typography,
+  from golden yellow through hot pink to periwinkle and seafoam.
+
+Only the palette, background light and surface noise change. No new objects.
 
 ### Previous explorations
 

@@ -100,6 +100,24 @@ const STYLES = {
     accent: 0xff6b35, additive: true, glow: true, glowOpacity: 0.85,
     cameraZ: 11.8, fov: 40, grid: false, auto: 0.0006, starScale: 2.6,
   },
+  thermal: {
+    ring: 0x00f0ff, ringOpacity: 0.4, node: 0x1eff8e, line: 0xff3b5c,
+    accent: 0xffa62b, additive: true, glow: true, glowOpacity: 0.85,
+    cameraZ: 11.8, fov: 40, grid: false, auto: 0.00065, starScale: 2.6,
+    nodeColors: [0xff3b5c, 0xffa62b, 0x00f0ff, 0x1eff8e, 0x5a4bff],
+  },
+  luxe: {
+    ring: 0xbbef1f, ringOpacity: 0.38, node: 0xeff8ff, line: 0xff0055,
+    accent: 0xff0055, additive: true, glow: true, glowOpacity: 0.6,
+    cameraZ: 11.8, fov: 40, grid: false, auto: 0.00055, starScale: 2.2,
+    nodeColors: [0xbbef1f, 0xff0055, 0xeff8ff],
+  },
+  opul: {
+    ring: 0x2ceaa3, ringOpacity: 0.4, node: 0xff2a9d, line: 0xff6b2b,
+    accent: 0xffc837, additive: true, glow: true, glowOpacity: 0.8,
+    cameraZ: 11.8, fov: 40, grid: false, auto: 0.0006, starScale: 2.5,
+    nodeColors: [0xffc837, 0xff6b2b, 0xff2a9d, 0x6e7bff, 0x2ceaa3],
+  },
 };
 
 function glowTexture() {
@@ -376,7 +394,8 @@ function cluster(palette) {
     const x = Math.cos(a) * r;
     const z = Math.sin(a) * r;
     const y = Math.sin(i * 1.7) * 1.05;
-    const color = i % 5 === 0 ? 0xff3b1f : i % 3 === 0 ? 0xc8ff00 : 0x4fe3ff;
+    const nodeColors = palette.nodeColors || [0xff3b1f, 0xc8ff00, 0x4fe3ff];
+    const color = nodeColors[i % nodeColors.length];
     const geo = i % 2 === 0 ? new THREE.BoxGeometry(0.36, 0.36, 0.36) : new THREE.IcosahedronGeometry(0.26, 1);
     const node = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({
       color, transparent: true, opacity: 0.92,
@@ -412,8 +431,9 @@ function cluster(palette) {
   root.add(core);
   nodes.forEach((point, i) => {
     if (i % 3 !== 0) return;
+    const haloColors = palette.nodeColors || [0xff3b1f, 0x4fe3ff];
     const halo = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: glow, color: i % 6 === 0 ? 0xff3b1f : 0x4fe3ff, transparent: true, opacity: 0.55,
+      map: glow, color: haloColors[(i + 1) % haloColors.length], transparent: true, opacity: 0.55,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }));
     halo.position.copy(point);

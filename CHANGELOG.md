@@ -35,6 +35,11 @@
   Lo-fi rainy street, in emerald, crimson, acid lime and cyan. A real WebGL
   account cluster with a red route, acid portal, film grain and editorial
   serif italics.
+- Three palette studies at `console/public/design-lab/v6/`, all using the exact
+  v5 template and the same point-cloud cluster: Thermal / Iridescent (obsidian,
+  coral, amber, cyan, mint, ultraviolet, heavy stipple), Neon Luxe (pitch black,
+  ice off-white, acid lime, hot crimson magenta) and OPUL 77 (a
+  sunset-to-bioluminescent wash behind white type). Palette and light only.
 - A live Signal instrument: auto-advancing phase, gradient light curve with
   area fill and echo, T−/phase readout, and a hold control that stops on scrub.
 - A hop rail with a flowing gradient progress bar, a pulsing play head and a
