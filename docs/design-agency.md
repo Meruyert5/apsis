@@ -275,3 +275,7 @@ The right-hand Figure / Apsis panel is the name test. An apsis is an orbit's clo
 Typography is Sora for figures and headings, IBM Plex Sans for reading, IBM Plex Mono for telemetry labels, and Georgia italic for the editorial accent. Palette: pitch #0D0303, ice #EFF8FF, acid lime #BBEF1F, crimson magenta #FF0055.
 
 The old console is untouched. This entry is the base for the next product pass; it can become the default route once the shape is approved.
+
+### Dashboard refinement
+
+Second pass on the Neon Luxe dashboard. Removed the palette card and every style label. The base is now neutral charcoal (#0E0F11 / #16181B) with off-white reading type; lime and crimson are accents only, for the primary action, the cut figure, the shortest route and critical state. Type sizes and spacing were raised across the shell, figures, atlas, table and evidence. Table severity became a dot plus word, route step techniques moved to hover titles, and duplicate metadata was removed. The dashboard URL is unchanged: `/dashboard.html`.

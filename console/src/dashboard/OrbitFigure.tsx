@@ -79,20 +79,21 @@ export function OrbitFigure({
 
         <text className="orbit-label end" x="300" y="55" textAnchor="end">
           <tspan className="orbit-key">APOGEE</tspan>
-          <tspan x="300" dy="12">{String(deepest).padStart(2, "0")} HOPS / ADMIN</tspan>
+          <tspan x="300" dy="12">{String(deepest).padStart(2, "0")} hops</tspan>
         </text>
         <line className="orbit-rule" x1="238" y1="60" x2={apogee.x + 8} y2={apogee.y - 7} />
 
         <text className="orbit-label start" x="36" y="228">
           <tspan className="orbit-key">PERIGEE</tspan>
-          <tspan x="36" dy="12">{String(shortest).padStart(2, "0")} HOP / CLOSEST</tspan>
+          <tspan x="36" dy="12">{String(shortest).padStart(2, "0")} hop</tspan>
         </text>
         <line className="orbit-rule" x1="96" y1="218" x2={perigee.x - 7} y2={perigee.y + 7} />
       </svg>
 
       <p className="orbit-caption">
-        An <em>apsis</em> is an orbit&rsquo;s closest or farthest point. Perigee is the {String(shortest).padStart(2, "0")}-hop
-        route; apogee is the {String(deepest).padStart(2, "0")}-hop route to the administrator. The dashboard watches both.
+        An <em>apsis</em> is an orbit&rsquo;s closest or farthest point. Perigee is the{" "}
+        {String(shortest).padStart(2, "0")}-hop route; apogee is the{" "}
+        {String(deepest).padStart(2, "0")}-hop route to the administrator.
       </p>
 
       <div className="orbit-metrics">

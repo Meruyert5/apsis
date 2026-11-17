@@ -105,7 +105,6 @@ export function RouteAtlas({ route, account }: { route: Route; account: string }
         <g className="atlas-cut">
           <line x1={cutX - 7} y1={cutY - 7} x2={cutX + 7} y2={cutY + 7} />
           <line x1={cutX + 7} y1={cutY - 7} x2={cutX - 7} y2={cutY + 7} />
-          <text x={cutX - 12} y={cutY - 12} textAnchor="end">SEVERED</text>
         </g>
 
         {points.map((point, index) => {
@@ -131,18 +130,16 @@ export function RouteAtlas({ route, account }: { route: Route; account: string }
       </svg>
 
       <div className="atlas-legend" aria-hidden="true">
-        <span><i className="dot mag" />CLOSEST ROUTE</span>
-        <span><i className="dot lime" />ADMINISTRATOR</span>
-        <span><i className="dot ice" />IDENTITY</span>
-        <span className="push">07 HOPS / 08 NODES</span>
+        <span><i className="dot mag" />Closest route</span>
+        <span><i className="dot lime" />Administrator</span>
+        <span><i className="dot ice" />Identity</span>
       </div>
 
       <ol className="hoplist">
         {route.steps.map((step, index) => (
-          <li key={`${step.edge}-${index}`}>
+          <li key={`${step.edge}-${index}`} title={step.technique.replaceAll("_", " ")}>
             <span>{String(index + 1).padStart(2, "0")}</span>
             <b>{step.name}</b>
-            <em>{step.technique.replaceAll("_", " ")}</em>
           </li>
         ))}
       </ol>
