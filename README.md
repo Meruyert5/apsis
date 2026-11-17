@@ -174,28 +174,33 @@ the two-pass direction log are in
 
 Two comparison surfaces live under `console/public/design-lab/`.
 
-### Five worlds (current)
+### Ten exact style plates (current)
 
-Five Signal-act vertical slices, each with real Apsis data and a real WebGL
-stage. Start at `/design-lab/v2/`:
+One page, ten full-viewport style plates, each with the real Apsis data and a
+different object that carries the account. Start at `/design-lab/v4/`:
 
-- 01 **GRIT** — deconstructed print, halftone orrery, one hot vermilion
-- 02 **The Quiet Survey** — atmospheric field poster, dusk 3D landscape
-- 03 **The Flight Deck** — analog hardware panel, amber orbital display
-- 04 **The Field Notebook** — expedition log, taped specimen plate
-- 05 **The Broadcast** — CRT signal room, phosphor transmission
+- 01 **Acid Graphics** - strict grid, halftone body, barcodes, cyan/red-orange
+- 02 **Neo-Vintage Travel** - double frame, red sun, mountain route, hanko, Seigaiha
+- 03 **Neon Bloom** - solid/outline type, CMYK blossom, crop windows, EN/RU
+- 04 **Limbo** - point-cloud cluster, synthwave grid, arched portal, phosphor green
+- 05 **Astronomicon** - vertical spine, megastructure, rust desert, archive metadata
+- 06 **Silent Authority** - crown of thorns + sword, serif, aphorisms, sepia gold
+- 07 **Surveillance** - goat skeleton X-ray, thermal scanner windows, HUD, Cyrillic
+- 08 **Atomic Apsis** - lowercase echo, chrome helix, clinical protocol, off-white
+- 09 **Vampire** - lips and fangs, gothic serif, film grain, vertical katakana
+- 10 **Mesmerize** - liquid type, thermal jellyfish, lens cutouts, black void
 
-Each world is a Signal-only mock: the 3D stage drags, zooms, resets, falls back
-to 2D and respects reduced motion. The chosen world extends to Map, Decide and
-Prove. The conversation and revision log are in
+The objects are custom per style - not a recoloured orrery. The page is a style
+capture for choosing the world; the chosen direction gets the live WebGL object
+and the other three acts. The revision log is in
 [docs/design-agency.md](docs/design-agency.md).
 
-### First exploration
+### Previous explorations
 
-The first five-direction lab is at `/design-lab/` (01 The Observatory, 02
-Orbital Ops, 03 Swiss Instrument, 04 Bioluminescent Field, 05 Terminal). It is
-kept as the evidence trail; the v2 worlds supersede it as the current review.
-The live console currently follows the Orbital Ops direction.
+The first five-direction lab is at `/design-lab/`, the five worlds at
+`/design-lab/v2/`, and the first ten-style pass at `/design-lab/v3/`. They are
+kept as the evidence trail. The live console currently follows the Orbital Ops
+direction.
 
 ## Data and scope
 

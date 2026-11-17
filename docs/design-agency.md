@@ -210,3 +210,25 @@ live operations: **The Broadcast**. The designer would prototype **The Quiet
 Survey** and **GRIT** first because they are the two poles; the next step is one
 Signal slice in the chosen world, then Map.
 
+
+---
+
+## Revision 4 - ten exact style plates (current)
+
+The five worlds were still interpretations. This pass treats the ten supplied descriptions as the brief and builds one full-viewport plate per style in a single comparison page: `/design-lab/v4/`.
+
+Each plate has the real Apsis data (16 accounts, 194 identities, 144 routes, 37 edges cut, 07 hops) and a different object that carries the account. The object is chosen for the style, not reused from an orrery:
+
+01 Acid - a halftone data body with a red/cyan route ribbon and motion blur.
+02 Neo-Vintage - a low-poly Fuji with a red route climbing to the summit, torii markers, hanko and Seigaiha.
+03 Neon - a 16-petal CMYK blossom with a magenta glow, crop windows and EN/RU microcopy.
+04 Limbo - a phosphor point-cloud cluster of cubes/spheres inside an arched portal and synthwave grid.
+05 Astronomicon - a ringed megastructure in a rust desert, with tiny figures and archival metadata.
+06 Silent Authority - a crown of thorns around a greatsword, haloed in sepia gold and blood red.
+07 Surveillance - a goat skeleton X-ray with thermal amber/cyan scanner windows and HUD reticles.
+08 Atomic Apsis - a chrome DNA helix on off-white, with the lowercase echo and protocol commands.
+09 Vampire - lips and fangs in a 90s flash close-up, gothic serif, film grain and vertical katakana.
+10 Mesmerize - a thermal jellyfish with liquid type, lens cutouts and marginal descriptors.
+
+The plates are style frames, not the final build: the chosen direction becomes the live 3D object and the other three acts. The first pass (v2) and the earlier style pass (v3) are kept as evidence only.
+

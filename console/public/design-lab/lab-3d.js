@@ -55,6 +55,46 @@ const STYLES = {
     accent: 0xffb000, additive: true, glow: true, glowOpacity: 0.55,
     cameraZ: 12.6, fov: 40, grid: true, gridColor: 0x1a3a2a, auto: 0.0005, starScale: 2.4,
   },
+  neon: {
+    ring: 0xff4fa3, ringOpacity: 0.32, node: 0x62e6ff, line: 0xff4fa3,
+    accent: 0xffb3d9, additive: true, glow: true, glowOpacity: 0.85,
+    cameraZ: 12, fov: 40, grid: false, auto: 0.0007, starScale: 2.8,
+  },
+  pointcloud: {
+    ring: 0x3dff88, ringOpacity: 0.38, node: 0x3dff88, line: 0x3dff88,
+    accent: 0xb6ffcf, additive: true, glow: true, glowOpacity: 0.55,
+    cameraZ: 12.5, fov: 42, grid: true, gridColor: 0x0f3a22, auto: 0.0005, starScale: 1.8,
+  },
+  retro: {
+    ring: 0x9a8f7a, ringOpacity: 0.38, node: 0xd7c9a8, line: 0xc46a3a,
+    accent: 0xd08a5a, additive: false, glow: false,
+    cameraZ: 13, fov: 38, grid: false, auto: 0.00028, starScale: 1.4,
+  },
+  fantasy: {
+    ring: 0x6a5a4a, ringOpacity: 0.42, node: 0xe8d8b8, line: 0x9a1f2e,
+    accent: 0xe8d8b8, additive: false, glow: true, glowOpacity: 0.38,
+    cameraZ: 12.4, fov: 36, grid: false, auto: 0.00028, starScale: 2.4,
+  },
+  surveillance: {
+    ring: 0x6f7a7a, ringOpacity: 0.38, node: 0xffb000, line: 0x62e6ff,
+    accent: 0xff5a1f, additive: true, glow: true, glowOpacity: 0.6,
+    cameraZ: 12, fov: 40, grid: false, auto: 0.0004, starScale: 1.8,
+  },
+  chrome: {
+    ring: 0x111111, ringOpacity: 0.72, node: 0x111111, line: 0x111111,
+    accent: 0x8a949c, additive: false, glow: false,
+    cameraZ: 12, fov: 38, grid: false, auto: 0.00032, starScale: 1.4,
+  },
+  vampire: {
+    ring: 0x8a3a3a, ringOpacity: 0.36, node: 0xe8c8a8, line: 0xd94b4b,
+    accent: 0xffd9b0, additive: false, glow: true, glowOpacity: 0.42,
+    cameraZ: 12.2, fov: 36, grid: false, auto: 0.00022, starScale: 2.6,
+  },
+  bioluminescent: {
+    ring: 0x4fffe0, ringOpacity: 0.3, node: 0xc9b8ff, line: 0xff8fa3,
+    accent: 0x4fffe0, additive: true, glow: true, glowOpacity: 0.8,
+    cameraZ: 12, fov: 40, grid: false, auto: 0.0004, starScale: 2.2,
+  },
 };
 
 function glowTexture() {

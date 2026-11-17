@@ -24,6 +24,12 @@
   Each is a vertical slice with real data, a real WebGL stage, drag/zoom, a 2D
   fallback and a reduced-motion path. The revision log is in
   `docs/design-agency.md`.
+- Ten exact style plates under `console/public/design-lab/v4/`, one page with a
+  full-viewport plate per reference: Acid Graphics, Neo-Vintage Travel, Neon
+  Bloom, Limbo, Astronomicon, Silent Authority, Surveillance, Atomic Apsis,
+  Vampire and Mesmerize. Each style has a different object carrying the account
+  (halftone body, Fuji, blossom, point cloud, megastructure, crown/sword,
+  skeleton, chrome helix, fangs, jellyfish) rather than a recoloured orrery.
 - A live Signal instrument: auto-advancing phase, gradient light curve with
   area fill and echo, T−/phase readout, and a hold control that stops on scrub.
 - A hop rail with a flowing gradient progress bar, a pulsing play head and a

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apsis — 03 Neon Bloom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../lab.css" />
+  <style>
+    :root {
+      --black: #050505;
+      --white: #f4f0eb;
+      --pink: #ff2fa3;
+      --hot: #ff6fc8;
+      --coral: #ff6b4a;
+      --cyan: #62e6ff;
+      --violet: #7a3cff;
+      --display: "Archivo Black", Impact, sans-serif;
+      --sans: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--black); color: var(--white); font-family: var(--sans); overflow-x: hidden; }
+    body::after { content: ""; position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: .06; mix-blend-mode: screen; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='.7'/></svg>"); }
+    .mono { font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .sr { position: absolute; left: -9999px; }
+    .frame { position: fixed; inset: 10px; z-index: 80; border: 1px solid rgb(244 240 235 / 40%); pointer-events: none; }
+    .wrap { width: min(1500px, calc(100% - 34px)); margin: 0 auto; }
+
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 18px 0 8px; font-family: var(--mono); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; color: rgb(244 240 235 / 60%); }
+    .top b { color: var(--white); font-weight: 500; }
+    .top .brand { display: inline-flex; gap: 8px; align-items: center; font-family: var(--display); font-size: 15px; letter-spacing: .03em; color: var(--white); }
+    .top .brand i { width: 8px; height: 8px; background: var(--pink); display: inline-block; box-shadow: 0 0 12px var(--pink); }
+    .top .mid { display: flex; gap: 18px; }
+    .top .hot { color: var(--pink); }
+
+    .poster { position: relative; min-height: calc(100vh - 68px); margin-bottom: 22px; border: 1px solid rgb(244 240 235 / 22%); overflow: hidden; isolation: isolate; background: radial-gradient(60% 50% at 72% 48%, rgb(255 47 163 / 14%), transparent 68%), #050505; }
+    .art { position: absolute; inset: 0 0 0 26%; z-index: 1; }
+    .art .lab3d { position: absolute; inset: 0; }
+    .art .lab3d-label { color: var(--cyan); border-color: rgb(98 230 255 / 45%); background: rgb(5 5 5 / 72%); }
+    .art .lab3d-title { color: var(--pink); }
+    .art .lab3d-controls button { border-color: rgb(255 47 163 / 45%); background: rgb(5 5 5 / 72%); color: var(--pink); }
+    .art::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background-image: radial-gradient(rgb(255 255 255 / 20%) 1px, transparent 1px); background-size: 4px 4px; mix-blend-mode: overlay; opacity: .45; }
+    .poster::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(90deg, rgb(5 5 5 / 96%) 0%, rgb(5 5 5 / 76%) 42%, transparent 62%), repeating-linear-gradient(180deg, rgb(255 255 255 / 3%) 0 1px, transparent 1px 4px); }
+    .copy { position: absolute; left: clamp(18px, 4vw, 58px); top: clamp(20px, 6vh, 70px); z-index: 3; width: min(54%, 720px); pointer-events: none; }
+    .copy a, .copy button { pointer-events: auto; }
+    .kicker { display: flex; gap: 9px; align-items: center; margin: 0 0 12px; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--pink); }
+    .kicker i { width: 50px; height: 1px; background: var(--pink); }
+    h1 { margin: 0; max-width: 10ch; font: 400 clamp(48px, 7.6vw, 114px)/.82 var(--display); letter-spacing: -.055em; text-transform: uppercase; }
+    h1 .outline { color: transparent; -webkit-text-stroke: 1px var(--white); text-shadow: none; }
+    h1 .chromatic { color: var(--white); text-shadow: 4px 0 var(--pink), -4px 0 var(--cyan); }
+    .lede { max-width: 38ch; margin: 18px 0 0; color: rgb(244 240 235 / 78%); font-size: 13px; line-height: 1.6; }
+    .ru { margin: 14px 0 0; font-family: var(--mono); font-size: 8px; line-height: 1.6; letter-spacing: .12em; text-transform: uppercase; color: var(--cyan); }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 0 12px; border: 1px solid rgb(244 240 235 / 38%); background: rgb(5 5 5 / 62%); color: var(--white); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+    .btn:hover { border-color: var(--pink); color: var(--pink); }
+    .btn--hot { background: var(--pink); border-color: var(--pink); color: var(--black); }
+    .btn--hot:hover { background: var(--cyan); border-color: var(--cyan); color: var(--black); }
+
+    .windows { position: absolute; right: 5%; top: 16%; z-index: 4; display: grid; gap: 10px; pointer-events: none; }
+    .win { width: 150px; border: 1px solid rgb(244 240 235 / 50%); background: #050505; padding: 4px; }
+    .win .swatch { height: 56px; background: linear-gradient(135deg, #ff2fa3, #ff6b4a 45%, #ffd2a8); filter: blur(.2px); }
+    .win:nth-child(2) .swatch { background: linear-gradient(135deg, #62e6ff, #4a8cff 48%, #7a3cff); }
+    .win span { display: block; padding: 4px 2px 1px; font-family: var(--mono); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; color: var(--white); }
+
+    .strip { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) 1.2fr; border-top: 1px solid rgb(244 240 235 / 32%); background: rgb(5 5 5 / 86%); backdrop-filter: blur(8px); }
+    .strip div { padding: 10px 14px; border-right: 1px solid rgb(244 240 235 / 16%); }
+    .strip div:last-child { border-right: 0; }
+    .strip b { display: block; font: 400 26px/.9 var(--display); color: var(--white); }
+    .strip span { display: block; margin-top: 3px; font-family: var(--mono); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; color: rgb(244 240 235 / 55%); }
+    .strip .tag { display: flex; flex-direction: column; justify-content: center; gap: 3px; font-family: var(--mono); font-size: 8px; color: var(--cyan); text-transform: uppercase; }
+    .strip .tag b { font-family: var(--display); font-size: 16px; color: var(--pink); }
+
+    .foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 0 0 18px; font-family: var(--mono); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; color: rgb(244 240 235 / 48%); }
+    .foot b { color: var(--white); font-weight: 500; }
+    .foot a { color: var(--white); text-decoration: none; border-bottom: 1px solid rgb(244 240 235 / 30%); }
+
+    @media (max-width: 900px) {
+      .poster { min-height: 780px; }
+      .art { inset: 0; opacity: .62; }
+      .copy { width: 84%; }
+      .windows { display: none; }
+      .strip { grid-template-columns: 1fr 1fr; }
+      .strip .tag { grid-column: 1 / -1; }
+    }
+    @media (max-width: 620px) {
+      .wrap { width: calc(100% - 24px); }
+      .top .mid { display: none; }
+      .copy { top: 22px; width: calc(100% - 36px); }
+      h1 { font-size: clamp(44px, 12.8vw, 64px); }
+      .poster { min-height: 720px; }
+      .art { opacity: .5; }
+      .strip b { font-size: 22px; }
+      .foot { padding-bottom: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="sr" href="#main">Skip to content</a>
+  <a class="lab-back" href="./index.html">← ten styles</a>
+  <div class="frame" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header class="top">
+      <div class="brand"><i></i>APSIS / NEON BLOOM</div>
+      <div class="mid"><span>STYLE 03 / ACID + Y2K</span><span>SIGNAL / 01</span><span><b>READ-ONLY</b></span><span class="hot">HOT PIXELS / ULTRA PINK</span></div>
+      <span>18.05.2026</span>
+    </header>
+
+    <main id="main">
+      <section class="poster" aria-labelledby="title">
+        <div class="art">
+          <div class="lab3d" data-3d data-scene="orrery" data-style="neon"
+               style="--ld-bg:#050505;--ld-ink:#f4f0eb;--ld-mute:#ff8fd0;--ld-line:rgba(255,47,163,.4);--ld-accent:#ff2fa3">
+            <canvas aria-hidden="true"></canvas>
+            <div class="lab3d-fallback" data-3d-fallback>
+              <svg viewBox="0 0 720 520" role="img" aria-label="A neon orbit diagram">
+                <g fill="none" stroke="#ff4fa3" stroke-opacity=".5">
+                  <ellipse cx="360" cy="270" rx="300" ry="166" transform="rotate(-8 360 270)" />
+                  <ellipse cx="360" cy="270" rx="230" ry="126" transform="rotate(12 360 270)" />
+                  <ellipse cx="360" cy="270" rx="160" ry="88" transform="rotate(-18 360 270)" />
+                </g>
+                <path d="M 110 360 C 190 210 300 156 414 198 S 588 330 520 384 S 320 424 360 270" fill="none" stroke="#ff4fa3" stroke-width="2" />
+                <g fill="#62e6ff"><circle cx="110" cy="360" r="4" /><circle cx="236" cy="218" r="4" /><circle cx="342" cy="168" r="4" /><circle cx="462" cy="218" r="4" /><circle cx="520" cy="328" r="4" /></g>
+                <circle cx="360" cy="270" r="8" fill="#ffb3d9" />
+                <g font-family="IBM Plex Mono, monospace" font-size="10" fill="#62e6ff"><text x="84" y="386">[AP-01]</text><text x="204" y="206">[TOOLS_INTERN]</text><text x="452" y="206">[LIVE-OPS]</text><text x="528" y="350">[ADMIN]</text></g>
+              </svg>
+            </div>
+            <div class="lab3d-hud" aria-hidden="true">
+              <span class="lab3d-title">3D / neon object</span>
+              <span class="lab3d-label" style="--x:74%;--y:40%">TOOLS INTERN / 07</span>
+              <span class="lab3d-label" style="--x:82%;--y:64%">ADMIN</span>
+              <span class="lab3d-hint">drag / scroll / dbl-click reset</span>
+            </div>
+            <div class="lab3d-controls"><button type="button" data-3d-toggle>Use 2D</button></div>
+          </div>
+        </div>
+
+        <div class="windows" aria-hidden="true">
+          <div class="win"><div class="swatch"></div><span>Hot pixels / 01</span></div>
+          <div class="win"><div class="swatch"></div><span>Ultra pink / 02</span></div>
+        </div>
+
+        <div class="copy">
+          <p class="kicker">STYLE 03 / NEON BLOOM <i></i></p>
+          <h1 id="title"><span class="chromatic">EVERY</span><br />ROUTE<br /><span class="outline">REACHES</span><br />ITS APSIS.</h1>
+          <p class="lede">A glowing specimen of an account: 16 bodies, 144 routes, one primary. The scene is a neon bloom; the numbers are still exact.</p>
+          <p class="ru">КАЖДЫЙ МАРШРУТ ДОСТИГАЕТ АПСИСА / 144 ROUTES</p>
+          <div class="actions">
+            <a class="btn btn--hot" href="#" aria-label="Signal mock action">Open the bloom →</a>
+            <a class="btn" href="#" aria-label="Signal mock action">Read the evidence</a>
+          </div>
+        </div>
+
+        <div class="strip" aria-label="Fleet readout">
+          <div><b>16</b><span>accounts</span></div>
+          <div><b>194</b><span>identities</span></div>
+          <div><b>144</b><span>routes</span></div>
+          <div><b>37</b><span>edges cut</span></div>
+          <div class="tag"><b>HOT PIXELS / ULTRA PINK</b>SIGNAL / 01 / 07 HOPS / 0 WRITES</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span><b>03 / Neon Bloom</b> / Acid Graphics + Y2K rave poster</span>
+      <a href="./index.html">← all ten styles</a>
+      <a href="../index.html">← first five directions</a>
+    </footer>
+  </div>
+
+  <script type="module" src="../lab-3d.js"></script>
+</body>
+</html>
