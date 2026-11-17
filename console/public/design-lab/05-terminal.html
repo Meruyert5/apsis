@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apsis — Direction 05 / Terminal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="lab.css" />
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #0a0a0a;
+      --ink: #f2f2ee;
+      --mute: #8a8a8a;
+      --faint: #5e5e5e;
+      --acid: #c8ff00;
+      --red: #ff3b30;
+      --blue: #5b8cff;
+      --line: #2a2a2a;
+      --line-2: #1c1c1c;
+      --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+      --ease: cubic-bezier(.16,1,.3,1);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.62;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 88;
+      pointer-events: none;
+      background: repeating-linear-gradient(180deg, rgb(255 255 255 / 2.2%) 0 1px, transparent 1px 4px);
+      mix-blend-mode: screen;
+      opacity: .4;
+    }
+    .wrap { width: min(1500px, calc(100% - 56px)); margin: 0 auto; }
+    .mono { font-family: var(--mono); }
+    .muted { color: var(--mute); }
+    .acid { color: var(--acid); }
+    .red { color: var(--red); }
+    .blue { color: var(--blue); }
+    a { color: inherit; }
+    .sr { position: absolute; left: -9999px; }
+
+    /* top */
+    .top { position: sticky; top: 0; z-index: 40; background: rgb(5 5 5 / 92%); border-bottom: 1px solid var(--line); backdrop-filter: blur(10px); }
+    .top .wrap { display: flex; align-items: center; gap: 24px; height: 58px; }
+    .brand { display: inline-flex; align-items: center; gap: 8px; font: 700 15px/1 var(--mono); letter-spacing: .06em; text-decoration: none; }
+    .brand i { width: 8px; height: 8px; background: var(--acid); display: inline-block; }
+    .nav { display: flex; gap: 4px; }
+    .nav a { padding: 7px 8px; border: 1px solid transparent; font: 400 11px/1 var(--mono); letter-spacing: .04em; text-decoration: none; color: var(--mute); }
+    .nav a:hover { border-color: var(--line); color: var(--ink); }
+    .nav a[aria-current="page"] { border-color: var(--line); color: var(--acid); }
+    .status { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font: 400 11px/1 var(--mono); color: var(--mute); }
+    .status i { width: 7px; height: 7px; border-radius: 50%; background: var(--acid); box-shadow: 0 0 8px var(--acid); animation: led 1.4s steps(2) infinite; }
+    @keyframes led { 50% { opacity: .2; } }
+
+    /* hero */
+    .hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.05fr); gap: 34px; align-items: stretch; padding: 42px 0 34px; border-bottom: 1px solid var(--line); }
+    .prompt { margin: 0 0 12px; font: 400 12px/1.6 var(--mono); color: var(--mute); }
+    .prompt b { color: var(--acid); font-weight: 500; }
+    h1 { margin: 0; max-width: 19ch; font: 700 clamp(36px, 4.5vw, 64px)/.98 var(--mono); letter-spacing: -.06em; text-transform: uppercase; }
+    h1 .cursor { display: inline-block; width: .56em; height: .78em; margin-left: .08em; background: var(--acid); vertical-align: -.04em; animation: blink 1.05s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .lede { max-width: 62ch; margin: 22px 0 0; color: #c9c9c3; font: 400 14px/1.7 var(--mono); }
+    .lede b { color: var(--ink); font-weight: 500; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 13px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: background .14s var(--ease), color .14s var(--ease), border-color .14s var(--ease); }
+    .btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .btn--acid { background: var(--acid); border-color: var(--acid); color: var(--bg); }
+    .btn--acid:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+    .btn--red { border-color: var(--red); color: var(--red); }
+    .btn--red:hover { background: var(--red); color: var(--bg); }
+    .fleet { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: 28px; border: 1px solid var(--line); }
+    .fleet div { padding: 9px 11px; border-right: 1px solid var(--line); }
+    .fleet div:last-child { border-right: 0; }
+    .fleet b { display: block; font: 700 26px/1 var(--mono); letter-spacing: -.04em; color: var(--acid); }
+    .fleet span { display: block; margin-top: 3px; font: 400 10px/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--mute); }
+
+    .hero-right { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    .hero-3d { height: 490px; border: 1px solid var(--line); background: #050505; }
+    .hero-3d::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: repeating-linear-gradient(180deg, rgb(200 255 0 / 3.5%) 0 1px, transparent 1px 5px); mix-blend-mode: screen; }
+    .hero-3d .lab3d-hud { z-index: 3; }
+    .hero-3d .lab3d-label { border-radius: 0; }
+    .figline { display: flex; justify-content: space-between; gap: 12px; color: var(--faint); font: 400 10px/1.6 var(--mono); letter-spacing: .04em; text-transform: uppercase; }
+    .figline b { color: var(--acid); font-weight: 500; }
+
+    /* sections */
+    .section { padding: 52px 0; border-bottom: 1px solid var(--line); }
+    .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding-bottom: 14px; margin-bottom: 20px; border-bottom: 1px solid var(--line); }
+    .section-head h2 { margin: 0; font: 700 clamp(22px, 2.8vw, 38px)/1.1 var(--mono); letter-spacing: -.04em; text-transform: uppercase; }
+    .section-head h2 span { color: var(--acid); }
+    .section-head p { max-width: 58ch; margin: 0; color: var(--mute); font: 400 12px/1.6 var(--mono); }
+    .kicker { margin: 0 0 8px; color: var(--faint); font: 400 10px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+
+    .type-grid { display: grid; grid-template-columns: 1.2fr 1fr .8fr; gap: 0; border: 1px solid var(--line); }
+    .type-card { padding: 16px; border-right: 1px solid var(--line); }
+    .type-card:last-child { border-right: 0; }
+    .type-card .label { font: 400 10px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
+    .type-card .sample { margin: 14px 0 0; }
+    .sample-display { font: 700 34px/.95 var(--mono); letter-spacing: -.06em; text-transform: uppercase; }
+    .sample-body { font: 400 13px/1.65 var(--mono); color: #c9c9c3; }
+    .sample-mono { font: 400 12px/1.8 var(--mono); color: var(--ink); }
+    .sample-mono b { color: var(--acid); font-weight: 500; }
+    .type-card p { margin: 10px 0 0; color: var(--faint); font: 400 11px/1.55 var(--mono); }
+    .palette { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 14px; border: 1px solid var(--line); }
+    .swatch { min-height: 82px; padding: 9px; display: flex; flex-direction: column; justify-content: flex-end; border-right: 1px solid var(--line); }
+    .swatch:last-child { border-right: 0; }
+    .swatch b { font: 500 10px/1.2 var(--mono); }
+    .swatch span { font: 400 9px/1.2 var(--mono); opacity: .65; }
+
+    /* TUI */
+    .tui { border: 1px solid var(--line); background: #070707; }
+    .tui-head { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 8px 11px; border-bottom: 1px solid var(--line); color: var(--mute); font: 400 10px/1.5 var(--mono); }
+    .tui-head b { color: var(--acid); font-weight: 500; }
+    .tui-badge { padding: 2px 6px; border: 1px solid var(--line); color: var(--mute); }
+    .tui-grid { display: grid; grid-template-columns: 280px minmax(0, 1fr) 330px; }
+    .tree { border-right: 1px solid var(--line); padding: 8px; }
+    .tree .th { display: flex; justify-content: space-between; padding: 4px 6px 8px; border-bottom: 1px solid var(--line); color: var(--faint); font: 400 9px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .trow { display: grid; grid-template-columns: 28px 1fr 24px; gap: 5px; align-items: center; width: 100%; min-height: 31px; padding: 4px 6px; border: 0; border-bottom: 1px solid var(--line-2); background: none; color: #c9c9c3; text-align: left; font: 400 11px/1.4 var(--mono); cursor: pointer; }
+    .trow:hover { background: #111; color: var(--ink); }
+    .trow[aria-selected="true"] { background: #121a00; color: var(--acid); box-shadow: inset 2px 0 0 var(--acid); }
+    .trow b { color: var(--faint); font-weight: 400; }
+    .trow em { color: var(--faint); font-style: normal; text-align: right; }
+    .tui-stage { position: relative; min-height: 460px; padding: 12px; overflow: hidden; border-right: 1px solid var(--line); }
+    .tui-stage .tag { position: absolute; left: 12px; top: 10px; color: var(--faint); font: 400 9px/1.5 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .tui-stage .tag b { color: var(--acid); font-weight: 500; }
+    .ascii { margin: 26px 0 0; color: var(--acid); font: 400 12px/1.15 var(--mono); white-space: pre; overflow: auto; }
+    .ascii .dim { color: #355000; }
+    .ascii .node { color: var(--ink); }
+    .ascii .risk { color: var(--red); }
+    .tui-stage .hint { position: absolute; left: 12px; bottom: 10px; color: var(--faint); font: 400 9px/1.5 var(--mono); }
+    .tui-right { padding: 12px; }
+    .tui-right h4 { margin: 0 0 4px; color: var(--ink); font: 700 20px/1.1 var(--mono); letter-spacing: -.04em; text-transform: uppercase; }
+    .tui-right .sub { margin: 0 0 10px; color: var(--faint); font: 400 10px/1.5 var(--mono); }
+    .tui-right .tagrow { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+    .ttag { padding: 3px 5px; border: 1px solid var(--line); color: var(--mute); font: 400 9px/1.2 var(--mono); text-transform: uppercase; }
+    .ttag.hot { border-color: var(--acid); color: var(--acid); }
+    .ttag.risk { border-color: var(--red); color: var(--red); }
+    .tlist { list-style: none; margin: 0; padding: 0; }
+    .tlist li { padding: 6px 0; border-top: 1px solid var(--line-2); color: #c9c9c3; font: 400 10px/1.5 var(--mono); }
+    .tlist b { color: var(--acid); font-weight: 400; }
+    .tlist em { display: block; color: var(--faint); font-style: normal; }
+    .tui-actions { display: flex; gap: 6px; margin-top: 10px; }
+    .tui-actions .btn { min-height: 34px; padding: 0 9px; font-size: 10px; }
+    .cmdbar { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-top: 1px solid var(--line); color: var(--faint); font: 400 11px/1.5 var(--mono); }
+    .cmdbar b { color: var(--acid); font-weight: 400; }
+    .cmdbar .grow { flex: 1; }
+    .cmdbar button { min-height: 32px; padding: 0 9px; border: 1px solid var(--acid); background: var(--acid); color: var(--bg); font: 500 10px/1 var(--mono); text-transform: uppercase; cursor: pointer; }
+
+    /* kit */
+    .kit { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); }
+    .comp { min-height: 170px; padding: 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .comp:nth-child(3n) { border-right: 0; }
+    .comp .clabel { display: flex; justify-content: space-between; gap: 8px; margin: 0 0 12px; color: var(--faint); font: 400 9px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .comp .clabel b { color: var(--acid); font-weight: 400; }
+    .stack { display: flex; flex-direction: column; gap: 6px; }
+    .inline { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .field { display: flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 9px; border: 1px solid var(--line); background: #070707; color: var(--faint); font: 400 11px/1 var(--mono); }
+    .field b { color: var(--acid); font-weight: 400; }
+    .field input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--ink); font: 400 11px/1 var(--mono); }
+    .field input::placeholder { color: var(--faint); }
+    .tabrow { display: flex; gap: 4px; flex-wrap: wrap; }
+    .tabrow button { min-height: 32px; padding: 0 8px; border: 1px solid var(--line); background: transparent; color: var(--mute); font: 400 10px/1 var(--mono); cursor: pointer; }
+    .tabrow button[aria-pressed="true"] { border-color: var(--acid); color: var(--acid); background: #121a00; }
+    .term { padding: 10px; border: 1px solid var(--line); background: #070707; color: #c9c9c3; font: 400 10px/1.75 var(--mono); }
+    .term .ok { color: var(--acid); }
+    .term .path { color: var(--blue); }
+    .term .risk { color: var(--red); }
+    .table { width: 100%; border-collapse: collapse; font: 400 10px/1.5 var(--mono); }
+    .table th { padding: 5px 4px; border-bottom: 1px solid var(--line); text-align: left; color: var(--faint); font-weight: 400; }
+    .table td { padding: 6px 4px; border-bottom: 1px solid var(--line-2); color: #c9c9c3; }
+    .table td:last-child { text-align: right; color: var(--ink); }
+    .progress { color: var(--acid); font: 400 12px/1 var(--mono); letter-spacing: .02em; }
+    .progress span { color: var(--line); }
+    .toggle { display: inline-flex; align-items: center; gap: 8px; color: var(--mute); font: 400 10px/1 var(--mono); cursor: pointer; }
+    .toggle input { position: absolute; opacity: 0; }
+    .toggle .box { width: 16px; height: 16px; border: 1px solid var(--line); display: inline-grid; place-items: center; color: var(--acid); font: 500 11px/1 var(--mono); }
+    .toggle input:checked + .box::after { content: "x"; }
+    .toggle input:focus-visible + .box { outline: 1px solid var(--acid); outline-offset: 3px; }
+    .callout { padding: 8px 10px; border-left: 2px solid var(--red); background: #100605; color: #c9c9c3; font: 400 10px/1.6 var(--mono); }
+    .callout b { color: var(--red); font-weight: 500; }
+    .caption { color: var(--faint); font: 400 9px/1.7 var(--mono); }
+    .caption b { color: var(--ink); font-weight: 500; }
+
+    /* 3D + rules */
+    .three-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); }
+    .three-card { padding: 14px; border-right: 1px solid var(--line); }
+    .three-card:last-child { border-right: 0; }
+    .three-card h3 { margin: 0 0 6px; color: var(--acid); font: 400 10px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .three-card p { margin: 0; color: var(--mute); font: 400 11px/1.55 var(--mono); }
+    .three-card p b { color: var(--ink); font-weight: 500; }
+    .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line); }
+    .rulecol { padding: 14px; border-right: 1px solid var(--line); }
+    .rulecol:last-child { border-right: 0; }
+    .rulecol h3 { margin: 0 0 8px; color: var(--acid); font: 400 10px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .rulecol li { padding: 6px 0; border-top: 1px solid var(--line-2); color: #c9c9c3; font: 400 10px/1.5 var(--mono); list-style: none; }
+    .rulecol li::before { content: "—"; display: inline-block; width: 14px; color: var(--faint); }
+
+    footer { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; padding: 16px 0 54px; color: var(--faint); font: 400 10px/1.5 var(--mono); text-transform: uppercase; }
+    footer b { color: var(--ink); font-weight: 500; }
+
+    @media (max-width: 1100px) {
+      .hero { grid-template-columns: 1fr; gap: 22px; }
+      .tui-grid { grid-template-columns: 240px minmax(0, 1fr); }
+      .tui-right { grid-column: 1 / -1; border-top: 1px solid var(--line); }
+      .kit { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .comp:nth-child(3n) { border-right: 1px solid var(--line); }
+      .comp:nth-child(2n) { border-right: 0; }
+      .type-grid { grid-template-columns: 1fr 1fr; }
+      .type-card:last-child { grid-column: 1 / -1; border-top: 1px solid var(--line); }
+      .three-grid { grid-template-columns: 1fr 1fr; }
+      .three-card:nth-child(2n) { border-right: 0; }
+      .three-card:nth-child(n+3) { border-top: 1px solid var(--line); }
+    }
+    @media (max-width: 760px) {
+      .wrap { width: calc(100% - 32px); }
+      .top .wrap { height: 54px; gap: 10px; }
+      .nav { display: none; }
+      h1 { font-size: clamp(31px, 9vw, 44px); }
+      .hero-3d { height: 390px; }
+      .fleet { grid-template-columns: 1fr 1fr; }
+      .fleet div:nth-child(2) { border-right: 0; }
+      .tui-grid { grid-template-columns: 1fr; }
+      .tree { border-right: 0; border-bottom: 1px solid var(--line); }
+      .tui-stage { min-height: 360px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .kit { grid-template-columns: 1fr; }
+      .comp { border-right: 0; }
+      .type-grid { grid-template-columns: 1fr; }
+      .type-card { border-right: 0; border-bottom: 1px solid var(--line); }
+      .type-card:last-child { grid-column: auto; border-top: 0; border-bottom: 0; }
+      .palette { grid-template-columns: 1fr 1fr; }
+      .swatch { border-bottom: 1px solid var(--line); }
+      .three-grid, .rules { grid-template-columns: 1fr; }
+      .three-card, .rulecol { border-right: 0; border-bottom: 1px solid var(--line); }
+      .section-head { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="sr" href="#main">Skip to content</a>
+  <a class="lab-back" href="./index.html">← all directions</a>
+
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="#top" aria-label="Apsis, back to the top"><i></i>APSIS://</a>
+      <nav class="nav" aria-label="Directions">
+        <a href="01-observatory.html">[01_OBSERVATORY]</a>
+        <a href="02-orbital-ops.html">[02_ORBITAL_OPS]</a>
+        <a href="03-swiss-instrument.html">[03_SWISS]</a>
+        <a href="04-bioluminescent.html">[04_BIOLUMINESCENT]</a>
+        <a href="05-terminal.html" aria-current="page">[05_TERMINAL]</a>
+      </nav>
+      <span class="status"><i></i> READ_ONLY / 04 DECKS</span>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero wrap" id="top">
+      <div>
+        <p class="prompt"><b>mara@apsis</b>:~$ apsis scan --account games-studio --limit 3</p>
+        <h1>Every route reaches its apsis<span class="cursor" aria-hidden="true"></span></h1>
+        <p class="lede">
+          <b>The account as a command-line instrument.</b> No glass, no glow, no
+          radius. One monospace family, two neutrals and one acid accent. The
+          console is the chrome; the data is the design.
+        </p>
+        <div class="actions">
+          <a class="btn btn--acid" href="#console">$ open the console</a>
+          <a class="btn" href="#kit">read the evidence</a>
+          <a class="btn btn--red" href="#console">sever --dry-run</a>
+        </div>
+        <div class="fleet" aria-label="Fleet readout">
+          <div><b>16</b><span>accounts</span></div>
+          <div><b>194</b><span>identities</span></div>
+          <div><b>144</b><span>routes</span></div>
+          <div><b>32</b><span>revocations</span></div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="lab3d hero-3d" data-3d data-scene="orrery" data-style="terminal"
+             style="--ld-bg:#050505;--ld-ink:#f2f2ee;--ld-mute:#8a8a8a;--ld-line:rgba(242,242,238,.2);--ld-accent:#c8ff00">
+          <canvas aria-hidden="true"></canvas>
+          <div class="lab3d-fallback" data-3d-fallback>
+            <svg viewBox="0 0 720 500" role="img" aria-label="A wireframe orbit diagram">
+              <g fill="none" stroke="#c8ff00" stroke-opacity=".55">
+                <ellipse cx="360" cy="250" rx="300" ry="166" transform="rotate(-8 360 250)" />
+                <ellipse cx="360" cy="250" rx="230" ry="126" transform="rotate(12 360 250)" />
+                <ellipse cx="360" cy="250" rx="160" ry="88" transform="rotate(-18 360 250)" />
+              </g>
+              <path d="M 110 340 L 190 210 L 300 160 L 414 198 L 520 300 L 430 360 L 360 250" fill="none" stroke="#c8ff00" stroke-width="1.4" stroke-dasharray="3 4" />
+              <g fill="#c8ff00"><circle cx="110" cy="340" r="3" /><circle cx="190" cy="210" r="3" /><circle cx="300" cy="160" r="3" /><circle cx="414" cy="198" r="3" /><circle cx="520" cy="300" r="3" /><circle cx="430" cy="360" r="3" /></g>
+              <circle cx="360" cy="250" r="6" fill="#f2f2ee" />
+              <g font-family="JetBrains Mono, monospace" font-size="10" fill="#8a8a8a">
+                <text x="84" y="364">[AP-01]</text><text x="204" y="206">[TOOLS_INTERN]</text><text x="452" y="206">[LIVE-OPS]</text><text x="528" y="326">[ADMIN]</text>
+              </g>
+            </svg>
+          </div>
+          <div class="lab3d-hud" aria-hidden="true">
+            <span class="lab3d-title">3D / wireframe orrery</span>
+            <span class="lab3d-label" style="--x:13%;--y:76%">[AP-01]</span>
+            <span class="lab3d-label" style="--x:30%;--y:27%">[TOOLS_INTERN]</span>
+            <span class="lab3d-label" style="--x:76%;--y:29%">[LIVE-OPS]</span>
+            <span class="lab3d-label" style="--x:82%;--y:76%">[ADMIN]</span>
+            <span class="lab3d-hint">drag / scroll / dbl-click reset</span>
+          </div>
+          <div class="lab3d-controls"><button type="button" data-3d-toggle>Use 2D</button></div>
+        </div>
+        <div class="figline"><span>FIG. 01 — SIGNATURE TRANSFER / 5 HOPS</span><b>WEBGL / WIREFRAME / 2D FALLBACK</b></div>
+      </div>
+    </section>
+
+    <section class="section wrap" id="foundations">
+      <div class="section-head">
+        <h2>One family. Two neutrals. One <span>acid</span>.</h2>
+        <p>Monospace is the entire voice. The accent is reserved for the live route and the primary action. Borders are 1px; radius is 0; shadow is never.</p>
+      </div>
+      <div class="type-grid">
+        <div class="type-card"><div class="label">Display / JetBrains Mono 700</div><p class="sample sample-display">Every route<br />reaches apsis<span style="color:var(--acid)">_</span></p><p>Upper case, tight, one statement per screen.</p></div>
+        <div class="type-card"><div class="label">Reading / JetBrains Mono 400</div><p class="sample sample-body">Apsis reads an AWS account as an orbital system: bodies on hop shells, the administrator at the primary.</p><p>Body is mono too. The interface is the terminal.</p></div>
+        <div class="type-card"><div class="label">Data / JetBrains Mono</div><p class="sample sample-mono">$ apsis scan --account games<br /><b>144 routes</b> / 37 edges cut<br />07 hops / 07 steps / 2 cuts</p><p>No second data face. The command is the caption.</p></div>
+      </div>
+      <div class="palette" aria-label="Palette">
+        <div class="swatch" style="background:#050505;color:#f2f2ee"><b>Black</b><span>#050505</span></div>
+        <div class="swatch" style="background:#f2f2ee;color:#050505"><b>Paper</b><span>#F2F2EE</span></div>
+        <div class="swatch" style="background:#c8ff00;color:#050505"><b>Acid</b><span>#C8FF00</span></div>
+        <div class="swatch" style="background:#ff3b30;color:#050505"><b>Risk</b><span>#FF3B30</span></div>
+        <div class="swatch" style="background:#5b8cff;color:#050505"><b>Link</b><span>#5B8CFF</span></div>
+      </div>
+    </section>
+
+    <section class="section wrap" id="console">
+      <div class="section-head">
+        <h2>The console, as a <span>TUI</span>.</h2>
+        <p>Left tree, centre model, right route. No card, no shadow. The command bar is the primary action. The TUI is a real screen, not ASCII decoration.</p>
+      </div>
+      <div class="tui">
+        <div class="tui-head"><span><b>apsis</b> map / games-studio / 555566667777</span><span class="tui-badge">2D + 3D</span></div>
+        <div class="tui-grid">
+          <div class="tree">
+            <div class="th"><span>principal</span><span>hops</span></div>
+            <button class="trow"><b>01</b><span>backup-role</span><em>01</em></button>
+            <button class="trow"><b>02</b><span>player-support</span><em>01</em></button>
+            <button class="trow"><b>03</b><span>live-ops-engineer</span><em>02</em></button>
+            <button class="trow"><b>04</b><span>live-services-role</span><em>03</em></button>
+            <button class="trow"><b>05</b><span>game-server-role</span><em>04</em></button>
+            <button class="trow"><b>06</b><span>art-pipeline-role</span><em>05</em></button>
+            <button class="trow"><b>07</b><span>build-role</span><em>06</em></button>
+            <button class="trow"><b>08</b><span>outsource-artist</span><em>07</em></button>
+            <button class="trow" aria-selected="true"><b>09</b><span>tools-intern</span><em>07</em></button>
+          </div>
+          <div class="tui-stage">
+            <span class="tag"><b>magnetic orrery</b> / star / shells / flux</span>
+            <pre class="ascii" aria-hidden="true">
+                    <span class="dim">·</span>   <span class="dim">·</span>   <span class="node">o</span>   <span class="dim">·</span>   <span class="dim">·</span>
+                <span class="dim">·</span>       <span class="dim">╭───────────╮</span>       <span class="dim">·</span>
+            <span class="node">o</span>           <span class="dim">│</span>     <span class="risk">@</span>     <span class="dim">│</span>           <span class="node">o</span>
+                <span class="dim">·</span>       <span class="dim">╰───────────╯</span>       <span class="dim">·</span>
+                    <span class="dim">·</span>   <span class="dim">·</span>   <span class="node">o</span>   <span class="dim">·</span>   <span class="dim">·</span>
+
+              <span class="dim">01</span> backup-role     <span class="dim">→</span>  <span class="dim">02</span> player-support
+                  <span class="dim">↘</span> <span class="node">03</span> live-ops-engineer <span class="dim">→</span> <span class="node">04</span> live-services
+                      <span class="dim">↘</span> <span class="node">05</span> game-server-role <span class="dim">→</span> <span class="node">06</span> art-pipeline
+                          <span class="dim">↘</span> <span class="node">07</span> build-role <span class="dim">→</span> <span class="node">08</span> outsource
+                              <span class="dim">↘</span> <span class="risk">09</span> tools-intern <span class="dim">→</span> <span class="risk">@ admin</span>
+            </pre>
+            <span class="hint">drag the 3D stage above / this is the projected TUI fallback</span>
+          </div>
+          <div class="tui-right">
+            <p class="kicker">route / 07 hops · theoretical</p>
+            <h4>tools-intern</h4>
+            <p class="sub">user → administrator / 7 steps / 2 cuts</p>
+            <div class="tagrow"><span class="ttag hot">07 hops</span><span class="ttag">07 steps</span><span class="ttag risk">sever</span></div>
+            <ul class="tlist">
+              <li><b>01</b> sts:AssumeRole<em>cross-role assumption</em></li>
+              <li><b>02</b> iam:PassRole<em>pass role into lambda</em></li>
+              <li><b>03</b> sts:AssumeRole<em>cross-role assumption</em></li>
+              <li><b>04</b> sts:AssumeRole<em>cross-role assumption</em></li>
+              <li><b>05</b> sts:AssumeRole<em>cross-role assumption</em></li>
+              <li><b>06</b> sts:AssumeRole<em>cross-role assumption</em></li>
+              <li><b>07</b> iam:CreatePolicyVersion<em>new version of an attached policy</em></li>
+            </ul>
+            <div class="tui-actions"><button class="btn btn--acid">copy</button><button class="btn btn--red">sever</button></div>
+          </div>
+        </div>
+        <div class="cmdbar"><b>$</b><span class="grow">apsis sever --scenario games-studio --apply</span><button type="button" id="runBtn">[run]</button></div>
+        <pre id="runOut" class="term" style="border:0;border-top:1px solid var(--line);margin:0;min-height:58px" aria-live="polite">> ready. 2 actions / 37 edges / 0 writes pending review.</pre>
+      </div>
+    </section>
+
+    <section class="section wrap" id="kit">
+      <div class="section-head">
+        <h2>The kit, <span>raw</span>.</h2>
+        <p>A control is a terminal command with a state. Buttons invert; inputs prompt; tabs are file names; tags are brackets.</p>
+      </div>
+      <div class="kit">
+        <div class="comp"><p class="clabel"><span>Actions</span><b>01</b></p><div class="stack"><button class="btn btn--acid">$ open the map</button><button class="btn">read the evidence</button><button class="btn btn--red">sever --dry-run</button><button class="btn" style="border-color:var(--line-2);color:var(--faint)">ghost</button></div></div>
+        <div class="comp"><p class="clabel"><span>Prompt</span><b>02</b></p><div class="stack"><label class="field"><b>&gt;</b><input placeholder="search principals" aria-label="Search principals" /></label><label class="field"><b>ip</b><input placeholder="10.0.0.0/8" aria-label="CIDR" /></label></div></div>
+        <div class="comp"><p class="clabel"><span>Tabs</span><b>03</b></p><div class="tabrow"><button aria-pressed="true">[route]</button><button>[node]</button><button>[cut]</button></div><p class="caption" style="margin-top:10px">[brackets] are the active state. No underline, no pill.</p></div>
+        <div class="comp"><p class="clabel"><span>Tags</span><b>04</b></p><div class="inline"><span class="ttag hot">[07 hops]</span><span class="ttag">[07 steps]</span><span class="ttag risk">[sever]</span></div><p class="caption" style="margin-top:10px">Acid for route, red for risk, grey for everything else.</p></div>
+        <div class="comp"><p class="clabel"><span>Table</span><b>05</b></p><table class="table"><thead><tr><th>action</th><th>edges</th></tr></thead><tbody><tr><td>sts:AssumeRole</td><td>31</td></tr><tr><td>iam:CreateAccessKey</td><td>18</td></tr><tr><td>iam:CreatePolicyVersion</td><td>10</td></tr></tbody></table></div>
+        <div class="comp"><p class="clabel"><span>Progress</span><b>06</b></p><div class="progress">███████<span>░░░</span> 67%</div><div class="progress" style="margin-top:8px">█████████<span>░</span> 91%</div><p class="caption" style="margin-top:10px">A bar is a string. No gradient.</p></div>
+        <div class="comp"><p class="clabel"><span>Terminal</span><b>07</b></p><div class="term"><div><span class="ok">$</span> apsis scan --scenario games-studio</div><div>15 routes from 9 identities reach administrator</div><div class="path">1. Game server role -&gt; Live services role -&gt; Admin</div><div class="risk">! printed, not applied</div></div></div>
+        <div class="comp"><p class="clabel"><span>Toggle</span><b>08</b></p><label class="toggle"><input type="checkbox" checked /><span class="box"></span>field_on</label><p class="caption" style="margin-top:12px">[x] is on, [ ] is off. A checkbox, not a switch.</p></div>
+        <div class="comp"><p class="clabel"><span>Callout</span><b>09</b></p><div class="callout"><b>!</b> printed, not applied. One action can remove several edges. Review the cost before revoking.</div></div>
+      </div>
+    </section>
+
+    <section class="section wrap" id="three-d">
+      <div class="section-head">
+        <h2>The model is a <span>wireframe</span>.</h2>
+        <p>One geometry, no shading, acid lines on black. The 3D stage is the same data as the TUI, just projected. The labels are brackets.</p>
+      </div>
+      <div class="three-grid">
+        <div class="three-card"><h3>camera</h3><p><b>42° perspective</b>, 13 units. Drag, scroll, double-click reset. The wireframe is the model, not an illustration.</p></div>
+        <div class="three-card"><h3>ink</h3><p><b>Acid line, bone node, black field.</b> No glow, no gradient, no shading. The red is the cut.</p></div>
+        <div class="three-card"><h3>labels</h3><p><b>[bracketed] perimeter labels.</b> Four max. The ASCII TUI is the 2D fallback, not a separate product.</p></div>
+        <div class="three-card"><h3>fallback</h3><p><b>Use 2D / reduced motion.</b> The static frame is the same wireframe, drawn once.</p></div>
+      </div>
+    </section>
+
+    <section class="section wrap" id="rules">
+      <div class="section-head">
+        <h2>Content is the <span>chrome</span>.</h2>
+        <p>No decoration that a terminal could not render. That is the whole bet.</p>
+      </div>
+      <div class="rules">
+        <div class="rulecol"><h3>do</h3><ul><li>Monospace everywhere; one family.</li><li>Two neutrals plus one accent.</li><li>1px borders; no radius; no shadow.</li><li>Real commands and real output.</li><li>Keep the TUI and the 3D in sync.</li></ul></div>
+        <div class="rulecol"><h3>don't</h3><ul><li>No glass, glow or gradient panels.</li><li>No pill controls or large radii.</li><li>No invented terminal output.</li><li>No colour without a label.</li><li>No ASCII that is not the data.</li></ul></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <span><b>Direction 05 / Terminal</b></span>
+    <span>Best for engineer-led launches · watch the non-technical buyer</span>
+    <span><a href="./index.html">← all directions</a></span>
+  </footer>
+
+  <script type="module" src="./lab-3d.js"></script>
+  <script>
+    const run = document.getElementById('runBtn');
+    const out = document.getElementById('runOut');
+    let running = false;
+    run.addEventListener('click', () => {
+      if (running) return;
+      running = true;
+      out.textContent = '> apsis sever --scenario games-studio --apply\n> checking 2 actions...\n';
+      setTimeout(() => {
+        out.textContent += '> 37 edges cut / 15 routes closed / 0 writes\n> done. record: games-studio/sever/text';
+        running = false;
+      }, 700);
+    });
+  </script>
+</body>
+</html>

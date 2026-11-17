@@ -170,6 +170,24 @@ system is in [docs/DESIGN.md](docs/DESIGN.md); the Pinterest reference trail and
 the two-pass direction log are in
 [docs/design-research.md](docs/design-research.md).
 
+## Design lab
+
+Five complete design systems and UI kits are in
+`console/public/design-lab/`, served at `/design-lab/`. Start with
+`/design-lab/index.html` for the agency memo and the conversation between the
+CEO, CTO, engineer and designer, then open each direction:
+
+- 01 The Observatory — editorial dark, engraved orrery
+- 02 Orbital Ops — cyber console, holographic orrery
+- 03 Swiss Instrument — paper, two inks, orthographic diagram
+- 04 Bioluminescent Field — organic deep-sea specimen
+- 05 Terminal — brutalist monospace, wireframe orrery
+
+Every direction includes a real WebGL stage with drag, zoom, a 2D fallback and a
+reduced-motion path. The live console currently follows Direction 02; the lab is
+the comparison surface for the next overhaul. The conversation and trade-offs
+are also in [docs/design-agency.md](docs/design-agency.md).
+
 ## Data and scope
 
 **This is a demonstration fleet, not a benchmark.** The 16 fixtures contain 194

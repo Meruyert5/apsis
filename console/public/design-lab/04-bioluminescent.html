@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apsis — Direction 04 / Bioluminescent Field</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="lab.css" />
+  <style>
+    :root {
+      --paper: #03110f;
+      --plate: #06201b;
+      --deep: #020b09;
+      --ink: #eafff8;
+      --text: #bfe6dc;
+      --mute: #7fb8a8;
+      --faint: #5f8f84;
+      --aqua: #3ff0d0;
+      --coral: #ff8fa3;
+      --lilac: #c9b8ff;
+      --kelp: #0a4a40;
+      --line: rgb(234 255 248 / 16%);
+      --line-2: rgb(234 255 248 / 9%);
+      --grad: linear-gradient(110deg, #3ff0d0, #6fe6ff 48%, #ff8fa3);
+      --sans: "Manrope", "Segoe UI", system-ui, sans-serif;
+      --serif: "Fraunces", Georgia, serif;
+      --mono: "DM Mono", ui-monospace, monospace;
+      --ease: cubic-bezier(.16,1,.3,1);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(60% 52% at 50% -12%, rgb(63 240 208 / 10%), transparent 68%),
+        radial-gradient(44% 44% at 88% 6%, rgb(255 143 163 / 5%), transparent 72%),
+        radial-gradient(40% 40% at 8% 80%, rgb(201 184 255 / 4%), transparent 72%),
+        var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.62;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 89;
+      pointer-events: none;
+      opacity: .04;
+      mix-blend-mode: screen;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='0.6'/></svg>");
+    }
+    .wrap { width: min(1460px, calc(100% - 64px)); margin: 0 auto; }
+    .mono { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .muted { color: var(--mute); }
+    a { color: inherit; }
+    .sr { position: absolute; left: -9999px; }
+
+    /* top */
+    .top { position: sticky; top: 0; z-index: 40; background: rgb(3 17 15 / 84%); border-bottom: 1px solid var(--line); backdrop-filter: blur(16px); }
+    .top .wrap { display: flex; align-items: center; gap: 34px; height: 68px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font: 300 32px/1 var(--serif); font-style: italic; letter-spacing: -.01em; text-decoration: none; }
+    .brand svg { width: 20px; height: 20px; filter: drop-shadow(0 0 10px rgb(63 240 208 / 50%)); }
+    .nav { display: flex; gap: 24px; }
+    .nav a { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: var(--faint); padding: 7px 0; border-bottom: 1px solid transparent; }
+    .nav a:hover { color: var(--text); }
+    .nav a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--aqua); }
+    .status { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+    .status i { width: 6px; height: 6px; border-radius: 50%; background: var(--aqua); box-shadow: 0 0 10px var(--aqua); animation: breathe 4s ease-in-out infinite; }
+    @keyframes breathe { 50% { opacity: .4; box-shadow: 0 0 4px var(--aqua); } }
+
+    /* hero */
+    .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); gap: clamp(30px, 5vw, 72px); align-items: center; padding: clamp(46px, 6.5vw, 92px) 0 clamp(38px, 5vw, 68px); border-bottom: 1px solid var(--line); }
+    .eyebrow { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
+    .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--aqua); box-shadow: 0 0 12px var(--aqua); }
+    .eyebrow b { color: var(--aqua); font-weight: 500; }
+    .eyebrow i { width: 70px; height: 1px; background: linear-gradient(90deg, var(--aqua), transparent); }
+    h1 { margin: 0; max-width: 12ch; font: 300 clamp(52px, 6.8vw, 104px)/.94 var(--serif); letter-spacing: -.04em; }
+    h1 em { font-style: italic; color: var(--aqua); }
+    .lede { max-width: 50ch; margin: 24px 0 0; color: var(--text); font-size: 17px; line-height: 1.66; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 19px; border: 1px solid var(--line); border-radius: 20px 6px 20px 6px; background: rgb(6 32 27 / 58%); color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: border-color .18s var(--ease), box-shadow .18s var(--ease), filter .18s; }
+    .btn:hover { border-color: var(--aqua); box-shadow: 0 0 26px -8px var(--aqua); }
+    .btn--solid { border-color: transparent; background: var(--grad); color: #03110f; box-shadow: 0 0 28px -8px var(--aqua); }
+    .btn--solid:hover { filter: brightness(1.06); }
+    .fleet { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: 34px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .fleet div { padding: 13px 14px 13px 0; border-right: 1px solid var(--line-2); }
+    .fleet div:last-child { border-right: 0; }
+    .fleet b { display: block; font: 300 36px/1 var(--serif); letter-spacing: -.02em; }
+    .fleet span { display: block; margin-top: 3px; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+
+    .hero-figure { margin: 0; }
+    .hero-3d { height: 540px; border: 1px solid var(--line); border-radius: 34px 10px 34px 10px; background: radial-gradient(60% 60% at 50% 46%, rgb(10 74 64 / 55%), transparent 72%), #020b09; box-shadow: inset 0 1px 0 rgb(234 255 248 / 6%), 0 40px 120px -70px rgb(63 240 208 / 50%); }
+    .hero-3d::after { content: ""; position: absolute; inset: 16px; z-index: 2; border: 1px solid rgb(63 240 208 / 16%); border-radius: 26px 6px 26px 6px; pointer-events: none; }
+    .hero-3d .lab3d-hud { z-index: 3; }
+    .hero-figure figcaption { display: flex; justify-content: space-between; gap: 12px; padding-top: 10px; color: var(--faint); font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+    .hero-figure figcaption b { color: var(--aqua); font-weight: 500; }
+
+    /* sections */
+    .section { padding: clamp(50px, 6vw, 86px) 0; border-bottom: 1px solid var(--line); }
+    .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 28px; padding-bottom: 20px; margin-bottom: 26px; border-bottom: 1px solid var(--line); }
+    .section-head h2 { margin: 0; font: 300 clamp(34px, 4.6vw, 64px)/1 var(--serif); letter-spacing: -.03em; }
+    .section-head h2 em { font-style: italic; color: var(--aqua); }
+    .section-head p { max-width: 54ch; margin: 0; color: var(--mute); font-size: 15px; line-height: 1.6; }
+
+    .type-grid { display: grid; grid-template-columns: 1.2fr 1fr .9fr; gap: 0; border: 1px solid var(--line); border-radius: 28px 8px 28px 8px; overflow: hidden; background: linear-gradient(160deg, rgb(6 32 27 / 72%), rgb(2 11 9 / 92%)); }
+    .type-card { padding: 22px; border-right: 1px solid var(--line); }
+    .type-card:last-child { border-right: 0; }
+    .type-card .label { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+    .type-card .sample { margin: 14px 0 0; }
+    .sample-display { font: 300 44px/.98 var(--serif); letter-spacing: -.03em; }
+    .sample-display em { font-style: italic; color: var(--aqua); }
+    .sample-body { font: 400 16px/1.6 var(--sans); color: var(--text); }
+    .sample-mono { font: 400 12px/1.8 var(--mono); color: var(--text); }
+    .type-card p { margin: 12px 0 0; color: var(--faint); font-size: 12px; line-height: 1.55; }
+    .palette { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; margin-top: 18px; border: 1px solid var(--line); border-radius: 20px 6px 20px 6px; overflow: hidden; }
+    .swatch { min-height: 96px; padding: 11px; display: flex; flex-direction: column; justify-content: flex-end; border-right: 1px solid var(--line); }
+    .swatch:last-child { border-right: 0; }
+    .swatch b { font-family: var(--mono); font-size: 10px; font-weight: 500; }
+    .swatch span { font-family: var(--mono); font-size: 9px; opacity: .7; }
+    .radius-note { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 18px; font-family: var(--mono); font-size: 10px; color: var(--mute); }
+    .radius-note span { display: inline-flex; align-items: center; gap: 8px; }
+    .radius-note i { width: 28px; height: 16px; border: 1px solid var(--aqua); border-radius: 10px 3px 10px 3px; display: inline-block; }
+
+    /* specimen mock */
+    .specimen { border: 1px solid var(--line); border-radius: 34px 10px 34px 10px; background: linear-gradient(160deg, rgb(6 32 27 / 72%), rgb(2 11 9 / 94%)); overflow: hidden; box-shadow: 0 40px 120px -80px rgb(63 240 208 / 45%); }
+    .specimen-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 22px; padding: 18px 22px; border-bottom: 1px solid var(--line); }
+    .specimen-head .label { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--aqua); }
+    .specimen-head h3 { margin: 6px 0 0; font: 300 34px/1 var(--serif); letter-spacing: -.02em; }
+    .specimen-head h3 em { font-style: italic; color: var(--aqua); }
+    .specimen-head p { margin: 0; max-width: 38ch; font-family: var(--mono); font-size: 10px; line-height: 1.8; text-align: right; color: var(--faint); }
+    .specimen-grid { display: grid; grid-template-columns: minmax(0, 1fr) 270px; }
+    .specimen-stage { position: relative; min-height: 520px; border-right: 1px solid var(--line); background: radial-gradient(58% 58% at 46% 48%, rgb(10 74 64 / 46%), transparent 74%), #020b09; overflow: hidden; }
+    .specimen-stage::before { content: ""; position: absolute; inset: 16px; border: 1px solid rgb(63 240 208 / 16%); border-radius: 28px 6px 28px 6px; pointer-events: none; }
+    .specimen-stage svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .specimen-stage .tag { position: absolute; left: 26px; top: 24px; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+    .specimen-stage .tag b { color: var(--aqua); font-weight: 500; }
+    .rings { padding: 16px; }
+    .rings h4 { display: flex; justify-content: space-between; margin: 0 0 2px; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+    .rings .note { margin: 0 0 10px; font-family: var(--mono); font-size: 9px; color: var(--faint); }
+    .ringrow { display: grid; grid-template-columns: 8px 24px 1fr auto; gap: 8px; align-items: center; width: 100%; min-height: 38px; padding: 6px 4px; border: 0; border-bottom: 1px solid var(--line-2); background: none; color: var(--text); text-align: left; cursor: pointer; }
+    .ringrow:hover { background: rgb(63 240 208 / 5%); }
+    .ringrow[aria-selected="true"] { color: var(--ink); background: rgb(63 240 208 / 8%); box-shadow: inset 2px 0 0 var(--aqua); }
+    .ringrow i { width: 5px; height: 5px; border-radius: 50%; background: var(--aqua); }
+    .ringrow b { font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--faint); }
+    .ringrow span { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ringrow em { font-family: var(--mono); font-style: normal; font-size: 10px; color: var(--faint); }
+    .specimen-foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 10px 16px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); }
+
+    /* kit */
+    .kit { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .comp { min-height: 180px; padding: 18px; border: 1px solid var(--line); border-radius: 22px 6px 22px 6px; background: linear-gradient(160deg, rgb(6 32 27 / 62%), rgb(2 11 9 / 88%)); }
+    .comp .clabel { display: flex; justify-content: space-between; gap: 8px; margin: 0 0 14px; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+    .comp .clabel b { color: var(--aqua); font-weight: 500; }
+    .stack { display: flex; flex-direction: column; gap: 8px; }
+    .inline { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .field { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 12px; border: 1px solid var(--line); border-radius: 14px 4px 14px 4px; background: rgb(3 17 15 / 62%); color: var(--faint); font-family: var(--mono); font-size: 11px; }
+    .field input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--ink); font-family: var(--mono); font-size: 11px; }
+    .field input::placeholder { color: var(--faint); }
+    .seg { display: inline-flex; gap: 4px; }
+    .seg button { min-height: 36px; padding: 0 11px; border: 1px solid var(--line); border-radius: 10px 3px 10px 3px; background: transparent; color: var(--mute); font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
+    .seg button[aria-pressed="true"] { border-color: var(--aqua); background: rgb(63 240 208 / 10%); color: var(--ink); }
+    .chip { padding: 5px 9px; border: 1px solid var(--line); border-radius: 12px 3px 12px 3px; font-family: var(--mono); font-size: 9px; letter-spacing: .04em; text-transform: uppercase; color: var(--text); }
+    .chip.hot { border-color: var(--aqua); color: var(--aqua); }
+    .chip.coral { border-color: var(--coral); color: var(--coral); }
+    .terminal { padding: 12px; border: 1px solid var(--line-2); border-radius: 14px 4px 14px 4px; background: #010807; font-family: var(--mono); font-size: 10px; line-height: 1.8; color: var(--text); }
+    .terminal .ok { color: var(--aqua); }
+    .terminal .path { color: var(--lilac); }
+    .wave { width: 100%; height: 62px; }
+    .toggle { display: inline-flex; align-items: center; gap: 9px; color: var(--mute); font-family: var(--mono); font-size: 10px; cursor: pointer; }
+    .toggle input { position: absolute; opacity: 0; }
+    .toggle .track { width: 42px; height: 22px; border: 1px solid var(--line); border-radius: 11px; background: rgb(3 17 15 / 70%); position: relative; }
+    .toggle .track::after { content: ""; position: absolute; left: 3px; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--faint); transition: left .2s var(--ease), background .2s; }
+    .toggle input:checked + .track::after { left: 23px; background: var(--aqua); box-shadow: 0 0 10px var(--aqua); }
+    .toggle input:focus-visible + .track { outline: 2px solid var(--aqua); outline-offset: 3px; }
+    .sonar { position: relative; width: 80px; height: 80px; margin: 0 auto; }
+    .sonar i { position: absolute; inset: 0; border: 1px solid rgb(63 240 208 / 30%); border-radius: 50%; animation: sonar 4.2s ease-out infinite; }
+    .sonar i:nth-child(2) { animation-delay: 1.4s; }
+    .sonar i:nth-child(3) { animation-delay: 2.8s; }
+    @keyframes sonar { 0% { transform: scale(.6); opacity: 0; } 30% { opacity: .55; } 100% { transform: scale(1.4); opacity: 0; } }
+    .caption { font-family: var(--mono); font-size: 9px; line-height: 1.7; color: var(--faint); }
+    .caption b { color: var(--text); font-weight: 500; }
+
+    /* 3D + rules */
+    .three-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    .three-card { padding: 18px; border: 1px solid var(--line); border-radius: 20px 6px 20px 6px; background: linear-gradient(160deg, rgb(6 32 27 / 58%), rgb(2 11 9 / 86%)); }
+    .three-card h3 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--aqua); }
+    .three-card p { margin: 0; color: var(--mute); font-size: 12px; line-height: 1.55; }
+    .three-card p b { color: var(--ink); font-weight: 500; }
+    .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .rulecol { padding: 20px; border: 1px solid var(--line); border-radius: 22px 6px 22px 6px; background: linear-gradient(160deg, rgb(6 32 27 / 58%), rgb(2 11 9 / 86%)); }
+    .rulecol h3 { margin: 0 0 10px; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--aqua); }
+    .rulecol li { padding: 8px 0; border-top: 1px solid var(--line-2); color: var(--text); font-size: 12px; line-height: 1.55; list-style: none; }
+    .rulecol li::before { content: "—"; display: inline-block; width: 16px; color: var(--faint); }
+
+    footer { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding: 24px 0 64px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); }
+    footer b { color: var(--text); font-weight: 500; }
+
+    @media (max-width: 1100px) {
+      .hero { grid-template-columns: 1fr; gap: 32px; }
+      .specimen-grid { grid-template-columns: 1fr; }
+      .specimen-stage { border-right: 0; border-bottom: 1px solid var(--line); }
+      .kit { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .type-grid { grid-template-columns: 1fr 1fr; }
+      .type-card:last-child { grid-column: 1 / -1; border-top: 1px solid var(--line); }
+      .three-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 760px) {
+      .wrap { width: calc(100% - 36px); }
+      .top .wrap { height: 60px; gap: 14px; }
+      .nav { display: none; }
+      .hero { padding-top: 40px; }
+      .hero-3d { height: 400px; }
+      .fleet { grid-template-columns: 1fr 1fr; }
+      .fleet div:nth-child(2) { border-right: 0; }
+      .kit { grid-template-columns: 1fr; }
+      .type-grid { grid-template-columns: 1fr; }
+      .type-card { border-right: 0; border-bottom: 1px solid var(--line); }
+      .type-card:last-child { grid-column: auto; border-top: 0; border-bottom: 0; }
+      .palette { grid-template-columns: 1fr 1fr; }
+      .swatch { border-bottom: 1px solid var(--line); }
+      .three-grid, .rules { grid-template-columns: 1fr; }
+      .specimen-head { flex-direction: column; align-items: flex-start; }
+      .specimen-head p { text-align: left; }
+      .specimen-stage { min-height: 380px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="sr" href="#main">Skip to content</a>
+  <a class="lab-back" href="./index.html">← all directions</a>
+
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="#top" aria-label="Apsis, back to the top">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <ellipse cx="12" cy="12" rx="9.4" ry="3.4" stroke="#3ff0d0" stroke-opacity=".7" stroke-width=".8" transform="rotate(-20 12 12)" />
+          <ellipse cx="12" cy="12" rx="4.6" ry="9.2" stroke="#eafff8" stroke-opacity=".6" stroke-width=".8" transform="rotate(18 12 12)" />
+          <circle cx="12" cy="12" r="2.6" fill="#3ff0d0" />
+          <circle cx="15.6" cy="3.6" r="1.4" fill="#eafff8" />
+        </svg>
+        Apsis
+      </a>
+      <nav class="nav" aria-label="Directions">
+        <a href="01-observatory.html">01 Observatory</a>
+        <a href="02-orbital-ops.html">02 Orbital Ops</a>
+        <a href="03-swiss-instrument.html">03 Swiss Instrument</a>
+        <a href="04-bioluminescent.html" aria-current="page">04 Bioluminescent</a>
+        <a href="05-terminal.html">05 Terminal</a>
+      </nav>
+      <span class="status"><i></i> Direction 04 / wildcard</span>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero wrap" id="top">
+      <div>
+        <p class="eyebrow"><b>Specimen 03</b> / Bioluminescent field <i></i></p>
+        <h1>Every route reaches its <em>apsis.</em></h1>
+        <p class="lede">
+          A living field, observed gently. The account is a specimen: 16 account
+          rings, 18 technique ribs, photophores at the intersections. The console
+          keeps the data exact and the surface soft.
+        </p>
+        <div class="actions">
+          <a class="btn btn--solid" href="#specimen">Open the specimen →</a>
+          <a class="btn" href="#kit">Read the ledger</a>
+        </div>
+        <div class="fleet" aria-label="Fleet readout">
+          <div><b>16</b><span>accounts</span></div>
+          <div><b>194</b><span>identities</span></div>
+          <div><b>144</b><span>routes</span></div>
+          <div><b>32</b><span>revocations</span></div>
+        </div>
+      </div>
+
+      <figure class="hero-figure">
+        <div class="lab3d hero-3d" data-3d data-scene="specimen" data-style="bio"
+             style="--ld-bg:#020b09;--ld-ink:#eafff8;--ld-mute:#7fb8a8;--ld-line:rgba(234,255,248,.18);--ld-accent:#3ff0d0">
+          <canvas aria-hidden="true"></canvas>
+          <div class="lab3d-fallback" data-3d-fallback>
+            <svg viewBox="0 0 720 520" role="img" aria-label="A bioluminescent specimen">
+              <defs>
+                <radialGradient id="bioOrb" cx="38%" cy="32%" r="68%">
+                  <stop offset="0" stop-color="#d8fff4" />
+                  <stop offset=".34" stop-color="#3ff0d0" stop-opacity=".85" />
+                  <stop offset=".72" stop-color="#0a5a4c" stop-opacity=".45" />
+                  <stop offset="1" stop-color="#03110f" stop-opacity="0" />
+                </radialGradient>
+              </defs>
+              <g fill="none" stroke="#3ff0d0" stroke-opacity=".22">
+                <ellipse cx="360" cy="260" rx="260" ry="150" transform="rotate(-8 360 260)" />
+                <ellipse cx="360" cy="260" rx="190" ry="108" transform="rotate(10 360 260)" />
+                <ellipse cx="360" cy="260" rx="120" ry="66" transform="rotate(-16 360 260)" />
+              </g>
+              <circle cx="360" cy="240" r="88" fill="url(#bioOrb)" />
+              <ellipse cx="360" cy="236" rx="84" ry="28" fill="none" stroke="#3ff0d0" stroke-opacity=".5" />
+              <circle cx="360" cy="236" r="12" fill="#eafff8" />
+              <g stroke="#3ff0d0" stroke-opacity=".4">
+                <path d="M292 256 C282 330 300 390 250 448" /><path d="M326 266 C322 350 342 400 318 468" /><path d="M360 270 C360 360 380 402 360 476" /><path d="M394 266 C398 350 420 400 410 468" /><path d="M428 256 C438 330 458 390 492 448" />
+              </g>
+              <g fill="#ff8fa3"><circle cx="250" cy="448" r="3" /><circle cx="318" cy="468" r="3" /><circle cx="410" cy="468" r="3" /><circle cx="492" cy="448" r="3" /></g>
+              <g fill="#c9b8ff"><circle cx="286" cy="356" r="2" /><circle cx="404" cy="372" r="2" /><circle cx="360" cy="404" r="2" /></g>
+              <g font-family="DM Mono, monospace" font-size="10" fill="#7fb8a8"><text x="86" y="400">AP-01</text><text x="210" y="206">TOOLS INTERN</text><text x="470" y="200">LIVE-OPS</text></g>
+            </svg>
+          </div>
+          <div class="lab3d-hud" aria-hidden="true">
+            <span class="lab3d-title">3D / living specimen</span>
+            <span class="lab3d-label" style="--x:14%;--y:76%">AP-01</span>
+            <span class="lab3d-label" style="--x:28%;--y:28%">Tools intern</span>
+            <span class="lab3d-label" style="--x:76%;--y:28%">Live-ops</span>
+            <span class="lab3d-label" style="--x:82%;--y:76%">Administrator</span>
+            <span class="lab3d-hint">drag to orbit · scroll to zoom · double-click reset</span>
+          </div>
+          <div class="lab3d-controls"><button type="button" data-3d-toggle>Use 2D</button></div>
+        </div>
+        <figcaption><span>Fig. 01 — Containment specimen / 16 accounts</span><b>WebGL / 1 3D / 1 calm fallback</b></figcaption>
+      </figure>
+    </section>
+
+    <section class="section wrap" id="foundations">
+      <div class="section-head">
+        <h2>A field, not a <em>dashboard.</em></h2>
+        <p>Deep teal, aqua and coral. Fraunces for the living voice, Manrope for reading, DM Mono for the exact count. Soft radii, but the data stays hard.</p>
+      </div>
+      <div class="type-grid">
+        <div class="type-card"><div class="label">Display / Fraunces</div><p class="sample sample-display">Every route reaches its <em>apsis.</em></p><p>Soft serif, italic accent. The one loud word is the apsis.</p></div>
+        <div class="type-card"><div class="label">Reading / Manrope</div><p class="sample sample-body">Apsis reads an AWS account as an orbital system: bodies on hop shells, the administrator at the primary.</p><p>Reading face for lede, notes and the ledger.</p></div>
+        <div class="type-card"><div class="label">Data / DM Mono</div><p class="sample sample-mono">SPECIMEN 03 / CONTAINMENT<br />18 PRIMITIVES · 163 EDGES<br />T− 4.5S / PHASE 55%</p><p>Counts, labels, captions, terminal.</p></div>
+      </div>
+      <div class="palette" aria-label="Palette">
+        <div class="swatch" style="background:#03110f;color:#eafff8"><b>Abyss</b><span>#03110F</span></div>
+        <div class="swatch" style="background:#3ff0d0;color:#03110f"><b>Aqua</b><span>#3FF0D0</span></div>
+        <div class="swatch" style="background:#ff8fa3;color:#03110f"><b>Coral</b><span>#FF8FA3</span></div>
+        <div class="swatch" style="background:#c9b8ff;color:#03110f"><b>Lilac</b><span>#C9B8FF</span></div>
+        <div class="swatch" style="background:#06201b;color:#eafff8"><b>Plate</b><span>#06201B</span></div>
+        <div class="swatch" style="background:#eafff8;color:#03110f"><b>Pale</b><span>#EAFFF8</span></div>
+      </div>
+      <div class="radius-note"><span><i></i>22/6 organic radius</span><span><i style="border-radius:50%"></i>the orb is the only circle</span><span>glow ≤ 18% opacity</span><span>data mono ≥ 14px in product</span></div>
+    </section>
+
+    <section class="section wrap" id="specimen">
+      <div class="section-head">
+        <h2>The specimen, <em>contained.</em></h2>
+        <p>A Decide deck: the core on the left, the account rings on the right, the exact ledger underneath. The organism is 3D; the numbers are not approximate.</p>
+      </div>
+      <div class="specimen">
+        <div class="specimen-head">
+          <div><div class="label">Specimen 03 / Containment bay</div><h3>18 primitives, <em>one core.</em></h3></div>
+          <p>16 accounts · 163 edges observed<br />18 escalation primitives · Games studio</p>
+        </div>
+        <div class="specimen-grid">
+          <div class="specimen-stage">
+            <span class="tag"><b>Containment core</b><br />bell · photophore · tendril · sonar</span>
+            <svg viewBox="0 0 720 520" aria-hidden="true">
+              <defs>
+                <radialGradient id="coreOrb" cx="38%" cy="32%" r="68%">
+                  <stop offset="0" stop-color="#d8fff4" /><stop offset=".34" stop-color="#3ff0d0" stop-opacity=".8" /><stop offset=".72" stop-color="#0a5a4c" stop-opacity=".4" /><stop offset="1" stop-color="#03110f" stop-opacity="0" />
+                </radialGradient>
+              </defs>
+              <g fill="none" stroke="#3ff0d0" stroke-opacity=".2">
+                <ellipse cx="360" cy="250" rx="270" ry="152" transform="rotate(-8 360 250)" />
+                <ellipse cx="360" cy="250" rx="200" ry="112" transform="rotate(10 360 250)" />
+                <ellipse cx="360" cy="250" rx="132" ry="72" transform="rotate(-16 360 250)" />
+                <ellipse cx="360" cy="250" rx="64" ry="36" transform="rotate(22 360 250)" />
+              </g>
+              <circle cx="360" cy="236" r="86" fill="url(#coreOrb)" />
+              <ellipse cx="360" cy="232" rx="84" ry="28" fill="none" stroke="#3ff0d0" stroke-opacity=".5" />
+              <circle cx="360" cy="232" r="11" fill="#eafff8" />
+              <g stroke="#3ff0d0" stroke-opacity=".38">
+                <path d="M292 252 C282 326 300 388 250 444" /><path d="M326 262 C322 346 342 398 318 464" /><path d="M360 266 C360 356 380 400 360 472" /><path d="M394 262 C398 346 420 398 410 464" /><path d="M428 252 C438 326 458 388 492 444" />
+              </g>
+              <g fill="#ff8fa3"><circle cx="250" cy="444" r="3" /><circle cx="318" cy="464" r="3" /><circle cx="410" cy="464" r="3" /><circle cx="492" cy="444" r="3" /></g>
+              <g fill="#c9b8ff"><circle cx="286" cy="352" r="2" /><circle cx="404" cy="368" r="2" /><circle cx="360" cy="400" r="2" /></g>
+              <g font-family="DM Mono, monospace" font-size="10" fill="#7fb8a8"><text x="74" y="402">AP-01</text><text x="206" y="202">TOOLS INTERN</text><text x="476" y="198">LIVE-OPS</text></g>
+            </svg>
+          </div>
+          <div class="rings">
+            <h4><span>Accounts</span><span>Routes</span></h4>
+            <p class="note">inner = most exposed</p>
+            <button class="ringrow" aria-selected="true"><i></i><b>01</b><span>Game</span><em>15</em></button>
+            <button class="ringrow"><i></i><b>02</b><span>Hlth</span><em>18</em></button>
+            <button class="ringrow"><i></i><b>03</b><span>R&amp;D</span><em>18</em></button>
+            <button class="ringrow"><i></i><b>04</b><span>Fin</span><em>13</em></button>
+            <button class="ringrow"><i></i><b>05</b><span>Media</span><em>13</em></button>
+            <button class="ringrow"><i></i><b>06</b><span>Ent</span><em>10</em></button>
+            <button class="ringrow"><i></i><b>07</b><span>Ret</span><em>10</em></button>
+            <button class="ringrow"><i></i><b>08</b><span>Gov</span><em>7</em></button>
+            <button class="ringrow"><i></i><b>09</b><span>Plat</span><em>7</em></button>
+            <button class="ringrow"><i></i><b>10</b><span>SaaS</span><em>15</em></button>
+          </div>
+        </div>
+        <div class="specimen-foot"><span>Specimen 03 — containment core</span><span>source: engine export / 163 edges observed</span></div>
+      </div>
+    </section>
+
+    <section class="section wrap" id="kit">
+      <div class="section-head">
+        <h2>The kit, <em>soft.</em></h2>
+        <p>Soft radii and glass, but the type is exact. The primary action is the only saturated fill; the data is always mono.</p>
+      </div>
+      <div class="kit">
+        <div class="comp"><p class="clabel"><span>Actions</span><b>01</b></p><div class="stack"><a class="btn btn--solid" href="#specimen">Open the specimen →</a><a class="btn" href="#specimen">Read the ledger</a><a class="btn" href="#specimen" style="border-color:var(--line-2);color:var(--faint)">Ghost</a></div></div>
+        <div class="comp"><p class="clabel"><span>Search</span><b>02</b></p><div class="stack"><label class="field"><span>⌕</span><input placeholder="Search techniques" aria-label="Search techniques" /></label><label class="field"><span>ip</span><input placeholder="10.0.0.0/8" aria-label="CIDR" /></label></div></div>
+        <div class="comp"><p class="clabel"><span>Segmented</span><b>03</b></p><div class="seg"><button aria-pressed="true">Route</button><button>Node</button><button>Cut</button></div><p class="caption" style="margin-top:12px">A soft control, a hard state. The active segment is aqua glass.</p></div>
+        <div class="comp"><p class="clabel"><span>Chips</span><b>04</b></p><div class="inline"><span class="chip hot">07 hops</span><span class="chip">07 steps</span><span class="chip coral">theoretical</span></div><p class="caption" style="margin-top:12px">Aqua is the route; coral is the risk; lilac is the identity.</p></div>
+        <div class="comp"><p class="clabel"><span>Rows</span><b>05</b></p><div style="border-top:1px solid var(--line)"><button class="ringrow"><i></i><b>01</b><span>Backup role</span><em>01</em></button><button class="ringrow" aria-selected="true"><i></i><b>02</b><span>Tools intern</span><em>07</em></button><button class="ringrow"><i></i><b>03</b><span>Art pipeline role</span><em>05</em></button></div></div>
+        <div class="comp"><p class="clabel"><span>Terminal</span><b>06</b></p><div class="terminal"><div><span class="ok">$</span> apsis scan --scenario games-studio</div><div>15 routes from 9 identities reach administrator</div><div class="path">1. Game server role -&gt; Live services role -&gt; Admin</div></div></div>
+        <div class="comp"><p class="clabel"><span>Waveform</span><b>07</b></p><svg class="wave" viewBox="0 0 360 62" preserveAspectRatio="none" aria-label="Recorded waveform"><path d="M0 34 C18 30 24 42 36 24 S54 40 66 30 S84 44 96 26 S114 40 126 32 S144 46 156 24 S174 38 186 30 S204 44 216 26 S234 40 246 32 S264 46 276 24 S294 38 306 30 S324 44 336 26 S354 38 360 34" fill="none" stroke="#3ff0d0" stroke-width="1.3" /></svg><p class="caption" style="margin-top:6px">line 23 / 123 · 1. → Administrator</p></div>
+        <div class="comp"><p class="clabel"><span>Sonar + toggle</span><b>08</b></p><div class="sonar"><i></i><i></i><i></i></div><label class="toggle" style="margin-top:12px"><input type="checkbox" checked /><span class="track"></span>Calm field</label></div>
+        <div class="comp"><p class="clabel"><span>Figure</span><b>09</b></p><p class="caption"><b>Fig. 02 — Containment core.</b> 16 account rings, 18 technique ribs, photophores at the intersections. Source: engine export / 163 edges.</p></div>
+      </div>
+    </section>
+
+    <section class="section wrap" id="three-d">
+      <div class="section-head">
+        <h2>The scene is a <em>living field.</em></h2>
+        <p>Organic materials, slow breathing, a soft fallback. The specimen is the only place where the interface allows itself a glow.</p>
+      </div>
+      <div class="three-grid">
+        <div class="three-card"><h3>Material</h3><p><b>Translucent bell</b>, additive tentacles, stippled photophores. The opacity never hides the readout behind it.</p></div>
+        <div class="three-card"><h3>Camera</h3><p><b>40° perspective</b>, 12 units. Drag with damping; scroll; double-click reset. One scene per deck.</p></div>
+        <div class="three-card"><h3>Labels</h3><p><b>Four perimeter labels</b>, soft glass, no leader clutter. The species legend is the real key.</p></div>
+        <div class="three-card"><h3>Calm</h3><p><b>Use 2D + reduced motion.</b> The specimen holds a still frame; the sonar and plankton stop.</p></div>
+      </div>
+    </section>
+
+    <section class="section wrap" id="rules">
+      <div class="section-head">
+        <h2>Soft surface, <em>hard data.</em></h2>
+        <p>The field is allowed to be beautiful. The count is not allowed to be vague.</p>
+      </div>
+      <div class="rules">
+        <div class="rulecol"><h3>Do</h3><ul><li>One aqua/coral pair per act; lilac only for identity.</li><li>Soft radii, but mono for every number.</li><li>Glow only on the specimen and live state.</li><li>Keep a 2D specimen and a calm motion switch.</li><li>Let the human figures be the scale.</li></ul></div>
+        <div class="rulecol"><h3>Don't</h3><ul><li>No low-contrast body copy on a glow.</li><li>No decorative blob that hides data.</li><li>No three gradients in one panel.</li><li>No pill controls for everything.</li><li>No floating labels over the specimen.</li></ul></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <span><b>Direction 04 / Bioluminescent Field</b></span>
+    <span>Best for human scale · watch contrast and data density</span>
+    <span><a href="./index.html">← all directions</a></span>
+  </footer>
+
+  <script type="module" src="./lab-3d.js"></script>
+</body>
+</html>

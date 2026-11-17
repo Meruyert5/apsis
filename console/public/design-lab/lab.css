@@ -1,0 +1,162 @@
+/* Shared shell for the Apsis design review. Neutral on purpose: the five
+   directions must do the talking. */
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img, svg { display: block; max-width: 100%; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: inherit; }
+
+.lab-back {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #111;
+  background: #f7f5ef;
+  color: #111;
+  font: 600 12px/1 ui-monospace, "IBM Plex Mono", monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 10px 30px -14px rgb(0 0 0 / 55%);
+}
+.lab-back:hover { background: #111; color: #f7f5ef; }
+.lab-back:focus-visible { outline: 2px solid #4f8cff; outline-offset: 3px; }
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 10000;
+  padding: 10px 14px;
+  background: #fff;
+  color: #000;
+}
+.skip:focus { left: 10px; top: 10px; }
+
+@media (max-width: 760px) {
+  .eyebrow { flex-wrap: wrap; }
+  .eyebrow i { display: none; }
+}
+@media (max-width: 600px) {
+  .lab-back { left: 10px; right: auto; bottom: 10px; padding: 8px 10px; font-size: 11px; }
+}
+
+/* ---------------------------------------------------------------- 3D stage */
+.lab3d {
+  --ld-bg: #0b0a08;
+  --ld-ink: #ece6d8;
+  --ld-mute: #9a9487;
+  --ld-line: rgb(236 230 216 / 18%);
+  --ld-accent: #d8b25e;
+  position: relative;
+  overflow: hidden;
+  background: var(--ld-bg);
+  isolation: isolate;
+}
+.lab3d canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: grab;
+}
+.lab3d[data-mode="fallback"] canvas { display: none; }
+.lab3d [data-3d-fallback] {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  place-items: center;
+}
+.lab3d [data-3d-fallback][hidden] { display: none; }
+.lab3d [data-3d-fallback] svg { width: 100%; height: 100%; }
+.lab3d-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.lab3d-title,
+.lab3d-hint {
+  position: absolute;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ld-mute);
+}
+.lab3d-title { left: 16px; top: 14px; }
+.lab3d-hint { left: 16px; bottom: 14px; }
+.lab3d-label {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border: 1px solid var(--ld-line);
+  background: color-mix(in srgb, var(--ld-bg) 76%, transparent);
+  color: var(--ld-ink);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.lab3d-label::before {
+  content: "";
+  width: 12px;
+  height: 1px;
+  background: var(--ld-accent);
+}
+.lab3d-controls {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  z-index: 3;
+  display: flex;
+  gap: 6px;
+}
+.lab3d-controls button {
+  min-height: 32px;
+  padding: 0 9px;
+  border: 1px solid var(--ld-line);
+  background: color-mix(in srgb, var(--ld-bg) 82%, transparent);
+  color: var(--ld-ink);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.lab3d-controls button:hover { border-color: var(--ld-accent); color: var(--ld-accent); }
+
+@media (max-width: 600px) {
+  .lab3d-label { font-size: 9px; padding: 2px 4px; }
+  .lab3d-hint { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
