@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "verify": "node scripts/verify.mjs",
     "audit": "node scripts/audit.mjs",
-    "shots": "node scripts/shoot.mjs"
+    "shots": "node scripts/shoot.mjs",
+    "test:logic": "node --test src/lib/*.test.ts"
   },
   "dependencies": {
     "lucide-react": "^1.72.0",
