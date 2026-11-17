@@ -95,6 +95,11 @@ const STYLES = {
     accent: 0x4fffe0, additive: true, glow: true, glowOpacity: 0.8,
     cameraZ: 12, fov: 40, grid: false, auto: 0.0004, starScale: 2.2,
   },
+  acidlimbo: {
+    ring: 0xc8ff00, ringOpacity: 0.36, node: 0x4fe3ff, line: 0xff3b1f,
+    accent: 0xff6b35, additive: true, glow: true, glowOpacity: 0.85,
+    cameraZ: 11.8, fov: 40, grid: false, auto: 0.0006, starScale: 2.6,
+  },
 };
 
 function glowTexture() {
@@ -362,6 +367,62 @@ function specimen(palette) {
   return { root, body };
 }
 
+function cluster(palette) {
+  const root = new THREE.Group();
+  const nodes = [];
+  for (let i = 0; i < 16; i += 1) {
+    const a = i * 2.37;
+    const r = 1.4 + (i % 5) * 0.52;
+    const x = Math.cos(a) * r;
+    const z = Math.sin(a) * r;
+    const y = Math.sin(i * 1.7) * 1.05;
+    const color = i % 5 === 0 ? 0xff3b1f : i % 3 === 0 ? 0xc8ff00 : 0x4fe3ff;
+    const geo = i % 2 === 0 ? new THREE.BoxGeometry(0.36, 0.36, 0.36) : new THREE.IcosahedronGeometry(0.26, 1);
+    const node = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({
+      color, transparent: true, opacity: 0.92,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    }));
+    node.position.set(x, y, z);
+    node.rotation.set(i * 0.4, i * 0.7, i * 0.2);
+    root.add(node);
+    nodes.push(node.position.clone());
+  }
+  const route = new THREE.CatmullRomCurve3([
+    nodes[0], nodes[3], nodes[6], nodes[9], nodes[12], nodes[15], new THREE.Vector3(0, 0, 0),
+  ]);
+  root.add(new THREE.Mesh(
+    new THREE.TubeGeometry(route, 90, 0.035, 8, false),
+    new THREE.MeshBasicMaterial({
+      color: palette.line, transparent: true, opacity: 0.9,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    }),
+  ));
+  root.add(new THREE.Mesh(
+    new THREE.TorusGeometry(3.1, 0.018, 8, 140),
+    new THREE.MeshBasicMaterial({
+      color: palette.ring, transparent: true, opacity: 0.45,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    }),
+  ));
+  const core = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: glow, color: palette.accent, transparent: true, opacity: 0.95,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+  }));
+  core.scale.set(1.6, 1.6, 1);
+  root.add(core);
+  nodes.forEach((point, i) => {
+    if (i % 3 !== 0) return;
+    const halo = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: glow, color: i % 6 === 0 ? 0xff3b1f : 0x4fe3ff, transparent: true, opacity: 0.55,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    }));
+    halo.position.copy(point);
+    halo.scale.set(0.9, 0.9, 1);
+    root.add(halo);
+  });
+  return { root };
+}
+
 function mount(el) {
   const canvas = el.querySelector("canvas");
   const fallback = el.querySelector("[data-3d-fallback]");
@@ -391,7 +452,7 @@ function mount(el) {
     ? new THREE.OrthographicCamera(-8, 8, 6, -6, 0.1, 100)
     : new THREE.PerspectiveCamera(palette.fov || 40, 1, 0.1, 100);
 
-  const built = sceneName === "specimen" ? specimen(palette) : orrery(styleName, palette);
+  const built = sceneName === "specimen" ? specimen(palette) : sceneName === "cluster" ? cluster(palette) : orrery(styleName, palette);
   const root = built.root;
   scene.add(root);
   if (palette.ortho) root.rotation.x = 0.35;

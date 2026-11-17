@@ -30,6 +30,11 @@
   Vampire and Mesmerize. Each style has a different object carrying the account
   (halftone body, Fuji, blossom, point cloud, megastructure, crown/sword,
   skeleton, chrome helix, fangs, jellyfish) rather than a recoloured orrery.
+- The chosen hybrid, "Towards Limitless", at
+  `console/public/design-lab/v5/`: Acid grid + Limbo point cloud + Cinematic
+  Lo-fi rainy street, in emerald, crimson, acid lime and cyan. A real WebGL
+  account cluster with a red route, acid portal, film grain and editorial
+  serif italics.
 - A live Signal instrument: auto-advancing phase, gradient light curve with
   area fill and echo, T−/phase readout, and a hold control that stops on scrub.
 - A hop rail with a flowing gradient progress bar, a pulsing play head and a

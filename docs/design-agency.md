@@ -232,3 +232,18 @@ Each plate has the real Apsis data (16 accounts, 194 identities, 144 routes, 37 
 
 The plates are style frames, not the final build: the chosen direction becomes the live 3D object and the other three acts. The first pass (v2) and the earlier style pass (v3) are kept as evidence only.
 
+
+---
+
+## Revision 5 - chosen hybrid: Towards Limitless
+
+The client chose Acid Graphics + Limbo + Cinematic Lo-fi Editorial. The mock is at `/design-lab/v5/`.
+
+It combines the acid grid, barcodes, crop compartments and registration marks with Limbo's phosphor point-cloud cluster and arched portal, over a deep-emerald rainy street with red-orange halation, film dust and scratches. Typography is Archivo Black for TOWARDS, Bodoni italic for Limitless and the vertical 'the', IBM Plex Mono for dates, credits and the STRANGE barcode, and Inter Tight for reading.
+
+The 3D object is a cluster of 16 cubes/spheres (the accounts) joined by a red route through the seven hops, with an acid ring and a warm core. It is a real WebGL object with drag, zoom, reset and Use 2D, not a recoloured orrery.
+
+The palette is emerald #03140F, crimson #FF3B1F, orange #FF6B35, acid lime #C8FF00, cyan #4FE3FF and bone #F2F0E8.
+
+Next: take this Signal mock to the live app, then extend the same world to Map, Decide and Prove.
+

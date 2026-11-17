@@ -195,6 +195,14 @@ capture for choosing the world; the chosen direction gets the live WebGL object
 and the other three acts. The revision log is in
 [docs/design-agency.md](docs/design-agency.md).
 
+### Chosen hybrid: Towards Limitless
+
+`/design-lab/v5/` combines the chosen languages: **Acid grid + Limbo point
+cloud + Cinematic Lo-fi**. Deep emerald shadows, crimson-orange halation, acid
+lime rules, a wet street, film dust and editorial serif italics. The 3D object
+is a point-cloud account cluster — 16 bodies, 144 routes, a red route — inside
+an acid portal, not an orrery.
+
 ### Previous explorations
 
 The first five-direction lab is at `/design-lab/`, the five worlds at
