@@ -217,6 +217,24 @@ point-cloud cluster and route - and re-grades it three ways:
 
 Only the palette, background light and surface noise change. No new objects.
 
+### Neon Luxe dashboard (build)
+
+`/dashboard.html` is the first build of the chosen Neon Luxe product surface. It
+is a separate entry with its own shell, components and CSS - the old console
+markup and styles are not reused. It reads the real bundles for the figures and
+the Games Studio signature route.
+
+- Sidebar with focus account, section nav, palette card and snapshot status.
+- Five figures: 16 accounts, 194 identities, 144 routes, 37 edges cut, 07 deep.
+- Route atlas of the real 7-hop Games Studio path, with the cut marked.
+- Figure / Apsis: an orbit that maps perigee to the 1-hop route and apogee to
+  the 7-hop route, testing the project name as a visual system.
+- Sortable, searchable 16-account fleet table.
+- Posture and evidence panels; JSON snapshot export; read-only throughout.
+
+The layout is responsive to 390px, the sidebar becomes a drawer, and the table
+columns collapse. This entry is not yet the default console route.
+
 ### Previous explorations
 
 The first five-direction lab is at `/design-lab/`, the five worlds at

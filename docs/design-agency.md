@@ -261,3 +261,17 @@ Three colour grades of the approved v5 poster at `/design-lab/v6/`. The layout, 
 03 OPUL 77 - a pitch-black #0A0708 void with a sunset-to-bioluminescent wash: golden yellow #FFC837, tangerine #FF6B2B, hot pink #FF2A9D, periwinkle #6E7BFF and seafoam #2CEAA3. Typography stays white.
 
 No new 3D objects: all three use the v5 cluster and route, recoloured through the shared palette table.
+
+---
+
+## Revision 7 - Neon Luxe dashboard build
+
+The Neon Luxe palette is now a dashboard, not a poster. It lives at `/dashboard.html` as its own Vite entry: separate shell, components and stylesheet, with none of the old console markup or CSS.
+
+The shell is a 236px rail plus a sticky command bar: focus account, section nav, the palette card, snapshot status. The page has five figures (16 accounts, 194 identities, 144 routes, 37 edges cut, 07 deepest), the real Games Studio 7-hop route atlas with the cut marked, a sortable/searchable 16-account fleet table, posture, an evidence timeline and a JSON snapshot export. Figures come from `src/lib/data.ts`; the row totals reconcile to 194 identities, 144 routes and 37 cut edges.
+
+The right-hand Figure / Apsis panel is the name test. An apsis is an orbit's closest or farthest point, so the figure maps perigee to the 1-hop route and apogee to the 7-hop route. It gives the name a real product meaning without forcing the counts to spell A-P-S-I-S.
+
+Typography is Sora for figures and headings, IBM Plex Sans for reading, IBM Plex Mono for telemetry labels, and Georgia italic for the editorial accent. Palette: pitch #0D0303, ice #EFF8FF, acid lime #BBEF1F, crimson magenta #FF0055.
+
+The old console is untouched. This entry is the base for the next product pass; it can become the default route once the shape is approved.
