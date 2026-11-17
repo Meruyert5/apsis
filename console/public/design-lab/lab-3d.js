@@ -30,6 +30,31 @@ const STYLES = {
     accent: 0xc8ff00, additive: false, glow: false,
     cameraZ: 13, fov: 42, grid: true, gridColor: 0x242424, auto: 0.0006,
   },
+  grit: {
+    ring: 0xf2f0e8, ringOpacity: 0.24, node: 0x62e6ff, line: 0xff3b1f,
+    accent: 0xff3b1f, additive: false, glow: false,
+    cameraZ: 12.2, fov: 40, grid: false, auto: 0.00075, starScale: 1.7,
+  },
+  survey: {
+    ring: 0xb8c3cc, ringOpacity: 0.18, node: 0xe8e2d4, line: 0xc7482f,
+    accent: 0xd8734a, additive: false, glow: true, glowOpacity: 0.42,
+    cameraZ: 13.4, fov: 36, grid: false, auto: 0.00022, starScale: 3.2,
+  },
+  flight: {
+    ring: 0xc9c2b2, ringOpacity: 0.2, node: 0xffb347, line: 0xff8a1f,
+    accent: 0xffc46b, additive: false, glow: true, glowOpacity: 0.35,
+    cameraZ: 12.4, fov: 40, grid: false, auto: 0.0004, starScale: 2.2,
+  },
+  notebook: {
+    ring: 0x6e6a5f, ringOpacity: 0.32, node: 0x1d1c18, line: 0xb04a2e,
+    accent: 0xb04a2e, additive: false, glow: false,
+    cameraZ: 12.8, fov: 38, grid: false, auto: 0.00018, starScale: 1.4,
+  },
+  broadcast: {
+    ring: 0x7dffb0, ringOpacity: 0.22, node: 0xfff2c0, line: 0x7dffb0,
+    accent: 0xffb000, additive: true, glow: true, glowOpacity: 0.55,
+    cameraZ: 12.6, fov: 40, grid: true, gridColor: 0x1a3a2a, auto: 0.0005, starScale: 2.4,
+  },
 };
 
 function glowTexture() {
@@ -149,7 +174,8 @@ function orrery(style, palette) {
       map: glow, color: palette.accent, transparent: true,
       opacity: palette.glowOpacity, blending: THREE.AdditiveBlending, depthWrite: false,
     }));
-    star.scale.set(style === "orbital" ? 2.6 : 2.1, style === "orbital" ? 2.6 : 2.1, 1);
+    const starScale = palette.starScale || (style === "orbital" ? 2.6 : 2.1);
+    star.scale.set(starScale, starScale, 1);
     root.add(star);
   }
 

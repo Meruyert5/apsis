@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apsis — Five worlds / Signal only</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../lab.css" />
+  <style>
+    :root {
+      --paper: #f4f1e8;
+      --paper-2: #eeeae0;
+      --ink: #11110f;
+      --muted: #6f6a5f;
+      --rule: #d6d0c2;
+      --red: #d4351c;
+      --blue: #1b4dd8;
+      --sans: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 17px; line-height: 1.55; }
+    .wrap { width: min(1420px, calc(100% - 48px)); margin: 0 auto; }
+    .mono { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .muted { color: var(--muted); }
+    a { color: inherit; }
+
+    .masthead { padding: 26px 0 34px; border-bottom: 1px solid var(--rule); }
+    .masthead-top { display: flex; align-items: center; justify-content: space-between; gap: 22px; }
+    .brandline { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+    .brandline i { width: 8px; height: 8px; background: var(--red); display: inline-block; }
+    .masthead-top nav { display: flex; gap: 20px; }
+    .masthead-top nav a { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--muted); }
+    .masthead-top nav a:hover { color: var(--ink); }
+    .masthead-top nav a.live { color: var(--ink); border-bottom: 1px solid var(--red); padding-bottom: 2px; }
+    .cover { display: grid; grid-template-columns: minmax(0, 8fr) minmax(250px, 3fr); gap: 44px; align-items: end; padding: 46px 0 0; }
+    .cover h1 { margin: 16px 0 0; max-width: 15ch; font: 700 clamp(52px, 7vw, 110px)/.9 var(--sans); letter-spacing: -.06em; }
+    .cover h1 em { font-style: italic; color: var(--red); font-weight: 500; }
+    .cover .deck { max-width: 58ch; margin: 20px 0 0; color: #3c3a34; font-size: 18px; line-height: 1.55; }
+    .cover-side { padding-left: 22px; border-left: 1px solid var(--rule); }
+    .cover-side p { margin: 0 0 12px; color: var(--muted); font-size: 14px; line-height: 1.55; }
+    .cover-side b { color: var(--ink); font-weight: 500; }
+    .cover-side .big { font: 500 36px/.95 var(--mono); letter-spacing: -.04em; color: var(--ink); }
+    .cover-side .big span { color: var(--red); }
+
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; padding: 28px 0 0; }
+    .world { display: grid; grid-template-rows: 190px auto; border: 1px solid var(--rule); background: var(--paper-2); text-decoration: none; transition: transform .2s cubic-bezier(.16,1,.3,1), box-shadow .2s, border-color .2s; }
+    .world:hover { transform: translateY(-3px); border-color: #b9b2a2; box-shadow: 0 24px 50px -40px rgb(0 0 0 / 55%); }
+    .world:first-child { grid-column: 1 / -1; grid-template-columns: 1.05fr 1fr; grid-template-rows: auto; }
+    .world:first-child .preview { min-height: 260px; border-right: 1px solid var(--rule); border-bottom: 0; }
+    .world:last-child { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .world:last-child .preview { min-height: 240px; border-right: 1px solid var(--rule); border-bottom: 0; }
+    .preview { position: relative; overflow: hidden; border-bottom: 1px solid var(--rule); }
+    .body { padding: 18px 20px 20px; display: flex; flex-direction: column; }
+    .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    .num { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--muted); }
+    .tag { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 3px 6px; border: 1px solid currentColor; }
+    .tag.final { color: var(--red); }
+    .tag.wild { color: var(--blue); }
+    .world h2 { margin: 8px 0 5px; font: 600 clamp(26px, 2.6vw, 36px)/1 var(--sans); letter-spacing: -.04em; }
+    .world .thesis { margin: 0 0 12px; color: #4a473f; font-size: 15px; line-height: 1.5; max-width: 52ch; }
+    .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: auto 0 0; padding-top: 12px; border-top: 1px solid var(--rule); }
+    .meta p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--muted); }
+    .meta b { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); font-weight: 500; margin-bottom: 2px; }
+    .open { margin-top: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
+    .open::after { content: " ↗"; }
+
+    /* previews */
+    .pv-grit { background: #0a0a0a; color: #f2f0e8; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; }
+    .pv-grit .big { font: 400 64px/.8 "Archivo Black", Impact, sans-serif; letter-spacing: -.05em; text-transform: uppercase; }
+    .pv-grit .big span { color: transparent; -webkit-text-stroke: 1px #f2f0e8; }
+    .pv-grit .bar { height: 6px; width: 62%; background: #ff3b1f; }
+    .pv-grit .stamp { font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: #8f8f8f; }
+    .pv-quiet { background: linear-gradient(180deg, #2e3a4a, #6d6f70 55%, #d8b49a); padding: 16px; color: #e8e2d4; display: flex; flex-direction: column; justify-content: space-between; }
+    .pv-quiet .sun { position: absolute; right: 24px; top: 24px; width: 72px; height: 72px; border-radius: 50%; background: #c7482f; }
+    .pv-quiet .big { font: 300 42px/.98 "Fraunces", Georgia, serif; letter-spacing: -.04em; }
+    .pv-quiet .big em { font-style: italic; color: #c7482f; }
+    .pv-quiet .stamp { font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+    .pv-flight { background: linear-gradient(160deg, #3a3d34, #1a1c16 60%, #11130e); padding: 16px; display: flex; align-items: center; justify-content: center; }
+    .pv-flight .panel { border: 1px solid #4a4d42; background: #10120d; padding: 10px; width: 100%; max-width: 220px; box-shadow: inset 0 0 20px #000; }
+    .pv-flight .panel b { display: block; color: #ffc46b; font: 500 24px/.9 var(--mono); }
+    .pv-flight .panel span { display: block; font: 400 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: #9a9d8f; }
+    .pv-flight .led { display: inline-flex; gap: 6px; align-items: center; margin-top: 6px; font: 400 9px var(--mono); color: #8fe36b; text-transform: uppercase; }
+    .pv-flight .led i { width: 5px; height: 5px; border-radius: 50%; background: #8fe36b; box-shadow: 0 0 8px #8fe36b; }
+    .pv-notebook { background: #1e1d19; padding: 16px; display: flex; align-items: center; justify-content: center; }
+    .pv-notebook .sheet { background: #efe9dc; color: #24221d; padding: 10px; width: 100%; max-width: 230px; transform: rotate(-2deg); box-shadow: 0 12px 24px -14px #000; }
+    .pv-notebook .sheet b { display: block; font: 300 26px/.95 "Fraunces", Georgia, serif; }
+    .pv-notebook .sheet b em { font-style: italic; color: #a84a2e; }
+    .pv-notebook .sheet span { display: block; margin-top: 5px; font: 400 8px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: #6e6a5f; }
+    .pv-broadcast { background: #050706; padding: 16px; display: flex; align-items: center; justify-content: center; }
+    .pv-broadcast .screen { width: 100%; max-width: 240px; border: 1px solid #1d3526; background: #08120b; padding: 10px; box-shadow: inset 0 0 24px #000; }
+    .pv-broadcast .screen b { display: block; color: #7dffb0; font: 400 18px var(--mono); letter-spacing: .04em; text-transform: uppercase; }
+    .pv-broadcast .screen span { display: block; margin-top: 3px; color: #ffb000; font: 400 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .pv-broadcast .bars { display: flex; gap: 2px; margin-top: 8px; height: 16px; align-items: flex-end; }
+    .pv-broadcast .bars i { width: 4px; background: #7dffb0; display: block; }
+    .pv-broadcast .bars i:nth-child(1) { height: 7px; } .pv-broadcast .bars i:nth-child(2) { height: 13px; } .pv-broadcast .bars i:nth-child(3) { height: 9px; } .pv-broadcast .bars i:nth-child(4) { height: 16px; } .pv-broadcast .bars i:nth-child(5) { height: 11px; }
+
+    .review { margin-top: 44px; padding: 22px 0 44px; border-top: 1px solid var(--rule); display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 28px; }
+    .review ol { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .review li { border-top: 2px solid var(--ink); padding-top: 10px; font-size: 14px; line-height: 1.55; color: #3c3a34; }
+    .review li b { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 4px; color: var(--ink); }
+    .note { grid-column: 2; margin-top: 18px; padding: 14px 16px; background: #efe9dc; border-left: 3px solid var(--blue); font-size: 14px; line-height: 1.6; }
+    .note b { font-weight: 600; }
+    footer { border-top: 1px solid var(--rule); padding: 18px 0 54px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+    footer b { color: var(--ink); font-weight: 500; }
+    footer a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); }
+    footer a:hover { border-color: var(--red); color: var(--red); }
+
+    @media (max-width: 980px) {
+      .cover { grid-template-columns: 1fr; gap: 24px; }
+      .cover-side { border-left: 0; border-top: 1px solid var(--rule); padding: 16px 0 0; display: flex; gap: 24px; flex-wrap: wrap; }
+      .cover-side p { margin: 0; }
+      .grid { grid-template-columns: 1fr; }
+      .world:first-child, .world:last-child { grid-template-columns: 1fr; }
+      .world:first-child .preview, .world:last-child .preview { min-height: 200px; border-right: 0; border-bottom: 1px solid var(--rule); }
+      .review { grid-template-columns: 1fr; }
+      .review .note { grid-column: 1; }
+    }
+    @media (max-width: 620px) {
+      .wrap { width: calc(100% - 32px); }
+      .masthead-top nav { display: none; }
+      .cover h1 { font-size: clamp(44px, 13vw, 64px); }
+      .meta { grid-template-columns: 1fr; }
+      .review ol { grid-template-columns: 1fr; }
+      .preview { height: 170px; }
+      .world:first-child .preview, .world:last-child .preview { min-height: 180px; }
+      .pv-grit .big { font-size: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="lab-back" href="../index.html">← first five directions</a>
+
+  <header class="masthead">
+    <div class="wrap">
+      <div class="masthead-top">
+        <div class="brandline"><i></i><b>Apsis</b> / five worlds / signal only / 17 Nov 2026</div>
+        <nav aria-label="Review">
+          <a href="#worlds">Worlds</a>
+          <a href="#review">How to review</a>
+          <a href="./grit.html">01 Grit</a>
+          <a class="live" href="../">Live console</a>
+        </nav>
+      </div>
+      <div class="cover">
+        <div>
+          <p class="mono muted">New brief / forget the component kit</p>
+          <h1>Five worlds. One account. Pick the <em>place.</em></h1>
+          <p class="deck">
+            Each direction is a Signal-act vertical slice: real Apsis data, a real
+            WebGL stage, one act. The chosen world extends to Map, Decide and
+            Prove. No more five full sites before the world is right.
+          </p>
+        </div>
+        <aside class="cover-side">
+          <div class="big">5 <span>worlds</span><br />1 <span>choice</span></div>
+          <p><b>Same data:</b> 16 accounts, 194 identities, 144 routes, 37 edges cut.</p>
+          <p><b>Every stage:</b> drag, zoom, double-click reset, Use 2D, reduced motion.</p>
+        </aside>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="wrap" id="worlds">
+      <div class="grid">
+        <a class="world" href="./grit.html">
+          <div class="preview pv-grit">
+            <div class="stamp">Movement over speed</div>
+            <div class="big">SIG<span>NAL</span></div>
+            <div class="bar"></div>
+          </div>
+          <div class="body">
+            <div class="top"><span class="num">01 / deconstructed print</span><span class="tag final">Loud</span></div>
+            <h2>GRIT</h2>
+            <p class="thesis">A security flyer pasted on a wall. Halftone, barcodes, layered type, one hot vermilion. The account is a scene, not a dashboard.</p>
+            <div class="meta">
+              <p><b>3D</b>Halftone orrery, stutter, red route.</p>
+              <p><b>Watch out</b>Style over data if the spec sheet is soft.</p>
+            </div>
+            <span class="open">Open the flyer</span>
+          </div>
+        </a>
+
+        <a class="world" href="./quiet-survey.html">
+          <div class="preview pv-quiet">
+            <span class="sun" aria-hidden="true"></span>
+            <div class="stamp">37.7749° N / 122.4194° W</div>
+            <div class="big">Every route<br />reaches its <em>apsis.</em></div>
+          </div>
+          <div class="body">
+            <div class="top"><span class="num">02 / atmospheric field poster</span><span class="tag final">Quiet</span></div>
+            <h2>The Quiet Survey</h2>
+            <p class="thesis">An account observed at dusk. Thin frame, red sun, paper grain, real coordinates. The furthest thing from a security SaaS.</p>
+            <div class="meta">
+              <p><b>3D</b>Slow, foggy landscape; one warm light.</p>
+              <p><b>Watch out</b>Too quiet for operators without a hard data rail.</p>
+            </div>
+            <span class="open">Open the survey</span>
+          </div>
+        </a>
+
+        <a class="world" href="./flight-deck.html">
+          <div class="preview pv-flight">
+            <div class="panel">
+              <span>Routes</span><b>144</b>
+              <span style="margin-top:6px">Display / 3D</span>
+              <span class="led"><i></i>Live</span>
+            </div>
+          </div>
+          <div class="body">
+            <div class="top"><span class="num">03 / analog hardware</span><span class="tag wild">Tactile</span></div>
+            <h2>The Flight Deck</h2>
+            <p class="thesis">A physical instrument panel. Anodized metal, silk-screened labels, toggle switches, one glass display. The instrument metaphor made literal.</p>
+            <div class="meta">
+              <p><b>3D</b>Hologram inside a hardware bezel, amber.</p>
+              <p><b>Watch out</b>Skeuomorphism can slow the UI.</p>
+            </div>
+            <span class="open">Open the deck</span>
+          </div>
+        </a>
+
+        <a class="world" href="./field-notebook.html">
+          <div class="preview pv-notebook">
+            <div class="sheet">
+              <b>Every route reaches its <em>apsis.</em></b>
+              <span>Field notes / Signal / 01</span>
+            </div>
+          </div>
+          <div class="body">
+            <div class="top"><span class="num">04 / expedition log</span><span class="tag wild">Human</span></div>
+            <h2>The Field Notebook</h2>
+            <p class="thesis">An observation notebook. Cream paper, graphite, taped specimen plates, hand annotations. The data is printed; the hand is the scale.</p>
+            <div class="meta">
+              <p><b>3D</b>Specimen plate on paper, sepia ink, soft shadow.</p>
+              <p><b>Watch out</b>Can become a prop if the numbers are handwritten.</p>
+            </div>
+            <span class="open">Open the notebook</span>
+          </div>
+        </a>
+
+        <a class="world" href="./broadcast.html">
+          <div class="preview pv-broadcast">
+            <div class="screen">
+              <b>SIGNAL 01</b>
+              <span>ON AIR / 18:42:07:12</span>
+              <div class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <div class="body">
+            <div class="top"><span class="num">05 / CRT transmission</span><span class="tag wild">Live</span></div>
+            <h2>The Broadcast</h2>
+            <p class="thesis">A signal room. Test card, timecode, channel strip, phosphor green with an amber star. The account is being transmitted, not browsed.</p>
+            <div class="meta">
+              <p><b>3D</b>Phosphor orrery, scanlines, one live feed.</p>
+              <p><b>Watch out</b>Can drift back into “terminal”.</p>
+            </div>
+            <span class="open">Open the broadcast</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="review wrap" id="review">
+      <div><div class="label mono muted">How to review</div></div>
+      <div>
+        <ol>
+          <li><b>Read the cover</b>Does the thesis sound like the company you want to be? Each world states its bet on the first screen.</li>
+          <li><b>Use the 3D</b>Drag the stage, scroll, double-click, then press Use 2D. Resize to 390. The fallback is part of the design.</li>
+          <li><b>Check the loss</b>Each world lists what it wins and what it loses. Pick the loss you can live with.</li>
+        </ol>
+        <p class="note"><b>Room recommendation.</b> For the strongest brand, start with <b>The Quiet Survey</b>. For the strongest category statement, <b>GRIT</b>. For the safest product fit, <b>The Flight Deck</b>. For human scale, <b>The Field Notebook</b>. For a live-ops story, <b>The Broadcast</b>. All five are Signal only; the chosen world extends to Map, Decide, Prove.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <span><b>Apsis</b> / five worlds / signal only</span>
+    <span><a href="../index.html">← the first five directions</a></span>
+    <span><a href="../">live console</a></span>
+  </footer>
+</body>
+</html>

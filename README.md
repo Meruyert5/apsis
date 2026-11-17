@@ -172,21 +172,30 @@ the two-pass direction log are in
 
 ## Design lab
 
-Five complete design systems and UI kits are in
-`console/public/design-lab/`, served at `/design-lab/`. Start with
-`/design-lab/index.html` for the agency memo and the conversation between the
-CEO, CTO, engineer and designer, then open each direction:
+Two comparison surfaces live under `console/public/design-lab/`.
 
-- 01 The Observatory — editorial dark, engraved orrery
-- 02 Orbital Ops — cyber console, holographic orrery
-- 03 Swiss Instrument — paper, two inks, orthographic diagram
-- 04 Bioluminescent Field — organic deep-sea specimen
-- 05 Terminal — brutalist monospace, wireframe orrery
+### Five worlds (current)
 
-Every direction includes a real WebGL stage with drag, zoom, a 2D fallback and a
-reduced-motion path. The live console currently follows Direction 02; the lab is
-the comparison surface for the next overhaul. The conversation and trade-offs
-are also in [docs/design-agency.md](docs/design-agency.md).
+Five Signal-act vertical slices, each with real Apsis data and a real WebGL
+stage. Start at `/design-lab/v2/`:
+
+- 01 **GRIT** — deconstructed print, halftone orrery, one hot vermilion
+- 02 **The Quiet Survey** — atmospheric field poster, dusk 3D landscape
+- 03 **The Flight Deck** — analog hardware panel, amber orbital display
+- 04 **The Field Notebook** — expedition log, taped specimen plate
+- 05 **The Broadcast** — CRT signal room, phosphor transmission
+
+Each world is a Signal-only mock: the 3D stage drags, zooms, resets, falls back
+to 2D and respects reduced motion. The chosen world extends to Map, Decide and
+Prove. The conversation and revision log are in
+[docs/design-agency.md](docs/design-agency.md).
+
+### First exploration
+
+The first five-direction lab is at `/design-lab/` (01 The Observatory, 02
+Orbital Ops, 03 Swiss Instrument, 04 Bioluminescent Field, 05 Terminal). It is
+kept as the evidence trail; the v2 worlds supersede it as the current review.
+The live console currently follows the Orbital Ops direction.
 
 ## Data and scope
 

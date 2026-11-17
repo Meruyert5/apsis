@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apsis — The Flight Deck / a Signal instrument</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../lab.css" />
+  <style>
+    :root {
+      --bg: #12140f;
+      --panel: #1f211b;
+      --panel-2: #2b2e26;
+      --metal: #3a3d34;
+      --metal-2: #4a4d42;
+      --ivory: #e8e2d2;
+      --amber: #ffc46b;
+      --orange: #ff8a1f;
+      --red: #e0452b;
+      --green: #8fe36b;
+      --ink: #10110d;
+      --line: #4a4d42;
+      --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+      --sans: "Inter Tight", "Segoe UI", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --ease: cubic-bezier(.16,1,.3,1);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(70% 50% at 50% -10%, rgb(255 196 107 / 5%), transparent 70%),
+        repeating-linear-gradient(90deg, rgb(255 255 255 / 2%) 0 1px, transparent 1px 4px),
+        var(--bg);
+      color: var(--ivory);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      pointer-events: none;
+      opacity: .06;
+      mix-blend-mode: screen;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='0.6'/></svg>");
+    }
+    .wrap { width: min(1500px, calc(100% - 40px)); margin: 0 auto; }
+    .mono { font-family: var(--mono); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; }
+    .dim { color: #9a9d8f; }
+    a { color: inherit; }
+    .sr { position: absolute; left: -9999px; }
+
+    /* rack */
+    .rack { margin: 22px 0 40px; border: 1px solid #3d4036; background: linear-gradient(180deg, #1c1e18, #12140f); box-shadow: inset 0 1px 0 #4d5044, 0 30px 80px -40px #000; }
+    .rack-top { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 8px 14px; border-bottom: 1px solid #3d4036; background: #161812; font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: #9a9d8f; }
+    .rack-top .brand { display: inline-flex; align-items: center; gap: 8px; font-family: var(--display); font-size: 18px; letter-spacing: .06em; color: var(--ivory); }
+    .rack-top .brand i { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+    .rack-top .mid { display: flex; gap: 18px; }
+    .rack-top .mid b { color: var(--ivory); font-weight: 500; }
+    .screw { width: 10px; height: 10px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #6a6d5f, #2a2c25 62%, #11120e); box-shadow: inset 0 0 2px #000, 0 1px 0 #5a5d50; position: relative; flex: none; }
+    .screw::after { content: ""; position: absolute; left: 2px; right: 2px; top: 4px; height: 1px; background: #11120e; transform: rotate(20deg); }
+
+    .panel { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); border-top: 1px solid #4a4d42; }
+    .panel-left { padding: clamp(20px, 2.4vw, 32px); border-right: 1px solid #3d4036; background: linear-gradient(160deg, #262920, #1a1c16); }
+    .panel-right { padding: clamp(14px, 2vw, 24px); background: linear-gradient(160deg, #1b1d17, #11130e); }
+    .screwline { display: flex; justify-content: space-between; margin-bottom: 12px; }
+    .nameplate { position: relative; border: 1px solid #4a4d42; background: linear-gradient(180deg, #20231c, #14160f); padding: 18px 18px 16px; box-shadow: inset 0 1px 0 #4f5246, inset 0 -10px 30px rgb(0 0 0 / 35%); }
+    .nameplate .screws { position: absolute; inset: 6px; pointer-events: none; }
+    .nameplate .screws .screw { position: absolute; }
+    .nameplate .screws .screw:nth-child(1) { left: 0; top: 0; }
+    .nameplate .screws .screw:nth-child(2) { right: 0; top: 0; }
+    .nameplate .screws .screw:nth-child(3) { left: 0; bottom: 0; }
+    .nameplate .screws .screw:nth-child(4) { right: 0; bottom: 0; }
+    .nameplate .code { display: flex; justify-content: space-between; gap: 12px; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: #9a9d8f; }
+    .nameplate .code b { color: var(--amber); font-weight: 500; }
+    .nameplate h1 { margin: 14px 0 0; max-width: 12ch; font: 600 clamp(44px, 5.2vw, 80px)/.88 var(--display); letter-spacing: -.02em; color: var(--ivory); }
+    .nameplate h1 em { font-style: normal; color: var(--amber); }
+    .nameplate .sub { max-width: 46ch; margin: 14px 0 0; color: #b9bcae; font-size: 13px; line-height: 1.55; }
+    .nameplate .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 0 12px; border: 1px solid #5a5d50; background: linear-gradient(180deg, #3a3d34, #24271f); color: var(--ivory); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; cursor: pointer; box-shadow: inset 0 1px 0 #5a5d50, 0 2px 0 #0b0c08; }
+    .btn:hover { border-color: var(--amber); color: var(--amber); }
+    .btn--amber { border-color: #8a6a32; background: linear-gradient(180deg, #ffc46b, #d49a3a); color: #191a13; box-shadow: inset 0 1px 0 #ffe2a8, 0 2px 0 #5a3c12; }
+    .btn--amber:hover { background: linear-gradient(180deg, #ffd58c, #e1aa48); color: #191a13; }
+    .btn--red { border-color: #7d2a1d; background: linear-gradient(180deg, #e0452b, #a92b17); color: #fff3ec; box-shadow: inset 0 1px 0 #ff9a86, 0 2px 0 #4a120b; }
+    .btn--red:hover { background: #ff5536; border-color: #ff5536; color: #191a13; }
+
+    .gauges { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 18px; }
+    .gauge { border: 1px solid #3d4036; background: #10120d; padding: 10px 11px; box-shadow: inset 0 0 22px rgb(0 0 0 / 55%); }
+    .gauge span { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: #8d9082; }
+    .gauge b { display: block; margin-top: 3px; font-family: var(--mono); font-size: 26px; font-weight: 500; letter-spacing: -.04em; color: var(--amber); text-shadow: 0 0 18px rgb(255 196 107 / 35%); }
+    .gauge .bar { height: 3px; margin-top: 6px; background: #24271f; }
+    .gauge .bar i { display: block; height: 3px; background: linear-gradient(90deg, #8a6a32, var(--amber)); }
+
+    .controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #3d4036; }
+    .switchset { display: flex; gap: 12px; }
+    .switch { display: flex; flex-direction: column; align-items: center; gap: 6px; font-family: var(--mono); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; color: #9a9d8f; }
+    .switch input { position: absolute; opacity: 0; }
+    .switch .track { width: 30px; height: 46px; border: 1px solid #0b0c08; background: linear-gradient(180deg, #0c0d09, #1b1d16); box-shadow: inset 0 2px 6px #000; position: relative; cursor: pointer; }
+    .switch .track::after { content: ""; position: absolute; left: 4px; right: 4px; top: 5px; height: 17px; background: linear-gradient(180deg, #5a5d50, #2a2c25); box-shadow: 0 2px 3px #000, inset 0 1px 0 #7a7d6e; transition: top .16s var(--ease); }
+    .switch input:checked + .track { background: linear-gradient(180deg, #2a2414, #161408); }
+    .switch input:checked + .track::after { top: 23px; background: linear-gradient(180deg, #ffc46b, #b98330); box-shadow: 0 0 12px rgb(255 196 107 / 35%); }
+    .switch input:focus-visible + .track { outline: 1px solid var(--amber); outline-offset: 3px; }
+
+    .knob { display: flex; flex-direction: column; align-items: center; gap: 5px; font-family: var(--mono); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; color: #9a9d8f; }
+    .knob .dial { width: 52px; height: 52px; border-radius: 50%; border: 1px solid #0b0c08; background: radial-gradient(circle at 38% 32%, #5a5d50, #2a2c25 55%, #11120e); box-shadow: inset 0 1px 0 #7a7d6e, 0 3px 6px #000; position: relative; }
+    .knob .dial::after { content: ""; position: absolute; left: 50%; top: 5px; width: 2px; height: 15px; background: var(--amber); transform: translateX(-50%) rotate(28deg); transform-origin: 50% 21px; box-shadow: 0 0 8px var(--amber); }
+    .guard { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+    .guard .cover { font-family: var(--mono); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; color: #9a9d8f; }
+    .guard .button { position: relative; padding: 8px 14px; border: 1px solid #0b0c08; background: repeating-linear-gradient(135deg, #e0452b 0 8px, #a92b17 8px 16px); color: #fff3ec; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; box-shadow: inset 0 1px 0 #ff9a86, 0 2px 0 #4a120b; }
+    .guard .button:hover { filter: brightness(1.1); }
+    .guard .stripe { width: 100%; height: 5px; background: repeating-linear-gradient(135deg, #ffc46b 0 5px, #191a13 5px 10px); }
+
+    /* display */
+    .display-bezel { border: 1px solid #4a4d42; background: linear-gradient(160deg, #363930, #1a1c16 58%, #11130e); padding: 12px; box-shadow: inset 0 1px 0 #5a5d50, inset 0 -1px 0 #0b0c08, 0 18px 40px -24px #000; }
+    .display-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 2px 8px; font-family: var(--mono); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; color: #9a9d8f; }
+    .display-top b { color: var(--ivory); font-weight: 500; }
+    .led { display: inline-flex; align-items: center; gap: 6px; color: var(--green); }
+    .led i { width: 5px; height: 5px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: led 2s ease-in-out infinite; }
+    @keyframes led { 50% { opacity: .35; } }
+    .screen { position: relative; height: 580px; border: 1px solid #000; background: #0a0b08; overflow: hidden; box-shadow: inset 0 0 60px #000; }
+    .screen .lab3d { position: absolute; inset: 0; background: #0a0b08; }
+    .screen .lab3d-title { color: #9a9d8f; }
+    .screen .lab3d-label { background: rgb(10 11 8 / 78%); border-color: rgb(255 196 107 / 30%); color: var(--amber); }
+    .screen .lab3d-hint { color: #8d9082; }
+    .screen .lab3d-controls button { border-color: #5a5d50; background: #1a1c16; color: var(--ivory); }
+    .screen .lab3d-controls button:hover { border-color: var(--amber); color: var(--amber); }
+    .screen::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: linear-gradient(115deg, rgb(255 255 255 / 7%) 0 18%, transparent 34%), repeating-linear-gradient(180deg, rgb(255 255 255 / 3%) 0 1px, transparent 1px 4px); }
+    .display-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 2px 0; font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: #8d9082; }
+    .display-bottom b { color: var(--amber); font-weight: 500; }
+
+    /* log */
+    .log { display: grid; grid-template-columns: 1.1fr .9fr; border-top: 1px solid #3d4036; }
+    .log-left, .log-right { padding: clamp(18px, 2.4vw, 28px); }
+    .log-left { border-right: 1px solid #3d4036; }
+    .log .label { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: #8d9082; }
+    .log h2 { margin: 8px 0 0; font: 600 34px/.9 var(--display); letter-spacing: -.01em; text-transform: uppercase; color: var(--ivory); }
+    .log h2 em { font-style: normal; color: var(--amber); }
+    .paper { margin-top: 14px; background: #e8e2d2; color: #191a13; padding: 14px 16px; border-left: 3px solid #c9a25a; box-shadow: 0 8px 20px -12px #000; }
+    .paper .prow { display: grid; grid-template-columns: 26px 1fr auto; gap: 9px; align-items: baseline; padding: 5px 0; border-bottom: 1px dashed #c9c2b2; font-family: var(--mono); font-size: 9px; }
+    .paper .prow:last-child { border-bottom: 0; }
+    .paper .prow b { color: #a92b17; font-weight: 500; }
+    .paper .prow span { font-size: 10px; }
+    .paper .prow em { color: #6e6a5f; font-style: normal; text-align: right; }
+    .log-right .cutline { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-top: 1px solid #3d4036; font-family: var(--mono); font-size: 9px; text-transform: uppercase; color: #b9bcae; }
+    .log-right .cutline b { color: var(--amber); font-weight: 500; }
+    .log-right .stamp { display: inline-block; margin-top: 10px; padding: 4px 8px; border: 2px solid #e0452b; color: #ff7a5c; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; transform: rotate(-4deg); }
+    .penumbra { margin-top: 14px; padding: 10px; border: 1px solid #3d4036; background: #10120d; display: flex; justify-content: space-between; gap: 12px; align-items: center; flex-wrap: wrap; font-family: var(--mono); font-size: 8px; line-height: 1.7; text-transform: uppercase; color: #8d9082; }
+    .penumbra b { color: var(--ivory); font-weight: 500; }
+    .log-right .switch { margin-top: 14px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--mono); font-size: 9px; text-transform: uppercase; color: #8d9082; }
+    .log-right .switch a { text-decoration: none; border-bottom: 1px solid #5a5d50; padding-bottom: 2px; color: var(--ivory); }
+    .log-right .switch a:hover { border-color: var(--amber); color: var(--amber); }
+    .foot { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; padding: 12px 14px; border-top: 1px solid #3d4036; background: #161812; font-family: var(--mono); font-size: 9px; letter-spacing: .07em; text-transform: uppercase; color: #8d9082; }
+    .foot b { color: var(--ivory); font-weight: 500; }
+    .foot a { color: var(--ivory); text-decoration: none; border-bottom: 1px solid #5a5d50; }
+    .foot a:hover { border-color: var(--amber); color: var(--amber); }
+
+    @media (max-width: 1080px) {
+      .panel { grid-template-columns: 1fr; }
+      .panel-left { border-right: 0; border-bottom: 1px solid #3d4036; }
+      .screen { height: 460px; }
+      .log { grid-template-columns: 1fr; }
+      .log-left { border-right: 0; border-bottom: 1px solid #3d4036; }
+      .rack-top .mid { display: none; }
+    }
+    @media (max-width: 620px) {
+      .wrap { width: calc(100% - 24px); }
+      .panel-left, .panel-right { padding: 16px; }
+      .nameplate h1 { font-size: clamp(40px, 10vw, 56px); }
+      .gauges { grid-template-columns: 1fr 1fr; }
+      .gauges .gauge:nth-child(3) { grid-column: 1 / -1; }
+      .controls { gap: 12px; }
+      .guard { margin-left: 0; align-items: flex-start; }
+      .screen { height: 360px; }
+      .display-bezel { padding: 8px; }
+      .paper .prow { grid-template-columns: 22px 1fr; }
+      .paper .prow em { grid-column: 2; text-align: left; }
+      .foot { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="sr" href="#main">Skip to content</a>
+  <a class="lab-back" href="./index.html">← five worlds</a>
+
+  <div class="wrap">
+    <main id="main">
+      <section class="rack" aria-labelledby="title">
+        <div class="rack-top">
+          <span class="brand"><i></i>APSIS / FLIGHT DECK</span>
+          <span class="mid"><span>SIGNAL / DECK 01</span><span>SERIAL <b>AP-01-5555</b></span><span>READ-ONLY</span></span>
+          <span>18:42 / 16 ACCOUNTS</span>
+          <span class="screw" aria-hidden="true"></span>
+        </div>
+
+        <div class="panel">
+          <div class="panel-left">
+            <div class="screwline" aria-hidden="true"><span class="screw"></span><span class="screw"></span></div>
+            <div class="nameplate">
+              <div class="screws" aria-hidden="true"><span class="screw"></span><span class="screw"></span><span class="screw"></span><span class="screw"></span></div>
+              <div class="code"><span>ORBITAL SECURITY INSTRUMENT</span><b>AP-01 / SIGNAL</b></div>
+              <h1 id="title">Every route reaches its <em>apsis.</em></h1>
+              <p class="sub">A physical console for a living account. The display is the model; the panel is the state. Drag the orrery, read the route, keep the writes at zero.</p>
+              <div class="actions">
+                <a class="btn btn--amber" href="#log">Open the map →</a>
+                <a class="btn" href="#log">Read the evidence</a>
+                <button class="btn btn--red" type="button" id="caution">Master caution</button>
+              </div>
+            </div>
+
+            <div class="gauges" aria-label="Fleet readout">
+              <div class="gauge"><span>routes</span><b>144</b><div class="bar"><i style="width:92%"></i></div></div>
+              <div class="gauge"><span>edges cut</span><b>37</b><div class="bar"><i style="width:64%"></i></div></div>
+              <div class="gauge"><span>revocations</span><b>32</b><div class="bar"><i style="width:58%"></i></div></div>
+            </div>
+
+            <div class="controls" aria-label="Panel controls">
+              <div class="switchset">
+                <label class="switch">FIELD<input type="checkbox" checked /><span class="track"></span></label>
+                <label class="switch">SCAN<input type="checkbox" /><span class="track"></span></label>
+                <label class="switch">3D<input type="checkbox" checked /><span class="track"></span></label>
+              </div>
+              <div class="knob"><span class="dial" aria-hidden="true"></span>RANGE / 07</div>
+              <div class="guard">
+                <span class="cover">guard / minimum cut</span>
+                <span class="stripe" aria-hidden="true"></span>
+                <button class="button" type="button" id="guard">Sever</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-right">
+            <div class="screwline" aria-hidden="true"><span class="screw"></span><span class="screw"></span></div>
+            <div class="display-bezel">
+              <div class="display-top"><span><b>ORBITAL DISPLAY</b> / 3D</span><span class="led"><i></i>LIVE</span></div>
+              <div class="screen">
+                <div class="lab3d" data-3d data-scene="orrery" data-style="flight"
+                     style="--ld-bg:#0a0b08;--ld-ink:#e8e2d2;--ld-mute:#9a9d8f;--ld-line:rgba(232,226,210,.22);--ld-accent:#ffc46b">
+                  <canvas aria-hidden="true"></canvas>
+                  <div class="lab3d-fallback" data-3d-fallback>
+                    <svg viewBox="0 0 720 520" role="img" aria-label="An amber orbit display">
+                      <g fill="none" stroke="#c9c2b2" stroke-opacity=".24">
+                        <ellipse cx="360" cy="270" rx="300" ry="166" transform="rotate(-8 360 270)" />
+                        <ellipse cx="360" cy="270" rx="230" ry="126" transform="rotate(12 360 270)" />
+                        <ellipse cx="360" cy="270" rx="160" ry="88" transform="rotate(-18 360 270)" />
+                      </g>
+                      <path d="M 110 360 C 190 210 300 156 414 198 S 588 330 520 384 S 320 424 360 270" fill="none" stroke="#ff8a1f" stroke-width="1.6" />
+                      <g fill="#ffb347"><circle cx="110" cy="360" r="4" /><circle cx="236" cy="218" r="4" /><circle cx="342" cy="168" r="4" /><circle cx="462" cy="218" r="4" /><circle cx="520" cy="328" r="4" /></g>
+                      <circle cx="360" cy="270" r="8" fill="#ffc46b" />
+                      <circle cx="360" cy="270" r="46" fill="#ffc46b" opacity=".16" />
+                      <g font-family="IBM Plex Mono, monospace" font-size="10" fill="#9a9d8f"><text x="84" y="386">[AP-01]</text><text x="204" y="206">[TOOLS_INTERN]</text><text x="452" y="206">[LIVE-OPS]</text><text x="528" y="350">[ADMIN]</text></g>
+                    </svg>
+                  </div>
+                  <div class="lab3d-hud" aria-hidden="true">
+                    <span class="lab3d-title">3D / orbital display</span>
+                    <span class="lab3d-label" style="--x:74%;--y:38%">TOOLS INTERN / 07</span>
+                    <span class="lab3d-label" style="--x:82%;--y:62%">ADMIN</span>
+                    <span class="lab3d-hint">drag / scroll / dbl-click reset</span>
+                  </div>
+                  <div class="lab3d-controls"><button type="button" data-3d-toggle>Use 2D</button></div>
+                </div>
+              </div>
+              <div class="display-bottom"><span>ROUTE / <b>07 HOPS</b> / 07 STEPS</span><span>STAR / 01 · FLUX / 07</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="log" id="log">
+          <div class="log-left">
+            <p class="label">Flight log / Signal only</p>
+            <h2>The route, on <em>paper.</em></h2>
+            <div class="paper" aria-label="Signature route">
+              <div class="prow"><b>01</b><span>Cross-role assumption</span><em>sts:AssumeRole</em></div>
+              <div class="prow"><b>02</b><span>PassRole into Lambda</span><em>iam:PassRole</em></div>
+              <div class="prow"><b>03</b><span>Cross-role assumption</span><em>sts:AssumeRole</em></div>
+              <div class="prow"><b>04</b><span>Cross-role assumption</span><em>sts:AssumeRole</em></div>
+              <div class="prow"><b>05</b><span>Cross-role assumption</span><em>sts:AssumeRole</em></div>
+              <div class="prow"><b>06</b><span>Cross-role assumption</span><em>sts:AssumeRole</em></div>
+              <div class="prow"><b>07</b><span>New version of an attached policy</span><em>iam:CreatePolicyVersion</em></div>
+            </div>
+          </div>
+          <div class="log-right">
+            <p class="label">Minimum cut</p>
+            <div class="cutline"><span>routes before</span><b>144</b></div>
+            <div class="cutline"><span>routes after</span><b>0</b></div>
+            <div class="cutline"><span>edges cut</span><b>37</b></div>
+            <div class="cutline"><span>actions</span><b>2</b></div>
+            <div class="cutline"><span>writes</span><b>0</b></div>
+            <span class="stamp">printed / not applied</span>
+            <div class="penumbra"><span><b>Penumbra handoff</b><br />path.opened / schema v1 / 7 hops<br />alert.json · evidence.json</span><button class="btn" type="button">Copy alert</button></div>
+            <div class="switch"><span>Signal only. The next act is Map.</span><a href="./index.html">← all five worlds</a></div>
+          </div>
+        </div>
+
+        <div class="foot">
+          <span><b>The Flight Deck</b> / a physical Signal console / 03 of 5 worlds</span>
+          <a href="./grit.html">← GRIT</a>
+          <a href="../index.html">← the five-direction lab</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="../lab-3d.js"></script>
+  <script>
+    const caution = document.getElementById('caution');
+    caution.addEventListener('click', () => {
+      caution.textContent = caution.textContent === 'Master caution' ? 'Caution acknowledged' : 'Master caution';
+    });
+    const guard = document.getElementById('guard');
+    guard.addEventListener('click', () => {
+      guard.textContent = guard.textContent === 'Sever' ? 'Guard open' : 'Sever';
+    });
+  </script>
+</body>
+</html>

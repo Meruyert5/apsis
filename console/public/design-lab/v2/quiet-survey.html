@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apsis — The Quiet Survey / a Signal field poster</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../lab.css" />
+  <style>
+    :root {
+      --dusk: #2e3a4a;
+      --dusk-2: #4a5158;
+      --peach: #d8b49a;
+      --cream: #e8e2d4;
+      --sun: #c7482f;
+      --ink: #1a1a18;
+      --muted: #6b7a88;
+      --line: rgb(232 226 212 / 38%);
+      --serif: "Fraunces", Georgia, serif;
+      --sans: "Manrope", "Segoe UI", system-ui, sans-serif;
+      --mono: "DM Mono", ui-monospace, monospace;
+      --ease: cubic-bezier(.16,1,.3,1);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #2e3a4a 0%, #4a5158 46%, #8b7f78 72%, #d8b49a 100%);
+      color: var(--cream);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      pointer-events: none;
+      opacity: .045;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='0.6'/></svg>");
+    }
+    .frame-line { position: fixed; inset: 12px; z-index: 80; border: 1px solid var(--line); pointer-events: none; }
+    .wrap { width: min(1320px, calc(100% - 64px)); margin: 0 auto; }
+    .mono { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+    .muted { color: var(--cream); opacity: .66; }
+    a { color: inherit; }
+    .sr { position: absolute; left: -9999px; }
+
+    /* masthead */
+    .masthead { display: flex; justify-content: space-between; align-items: center; gap: 22px; padding: 26px 0 10px; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--cream); }
+    .masthead .brand { display: inline-flex; align-items: center; gap: 9px; font-family: var(--serif); font-size: 20px; font-weight: 400; font-style: italic; letter-spacing: 0; text-transform: none; }
+    .masthead .sun-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sun); display: inline-block; }
+    .masthead .mid { opacity: .72; }
+    .masthead .right { text-align: right; opacity: .72; }
+    .masthead .right b { color: var(--cream); font-weight: 500; opacity: 1; }
+
+    /* poster */
+    .poster { position: relative; min-height: 760px; margin-top: 8px; border: 1px solid var(--line); overflow: hidden; isolation: isolate; }
+    .poster-3d { position: absolute; inset: 0; z-index: 1; background: transparent; }
+    .poster-3d .lab3d-title, .poster-3d .lab3d-hint { display: none; }
+    .poster-3d .lab3d-label { background: rgb(46 58 74 / 62%); border-color: rgb(232 226 212 / 34%); color: var(--cream); }
+    .poster-3d::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(180deg, rgb(26 26 24 / 10%) 0%, transparent 38%, rgb(26 26 24 / 26%) 100%); }
+    .sun { position: absolute; right: 9%; top: 9%; z-index: 0; width: 150px; height: 150px; border-radius: 50%; background: var(--sun); opacity: .92; box-shadow: 0 0 80px rgb(199 72 47 / 38%); }
+    .poster-copy { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; justify-content: space-between; padding: clamp(26px, 3.4vw, 44px); pointer-events: none; }
+    .poster-copy a { pointer-events: auto; }
+    .kicker { display: flex; align-items: center; gap: 9px; margin: 0; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--cream); opacity: .8; }
+    .kicker b { color: var(--sun); font-weight: 500; opacity: 1; }
+    .kicker i { width: 60px; height: 1px; background: var(--line); }
+    .poster h1 { margin: 20px 0 0; max-width: 11ch; font: 300 clamp(52px, 6.8vw, 96px)/.94 var(--serif); letter-spacing: -.045em; color: var(--cream); text-shadow: 0 2px 22px rgb(26 26 24 / 55%); }
+    .poster h1 em { font-style: italic; color: var(--sun); }
+    .poster .lede { max-width: 38ch; margin: 20px 0 0; color: rgb(232 226 212 / 88%); font-size: 14px; line-height: 1.65; text-shadow: 0 1px 16px rgb(26 26 24 / 60%); }
+    .poster .link { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; color: var(--cream); border-bottom: 1px solid rgb(232 226 212 / 55%); padding-bottom: 3px; }
+    .poster .link:hover { border-color: var(--sun); color: var(--sun); }
+    .poster .link::after { content: "↗"; }
+    .vertical { position: absolute; left: 17px; top: 54%; z-index: 3; transform: rotate(-90deg) translateX(-50%); transform-origin: left top; font-family: var(--mono); font-size: 9px; letter-spacing: .26em; text-transform: uppercase; color: rgb(232 226 212 / 70%); white-space: nowrap; }
+    .coords { position: absolute; left: clamp(26px, 3.4vw, 44px); bottom: 16px; z-index: 3; font-family: var(--mono); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: rgb(232 226 212 / 72%); }
+    .poster-caption { position: absolute; right: clamp(26px, 3.4vw, 44px); bottom: 16px; z-index: 3; text-align: right; font-family: var(--mono); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: rgb(232 226 212 / 72%); }
+    .poster .lab3d-controls { z-index: 5; bottom: 44px; right: 20px; }
+    .poster .lab3d-controls button { border-color: rgb(232 226 212 / 38%); background: rgb(46 58 74 / 62%); color: var(--cream); }
+    .poster .lab3d-controls button:hover { border-color: var(--sun); color: var(--sun); }
+
+    /* notes */
+    .notes { background: var(--cream); color: var(--ink); padding: clamp(44px, 6vw, 84px) 0; }
+    .notes .wrap { display: grid; grid-template-columns: 1.08fr .92fr; gap: clamp(28px, 5vw, 72px); }
+    .notes .label { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #706a5f; }
+    .notes h2 { margin: 12px 0 0; font: 300 clamp(40px, 5vw, 74px)/.94 var(--serif); letter-spacing: -.04em; }
+    .notes h2 em { font-style: italic; color: var(--sun); }
+    .notes p { max-width: 54ch; margin: 16px 0 0; color: #3c3a34; font-size: 14px; line-height: 1.65; }
+    .route { margin-top: 24px; border-top: 1px solid var(--ink); }
+    .rhead { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--ink); font-family: var(--mono); font-size: 9px; letter-spacing: .07em; text-transform: uppercase; color: #706a5f; }
+    .rstep { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid #d6d0c2; }
+    .rstep b { font-family: var(--mono); font-size: 10px; color: var(--sun); font-weight: 500; }
+    .rstep span { font-size: 13px; }
+    .rstep em { font-family: var(--mono); font-size: 9px; font-style: normal; color: #706a5f; text-align: right; }
+    .cut { border: 1px solid var(--ink); padding: 16px; position: relative; background: rgb(255 255 255 / 18%); }
+    .cut h3 { margin: 0 0 4px; font: 300 30px/1 var(--serif); }
+    .cut p { margin: 0 0 10px; font-size: 13px; color: #3c3a34; }
+    .cut .row { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-top: 1px solid #d6d0c2; font-family: var(--mono); font-size: 10px; text-transform: uppercase; }
+    .cut .row b { font-weight: 500; }
+    .stamp { display: inline-block; margin-top: 12px; padding: 5px 9px; border: 2px solid var(--sun); color: var(--sun); font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; transform: rotate(-5deg); }
+    .penumbra { margin-top: 16px; padding: 12px; border: 1px dashed #8d8577; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+    .penumbra .p { font-family: var(--mono); font-size: 9px; line-height: 1.7; text-transform: uppercase; color: #706a5f; }
+    .penumbra .p b { color: var(--ink); font-weight: 500; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 0 12px; border: 1px solid var(--ink); background: transparent; color: var(--ink); font-family: var(--mono); font-size: 9px; letter-spacing: .07em; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+    .btn:hover { background: var(--ink); color: var(--cream); }
+    .notes .note { margin-top: 18px; padding: 10px 0 0 12px; border-left: 2px solid var(--sun); font-family: var(--mono); font-size: 9px; line-height: 1.7; text-transform: uppercase; color: #706a5f; }
+    .switch { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; align-items: center; margin-top: 28px; padding-top: 16px; border-top: 1px solid #cfc8b8; font-family: var(--mono); font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: #706a5f; }
+    .switch a { text-decoration: none; border-bottom: 1px solid #a39b8c; padding-bottom: 2px; color: var(--ink); }
+    .switch a:hover { border-color: var(--sun); color: var(--sun); }
+
+    @media (max-width: 900px) {
+      .poster { min-height: 700px; }
+      .poster h1 { font-size: clamp(44px, 8vw, 64px); }
+      .notes .wrap { grid-template-columns: 1fr; }
+      .sun { width: 120px; height: 120px; }
+    }
+    @media (max-width: 620px) {
+      .wrap { width: calc(100% - 28px); }
+      .frame-line { inset: 7px; }
+      .masthead { padding-top: 18px; gap: 10px; flex-wrap: wrap; }
+      .masthead .mid { display: none; }
+      .masthead .right { text-align: left; }
+      .poster { min-height: 620px; margin-top: 12px; }
+      .poster-copy { padding: 18px; }
+      .poster h1 { font-size: clamp(38px, 10vw, 54px); margin-top: 14px; }
+      .poster .lede { font-size: 13px; }
+      .sun { width: 96px; height: 96px; top: 26%; right: 10%; }
+      .vertical { display: none; }
+      .poster-caption { display: none; }
+      .coords { bottom: 12px; }
+      .poster .lab3d-controls { bottom: 40px; right: 12px; }
+      .poster .lab3d-label { display: none; }
+      .rstep { grid-template-columns: 24px 1fr; }
+      .rstep em { grid-column: 2; text-align: left; }
+      .notes h2 { font-size: 40px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="sr" href="#main">Skip to content</a>
+  <a class="lab-back" href="./index.html">← five worlds</a>
+  <div class="frame-line" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header class="masthead">
+      <div class="brand"><span class="sun-dot"></span>Apsis</div>
+      <div class="mid">FIELD SURVEY / SIGNAL / 01</div>
+      <div class="right"><b>37.7749° N / 122.4194° W</b><br />18:42 / READ-ONLY</div>
+    </header>
+
+    <main id="main">
+      <section class="poster" aria-labelledby="title">
+        <span class="sun" aria-hidden="true"></span>
+        <div class="lab3d poster-3d" data-3d data-scene="orrery" data-style="survey"
+             style="--ld-bg:#2e3a4a;--ld-ink:#e8e2d4;--ld-mute:#c9c2b2;--ld-line:rgba(232,226,212,.3);--ld-accent:#c7482f">
+          <canvas aria-hidden="true"></canvas>
+          <div class="lab3d-fallback" data-3d-fallback>
+            <svg viewBox="0 0 720 620" role="img" aria-label="A dusky orbit diagram">
+              <defs>
+                <radialGradient id="qSun" cx="50%" cy="50%" r="50%">
+                  <stop offset="0" stop-color="#f0c8a8" />
+                  <stop offset=".35" stop-color="#d8734a" />
+                  <stop offset="1" stop-color="#c7482f" stop-opacity="0" />
+                </radialGradient>
+              </defs>
+              <g fill="none" stroke="#b8c3cc" stroke-opacity=".28">
+                <ellipse cx="360" cy="340" rx="300" ry="156" transform="rotate(-8 360 340)" />
+                <ellipse cx="360" cy="340" rx="230" ry="118" transform="rotate(12 360 340)" />
+                <ellipse cx="360" cy="340" rx="160" ry="82" transform="rotate(-18 360 340)" />
+              </g>
+              <path d="M 110 410 C 190 270 300 230 414 262 S 588 380 520 426 S 320 470 360 340" fill="none" stroke="#c7482f" stroke-width="1.5" />
+              <g fill="#e8e2d4"><circle cx="110" cy="410" r="3" /><circle cx="236" cy="286" r="3" /><circle cx="342" cy="242" r="3" /><circle cx="462" cy="286" r="3" /><circle cx="520" cy="380" r="3" /></g>
+              <circle cx="360" cy="340" r="7" fill="#d8734a" />
+              <circle cx="360" cy="340" r="62" fill="url(#qSun)" opacity=".7" />
+              <g font-family="DM Mono, monospace" font-size="10" fill="#e8e2d4" opacity=".7"><text x="86" y="432">AP-01</text><text x="206" y="232">TOOLS INTERN</text><text x="452" y="232">LIVE-OPS</text><text x="528" y="396">ADMIN</text></g>
+            </svg>
+          </div>
+          <div class="lab3d-hud" aria-hidden="true">
+            <span class="lab3d-label" style="--x:72%;--y:54%">TOOLS INTERN / 07</span>
+            <span class="lab3d-label" style="--x:82%;--y:70%">ADMINISTRATOR</span>
+          </div>
+          <div class="lab3d-controls"><button type="button" data-3d-toggle>Use 2D</button></div>
+        </div>
+
+        <div class="poster-copy">
+          <div>
+            <p class="kicker"><b>Signal / 01</b> / games studio <i></i></p>
+            <h1 id="title">Every route reaches its <em>apsis.</em></h1>
+            <p class="lede">An account observed at dusk. The administrator is the primary; the route is a thin line across the field. Read the survey, not the dashboard.</p>
+            <a class="link" href="#notes">Read the field notes</a>
+          </div>
+          <div>
+            <span class="coords">16 accounts / 194 identities / 144 routes / 37 edges cut</span>
+            <span class="poster-caption">Fig. 01 — signature transfer<br />05 hops / WebGL / 2D fallback</span>
+          </div>
+        </div>
+        <span class="vertical">SIGNAL / 01 / GAMES STUDIO / READ-ONLY / APSIS 0.2.0</span>
+      </section>
+
+      <section class="notes" id="notes">
+        <div class="wrap">
+          <div>
+            <p class="label">Field notes / Signal only</p>
+            <h2>The route, as <em>observed.</em></h2>
+            <p>This is the Signal act as a dusk survey. The 3D orrery is the weather; the route is the observation. The other three acts will follow this world if it survives.</p>
+            <div class="route" aria-label="Signature route">
+              <div class="rhead"><span>Tools intern → administrator</span><span>07 hops</span></div>
+              <div class="rstep"><b>01</b><span>Cross-role assumption</span><em>sts:AssumeRole</em></div>
+              <div class="rstep"><b>02</b><span>PassRole into Lambda</span><em>iam:PassRole</em></div>
+              <div class="rstep"><b>03</b><span>Cross-role assumption</span><em>sts:AssumeRole</em></div>
+              <div class="rstep"><b>04</b><span>Cross-role assumption</span><em>sts:AssumeRole</em></div>
+              <div class="rstep"><b>05</b><span>Cross-role assumption</span><em>sts:AssumeRole</em></div>
+              <div class="rstep"><b>06</b><span>Cross-role assumption</span><em>sts:AssumeRole</em></div>
+              <div class="rstep"><b>07</b><span>New version of an attached policy</span><em>iam:CreatePolicyVersion</em></div>
+            </div>
+            <p class="note">Composition borrowed from the poster: thin frame, vertical labels, red disc, real coordinates. No cultural pastiche; the labels are English and the data is Apsis.</p>
+          </div>
+          <div>
+            <div class="cut">
+              <h3>The cut</h3>
+              <p>Printed, not applied. Two actions remove 37 edges and close 15 routes.</p>
+              <div class="row"><span>routes before</span><b>144</b></div>
+              <div class="row"><span>routes after</span><b>0</b></div>
+              <div class="row"><span>edges cut</span><b>37</b></div>
+              <div class="row"><span>actions</span><b>2</b></div>
+              <div class="row"><span>writes</span><b>0</b></div>
+              <span class="stamp">Closed / verified</span>
+            </div>
+            <div class="penumbra">
+              <div class="p"><b>Penumbra handoff</b><br />path.opened / schema v1 / 7 hops<br />alert.json · evidence.json</div>
+              <button class="btn" type="button">Copy alert</button>
+            </div>
+            <div class="switch">
+              <span>Signal only. The next act is Map.</span>
+              <a href="./index.html">← all five worlds</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="switch wrap" style="border-top:1px solid #cfc8b8;color:#706a5f">
+      <span><b>The Quiet Survey</b> / a dusk field poster / 02 of 5 worlds</span>
+      <a href="./grit.html">← GRIT</a>
+      <a href="../index.html">← the five-direction lab</a>
+    </footer>
+  </div>
+
+  <script type="module" src="../lab-3d.js"></script>
+</body>
+</html>

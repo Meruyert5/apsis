@@ -152,3 +152,61 @@ test how far the brand can go. The final call is the client's.
 - A 2D fallback on the same surface and a reduced-motion path.
 - A real command, route or specimen in the scene; no decorative geometry that
   does not map to the account.
+
+---
+
+## Revision 3 — five worlds, Signal only (current)
+
+**Mara (CEO):** “All five are bad. They are design-system demos. Forget the
+design and UI completely.”
+
+**Noa (designer):** “Then we start from a world, not a component kit. Five
+worlds, one Signal act each, real data, real 3D. Pick the world, then we build
+Map, Decide and Prove.”
+
+**Ilya (CTO):** “Real WebGL, real fallback, 390px and 1440px. Same contract as
+before, no exceptions.”
+
+**Priya (engineer):** “One vertical slice before the other three acts. I am not
+building four screens of a world we have not chosen.”
+
+### The five worlds
+
+| # | World | Register | 3D | The bet |
+| --- | --- | --- | --- | --- |
+| 01 | GRIT | Deconstructed print / flyer | Halftone orrery, stutter, red route | The account is a scene; loud, memorable, category-breaking |
+| 02 | The Quiet Survey | Atmospheric field poster | Slow, foggy landscape, one warm light | The opposite of security SaaS; a place at dusk |
+| 03 | The Flight Deck | Analog hardware panel | Hologram in a physical glass display | The instrument metaphor made literal |
+| 04 | The Field Notebook | Expedition log | Specimen plate on paper, sepia ink | Human scale, evidence and observation |
+| 05 | The Broadcast | CRT signal room | Phosphor orrery, scanlines, one live feed | The account is being transmitted, not browsed |
+
+The two poles the client supplied are **GRIT** (deconstructed print) and **The
+Quiet Survey** (travel poster). The other three extend the range: tactile,
+analog, live.
+
+### Files
+
+- `console/public/design-lab/v2/index.html` — the five-world comparison
+- `console/public/design-lab/v2/grit.html`
+- `console/public/design-lab/v2/quiet-survey.html`
+- `console/public/design-lab/v2/flight-deck.html`
+- `console/public/design-lab/v2/field-notebook.html`
+- `console/public/design-lab/v2/broadcast.html`
+
+### What each mock proves
+
+- A world can carry the real Apsis data: 16 accounts, 194 identities, 144
+  routes, 37 edges cut, the seven-hop tools-intern route, the Penumbra handoff.
+- The 3D stage can change material language without changing the geometry:
+  halftone, dusk, amber hardware, sepia ink, phosphor.
+- A Signal-only vertical slice is enough to judge the world. The other acts are
+  deliberately not designed yet.
+
+### Room recommendation
+
+If the brand needs to be unmistakable: **GRIT** or **The Quiet Survey**. If the
+buyer is a CISO: **The Flight Deck** or **The Field Notebook**. If the story is
+live operations: **The Broadcast**. The designer would prototype **The Quiet
+Survey** and **GRIT** first because they are the two poles; the next step is one
+Signal slice in the chosen world, then Map.
+

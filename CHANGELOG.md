@@ -19,6 +19,11 @@
 - `docs/design-research.md`: the Pinterest reference trail (NOCTRA, Swiss 037,
   Flowers of the Sky, Deep Sea Bioluminescence), the evidence table, and the
   two-pass direction log from editorial plates to the cyber console.
+- Five Signal-only design worlds under `console/public/design-lab/v2/`: GRIT,
+  The Quiet Survey, The Flight Deck, The Field Notebook and The Broadcast.
+  Each is a vertical slice with real data, a real WebGL stage, drag/zoom, a 2D
+  fallback and a reduced-motion path. The revision log is in
+  `docs/design-agency.md`.
 - A live Signal instrument: auto-advancing phase, gradient light curve with
   area fill and echo, T−/phase readout, and a hold control that stops on scrub.
 - A hop rail with a flowing gradient progress bar, a pulsing play head and a
