@@ -28,11 +28,11 @@ than claiming to replace them.
 ## What Apsis adds
 
 - **Routes as the unit.** Each edge keeps the IAM action, the statement that
-  allowed it, and a MITRE technique; the survey shows the shortest walk to the
+  allowed it, and a MITRE technique; the Map shows the shortest walk to the
   administrator and lets a reviewer step it.
 - **Minimum cut as a first-class result.** The sever view names the grants to
   revoke, not just the risky principals.
-- **A coverage view.** The atlas shows 18 primitives across 16 accounts. It is a
+- **A coverage view.** The specimen shows 18 primitives across 16 accounts. It is a
   coverage chart, not a benchmark.
 - **One static artifact.** The console is a recorded export; it does not call
   AWS, and it can be published without a backend.
@@ -56,16 +56,15 @@ representative sample of AWS accounts and must not be used as a benchmark.
 
 ## Design assessment
 
-The orbital metaphor is useful for routes and hop depth because it makes distance
-and convergence visible. It is weaker for exact counts, so the atlas keeps exact
-numbers in the accessible name, the title, and the inspector. The matrix uses
-body class and tone to make coverage scannable, with a plain data trail behind
-it.
+The living-account metaphor is useful because the growth rings make hop distance
+and convergence visible. It is weaker for exact counts, so the ledger keeps the
+exact numbers in accessible names, rows and bars. The specimen uses ring depth
+and photophore size to make coverage scannable, with the data trail beside it.
 
 The main risk is **security theatre**: a beautiful graph that hides weak
 evidence. The dossier is the mitigation. It shows the action, the narration, the
 MITRE mapping, the evidence, and the fix for the active hop. A future plain-table
-or CSV view would make the atlas useful outside the visual metaphor.
+or CSV view would make the ledger useful outside the visual metaphor.
 
 ## Recommended next work
 

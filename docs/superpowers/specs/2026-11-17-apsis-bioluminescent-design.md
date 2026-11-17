@@ -16,12 +16,8 @@ organism; the fleet is the ecosystem it belongs to; the administrator is
 the nucleus that every route reaches. The page is still a security tool, so
 every glowing thing has a data job and every count stays exact.
 
-The three approved mockups are the visual target:
-
-- `docs/superpowers/specs/mockups/map-bio.html` — the 3D living account.
-- `docs/superpowers/specs/mockups/core-prove.html?theme=bio` — the 3D
-  specimen and the abyss.
-- the six stills in `docs/superpowers/specs/mockups/`.
+The approved mockups were built locally as a scratch visual check and are not
+shipped; the retained stills are in `docs/img/`.
 
 The solar-system Map is retired. The spatial logic survives: distance from
 the administrator is still hop depth, and the shortest route is still the

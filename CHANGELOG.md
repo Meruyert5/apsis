@@ -1,3 +1,28 @@
+## Unreleased
+
+### Changed
+
+- The console is now a bioluminescent deep-sea instrument: a 3D living-account
+  Map, a 3D fleet specimen with a 2D fallback, a merged proof act, and a
+  mission rail. The solar-system survey and planet atlas are retired.
+- Sora, IBM Plex Sans, and IBM Plex Mono are the only type families; the
+  palette is abyss teal, cyan, mint, violet, coral and amber.
+- The Map and Decide sections are Three.js scenes that pause when offscreen and
+  fall back to static/2D views for reduced motion.
+
+### Added
+
+- A command palette (`Ctrl/⌘ K`) for acts, accounts and techniques.
+- A living-account model with deterministic depth, route and spiral layout,
+  covered by Node tests.
+- A 3D specimen core and a 2D radial alternative.
+- A revocation ledger sourced from `permissionSteps`.
+
+### Removed
+
+- The solar-system constellation, the planet hero, the planet atlas and the
+  astronaut. The planet textures are no longer shipped.
+
 # Changelog
 
 All notable changes are recorded here. The project follows Semantic Versioning.

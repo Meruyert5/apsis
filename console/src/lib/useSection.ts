@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 export const SECTIONS = [
-  { id: "start", label: "Start", index: "01" },
-  { id: "survey", label: "Orbit", index: "02" },
-  { id: "atlas", label: "Atlas", index: "03" },
-  { id: "commands", label: "Log", index: "04" },
+  { id: "signal", label: "Signal", index: "01" },
+  { id: "map", label: "Map", index: "02" },
+  { id: "decide", label: "Decide", index: "03" },
+  { id: "prove", label: "Prove", index: "04" },
 ] as const;
 
 export type SectionId = (typeof SECTIONS)[number]["id"];
@@ -13,7 +13,7 @@ export type SectionId = (typeof SECTIONS)[number]["id"];
  * A scroll read (rather than an IntersectionObserver) survives the lazy
  * Commands chunk replacing its Suspense fallback with a new DOM node. */
 export function useSection(): SectionId {
-  const [current, setCurrent] = useState<SectionId>("start");
+  const [current, setCurrent] = useState<SectionId>("signal");
 
   useEffect(() => {
     let frame = 0;

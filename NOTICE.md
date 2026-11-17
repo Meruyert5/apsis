@@ -15,14 +15,6 @@ served CSS or JavaScript. If the design source must remain private, use a privat
 console repository and publish the built site from there; see
 `docs/DEPLOYMENT.md`.
 
-## Planet textures
-
-- **Solar System Scope** — https://www.solarsystemscope.com/textures/
-  Licensed under **CC BY 4.0**.
-- Earth day, normal, specular, cloud, night-light and lunar maps are NASA-derived
-  imagery distributed with the three.js examples. NASA imagery is generally not
-  copyrighted in the United States; retain the source credit.
-
 ## Fonts
 
 - **Sora** — SIL Open Font License 1.1.

@@ -1,148 +1,101 @@
 # Apsis — design system
 
-Apsis is both the console and the engine that produces its data. This document
-records the visual and interaction system so the interface can be reviewed,
-extended, or replaced without guessing at intent.
+The console is one bioluminescent instrument: a living-account Map, a fleet
+specimen, and a proof act in the abyss. The binding spec is
+`docs/superpowers/specs/2026-11-17-apsis-bioluminescent-design.md`; this page
+records the system a reviewer needs to extend it.
 
 ## 1. Concept
 
-The console is framed as a **field instrument for an orbital survey**, not a
-marketing dashboard. The account is a small solar system: the administrator is
-the sun, principals are bodies on hop orbits, and the atlas is a coverage chart
-where each body's class encodes a grant count. The metaphor is explanatory, not
-literal; the graph, routes, and counts are the engine's data.
+One account is one organism. The administrator is the nucleus; identities are
+cells on growth rings; escalations are veins. The fleet is the ecosystem: the
+Decide core is the specimen of all 16 organisms, and the Prove act is the
+environment they live in.
 
-Three rules keep the metaphor honest:
-
-1. Every instrument has a data job. No decorative chart without an encoding.
-2. The engine's evidence (actions, ARNs, MITRE technique) stays one click away.
-3. The interface never implies complete AWS coverage. The technique set and the
-   fixture fleet are stated in the UI and in the README.
+Every glow has a data job. Nothing in the interface is a decorative chart.
 
 ## 2. Colour
 
-The palette is a near-black deep-space chassis with two cold accents — electric
-blue and violet — a restrained rose edge, and a very small gold live signal.
-
 | Token | Value | Use |
 | --- | --- | --- |
-| `--chassis` | `#03050e` | page base |
-| `--chassis-2` | `#070b18` | rails, raised chrome |
-| `--well` | `#060b18` | recessed panels |
-| `--chalk` | `#eef3ff` | primary text |
-| `--chalk-2` | `#b7c5e6` | reading text |
-| `--mute` | `#8b9bc4` | labels, metadata |
-| `--accent` | `#5b8cff` | primary signal, active route |
-| `--cobalt` | `#7aa2ff` | compute, secondary signal |
-| `--violet` | `#8b5cf6` | identity, escalation |
-| `--violet-lit` | `#c9b8ff` | trust, soft highlights |
-| `--oxide` | `#ff7696` | severance, critical states |
-| `--gold` | `#e6b86a` | live/REC flecks, final zero |
+| `--abyss` | `#02090c` | page base |
+| `--hull` | `#03110f` | work panels |
+| `--well` | `#020c0b` | data wells, terminal |
+| `--ink` | `#eafff8` | primary text |
+| `--read` | `#a9e6d6` | reading text |
+| `--cyan` | `#4fe3c1` | compute, live, primary signal |
+| `--violet` | `#8b7bff` | identity |
+| `--mint` | `#d6fff2` | trust, light |
+| `--rose` | `#ff8fa3` | severance, critical |
+| `--amber` | `#ffd27a` | nucleus, administrator, one live lure |
 
-Data inks are deliberately separate from UI signal: identity `#8b5cf6`, compute
-`#7aa2ff`, trust `#c9b8ff`, severity `#ff7696`. Gold is never a surface fill.
-
-Surfaces are one glass recipe: a 155° blue-tinted gradient, a 1px cool hairline,
-`blur(22px) saturate(145%)`, and an inset top highlight. The sky behind them is a
-fixed layer of blue, violet, and a faint rose horizon, so every panel refracts the
-same field.
+Amber is never a surface fill. Coral never marks a healthy state.
 
 ## 3. Typography
 
 | Role | Family | Notes |
 | --- | --- | --- |
-| Display | **Sora** 300–800 | headings, figures, wordmark |
-| Reading | **IBM Plex Sans** 400–600 | body copy, control labels |
-| Telemetry | **IBM Plex Mono** 400–500 | data, labels, terminal |
+| Display | Sora 300–800 | headings, figures, wordmark |
+| Reading | IBM Plex Sans 400–600 | body, controls |
+| Telemetry | IBM Plex Mono 400–500 | data, labels, terminal |
 
-All fonts are self-hosted from `console/public/fonts` with their OFL licences.
-Text never drops below 14px. Headings use tight tracking and large, quiet sizes;
-labels use normal case rather than all-caps so the interface reads as a tool, not
-a poster.
+Self-hosted from `console/public/fonts`; only these families ship. Text never
+drops below 14px.
 
-## 4. Form and layout
+## 4. Surfaces and shape
 
-- **The field**: a fixed layer behind the whole page with a drifting blue-violet
-  mesh, two starfields, a 176vw arc, a smaller rotated arc, two CSS orbs, a
-  horizon glow, and faint axis lines. It is decorative, `aria-hidden`, and never
-  scrolls.
-- **Top rail**: a floating glass command bar. It carries the wordmark, the section
-  index, the live status waveform, the motion preference, and the section counter.
-  It is not a sidebar; on mobile it becomes a compact bar.
-- **Plates**: sections sit directly on the field. Panels use a 22–24px radius and
-  a glass edge; tables keep their square grid inside a dark glass frame. Tools are
-  soft, data is ruled.
-- **Detail wells**: the survey dossier and atlas inspector are glass plates with a
-  violet/blue corner bracket and a top index rail.
-- **The recorded log** is the one true console screen: a grid, a dark REC bar, and
-  gold only on the recording mark. It is evidence, not decoration.
-- **The black hole** is an instrument plate; the final zero is gold.
+- **Membrane** — translucent teal gradient, 1px cool hairline, soft inner
+  highlight, asymmetric radius (22px / 7px). Work panels.
+- **Hull** — near-opaque abyss panel with a hairline. Terminal, readout, stage.
+- **Well** — `#020c0b` with a teal hairline. Data, code, inputs.
+- Controls use an 8px radius; data chips 4px. Not everything is a pill.
+- The top bar is solid; the mission rail is fixed at 66px and expands to 226px.
 
-## 5. Data encodings
+## 5. The four acts
 
-### Survey
+**Signal** — a 2D signature vein to an amber nucleus, the fleet readout, and a
+five-stage bus. No WebGL on the first paint.
 
-- Sun = administrator.
-- Orbit radius = hop count.
-- Body class = identity kind (user, role, group, resource).
-- Route spine = the shortest path to the administrator.
-- Sever = the minimum edge cut, with the affected actions and evidence in the
-  dossier.
+**Map** — a Three.js organism: nucleus lobes, organic growth rings, identity
+cells, curved veins, a fresnel membrane and plankton. The selected route is a
+tube with two travelling pulses. Severing turns the cut veins coral and dims the
+organism. The workbench adds a principal rail, Route/Node/Cut readout, hop bar
+and account selector. Reduced motion renders a static frame.
 
-### Atlas
+**Decide** — a Three.js specimen of 16 account rings and 18 technique ribs with
+photophores at the intersections. The 2D radial core is the fallback and the
+explicit alternate view. The ledger is the exact reading path.
 
-- Rows = the 18 modelled escalation primitives.
-- Columns = the 16 fixture accounts, with a short label in the header.
-- Body class = observed grant count: void, moon, planet, ringed, giant, star,
-  cluster, galaxy.
-- Tone = category: identity, compute, trust.
-- Exact counts are in the accessible name, the title, and the inspector. The
-  matrix itself is intentionally number-free.
-- The matrix runs full width and the selected technique opens as a detail plate
-  underneath, because the fleet no longer fits beside it.
+**Prove** — the recorded terminal, the abyss, the zero, the revocation ledger
+and the diver. The abyss is full-bleed and unframed.
 
 ## 6. Motion
 
-- One live 3D scene per plate: Earth, survey, event horizon. Each pauses when it
-  leaves the viewport and renders a static frame when motion is off.
-- The sky is the only page-level animation: the mesh drifts on a 32s alternate,
-  and two orbs float slowly. Both stop for reduced motion and for the in-app
-  switch.
-- No cursor-following Earth, no custom cursor, no permanent scroll-linked
-  animation.
-- The top-bar waveform, gauge ring, and hover sheen are the small moving details.
-- `prefers-reduced-motion` and the in-app motion switch both resolve to stable
-  final states; the audit asserts this.
+- Pulses travel along the selected vein; the membrane breathes; the specimen
+  rotates slowly.
+- One visible WebGL scene at a time; each pauses offscreen.
+- `prefers-reduced-motion` and the manual motion switch resolve to the 2D core,
+  static Map, no countdown and no drift.
+- Durations: 120 press, 180 hover, 280 state, 620 scene.
 
-## 7. Performance
+## 7. Accessibility
 
-- Textures are 1K for the small planets and 2K only for the hero Earth.
-- Pixel ratio is capped at 1.5 on high-DPI screens.
-- The survey uses standard materials and sprite glows; its full-resolution bloom
-  pass was removed.
-- Survey labels update at 10fps rather than every frame.
-- The sky is two composited layers with `will-change: transform`; glass blur is
-  dropped at 900px, where the panels are full width and the cost is not worth it.
-- Sections below the fold are ordinary DOM; the Commands chunk is eager so the
-  page height does not jump.
+- The Map canvas and the 3D core are `aria-hidden`; the principal rail, readout
+  and ledger carry every value.
+- The 2D radial core is keyboard-operable and is the reduced-motion default.
+- Tabs, hop bar, palette, selects and sever controls are keyboard reachable.
+- Contrast 4.5:1, 14px floor, 24px targets, visible focus, no overflow at 390.
+- Amber is never the only carrier of meaning.
 
-## 8. Accessibility
+## 8. Performance
 
-The console targets WCAG 2.2 A/AA floors:
-
-- text contrast at least 4.5:1;
-- no text below 14px;
-- targets at least 24px (most controls are 36–44px);
-- keyboard reachable controls with visible focus;
-- no horizontal overflow at 1440 or 390;
-- accessible names on every instrument control;
-- reduced-motion parity.
-
-`console/scripts/audit.mjs` measures contrast, heading order, names and target
-size. `console/scripts/verify.mjs` exercises the flows and responsive layouts.
+- Map: ~16 cells, 16 veins, 8 rings, 220 plankton; one rAF, paused offscreen.
+- Decide: 288 photophores, 16 rings, 18 ribs; one rAF, disposed on rebuild.
+- Prove: the existing horizon shader, one rAF.
+- Sky: a single fixed canvas with the fleet graph at 8–14% opacity.
+- DPR capped at 1.5. The old theme CSS and unused textures are removed.
 
 ## 9. Ownership
 
 The design, wordmark, and screenshots are © 2026 Meruyert Oshayeva. The source
-code is MIT; see the repository notice for the split between functional code and
-visual identity.
+code is MIT; the visual identity is reserved. See `NOTICE.md`.

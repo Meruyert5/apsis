@@ -4,8 +4,8 @@
 
 Apsis reads an AWS account as a permission system, finds every route from a
 low-privilege principal to administrator, and computes the smallest set of grants
-to revoke so that no route remains. Apsis turns that output into an orbital
-survey you can inspect, step, and sever.
+to revoke so that no route remains. Apsis turns that output into a
+living-account console you can inspect, step, and sever.
 
 [![CI](https://github.com/Meruyert5/apsis/actions/workflows/ci.yml/badge.svg)](https://github.com/Meruyert5/apsis/actions/workflows/ci.yml)
 [![Pages](https://github.com/Meruyert5/apsis/actions/workflows/pages.yml/badge.svg)](https://github.com/Meruyert5/apsis/actions/workflows/pages.yml)
@@ -14,7 +14,7 @@ survey you can inspect, step, and sever.
 [![Console: React + Vite](https://img.shields.io/badge/console-React%20%2B%20Vite-d9b36a)](console/package.json)
 [![Data: synthetic](https://img.shields.io/badge/data-synthetic%20fixtures-e0799a)](docs/RESEARCH.md)
 
-![Apsis: a lit Earth, a signature transit, and the method](docs/img/hero.png)
+![Apsis: a signature vein ending at the nucleus, and the fleet readout](docs/img/signal.png)
 
 ## What this is
 
@@ -50,17 +50,17 @@ with `iam:PassRole` and `lambda:CreateFunction` is not obviously dangerous until
 you see that it can hand a role to a function and invoke it. Apsis composes
 those steps into edges and searches for the shortest walk to an administrator.
 
-The orbital console is an explanatory layer over that graph:
+The living-account console is an explanatory layer over that graph:
 
-- the administrator is the sun;
-- each principal is a body on the orbit its hop count allows;
-- the bright spine is the selected route;
-- severing the cut puts the system out.
+- the administrator is the nucleus;
+- each principal is a cell on the growth ring its hop count allows;
+- the bright vein is the selected route;
+- severing the cut darkens the organism.
 
-The atlas is a second view of the same export: 18 escalation primitives against
-the 16 fixture accounts. A body's class encodes the observed grant count; its
-tone encodes the category. Exact counts stay in the accessible name, the title,
-and the inspector.
+The specimen is a second view of the same export: 18 escalation primitives as
+ribs against the 16 fixture accounts as rings. A photophore is an edge the
+engine observed; its size encodes the count, its tone the category. Exact
+counts stay in the ledger and the accessible names.
 
 ## How it works
 
@@ -82,7 +82,7 @@ apsis/             engine: model, policy matcher, techniques, paths, cut, diff, 
 scenarios/            sixteen account fixtures
 scripts/              export_commands.py, records CLI output for the console
 tests/                engine tests, standard library only
-console/             Apsis: React site, generated data, verify, audit and capture tooling
+console/             Apsis: React site, generated data, verify and audit tooling
 docs/                 design, research, assumptions, deployment, screenshots
 ```
 
@@ -152,17 +152,18 @@ npm run audit      # contrast, headings, names, target size
 | Section | What it does |
 | --- | --- |
 | Start | Lit Earth, the signature transit, and the five-move method |
-| Orbit | The account as a solar system: drag, pan, zoom, lift a body, step a route, sever the cut |
-| Atlas | 18 techniques × 16 accounts, with the fix in the inspector |
-| Log | A command builder beside the engine's recorded output |
-| Resolution | The account at zero, the export facts, and the notes |
+| Signal | A signature vein, the fleet readout, and the five-stage bus |
+| Map | The account as a living organism: nucleus, growth rings, cells, veins; step a route and sever the cut |
+| Decide | 18 techniques × 16 accounts as a specimen core, with the exact ledger |
+| Prove | A command builder, the recorded output, the abyss, and the zero |
 
-![The survey section](docs/img/survey.png)
+![The Map section](docs/img/map.png)
 
-The design is a deep-space cybernetic console rather than a dashboard: one fixed
-blue-violet field behind everything, glass plates with a restrained rose edge, a
-top command rail, and a dark terminal for recorded output. Gold appears only as a
-live signal. The full system is in [docs/DESIGN.md](docs/DESIGN.md).
+The design is a bioluminescent deep-sea instrument: a dark abyss, membrane
+panels, a living-account organism in 3D, a 3D fleet specimen with a 2D fallback,
+and an abyss that closes the page. Amber marks the nucleus and the live signal;
+coral marks severance. The full system is in
+[docs/superpowers/specs/2026-11-17-apsis-bioluminescent-design.md](docs/superpowers/specs/2026-11-17-apsis-bioluminescent-design.md).
 
 ## Data and scope
 
@@ -232,7 +233,7 @@ Details, custom domains, and the CLI steps are in
 
 | Now | Next | Later |
 | --- | --- | --- |
-| 18 primitives, 16 fixtures, route survey, minimum cut, static console, Pages workflow | Live import from `GetAccountAuthorizationDetails`; condition and resource-policy evaluation; CSV/table view for the atlas | Benchmark against PMapper; drift view in the console; more primitives with fixture coverage |
+| 18 primitives, 16 fixtures, route survey, minimum cut, static console, Pages workflow | Live import from `GetAccountAuthorizationDetails`; condition and resource-policy evaluation; a CSV view of the ledger | Benchmark against PMapper; drift view in the console; more primitives with fixture coverage |
 
 ## Contributing
 
@@ -242,10 +243,9 @@ verify` / `npm run audit` before a UI change.
 
 ## Credits
 
-Planet textures by [Solar System Scope](https://www.solarsystemscope.com/textures/)
-under CC BY 4.0. Earth and lunar maps are NASA-derived. Sora and IBM Plex are
-licensed under the SIL Open Font License. Three.js, React, Vite and Lucide retain
-their upstream licences. The full attribution is in [NOTICE.md](NOTICE.md).
+Sora and IBM Plex are licensed under the SIL Open Font License. Three.js,
+React, Vite and Lucide retain their upstream licences. The full attribution is
+in [NOTICE.md](NOTICE.md).
 
 ## License
 
