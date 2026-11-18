@@ -12,6 +12,7 @@ import type { ViewId } from "./model";
 import { Atlas } from "./views/Atlas";
 import { Blueprint } from "./views/Blueprint";
 import { Commands } from "./views/Commands";
+import { Drift } from "./views/Drift";
 import { Extensions } from "./views/Extensions";
 import { Overview } from "./views/Overview";
 import { PathMap } from "./views/PathMap";
@@ -115,6 +116,8 @@ export function App() {
       <BackgroundFX motion={motion} />
       <div className="bg-grid" aria-hidden="true" />
       <div className="bg-aurora" aria-hidden="true" />
+      <div className="bg-ribbon" aria-hidden="true" />
+      <div className="bg-scan" aria-hidden="true" />
       <div className="screen-edge" aria-hidden="true">
         <i className="corner tl" /><i className="corner tr" /><i className="corner bl" /><i className="corner br" />
       </div>
@@ -219,6 +222,7 @@ export function App() {
             />
           ) : null}
           {view === "atlas" ? <Atlas account={account} setAccount={setAccount} motion={motion} navigate={navigate} /> : null}
+          {view === "drift" ? <Drift motion={motion} navigate={navigate} setAccount={setAccount} /> : null}
           {view === "commands" ? (
             <Commands
               commandKey={commandKey}

@@ -34,12 +34,6 @@ export default defineConfig({
   build: {
     outDir: "dist",
     target: "es2022",
-    rollupOptions: {
-      input: {
-        main: "index.html",
-        dashboard: "dashboard.html",
-      },
-    },
     // The sixteen account bundles are inlined so the site makes no requests
     // for data; the raw size is the dataset itself.
     chunkSizeWarningLimit: 800,

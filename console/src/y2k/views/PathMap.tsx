@@ -45,6 +45,7 @@ export function PathMap({
   const step = route.steps[Math.min(active, route.steps.length - 1)];
   const technique = techniqueRows.find((item) => item.id === step?.technique);
   const conditional = route.steps.filter((item) => item.conditional).length;
+  const observed = route.steps.filter((item) => item.observed).length;
 
   useEffect(() => {
     const signature = bundle.signature;
@@ -217,7 +218,7 @@ export function PathMap({
             index="FIG. 03"
             title="Escalation ascent"
             meta={`${group?.source ?? "Source"} → administrator`}
-            tags={[`${route.hops} hops`, `${conditional} conditional`, cut ? "cut" : "open"]}
+            tags={[`${route.hops} hops`, `${conditional} conditional`, `${observed} observed`, cut ? "cut" : "open"]}
             note="Auto: the route threads the constellation / click a hop"
             foot={`${active + 1} / ${labels.length}`}
             motion={motion}
@@ -262,7 +263,7 @@ export function PathMap({
                 onClick={() => jumpTo(index)}
               >
                 <span>{String(index + 1).padStart(2, "0")}</span>
-                <b>{label}</b>
+                <b title={label}>{label === "Administrator" ? "Admin" : label}</b>
               </button>
             ))}
           </div>
@@ -314,6 +315,10 @@ export function PathMap({
                   <div><dt>To</dt><dd>{labels[active + 1]}</dd></div>
                   <div><dt>MITRE</dt><dd>{technique?.mitre ?? step?.mitre ?? "—"}</dd></div>
                   <div><dt>Conditional</dt><dd>{step?.conditional ? "yes" : "no"}</dd></div>
+                  <div><dt>Observed</dt><dd>{step?.observed ? "CloudTrail" : "theoretical"}</dd></div>
+                  {step?.observed && step.firstSeen ? (
+                    <div><dt>First seen</dt><dd>{step.firstSeen.replace("T", " ").replace("Z", " UTC")}</dd></div>
+                  ) : null}
                 </dl>
                 {step?.actions?.length ? (
                   <div className="detail-block">

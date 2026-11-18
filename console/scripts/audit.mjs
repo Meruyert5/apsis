@@ -8,6 +8,7 @@ import { join } from "node:path";
 const CHROME =
   process.env.CHROME_PATH || "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const BASE = process.env.BASE_URL || "http://localhost:4180/";
+const VIEWS = ["", "#/survey", "#/path", "#/atlas", "#/drift", "#/commands", "#/extensions", "#/blueprint"];
 const PORT = Number(process.env.CDP_PORT || 9399);
 const ROOT = process.cwd();
 
@@ -175,6 +176,7 @@ try {
     return result.value;
   };
 
+  let failed = false;
   for (const width of [1440, 390]) {
     await send("Emulation.setDeviceMetricsOverride", {
       width,
@@ -184,20 +186,32 @@ try {
       deviceScaleFactor: 1,
       mobile: false,
     });
-    await send("Page.navigate", { url: BASE });
-    await sleep(2400);
-    await evaluate("document.fonts.ready.then(() => true)");
-    // Walk the page so every scroll-revealed block is rendered.
-    await evaluate(`(async () => {
-      const h = document.body.scrollHeight;
-      for (let y = 0; y < h; y += 600) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 40)); }
-      window.scrollTo(0, 0);
-      await new Promise(r => setTimeout(r, 300));
-    })()`);
-    const report = await evaluate(AUDIT);
-    console.log(`\n=== ${width}px ===`);
-    console.log(JSON.stringify(report, null, 1));
+    for (const view of VIEWS) {
+      await send("Page.navigate", { url: BASE + view });
+      await sleep(view ? 1500 : 2400);
+      await evaluate("document.fonts.ready.then(() => true)");
+      // Walk the page so every scroll-revealed block is rendered.
+      await evaluate(`(async () => {
+        const h = document.body.scrollHeight;
+        for (let y = 0; y < h; y += 600) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 40)); }
+        window.scrollTo(0, 0);
+        await new Promise(r => setTimeout(r, 250));
+      })()`);
+      const report = await evaluate(AUDIT);
+      const overflow = report.overflow && report.overflow.sw > report.overflow.iw;
+      const failures = [
+        report.contrastFailures?.length ? "contrast" : "",
+        report.headingSkips?.length ? "headings" : "",
+        report.unnamed?.length ? "unnamed" : "",
+        report.smallTargets?.length ? "targets" : "",
+        overflow ? "overflow" : "",
+      ].filter(Boolean);
+      if (failures.length) failed = true;
+      console.log(`\n=== ${width}px ${view || "/"} ${failures.length ? "FAIL " + failures.join(",") : "ok"} ===`);
+      console.log(JSON.stringify(report, null, 1));
+    }
   }
+  process.exitCode = failed ? 1 : 0;
 } finally {
   try {
     socket?.close();

@@ -1,3 +1,4 @@
+> **Historical design log.** The design-lab v2-v7 assets, legacy consoles and old screenshots were removed in the final build. Links to those paths below are kept as history, not as live routes.
 # Apsis design overhaul — agency review
 
 Date: 17 November 2026
@@ -391,3 +392,16 @@ Global:
 - Brand: a new A-orbit favicon, 512px icon, Apple touch icon, manifest and a 1200x630 OG card. Both HTML entries carry the new metadata.
 - Product: Extensions lists the validated alert and the delivered Penumbra handoff; the case shows both paths. Blueprint is complete and ready for upload. Contract tests cover alert/evidence consistency.
 - Verification: build pass, 9/9 logic, 73/73 Python, contracts valid, no overflow at 390/768/1440, a11y audit clean, fullscreen 2D/3D and node picking checked.
+
+---
+
+## Revision 15 - one dashboard, engine complete
+
+- The site is one Vite entry at `/`. The legacy four-deck console, its component tree and the design-lab v2-v7 mocks were removed. Old screenshots were deleted with them.
+- Corners returned to a sharp 2px/0px scale. The display moved to 110-196px and body copy to 17px; the palette and mono labels carry the Style 1/2 typography.
+- The desktop topbar is a floating glass pill over a cyan/cobalt hero aura. The background gains a particle constellation with shooting stars, a rotating ribbon and a slow scan sweep. All motion stops under reduced motion.
+- Drift is the fifth view: two snapshots, a split 3D instrument, added/closed routes and edge changes. Survey adds a route ledger and CSV download; the engine adds `apsis ledger`.
+- Engine: CloudTrail overlay (`apsis overlay`, `scan/export --cloudtrail`), live IAM import from `GetAccountAuthorizationDetails`, condition evaluation, resource policies, route-aware drift and CSV. Tests: 89 Python, 5 dashboard logic.
+- Blueprint is complete and ready for upload; the left column now holds pipeline, architecture and the engine additions so the release panel has no empty counterpart.
+- CI audits all eight views at 1440/390 and runs Lighthouse with accessibility, best-practice and SEO assertions.
+

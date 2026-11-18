@@ -7,6 +7,7 @@ export type IconName =
   | "survey"
   | "path"
   | "atlas"
+  | "drift"
   | "commands"
   | "extensions"
   | "blueprint"
@@ -67,6 +68,13 @@ export function Icon({ name, size = 16 }: { name: IconName; size?: number }) {
         <svg {...common}>
           <circle cx="8" cy="8" r="6" /><ellipse cx="8" cy="8" rx="6" ry="2.4" />
           <ellipse cx="8" cy="8" rx="2.4" ry="6" />
+        </svg>
+      );
+    case "drift":
+      return (
+        <svg {...common}>
+          <rect x="2" y="3" width="4.5" height="10" /><rect x="9.5" y="3" width="4.5" height="10" />
+          <path d="M6.5 5h3M6.5 8h3M6.5 11h3" />
         </svg>
       );
     case "commands":

@@ -5,6 +5,7 @@
     apsis diff      compare two snapshots, route aware
     apsis check     CI gate: exit 1 when any identity reaches admin
     apsis export    write the web bundle, or every fixture at once
+    apsis overlay   mark survey edges observed from CloudTrail
     apsis techniques  list the registry
 """
 
@@ -16,7 +17,7 @@ import os
 import sys
 from typing import List, Optional
 
-from . import __version__, aws_import, diff as diff_mod, report, techniques as technique_mod
+from . import __version__, aws_import, diff as diff_mod, observed as observed_mod, report, techniques as technique_mod
 from .graph import build, Survey
 from .sever import sever as compute_sever
 from . import paths as pathmod
@@ -76,6 +77,11 @@ def _write(path: str, content: str) -> None:
 
 def cmd_scan(args: argparse.Namespace) -> int:
     survey = load(args.scenario, args)
+    if getattr(args, "cloudtrail", None):
+        events = observed_mod.load_events(args.cloudtrail)
+        result = observed_mod.overlay(survey, events)
+        print("CloudTrail: %d events, %d edges observed, %d routes observed, %d unmatched" % (
+            result.events, len(result.edges), len(result.routes), result.unmatched))
     if args.json:
         print(report.to_json(report.web_bundle(survey, limit=args.limit)))
     else:
@@ -146,7 +152,46 @@ def cmd_check(args: argparse.Namespace) -> int:
     return 1
 
 
+def cmd_overlay(args: argparse.Namespace) -> int:
+    survey = load(args.scenario, args)
+    events = observed_mod.load_events(args.cloudtrail)
+    result = observed_mod.overlay(survey, events)
+    if args.json:
+        payload = observed_mod.summary(result)
+        payload["scenario"] = survey.scenario.name
+        payload["routes"] = [list(route) for route in result.routes]
+        print(report.to_json(payload))
+        return 0
+    print("CloudTrail overlay %s" % survey.scenario.name)
+    print("  events       %d" % result.events)
+    print("  edges        %d observed" % len(result.edges))
+    print("  routes       %d observed" % len(result.routes))
+    print("  unmatched    %d" % result.unmatched)
+    for index in result.edges:
+        edge = survey.edges[index]
+        print("  e%-3d %-28s %-26s %s" % (
+            index, edge.technique, survey.label(edge.source), survey.label(edge.target)))
+        if edge.first_seen:
+            print("       %s -> %s" % (edge.first_seen, edge.last_seen))
+    return 0
+
+
+def cmd_ledger(args: argparse.Namespace) -> int:
+    survey = load(args.scenario, args)
+    if getattr(args, "cloudtrail", None):
+        observed_mod.overlay(survey, observed_mod.load_events(args.cloudtrail))
+    text = report.ledger_csv(survey, limit=args.limit)
+    if args.out:
+        _write(args.out, text)
+        print("wrote %s" % args.out)
+    else:
+        print(text, end="")
+    return 0
+
+
 def cmd_export(args: argparse.Namespace) -> int:
+    if args.all and getattr(args, "cloudtrail", None):
+        raise SystemExit("--cloudtrail applies to one scenario; use --scenario with it")
     if args.all:
         root = scenario_root()
         names = sorted(
@@ -188,6 +233,8 @@ def cmd_export(args: argparse.Namespace) -> int:
     if not args.scenario:
         raise SystemExit("export needs --scenario NAME or --all")
     survey = load(args.scenario, args)
+    if getattr(args, "cloudtrail", None):
+        observed_mod.overlay(survey, observed_mod.load_events(args.cloudtrail))
     bundle = report.web_bundle(survey, limit=args.limit)
     _write(args.out, report.to_json(bundle))
     print("wrote %s (%d nodes, %d edges, %d routes)" % (
@@ -253,6 +300,7 @@ def build_parser() -> argparse.ArgumentParser:
     scan.add_argument("--markdown", help="write a Markdown report")
     scan.add_argument("--sarif", help="write SARIF for code scanning")
     scan.add_argument("--mermaid", help="write a Mermaid diagram")
+    scan.add_argument("--cloudtrail", help="mark observed edges from a CloudTrail JSON export")
     scan.add_argument("--no-color", action="store_true")
     _add_filters(scan)
     scan.set_defaults(func=cmd_scan)
@@ -283,8 +331,24 @@ def build_parser() -> argparse.ArgumentParser:
     export.add_argument("--all", action="store_true", help="export every fixture plus index.json")
     export.add_argument("--out", "-o", required=True)
     export.add_argument("--limit", type=int, default=4)
+    export.add_argument("--cloudtrail", help="mark observed edges in the bundle")
     _add_filters(export)
     export.set_defaults(func=cmd_export)
+
+    overlay = sub.add_parser("overlay", help="mark observed edges from CloudTrail")
+    overlay.add_argument("--scenario", "-s", required=True)
+    overlay.add_argument("--cloudtrail", required=True)
+    overlay.add_argument("--json", action="store_true")
+    _add_filters(overlay)
+    overlay.set_defaults(func=cmd_overlay)
+
+    ledger = sub.add_parser("ledger", help="write the route ledger as CSV")
+    ledger.add_argument("--scenario", "-s", required=True)
+    ledger.add_argument("--out", "-o")
+    ledger.add_argument("--limit", type=int, default=4)
+    ledger.add_argument("--cloudtrail")
+    _add_filters(ledger)
+    ledger.set_defaults(func=cmd_ledger)
 
     imp = sub.add_parser("import", help="import an IAM authorization dump")
     imp.add_argument("--from-aws", action="store_true", help="call the AWS CLI for a live dump")

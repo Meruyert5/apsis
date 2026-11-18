@@ -87,6 +87,7 @@ class Resource:
     arn: str
     role: str = ""
     note: str = ""
+    policy: Optional[Dict[str, Any]] = None
 
 
 @dataclass
@@ -104,6 +105,9 @@ class Edge:
     mitre: str = ""
     severity: str = "high"
     narration: str = ""
+    observed: bool = False
+    first_seen: str = ""
+    last_seen: str = ""
 
     @property
     def key(self) -> Tuple[str, str, str]:

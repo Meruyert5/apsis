@@ -13,8 +13,10 @@ Conditions are never silently trusted. A survey that pretends to evaluate
 
 from __future__ import annotations
 
+import ipaddress
 import json
 import re
+from dataclasses import dataclass
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 from .model import Policy, Statement
@@ -44,6 +46,183 @@ def _as_tuple(value: Any) -> Tuple[str, ...]:
     if isinstance(value, str):
         return (value,)
     return tuple(str(item) for item in value)
+
+
+@dataclass(frozen=True)
+class ConditionContext:
+    """Known request facts for condition evaluation.
+
+    Anything absent stays unknown and the edge remains conditional. The engine
+    never invents a value for MFA, org id, source VPC or a tag it was not given.
+    """
+
+    principal_arn: str = ""
+    principal_account: str = ""
+    principal_id: str = ""
+    principal_name: str = ""
+    account: str = ""
+    region: str = ""
+    source_arn: str = ""
+    source_account: str = ""
+    source_vpce: str = ""
+    source_ip: str = ""
+    principal_org_id: str = ""
+    mfa: Optional[bool] = None
+    secure_transport: bool = True
+    tags: Optional[Dict[str, str]] = None
+    now: Optional[str] = ""
+
+
+def _context_value(key: str, ctx: ConditionContext) -> Optional[str]:
+    lowered = key.lower()
+    fixed = {
+        "aws:principalarn": ctx.principal_arn,
+        "aws:principalaccount": ctx.principal_account or ctx.account,
+        "aws:principalid": ctx.principal_id,
+        "aws:userid": ctx.principal_id,
+        "aws:username": ctx.principal_name,
+        "aws:sourceaccount": ctx.source_account or ctx.account,
+        "aws:sourcearn": ctx.source_arn,
+        "aws:sourcevpce": ctx.source_vpce,
+        "aws:sourceip": ctx.source_ip,
+        "aws:requestedregion": ctx.region,
+        "aws:principalorgid": ctx.principal_org_id,
+        "aws:currenttime": ctx.now or "",
+    }
+    if lowered in fixed:
+        value = fixed[lowered]
+        return value if value else None
+    if lowered == "aws:securetransport":
+        return "true" if ctx.secure_transport else "false"
+    if lowered == "aws:multifactorauthpresent":
+        if ctx.mfa is None:
+            return None
+        return "true" if ctx.mfa else "false"
+    if lowered.startswith("aws:principaltag/"):
+        tag = lowered.split("/", 1)[1]
+        return (ctx.tags or {}).get(tag)
+    return None
+
+
+def _condition_matches(operator: str, actual: Optional[str], expected: Any) -> Optional[bool]:
+    """Return True/False/None for one operator/key pair."""
+    values = _as_tuple(expected)
+
+    def one(value: str) -> Optional[bool]:
+        if operator in ("StringEquals", "ArnEquals"):
+            return actual == value
+        if operator == "StringEqualsIgnoreCase":
+            return actual is not None and actual.lower() == value.lower()
+        if operator in ("StringLike", "ArnLike"):
+            return actual is not None and matches(value, actual)
+        if operator == "StringNotEquals":
+            return actual != value
+        if operator == "StringNotEqualsIgnoreCase":
+            return actual is None or actual.lower() != value.lower()
+        if operator == "StringNotLike":
+            return actual is None or not matches(value, actual)
+        if operator == "ArnNotEquals":
+            return actual != value
+        if operator == "ArnNotLike":
+            return actual is None or not matches(value, actual)
+        if operator == "Bool":
+            return actual is not None and actual.lower() == value.lower()
+        if operator in ("IpAddress", "NotIpAddress"):
+            if actual is None:
+                return None
+            try:
+                address = ipaddress.ip_address(actual)
+                network = ipaddress.ip_network(value, strict=False)
+            except ValueError:
+                return None
+            inside = address in network
+            return inside if operator == "IpAddress" else not inside
+        if operator.startswith("Date"):
+            if actual is None:
+                return None
+            try:
+                left = _parse_time(actual)
+                right = _parse_time(value)
+            except ValueError:
+                return None
+            if operator.endswith("Equals"):
+                return left == right
+            if operator.endswith("LessThan"):
+                return left < right
+            if operator.endswith("GreaterThan"):
+                return left > right
+            return None
+        if operator.startswith("Numeric"):
+            if actual is None:
+                return None
+            try:
+                left = float(actual)
+                right = float(value)
+            except ValueError:
+                return None
+            if operator.endswith("Equals"):
+                return left == right
+            if operator.endswith("LessThan"):
+                return left < right
+            if operator.endswith("GreaterThan"):
+                return left > right
+            return None
+        return None
+
+    if operator == "Null":
+        wanted = str(values[0]).lower() == "true" if values else True
+        return (actual is None) == wanted
+
+    if actual is None and operator.endswith("IfExists"):
+        return True
+    if operator.endswith("IfExists"):
+        operator = operator[: -len("IfExists")]
+
+    if operator.startswith("ForAllValues:"):
+        operator = operator.split(":", 1)[1]
+        results = [one(value) for value in values]
+        if any(result is False for result in results):
+            return False
+        return True if all(result is True for result in results) else None
+    if operator.startswith("ForAnyValue:"):
+        operator = operator.split(":", 1)[1]
+        results = [one(value) for value in values]
+        if any(result is True for result in results):
+            return True
+        return False if all(result is False for result in results) else None
+
+    if actual is None:
+        return None
+    results = [one(value) for value in values]
+    if any(result is True for result in results):
+        return True
+    if any(result is None for result in results):
+        return None
+    return False
+
+
+def evaluate_condition(condition: Optional[Dict[str, Any]], ctx: ConditionContext) -> Optional[bool]:
+    """Evaluate a condition block. None means the engine cannot know."""
+    if not condition:
+        return True
+    verdict: Optional[bool] = True
+    for operator, entries in condition.items():
+        if not isinstance(entries, dict):
+            return None
+        for key, expected in entries.items():
+            result = _condition_matches(str(operator), _context_value(str(key), ctx), expected)
+            if result is False:
+                return False
+            if result is None:
+                verdict = None
+    return verdict
+
+
+def _parse_time(value: str):
+    from datetime import datetime
+
+    return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+
 
 
 def parse_statement(raw: Dict[str, Any]) -> Statement:
@@ -109,20 +288,133 @@ def _resource_matches(statement: Statement, resource: str) -> bool:
 
 
 def evaluate(
-    statements: Sequence[Statement], action: str, resource: str
+    statements: Sequence[Statement],
+    action: str,
+    resource: str,
+    context: Optional[ConditionContext] = None,
 ) -> Tuple[bool, Optional[Statement]]:
-    """Return (allowed, the allowing statement). Explicit deny wins."""
+    """Return (allowed, the allowing statement). Explicit deny wins.
+
+    When a context is supplied, a condition that is provably false removes the
+    statement; a condition that remains unknown is still treated as a possible
+    allow and the edge stays conditional.
+    """
     allowing: Optional[Statement] = None
     for statement in statements:
         if not _action_matches(statement, action):
             continue
         if not _resource_matches(statement, resource):
             continue
+        if context is not None:
+            verdict = evaluate_condition(statement.condition, context)
+            if verdict is False:
+                continue
         if statement.effect.lower() == "deny":
             return False, None
         if allowing is None:
             allowing = statement
     return allowing is not None, allowing
+
+
+def condition_verdict(statement: Optional[Statement], context: ConditionContext) -> Optional[bool]:
+    if statement is None:
+        return None
+    return evaluate_condition(statement.condition, context)
+
+
+def explicit_deny(
+    statements: Sequence[Statement],
+    action: str,
+    resource: str,
+    context: Optional[ConditionContext] = None,
+) -> bool:
+    for statement in statements:
+        if statement.effect.lower() != "deny":
+            continue
+        if not _action_matches(statement, action):
+            continue
+        if not _resource_matches(statement, resource):
+            continue
+        if context is not None and evaluate_condition(statement.condition, context) is False:
+            continue
+        return True
+    return False
+
+
+def _principal_admits(principal: Any, principal_arn: str, account: str) -> bool:
+    if principal is None:
+        return False
+    if isinstance(principal, str):
+        candidates = [principal]
+    elif isinstance(principal, list):
+        candidates = [str(item) for item in principal]
+    elif isinstance(principal, dict):
+        values = principal.get("AWS", [])
+        if isinstance(values, str):
+            values = [values]
+        candidates = [str(item) for item in values]
+    else:
+        return False
+    for candidate in candidates:
+        if candidate == "*":
+            return True
+        if candidate == account:
+            return principal_arn.startswith("arn:aws:iam::%s:" % account)
+        if candidate.endswith(":root"):
+            parts = candidate.split(":")
+            if len(parts) > 4 and parts[4] == account:
+                return True
+            continue
+        if matches(candidate, principal_arn):
+            return True
+    return False
+
+
+def resource_policy_evaluate(
+    document: Optional[Dict[str, Any]],
+    action: str,
+    resource_arn: str,
+    principal_arn: str,
+    account: str,
+    context: Optional[ConditionContext] = None,
+) -> Tuple[bool, bool, str, bool]:
+    """Evaluate a resource-based policy for one principal.
+
+    Returns (allowed, conditional, evidence, denied). A resource-based policy
+    only applies when its Principal admits the caller.
+    """
+    if not document:
+        return False, False, "", False
+    raw_statements = document.get("Statement", [])
+    if isinstance(raw_statements, dict):
+        raw_statements = [raw_statements]
+    allowing = False
+    conditional = False
+    denied = False
+    for raw in raw_statements:
+        if not isinstance(raw, dict):
+            continue
+        if raw.get("Principal") is not None and not _principal_admits(
+            raw.get("Principal"), principal_arn, account
+        ):
+            continue
+        statement = parse_statement(raw)
+        if not _action_matches(statement, action):
+            continue
+        if not _resource_matches(statement, resource_arn):
+            continue
+        verdict = evaluate_condition(statement.condition, context) if context else None
+        if verdict is False:
+            continue
+        if statement.effect.lower() == "deny":
+            denied = True
+            continue
+        allowing = True
+        conditional = conditional or verdict is None
+    evidence = "resource policy"
+    return allowing, conditional, evidence, denied
+
+
 
 
 def grants_full_admin(statements: Iterable[Statement]) -> bool:

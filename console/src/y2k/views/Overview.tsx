@@ -26,6 +26,7 @@ const MODULE_VALUE: Record<string, string> = {
   survey: `${snapshot.accounts} accounts`,
   path: `${snapshot.routes} routes`,
   atlas: `${snapshot.identities} identities`,
+  drift: "snapshot diff",
   commands: `${commands.length} runs`,
   extensions: `${techniqueCount} primitives`,
   blueprint: "Whole system",

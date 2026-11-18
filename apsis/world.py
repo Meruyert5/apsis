@@ -96,6 +96,29 @@ class World:
     def resource_by_id(self, rid: str) -> Optional[Resource]:
         return self.resources.get(rid)
 
+    def resource_by_arn(self, arn: str) -> Optional[Resource]:
+        for resource in self.resources.values():
+            if not resource.policy:
+                continue
+            if resource.arn == arn or policy.matches(resource.arn, arn) or policy.matches(arn, resource.arn):
+                return resource
+        return None
+
+    def condition_context(self, identity_id: str) -> policy.ConditionContext:
+        identity = self.identities.get(identity_id)
+        arn = identity.arn if identity else ""
+        name = identity.label if identity else ""
+        return policy.ConditionContext(
+            principal_arn=arn,
+            principal_account=self.account,
+            principal_id=identity_id,
+            principal_name=name,
+            account=self.account,
+            region=self.region,
+            source_account=self.account,
+            secure_transport=True,
+        )
+
     # -- statements -------------------------------------------------------
 
     def statements(self, identity_id: str) -> List[Tuple[str, Statement]]:
@@ -159,16 +182,49 @@ class World:
     # -- authorization ----------------------------------------------------
 
     def allows(self, identity_id: str, action: str, resource_arn: str) -> Match:
-        allowed, statement = policy.evaluate(
-            [statement for _, statement in self.statements(identity_id)], action, resource_arn
-        )
-        if not allowed or statement is None:
+        identity = self.identities.get(identity_id)
+        if identity is None:
             return Match(False, action=action, resource=resource_arn)
-        name = next(
-            (n for n, s in self.statements(identity_id) if s is statement), "policy"
+        statements = [statement for _, statement in self.statements(identity_id)]
+        context = self.condition_context(identity_id)
+        if policy.explicit_deny(statements, action, resource_arn, context):
+            return Match(False, action=action, resource=resource_arn)
+        allowed, statement = policy.evaluate(statements, action, resource_arn, context)
+        identity_conditional = bool(
+            allowed and statement is not None
+            and policy.condition_verdict(statement, context) is None
         )
-        evidence = '%s allows %s on %s' % (name, action, resource_arn)
-        return Match(True, statement.conditional, evidence, action, resource_arn)
+
+        resource_conditional = False
+        resource_allowed = False
+        resource_evidence = ""
+        resource = self.resource_by_arn(resource_arn)
+        if resource and resource.policy:
+            resource_allowed, resource_conditional, resource_evidence, denied = policy.resource_policy_evaluate(
+                resource.policy, action, resource_arn, identity.arn, self.account, context
+            )
+            if denied:
+                return Match(False, action=action, resource=resource_arn)
+
+        if not allowed and not resource_allowed:
+            return Match(False, action=action, resource=resource_arn)
+
+        conditions = []
+        if allowed:
+            conditions.append(identity_conditional)
+        if resource_allowed:
+            conditions.append(resource_conditional)
+        conditional = all(conditions) if conditions else False
+
+        evidence = ""
+        if allowed and statement is not None:
+            name = next(
+                (n for n, s in self.statements(identity_id) if s is statement), "policy"
+            )
+            evidence = "%s allows %s on %s" % (name, action, resource_arn)
+        if resource_allowed and not allowed:
+            evidence = "%s allows %s on %s" % (resource_evidence, action, resource_arn)
+        return Match(True, conditional, evidence, action, resource_arn)
 
     def allows_any(self, identity_id: str, action: str, resources: Iterable[str]) -> Match:
         """True if the action is allowed against any of the candidate resources."""
@@ -286,6 +342,7 @@ def load_scenario(path: str) -> Scenario:
             arn=str(item.get("arn") or _arn(kind, scenario.account_id, scenario.region, name)),
             role=str(item.get("role") or ""),
             note=str(item.get("note") or ""),
+            policy=item.get("policy") if isinstance(item.get("policy"), dict) else None,
         )
         scenario.resources[resource.id] = resource
 

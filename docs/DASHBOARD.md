@@ -1,8 +1,7 @@
 # Fleet dashboard
 
-The dashboard at `/dashboard.html` is a separate Vite entry from the legacy
-console at `/`. It reads the same static Apsis export and adds a multi-view
-control surface with one distinct WebGL instrument per view.
+The dashboard at `/` is the single Vite entry. It reads the static Apsis export
+and renders eight views, each with a distinct WebGL instrument.
 
 ## View map
 
@@ -12,9 +11,10 @@ control surface with one distinct WebGL instrument per view.
 | 02 | Survey | Which accounts carry the exposure? | Dish | Wireframe bowl + radar sweep |
 | 03 | Path map | How does one escalation walk, hop by hop? | Ascent | Constellation-threaded ascent |
 | 04 | Atlas | Which identity, role and trust edges connect? | Constellation | 16-node disc + orbital ring |
-| 05 | Commands | What did the engine actually run? | Prism | Monolith + scan plane |
-| 06 | Extensions | Which primitives, coverage, contracts and cases exist? | Bloom | Six rings + 18 nodes |
-| 07 | Blueprint | What is the whole system and is it ready? | Stack | Five stacked layers |
+| 05 | Drift | What changed between two snapshots? | Split | Before/after panels + seam |
+| 06 | Commands | What did the engine actually run? | Prism | Monolith + scan plane |
+| 07 | Extensions | Which primitives, coverage, contracts and cases exist? | Bloom | Six rings + 18 nodes |
+| 08 | Blueprint | What is the whole system and is it ready? | Stack | Five stacked layers |
 
 Each figure supports drag, scroll zoom, double-click reset, a `2D` SVG fallback,
 a **fullscreen** toggle and a reduced-motion path. Fullscreen expands the panel
@@ -34,27 +34,49 @@ lit linework and halos add light. Build details:
 | Dish | Lathe bowl, rim, feed, 28 contacts | Sweep rotates and wakes contacts |
 | Ascent | Eight gates, hex platforms, S-curve depth, context constellation, target beacon, shock rings | Hops advance; pulse travels; rings expand; context stars link to the route |
 | Constellation | Sixteen nodes, curved tube arcs, node rings, orbital ring, nucleus, base stems | Nodes pulse; rings spin; data motes orbit; focus beam rises |
+| Split | Two vertical wire plates, seven linked nodes, seam and scan plane | Panels breathe; added edges cyan; scan reads both sides |
 | Prism | Glass monolith, beam, scan plane, stacked rings | Scan climbs; rings counter-rotate |
 | Bloom | Six rings, eighteen pickable nodes, wire nucleus | Rings counter-rotate; focus node swells |
 | Stack | Five wire layers, outlines, beam, connectors | Layers breathe; beam rises |
 
 Clickable figures: the Path map ascent jumps to a hop, the Atlas constellation
-switches account, and the Bloom node selects a primitive. Each pickable node
-carries an oversized invisible hit sphere, so the target is comfortable at any
-stage size.
+switches account, and the Bloom node selects a primitive. The Drift split is a
+before/after comparison with its own selectors and route-aware diff. Each
+pickable node carries an oversized invisible hit sphere, so the target is
+comfortable at any stage size.
 
-Typography is set for reading: 16.5px body, 15–16.5px data and notes, 13–15px
-labels, 11–13px micro-labels, a 100–174px display title and SVG graph labels
+Typography is set for reading: 17px body, 15.5–17px data and notes, 13.5–15.5px
+labels, 11.5–13.5px micro-labels, a 110–196px display title and SVG graph labels
 sized for the rendered panel.
 
 ## Soft geometry
 
-The dashboard uses a small fixed radius rather than a corner variant: 5px on
-panels, cards, figure stages and the palette shell; 4px on buttons, fields,
-chips, rails and nav items; 2px on tags, badges and matrix cells. The accent KPI
-gets a 16px top-right sweep and the primary button a 12px top-right sweep, so
-the shape language has one deliberate variation. The screen frame, tables and
-barcode stay square.
+The dashboard uses a fixed sharp scale: 2px on panels, cards, figure stages,
+controls and the palette; 0px on tags, badges and matrix cells. There is no
+corner variant and no asymmetric sweep. The screen frame, tables and barcode
+stay square; the only soft element is the floating glass topbar.
+
+## Engine features
+
+- **CloudTrail overlay** - `apsis overlay`, `apsis scan --cloudtrail` and
+  `apsis export --cloudtrail` map events to survey edges, set `observed` and
+  first/last seen, and mark which routes are fully observed.
+- **Live IAM import** - `apsis import --from-aws` runs the AWS CLI
+  `get-account-authorization-details` and converts the dump into a scenario;
+  `--input` does the same from a saved file. No AWS SDK is added to the engine.
+- **Condition evaluation** - string, ARN, Bool, IP, date and numeric operators
+  against a known request context. A condition that cannot be decided stays
+  conditional instead of being silently trusted.
+- **Resource policies** - resource-based Allow/Deny with Principal matching,
+  combined with identity policies and explicit deny precedence.
+- **Drift** - `apsis diff` and the dashboard's Drift view key edges by source,
+  target and technique, then re-derive added and lost routes.
+- **CSV ledger** - `apsis ledger -s <fixture>` writes one row per route edge;
+  Survey can download the same ledger from the browser.
+- **CI gate** - the site workflow audits all eight views at 1440 and 390 and
+  runs Lighthouse with accessibility, best-practice and SEO assertions. The
+  performance score is a warning, not an error, because the instruments are
+  WebGL.
 
 On desktop the topbar floats as a glass pill; the hero sits over a cyan/cobalt
 aura with a grain and scanline texture. Deep void, electric cyan, cobalt and
@@ -91,7 +113,7 @@ All numbers are real fixture totals: 16 accounts, 194 identities, 144 routes,
 - `CommandPalette.tsx` — `Cmd/Ctrl+K`; searches views, accounts, commands and
   techniques; arrow keys and Enter navigate.
 - `ui.tsx` — icons, count-up, panels, figure frame, chips, tabs, donut, badge.
-- `Figure3D.tsx` — one renderer and seven scene builders. State (active hop,
+- `Figure3D.tsx` - one renderer and eight scene builders. State (active hop,
   cut, focus node) is passed through a ref so scenes update without remounting.
 - `views/*` — one file per view.
 
@@ -137,19 +159,20 @@ npm --prefix console run test:logic
 python -m unittest discover -s tests -v
 ```
 
-The Vite build emits `dist/index.html` (legacy console) and
-`dist/dashboard.html` (this dashboard). The Pages workflow publishes `dist/`.
+The Vite build emits `dist/index.html`; the Pages workflow publishes `dist/`.
 
-Last verification: build pass; 9/9 logic tests; 73/73 Python tests (including
-contract tests); contracts valid against both schemas; no horizontal overflow on
-any of the seven views at 390, 768 or 1440; local audit reports no contrast,
-heading, unnamed-control, small-target or overflow failures; fullscreen (3D and
-2D), Escape-close, portrait fit and 3D node picking verified in the browser. The
-audit's 14px floor still flags intentional HUD micro-labels.
+Last verification: build pass; 5/5 logic tests; 89/89 Python tests (contracts,
+conditions, import, overlay and ledger included); contracts valid against both
+schemas; no horizontal overflow on any of the eight views at 390, 768 or 1440;
+the audit gate reports no contrast, heading, unnamed-control, small-target or
+overflow failures across all views at 1440 and 390; Lighthouse accessibility,
+best practices and SEO pass; fullscreen (3D and 2D), Escape-close, portrait fit
+and 3D node picking verified in the browser. The audit's 14px floor still flags
+intentional HUD micro-labels.
 
 ## Boundaries
 
-- Static fixtures only. No AWS client, no backend and no live import.
+- Static fixtures by default. The engine has no AWS SDK; the optional
+  `apsis import --from-aws` shells out to the AWS CLI for a live or saved IAM
+  dump.
 - Penumbra is a contract, not a live connector.
-- The legacy four-deck console remains available at `/`; this dashboard is the
-  new build.

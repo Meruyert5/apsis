@@ -8,7 +8,7 @@ import {
   techniques,
   totals,
 } from "../lib/data";
-import type { Bundle, CommandRecord, Route, Severity, Technique } from "../lib/types";
+import type { Bundle, CommandRecord, GraphEdge, Route, Severity, Technique } from "../lib/types";
 
 export interface FleetRow {
   key: string;
@@ -92,6 +92,148 @@ export function routesFor(bundle: Bundle): RouteGroup[] {
 }
 
 export const routeGroups = new Map(bundles.map(({ key, bundle }) => [key, routesFor(bundle)]));
+
+/* ------------------------------------------------------------------ drift */
+export interface DriftRoute {
+  source: string;
+  sourceLabel: string;
+  labels: string[];
+  hops: number;
+  edges: string[];
+}
+
+export interface DriftSummary {
+  beforeKey: string;
+  afterKey: string;
+  beforeTitle: string;
+  afterTitle: string;
+  beforeRoutes: number;
+  afterRoutes: number;
+  added: GraphEdge[];
+  removed: GraphEdge[];
+  newRoutes: DriftRoute[];
+  lostRoutes: DriftRoute[];
+  status: "worsened" | "improved" | "steady";
+}
+
+function flattenRoutes(bundle: Bundle): DriftRoute[] {
+  const labels = new Map(bundle.nodes.map((node) => [node.id, node.label]));
+  return Object.entries(bundle.paths).flatMap(([source, routes]) =>
+    routes.map((route) => ({
+      source,
+      sourceLabel: labels.get(source) ?? source,
+      labels: route.labels,
+      hops: route.hops,
+      edges: route.edges,
+    })),
+  );
+}
+
+export function driftFor(beforeKey: string, afterKey: string): DriftSummary {
+  const before = byKey.get(beforeKey) ?? bundles[0].bundle;
+  const after = byKey.get(afterKey) ?? bundles[0].bundle;
+  const keyOf = (edge: GraphEdge): string =>
+    `${edge.source}|${edge.target}|${edge.technique}`;
+  const beforeEdges = new Map(before.edges.map((edge) => [keyOf(edge), edge]));
+  const afterEdges = new Map(after.edges.map((edge) => [keyOf(edge), edge]));
+  const added = [...afterEdges.entries()]
+    .filter(([key]) => !beforeEdges.has(key))
+    .map(([, edge]) => edge);
+  const removed = [...beforeEdges.entries()]
+    .filter(([key]) => !afterEdges.has(key))
+    .map(([, edge]) => edge);
+  const beforeRoutes = flattenRoutes(before);
+  const afterRoutes = flattenRoutes(after);
+  const routeKey = (route: DriftRoute) => route.edges.join("|");
+  const beforeKeys = new Set(beforeRoutes.map(routeKey));
+  const afterKeys = new Set(afterRoutes.map(routeKey));
+  const newRoutes = afterRoutes.filter((route) => !beforeKeys.has(routeKey(route)));
+  const lostRoutes = beforeRoutes.filter((route) => !afterKeys.has(routeKey(route)));
+  const status = added.length || newRoutes.length
+    ? "worsened"
+    : removed.length || lostRoutes.length
+      ? "improved"
+      : "steady";
+  return {
+    beforeKey,
+    afterKey,
+    beforeTitle: before.scenario.title,
+    afterTitle: after.scenario.title,
+    beforeRoutes: beforeRoutes.length,
+    afterRoutes: afterRoutes.length,
+    added,
+    removed,
+    newRoutes,
+    lostRoutes,
+    status,
+  };
+}
+
+export const driftPair = { before: "ci-cd", after: "ci-cd-after" };
+
+/* ---------------------------------------------------------------- ledger */
+export interface LedgerRow {
+  account: string;
+  short: string;
+  source: string;
+  route: number;
+  hops: number;
+  hop: number;
+  from: string;
+  to: string;
+  technique: string;
+  actions: string;
+  conditional: boolean;
+  observed: boolean;
+}
+
+export function ledgerRows(): LedgerRow[] {
+  const rows: LedgerRow[] = [];
+  for (const account of fleet) {
+    const groups = routeGroups.get(account.key) ?? [];
+    for (const group of groups) {
+      group.routes.forEach((route, routeIndex) => {
+        route.steps.forEach((step, hopIndex) => {
+          rows.push({
+            account: account.key,
+            short: account.short,
+            source: group.source,
+            route: routeIndex + 1,
+            hops: route.hops,
+            hop: hopIndex + 1,
+            from: route.labels[hopIndex] ?? group.source,
+            to: route.labels[hopIndex + 1] ?? "Administrator",
+            technique: step.technique,
+            actions: step.actions.join(" "),
+            conditional: step.conditional,
+            observed: Boolean(step.observed),
+          });
+        });
+      });
+    }
+  }
+  return rows;
+}
+
+export function ledgerCsv(rows: LedgerRow[]): string {
+  const header = [
+    "account", "account_short", "source", "route", "hops", "hop",
+    "from", "to", "technique", "actions", "conditional", "observed",
+  ];
+  const escape = (value: string | number | boolean) => {
+    const text = String(value);
+    return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+  };
+  return [
+    header.join(","),
+    ...rows.map((row) => [
+      row.account, row.short, row.source, row.route, row.hops, row.hop,
+      row.from, row.to, row.technique, row.actions, row.conditional, row.observed,
+    ].map(escape).join(",")),
+  ].join("\n");
+}
+
+
 
 /* ---------------------------------------------------------------- commands */
 const commandData = commandsRaw as { generated: string; records: CommandRecord[] };
@@ -277,26 +419,26 @@ export const modules = [
   { id: "survey", index: "02", label: "Survey", detail: "Exposure, severity and account ranking" },
   { id: "path", index: "03", label: "Path map", detail: "Step and sever the signature escalation" },
   { id: "atlas", index: "04", label: "Atlas", detail: "Accounts, identities and trust in one map" },
-  { id: "commands", index: "05", label: "Commands", detail: "Recorded CLI runs, replayable" },
-  { id: "extensions", index: "06", label: "Extensions", detail: "18 primitives, coverage, contracts, case" },
-  { id: "blueprint", index: "07", label: "Blueprint", detail: "Architecture, roadmap and release state" },
+  { id: "drift", index: "05", label: "Drift", detail: "Compare two snapshots, route aware" },
+  { id: "commands", index: "06", label: "Commands", detail: "Recorded CLI runs, replayable" },
+  { id: "extensions", index: "07", label: "Extensions", detail: "18 primitives, coverage, contracts, case" },
+  { id: "blueprint", index: "08", label: "Blueprint", detail: "Architecture, roadmap and release state" },
 ];
 
 export const roadmap = {
   now: [
     "18 primitives, 16 fixtures, route survey, minimum cut",
-    "Seven-view read-only dashboard, observed-path case and guardrail contract",
-    "Penumbra alert/evidence handoff and Pages workflow",
+    "Eight-view dashboard, CloudTrail overlay, live IAM import",
+    "Condition and resource-policy evaluation, drift, CSV ledger",
+    "Penumbra handoff, CI accessibility + Lighthouse, Pages workflow",
   ],
   next: [
-    "CloudTrail overlay that marks theoretical and observed edges",
-    "Live import from GetAccountAuthorizationDetails",
-    "Condition and resource-policy evaluation",
-    "A CSV view of the ledger",
+    "Benchmark against PMapper",
+    "Expand condition coverage and real-account import coverage",
+    "A performance budget for the 3D instruments",
   ],
   later: [
-    "Benchmark against PMapper",
-    "Drift view in the dashboard",
+    "Network threat-hunting lab",
     "More primitives with fixture coverage",
   ],
 };
@@ -306,6 +448,7 @@ export type ViewId =
   | "survey"
   | "path"
   | "atlas"
+  | "drift"
   | "commands"
   | "extensions"
   | "blueprint";

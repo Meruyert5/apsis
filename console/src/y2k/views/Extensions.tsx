@@ -81,7 +81,7 @@ export function Extensions({
     <>
       <section className="view-hero extensions-hero">
         <div className="hero-copy">
-          <p className="eyebrow"><span>06</span> Extensions / Registry + contracts</p>
+          <p className="eyebrow"><span>07</span> Extensions / Registry + contracts</p>
           <h1>Everything the engine <em>knows.</em></h1>
           <p className="lede">
             Eighteen escalation primitives, a 16 × 18 coverage field, the evidence contract and the
@@ -103,7 +103,7 @@ export function Extensions({
         </div>
         <FigurePanel
           variant="bloom"
-          index="FIG. 06"
+          index="FIG. 07"
           title="Primitive bloom"
           meta="18 nodes / six rings"
           tags={[`${techniqueCount} primitives`, `${fleet.length} accounts`, `${Math.round((coveredCells / totalCells) * 100)}% covered`]}
@@ -322,3 +322,4 @@ export function Extensions({
     </>
   );
 }
+

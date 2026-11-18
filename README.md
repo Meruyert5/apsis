@@ -23,11 +23,13 @@ orbital console you can inspect, step, and sever.
    0 writes.
 2. **Path map** — press play, watch the hops advance, then **Apply cut**. The
    route state closes and the 3D ascent fractures.
-3. **Atlas** — switch account from the list, click a node in the 3D
+3. **Atlas** - switch account from the list, click a node in the 3D
    constellation, then inspect its trust and routes in the graph.
-4. **Extensions** — open the 288-cell coverage field, the alert/evidence
+4. **Drift** - compare the CI/CD baseline with the after snapshot; two new routes
+   and one new edge are called out.
+5. **Extensions** - open the 288-cell coverage field, the alert/evidence
    contracts and the observed-path case.
-5. **Blueprint** — read the pipeline, architecture, roadmap and the release
+6. **Blueprint** - read the pipeline, architecture, roadmap and the release
    state. The only open items are approval and the GitHub push.
 
 The full architecture and interaction inventory are in
@@ -61,9 +63,8 @@ runs, the site is at:
 The build uses relative paths, so it also works from a project subpath or a
 custom domain. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
-The current dashboard is `/dashboard.html`; the legacy four-deck console remains
-at `/`. The dashboard architecture and interaction inventory are in
-[docs/DASHBOARD.md](docs/DASHBOARD.md).
+The dashboard is served at `/`. The architecture and interaction inventory are
+in [docs/DASHBOARD.md](docs/DASHBOARD.md).
 
 ## Why routes
 
@@ -108,7 +109,7 @@ schema/               penumbra.alert/v1 and penumbra.evidence/v1 contracts
 cases/                observed-path case, validated alert, evidence, guardrails
 scripts/              export_commands.py, records CLI output for the console
 tests/                engine tests and contract tests, standard library only
-console/              React site, four-deck console, seven-view dashboard, audit tooling
+console/              React site: eight-view dashboard, generated data, audit tooling
 docs/                 design, research, assumptions, deployment, release, screenshots
 ```
 
@@ -140,8 +141,17 @@ python -m apsis scan -s enterprise \
 | `apsis sever -s <fixture>` | Compute the minimum cut and the revocations |
 | `apsis diff --before <fixture> --after <fixture>` | Compare two snapshots, route aware |
 | `apsis check -s <fixture> --sarif out.sarif` | CI gate; exits 1 when a route remains |
+| `apsis overlay -s <fixture> --cloudtrail events.json` | Mark observed edges and routes from CloudTrail |
+| `apsis ledger -s <fixture> -o ledger.csv` | One CSV row per route edge |
+| `apsis import --from-aws -o account.json` | Convert a live IAM authorization dump |
+| `apsis import --input dump.json -o account.json` | Convert a saved dump |
 | `apsis export -s <fixture> -o bundle.json` | Write the JSON bundle for the console |
 | `apsis techniques` | List the 18 modelled techniques |
+
+`scan` and `export` also accept `--cloudtrail` to carry observation fields into
+the bundle. The site job in CI runs the accessibility audit across all eight
+views and Lighthouse with accessibility, best-practice and SEO assertions.
+
 
 ### Console
 
@@ -173,81 +183,10 @@ npm run audit       # contrast, headings, names, target size
 `audit` drives a local Chrome over the DevTools protocol; set
 `CHROME_PATH` if Chrome is not in the default Windows location.
 
-## The console
+## Dashboard
 
-| Deck | What it does |
-| --- | --- |
-| Signal | A 3D signature transfer into the star, the fleet readout, and the five-stage bus |
-| Map | The account as a magnetic orrery: primary star, hop shells, bodies, flux tubes; step a route and sever the cut |
-| Decide | 18 techniques × 16 accounts as a containment core, with the exact ledger |
-| Prove | A command builder, the recorded output, the 3D field collapse, the zero, guardrails and the Penumbra handoff |
-
-Apsis is four cyber decks of one orbital operations console, not a recoloured
-security dashboard. Signal is a holographic uplink in cyan and amber; Map is a
-magnetic array in blue and violet; Decide is a containment bay in emerald and
-magenta; Prove is a flight recorder in rust and amber. Deep navy glass, 1px
-gradient borders, scanlines and HUD labels carry the system. Sora 600 sets the
-display, IBM Plex Mono carries the data, and Sora carries the reading.
-
-![The Map deck](docs/img/map.png)
-
-The title is the information design: every route reaches its apsis. The full
-system is in [docs/DESIGN.md](docs/DESIGN.md); the Pinterest reference trail and
-the two-pass direction log are in
-[docs/design-research.md](docs/design-research.md).
-
-## Design lab
-
-Two comparison surfaces live under `console/public/design-lab/`.
-
-### Ten exact style plates (current)
-
-One page, ten full-viewport style plates, each with the real Apsis data and a
-different object that carries the account. Start at `/design-lab/v4/`:
-
-- 01 **Acid Graphics** - strict grid, halftone body, barcodes, cyan/red-orange
-- 02 **Neo-Vintage Travel** - double frame, red sun, mountain route, hanko, Seigaiha
-- 03 **Neon Bloom** - solid/outline type, CMYK blossom, crop windows, EN/RU
-- 04 **Limbo** - point-cloud cluster, synthwave grid, arched portal, phosphor green
-- 05 **Astronomicon** - vertical spine, megastructure, rust desert, archive metadata
-- 06 **Silent Authority** - crown of thorns + sword, serif, aphorisms, sepia gold
-- 07 **Surveillance** - goat skeleton X-ray, thermal scanner windows, HUD, Cyrillic
-- 08 **Atomic Apsis** - lowercase echo, chrome helix, clinical protocol, off-white
-- 09 **Vampire** - lips and fangs, gothic serif, film grain, vertical katakana
-- 10 **Mesmerize** - liquid type, thermal jellyfish, lens cutouts, black void
-
-The objects are custom per style - not a recoloured orrery. The page is a style
-capture for choosing the world; the chosen direction gets the live WebGL object
-and the other three acts. The revision log is in
-[docs/design-agency.md](docs/design-agency.md).
-
-### Chosen hybrid: Towards Limitless
-
-`/design-lab/v5/` combines the chosen languages: **Acid grid + Limbo point
-cloud + Cinematic Lo-fi**. Deep emerald shadows, crimson-orange halation, acid
-lime rules, a wet street, film dust and editorial serif italics. The 3D object
-is a point-cloud account cluster - 16 bodies, 144 routes, a red route - inside
-an acid portal, not an orrery.
-
-### Three palette studies (current)
-
-`/design-lab/v6/` keeps the v5 template untouched - same grid, title, copy,
-point-cloud cluster and route - and re-grades it three ways:
-
-- 01 **Thermal / Iridescent** - obsidian shadows, coral, amber, cyan, mint and
-  ultraviolet, heavy stipple.
-- 02 **Neon Luxe** - pitch black, ice off-white, acid lime and hot crimson
-  magenta, crisp and almost grain-free.
-- 03 **OPUL 77** - a sunset-to-bioluminescent wash behind white typography,
-  from golden yellow through hot pink to periwinkle and seafoam.
-
-Only the palette, background light and surface noise change. No new objects.
-
-### Fleet dashboard (current build)
-
-`/dashboard.html` is the current dashboard: seven views over the same static
-export, each with its own WebGL instrument. It is a separate Vite entry; the
-legacy console remains at `/`.
+`/` is the dashboard: eight views over the same static export, each with its
+own WebGL instrument. One Vite entry, one shell, no legacy console.
 
 - **Overview** — orb; fleet figures, module map, fleet pulse, evidence.
 - **Survey** — radar dish; severity, ranking, coverage, searchable ledger.
@@ -255,6 +194,8 @@ legacy console remains at `/`.
   cut/restore, clickable 3D hops, hop detail, route ledger.
 - **Atlas** - account constellation; curved directed trust graph with short
   labels and flow, filters, inspector.
+- **Drift** - before/after split; route-aware diff, new and closed routes, edge
+  changes, the same comparator as `apsis diff`.
 - **Commands** - prism; 114 recorded runs, typewriter output, replay, copy.
 - **Extensions** - bloom; 18 primitives, 288-cell coverage matrix, six contracts
   including the handoff, alert sample and the observed-path case.
@@ -262,12 +203,11 @@ legacy console remains at `/`.
   verification and release state.
 
 Global: `Cmd/Ctrl+K` command palette, motion toggle, fullscreen on every figure,
-sharp 5px panel geometry with a chamfered accent card, floating glass topbar,
-hero aurora, hash deep links, animated particle/grid background with a grain and
-scanline texture, bloom-lit glass panels, neon focus states, 2D fallback on every
-figure, clickable 3D nodes on Path map, Atlas and Extensions, and the same
-read-only export. The architecture and interaction inventory are in
-[docs/DASHBOARD.md](docs/DASHBOARD.md).
+sharp 2px panel geometry, floating glass topbar, hero aurora, moving constellation
+background with grain and scanline texture, bloom-lit glass panels, neon focus
+states, 2D fallback on every figure, clickable 3D nodes on Path map, Atlas,
+Drift and Extensions, and the same read-only export. The architecture and
+interaction inventory are in [docs/DASHBOARD.md](docs/DASHBOARD.md).
 
 ### Dashboard screenshots
 
@@ -275,27 +215,11 @@ read-only export. The architecture and interaction inventory are in
 
 ![Atlas: the account constellation and the directed trust graph](docs/img/dashboard-atlas.png)
 
-The Neon Luxe dashboard is retired. This is the dashboard build.
+![Drift: two snapshots, the route-aware diff and the new walks](docs/img/dashboard-drift.png)
 
-### Y2K / Acid Graphics mascot (current mock)
+![Blueprint: pipeline, architecture, engine additions and release state](docs/img/dashboard-blueprint.png)
 
-`/design-lab/v7/` is a clean departure from the previous poster directions:
-pure black, white linework and electric ultramarine. The title `APSIS` repeats
-three times - solid fill, white outline, blue outline - over a liquid chrome
-wave, Y2K stamps, a circular badge, a swoosh and a vertical barcode.
-
-The mascot is a real WebGL object built from two inputs: a **path** (a
-Catmull-Rom orbit with seven nodes) and an **atlas** (a wireframe globe shell,
-a 420-point dust field and a polar grid) around a liquid-cobalt core. It drags,
-zooms, resets and falls back to an SVG wireframe illustration. A separate
-dotted waveform mesh runs along the lower left.
-
-### Previous explorations
-
-The first five-direction lab is at `/design-lab/`, the five worlds at
-`/design-lab/v2/`, and the first ten-style pass at `/design-lab/v3/`. They are
-kept as the evidence trail. The live console currently follows the Orbital Ops
-direction.
+The dashboard replaces every earlier console and design-lab iteration.
 
 ## Data and scope
 
@@ -365,11 +289,11 @@ Details, custom domains, and the CLI steps are in
 
 | Now | Next | Later |
 | --- | --- | --- |
-| 18 primitives, 16 fixtures, route survey, minimum cut; seven-view read-only dashboard, observed-path case and guardrail contract; Penumbra handoff and Pages workflow | CloudTrail overlay that marks theoretical and observed edges; live import from `GetAccountAuthorizationDetails`; condition and resource-policy evaluation; a CSV view of the ledger | Benchmark against PMapper; drift view in the console; more primitives with fixture coverage |
+| 18 primitives, 16 fixtures, route survey, minimum cut; eight-view dashboard with CloudTrail overlay, live IAM import, condition/resource-policy evaluation, drift and CSV ledger; Penumbra handoff, CI gate and Pages workflow | Benchmark against PMapper; expand condition and import coverage; a performance budget for the 3D instruments | Network threat-hunting lab; more primitives with fixture coverage |
 
-The console, observed-path case, guardrail contract and Penumbra handoff are
-shipped. The live CloudTrail overlay, live import and condition evaluation
-remain the next engine work.
+Everything in the static/demo scope is delivered. The next work is engine depth:
+condition coverage against real requests, a PMapper benchmark, and a performance
+budget for the eight WebGL instruments.
 
 - **[docs/RELEASE.md](docs/RELEASE.md)** - preflight, GitHub Pages setup, upload
   gate and post-deploy checks.

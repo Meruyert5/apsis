@@ -4,6 +4,8 @@ import {
   averageRoutes,
   criticalAccounts,
   fleet,
+  ledgerCsv,
+  ledgerRows,
   severityCounts,
   snapshot,
   techniqueCount,
@@ -62,6 +64,19 @@ export function Survey({
   const maxEdges = Math.max(...techniqueRows.map((row) => row.edges), 1);
   const totalCells = techniqueCount * fleet.length;
   const coveredCells = techniqueRows.reduce((sum, row) => sum + row.accounts, 0);
+  const ledger = useMemo(() => ledgerRows(), []);
+  const [ledgerAll, setLedgerAll] = useState(false);
+
+  const downloadLedger = () => {
+    const blob = new Blob([ledgerCsv(ledger)], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "apsis-ledger.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+    notify(`Ledger CSV exported · ${ledger.length} edge rows`);
+  };
 
   const scan = () => {
     setScanning(true);
@@ -92,6 +107,9 @@ export function Survey({
             </button>
             <button type="button" className="btn" onClick={scan}>
               <Icon name="survey" />{scanning ? "Scanning…" : "Replay scan"}
+            </button>
+            <button type="button" className="btn" onClick={downloadLedger}>
+              <Icon name="copy" />Download ledger CSV
             </button>
           </div>
         </div>
@@ -250,6 +268,60 @@ export function Survey({
                   <td>{String(row.cut).padStart(2, "0")}</td>
                   <td><span className={`sev ${row.severity}`}>{row.severity}</span></td>
                   <td><span className={`state ${row.state}`}>{row.state}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Panel>
+
+      <Panel
+        title="Route ledger"
+        meta={`${ledger.length} edge rows`}
+        actions={
+          <div className="ledger-actions">
+            <button type="button" className="ghost-toggle" onClick={() => setLedgerAll((value) => !value)}>
+              {ledgerAll ? "First 40" : "Show all"}
+            </button>
+            <button type="button" className="ghost-toggle" onClick={downloadLedger}>
+              <Icon name="copy" size={12} />CSV
+            </button>
+          </div>
+        }
+        className="ledger-panel"
+      >
+        <div className="ledger-toolbar">
+          <span className="mini-note">Every account / every route / one edge per row</span>
+          <span className="mini-note">account, source, hop, technique, from → to, observed</span>
+        </div>
+        <div className="table-scroll ledger-scroll">
+          <table className="data-table ledger-table">
+            <caption className="sr-only">Route ledger for every account</caption>
+            <thead>
+              <tr>
+                <th scope="col">Account</th>
+                <th scope="col">Source</th>
+                <th scope="col">Hop</th>
+                <th scope="col">Technique</th>
+                <th scope="col">Edge</th>
+                <th scope="col">Observed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(ledgerAll ? ledger : ledger.slice(0, 40)).map((row, index) => (
+                <tr key={`${row.account}-${row.source}-${row.route}-${row.hop}-${index}`}>
+                  <th scope="row">
+                    <b>{row.short}</b>
+                    <span>{row.account}</span>
+                  </th>
+                  <td>
+                    <b className="ledger-source-label">{row.source}</b>
+                    <span className="ledger-route-label">route {row.route}</span>
+                  </td>
+                  <td>{row.hop}/{row.hops}</td>
+                  <td>{row.technique}</td>
+                  <td>{row.from} → {row.to}</td>
+                  <td>{row.observed ? "yes" : "no"}</td>
                 </tr>
               ))}
             </tbody>

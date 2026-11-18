@@ -2,24 +2,34 @@
 
 ### Changed
 
+- The dashboard is now the only site entry at `/`. The legacy four-deck console,
+  its component tree and the design-lab v2-v7 mocks were removed.
+- Engine: a CloudTrail overlay marks observed edges and routes, `apsis import`
+  converts `GetAccountAuthorizationDetails` dumps, conditions and resource
+  policies are evaluated, `apsis diff` is surfaced as the Drift view, and
+  `apsis ledger` writes a CSV. The Python suite is 89 tests; the dashboard
+  logic suite is 5.
+- CI: the site job audits all eight views at 1440 and 390 and runs Lighthouse
+  with accessibility, best-practice and SEO assertions.
+- Background: a drifting particle constellation with shooting stars, a rotating
+  ribbon and a slow scan sweep; all stop with reduced motion.
 - The 2D fallback was rebuilt as a wrapped, full-frame board for every figure:
   annotated grids, orbit/nucleus/route geometry and `xMidYMid meet` sizing.
   Fullscreen now shows the whole board in landscape and portrait instead of
   cropping the lower half.
-- Typography moved up again: 16.5px body, 15-16.5px data, 13-15px labels and a
-  100-174px display title. The display gains a soft orbital glow.
-- Corners sharpened to 5px / 4px / 2px, with a 16px sweep on the accent KPI and a
-  12px sweep on the primary button. The desktop topbar is now a floating glass
-  pill, the hero carries a cyan/cobalt aura over the grain, and the palette gained
-  electric cyan, cobalt and periwinkle.
+- Typography moved up again: 17px body, 15.5-17px data, 13.5-15.5px labels and
+  a 110-196px display title. The display gains a soft orbital glow.
+- Corners are sharp everywhere: 2px panels and controls, 0px tags. The desktop
+  topbar is a floating glass pill, the hero carries a cyan/cobalt aura over the
+  grain, and the palette gained electric cyan, cobalt and periwinkle.
 - New brand mark: `favicon.svg` (A inside an orbit), 512px and Apple touch PNGs,
-  a web manifest, and a purpose-built 1200x630 `og.png`. Both HTML entries carry
+  a web manifest, and a purpose-built 1200x630 `og.png`. The HTML entry carries
   the new icon, manifest and social metadata.
 - Extensions now lists the validated alert instance and the delivered Penumbra
   handoff, and the case shows both paths. Blueprint is marked complete and ready
   for upload.
 - Added six stdlib contract tests (`tests/test_contracts.py`), taking the Python
-  suite to 73. README now has a reviewer path, repository map and dashboard
+  suite to 89. README now has a reviewer path, repository map and dashboard
   screenshots.
 
 - The console is now four cyber decks of one orbital operations console:
@@ -71,8 +81,8 @@
   path (7-node orbit) and an atlas (wireframe globe, dust field, polar grid),
   with drag/zoom/reset and an SVG fallback.
 - The Fleet dashboard at `console/dashboard.html` now renders
-  `console/src/y2k/` as a seven-view control surface: Overview, Survey, Path map,
-  Atlas, Commands, Extensions and Blueprint. Each view has a distinct WebGL
+  `console/src/y2k/` as an eight-view control surface: Overview, Survey, Path map,
+  Atlas, Drift, Commands, Extensions and Blueprint. Each view has a distinct WebGL
   instrument (orb, dish, ascent, constellation, prism, bloom, stack) with
   drag/zoom/reset and a 2D fallback. Adds a `Cmd/Ctrl+K` command palette, motion
   toggle, animated background, auto-escalation and cut, 114 recorded commands
@@ -94,8 +104,7 @@
   graph moved to a uniform-fit layout with curved directed edges, short labels,
   shape-by-kind nodes and an animated trust flow. All 3D pickables now carry
   oversized invisible hit targets.
-- Corner geometry is fixed at 5px panels, 4px controls and 2px tags, with a 16px
-  sweep on the accent KPI and a 12px sweep on the primary button. The screen
+- Corner geometry is fixed at 2px panels and controls with 0px tags. The screen
   frame and tables stay square; there is no corner toggle.
 - Typography moved up across the console: 16.5px body, 15–16.5px data and notes,
   13–15px labels and a 100–174px display. Every figure now has a fullscreen

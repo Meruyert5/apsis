@@ -3,9 +3,7 @@
 The site is a static Vite build in `console/dist`. It has no server, no runtime
 API, no analytics, and no third-party scripts.
 
-The build has two HTML entries: `dist/index.html` (legacy four-deck console)
-and `dist/dashboard.html` (the current Fleet dashboard). Both are static
-and deploy together.
+The build has one HTML entry: `dist/index.html`, the eight-view dashboard.
 
 ## GitHub Pages
 

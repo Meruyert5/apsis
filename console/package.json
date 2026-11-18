@@ -2,7 +2,10 @@
   "name": "apsis-site",
   "private": true,
   "homepage": "https://meruyert5.github.io/apsis/",
-  "repository": { "type": "git", "url": "https://github.com/Meruyert5/apsis.git" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Meruyert5/apsis.git"
+  },
   "version": "0.2.0",
   "type": "module",
   "scripts": {
@@ -13,7 +16,6 @@
     "test:logic": "node --test src/lib/*.test.ts"
   },
   "dependencies": {
-    "lucide-react": "^1.72.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "three": "^0.187.0"

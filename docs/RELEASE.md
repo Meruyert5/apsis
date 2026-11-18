@@ -6,8 +6,7 @@ Status: **ready for approval**. Nothing is pushed until the owner signs off.
 
 | Artifact | Path |
 | --- | --- |
-| Legacy console | `console/dist/index.html` |
-| Fleet dashboard | `console/dist/dashboard.html` |
+| Dashboard | `console/dist/index.html` |
 | Alert contract | `schema/alert.schema.json` |
 | Evidence contract | `schema/evidence.schema.json` |
 | Case alert | `cases/01-observed-path/alert.json` |
@@ -31,12 +30,12 @@ Then run the local audit against the built dashboard:
 ```powershell
 cd console
 npm run preview -- --port 4180 --strictPort
-$env:BASE_URL='http://localhost:4180/dashboard.html'; npm run audit
+$env:BASE_URL='http://localhost:4180/'; npm run audit
 ```
 
-Expected: build pass, 9/9 logic tests, 73/73 Python tests, contracts valid,
-no contrast, heading, control-name, target-size or overflow findings at 1440
-and 390.
+Expected: build pass, 5/5 logic tests, 89/89 Python tests, contracts valid, no
+contrast, heading, control-name, target-size or overflow findings across all
+eight views at 1440 and 390.
 
 ## GitHub
 
@@ -52,8 +51,7 @@ GitHub before the first push, or update `origin` to the final URL.
 3. Open **Settings -> Pages** and set **Build and deployment -> Source** to
    **GitHub Actions**.
 4. Run the `pages` workflow, or let the push trigger it.
-5. The site publishes at `https://meruyert5.github.io/apsis/`; the dashboard is
-   `https://meruyert5.github.io/apsis/dashboard.html`.
+5. The site publishes at `https://meruyert5.github.io/apsis/`.
 
 The workflow builds `console` and uploads `console/dist`. It does not need a
 token, a backend, or a custom domain.
@@ -66,9 +64,9 @@ token, a backend, or a custom domain.
 
 ## Post-deploy checks
 
-- `/` shows the legacy console, `/dashboard.html` the fleet dashboard.
+- `/` shows the eight-view dashboard.
 - No 404 on `assets/`, fonts, `favicon.svg`, `icon-512.png`, `apple-touch-icon.png` or `og.png`.
-- `#/survey`, `#/path`, `#/atlas`, `#/commands`, `#/extensions`, `#/blueprint`
+- `#/survey`, `#/path`, `#/atlas`, `#/drift`, `#/commands`, `#/extensions`, `#/blueprint`
   all load directly.
 - Command palette (`Cmd/Ctrl+K`), motion toggle and fullscreen work.
 - Reduced motion stops CSS animation and the 3D clock.
@@ -80,3 +78,4 @@ token, a backend, or a custom domain.
 - [ ] Owner approves the public repository and Pages URL.
 - [ ] `git push origin main` (or the Pages workflow dispatch) is run by the
   owner or with explicit permission.
+

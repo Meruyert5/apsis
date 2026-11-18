@@ -1,3 +1,4 @@
+> **Historical design log.** The design-lab v2-v7 assets, legacy consoles and old screenshots were removed in the final build. Links to those paths below are kept as history, not as live routes.
 # Apsis design research — the darkroom observatory
 
 Date: 17 November 2026
@@ -279,3 +280,4 @@ The evidence trail in §1–§2 is retained because it still governs the structu
 grid, hierarchy, one ink per act, numbered specimens, and the archival figure
 caption. The two-pass decision log is the point: the research was not discarded
 when the surface changed.
+

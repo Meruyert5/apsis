@@ -18,17 +18,30 @@ The synthetic `Administrator` node is where paths terminate when a technique gra
 
 ## Conditions
 
-The engine reports conditions, it does not evaluate them. An edge allowed by a statement with a `Condition` is marked `conditional` and is still counted as a route.
+The engine evaluates the condition operators it can ground in known request
+facts: string, ARN, Bool, IP, date and numeric comparisons, plus `Null` and the
+`IfExists`/`ForAllValues`/`ForAnyValue` forms. The context carries the caller
+ARN, account, region, source account/ARN/VPC endpoint and secure transport.
 
-This is deliberate. Evaluating `aws:SourceVpce`, `aws:PrincipalOrgID`, or `sts:ExternalId` correctly needs account context the engine does not have. A conditional route is a question for a human: if the guard is real, the route is closed; if the value leaked into a CI config, it is not.
+What it cannot know stays unknown. `aws:PrincipalOrgID`, MFA, tags, external IDs
+and request-time IPs remain conditional unless the caller supplies them. A
+condition that is provably false removes the statement; a condition that stays
+unknown still counts as a possible route and is marked `conditional`.
 
-The report marks conditional edges with `=>` in the terminal and a dashed curve on the site.
+The report marks conditional edges with `=>` in the terminal and a dashed curve
+on the site.
 
 ## Trust policies
 
-`sts:AssumeRole` on a role requires both a matching `Allow` in the caller's identity policy and an entry in the role's trust policy. Trust entries are matched as ARN patterns. A trust of `arn:aws:iam::<account>:root` admits any principal in the account, which is how several of the fixture routes begin.
+`sts:AssumeRole` on a role requires both a matching `Allow` in the caller's
+identity policy and an entry in the role's trust policy. Trust entries are
+matched as ARN patterns. A trust of `arn:aws:iam::<account>:root` admits any
+principal in the account, which is how several of the fixture routes begin.
 
-Resource-based policies that could also satisfy trust are out of scope.
+Resource-based policies are evaluated for modelled resources: an Allow in the
+resource policy can satisfy an action even when the identity policy does not,
+and an explicit Deny in either policy wins. Resource policies outside the
+modelled resource list are not inferred.
 
 ## Groups
 
@@ -62,22 +75,23 @@ Run `apsis techniques` for the exact list with MITRE mappings and fixes.
 These are not bugs and the engine says so in the report:
 
 - **Service control policies.** An SCP can cap what an edge reaches. An SCP-protected account can look worse here than it is.
-- **Resource policies.** Bucket, queue, KMS, and Secrets Manager policies can grant access that identity policies never mention.
+- **Resource policies outside the modelled resources.** The evaluator handles policies on resources present in the scenario; bucket, queue, KMS and Secrets Manager policies that were not imported are not inferred.
 - **Organizations and Identity Center.** SSO assignments are flattened by the export. Permission sets are not modelled.
 - **Session policies and permission boundaries.** Boundaries reduce effective permissions and are not subtracted.
 - **Data exfiltration.** The engine models privilege, not which bucket is interesting.
 
 ## Known false positives
 
-- A conditional grant whose guard is actually enforced will be reported as a route.
+- A conditional grant whose guard is actually enforced, when the context needed
+  to evaluate it was not supplied, will be reported as a route.
 - `iam:PassRole` is checked against the role ARN, but the engine does not verify that the passable role can be attached to the target service's execution model.
 - The engine does not know whether a role is used by anything. A dormant admin role still counts.
 
 ## Known false negatives
 
-- Escalation through resource policies, SCP gaps, or cross-account trust outside the modelled account.
+- Escalation through resource policies that are not imported, SCP gaps, or cross-account trust outside the modelled account.
 - Techniques that need several API calls the registry does not compose, such as creating a user, attaching a policy, and minting a key as separate steps.
-- Anything that depends on the value of a condition.
+- A condition whose context is unknown and whose guard is actually enforced.
 
 ## Severing
 

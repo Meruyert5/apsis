@@ -310,6 +310,9 @@ def web_bundle(survey: Survey, limit: int = 4) -> Dict[str, Any]:
             "mitre": edge.mitre,
             "actions": list(edge.actions),
             "conditional": edge.conditional,
+            "observed": edge.observed,
+            "firstSeen": edge.first_seen or None,
+            "lastSeen": edge.last_seen or None,
             "evidence": edge.evidence,
             "narration": edge.narration,
             "fix": technique.fix if technique else "",
@@ -333,6 +336,9 @@ def web_bundle(survey: Survey, limit: int = 4) -> Dict[str, Any]:
                         "mitre": survey.edges[int(edge_id[1:])].mitre,
                         "evidence": survey.edges[int(edge_id[1:])].evidence,
                         "conditional": survey.edges[int(edge_id[1:])].conditional,
+                        "observed": survey.edges[int(edge_id[1:])].observed,
+                        "firstSeen": survey.edges[int(edge_id[1:])].first_seen or None,
+                        "lastSeen": survey.edges[int(edge_id[1:])].last_seen or None,
                     }
                     for edge_id in route.edges
                 ],
@@ -392,6 +398,50 @@ def web_bundle(survey: Survey, limit: int = 4) -> Dict[str, Any]:
         "signature": signature,
         "registry": technique_mod.registry(),
     }
+
+
+def ledger_rows(survey: Survey, limit: int = 4) -> List[Dict[str, Any]]:
+    """One row per edge occurrence in a route, ready for CSV or a table."""
+    routes = pathmod.all_paths(survey, limit=limit)
+    rows: List[Dict[str, Any]] = []
+    for source in sorted(routes):
+        for route_index, route in enumerate(routes[source], start=1):
+            for hop, edge_id in enumerate(route.edges, start=1):
+                edge = survey.edges[int(edge_id[1:])]
+                rows.append({
+                    "account": survey.scenario.account_id,
+                    "scenario": survey.scenario.name,
+                    "source": survey.label(source),
+                    "route": route_index,
+                    "hops": route.hops,
+                    "hop": hop,
+                    "from": survey.label(edge.source),
+                    "to": survey.label(edge.target),
+                    "technique": edge.technique,
+                    "actions": " ".join(edge.actions),
+                    "conditional": edge.conditional,
+                    "observed": edge.observed,
+                    "firstSeen": edge.first_seen,
+                    "lastSeen": edge.last_seen,
+                })
+    return rows
+
+
+def ledger_csv(survey: Survey, limit: int = 4) -> str:
+    import csv
+    import io
+
+    rows = ledger_rows(survey, limit=limit)
+    fields = [
+        "account", "scenario", "source", "route", "hops", "hop",
+        "from", "to", "technique", "actions", "conditional", "observed",
+        "firstSeen", "lastSeen",
+    ]
+    buffer = io.StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=fields, lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(rows)
+    return buffer.getvalue()
 
 
 def drift_text(drift: Drift, before: Survey, after: Survey, colour: bool = True) -> str:

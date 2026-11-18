@@ -5,7 +5,7 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 
-export type FigureVariant = "orb" | "dish" | "ascent" | "atlas" | "prism" | "bloom" | "stack";
+export type FigureVariant = "orb" | "dish" | "ascent" | "atlas" | "drift" | "prism" | "bloom" | "stack";
 
 interface FigureState {
   active: number;
@@ -1269,6 +1269,128 @@ function buildStack(): Built {
   };
 }
 
+/* ---------------------------------------------------------------- drift */
+function buildDrift(glow: THREE.Texture): Built {
+  const root = new THREE.Group();
+  root.rotation.x = 0.06;
+  root.position.y = 0.22;
+
+  const panelMats: THREE.MeshBasicMaterial[] = [];
+  const nodes: THREE.Mesh[] = [];
+  const nodeMats: THREE.MeshBasicMaterial[] = [];
+  const connectorMats: THREE.LineBasicMaterial[] = [];
+
+  const points: [number, number][] = [
+    [-0.62, 1.3],
+    [0.5, 0.94],
+    [-0.24, 0.4],
+    [0.58, -0.12],
+    [-0.5, -0.64],
+    [0.18, -1.14],
+    [-0.12, -1.52],
+  ];
+  const spread = 1.3;
+
+  for (const side of [-1, 1]) {
+    const panelMat = wire(BLUE, 0.22);
+    const panel = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 4.0, 6, 8), panelMat);
+    panel.position.set(side * spread, 0, 0);
+    panel.rotation.y = side * -0.07;
+    root.add(panel);
+    panelMats.push(panelMat);
+
+    for (const [px, py] of points) {
+      const nodeMat = basic(BLUE, 0.7);
+      const node = new THREE.Mesh(new THREE.OctahedronGeometry(0.095, 0), nodeMat);
+      node.position.set(side * spread + px, py, 0.02);
+      root.add(node);
+      nodes.push(node);
+      nodeMats.push(nodeMat);
+    }
+  }
+
+  for (let index = 0; index < points.length; index += 1) {
+    const a = nodes[index];
+    const b = nodes[index + points.length];
+    const mat = new THREE.LineBasicMaterial({
+      color: BLUE, transparent: true, opacity: 0.25,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    });
+    const connector = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints([a.position.clone(), b.position.clone()]),
+      mat,
+    );
+    root.add(connector);
+    connectorMats.push(mat);
+  }
+
+  const seam = line([
+    new THREE.Vector3(0, -1.98, 0),
+    new THREE.Vector3(0, 1.98, 0),
+  ], WHITE, 0.2);
+  root.add(seam);
+
+  // The floor holds both snapshots; the bar reads them line by line.
+  const baseMat = wire(BLUE, 0.14);
+  const base = new THREE.Mesh(new THREE.PlaneGeometry(2.9, 1.7, 6, 4), baseMat);
+  base.rotation.x = -Math.PI / 2;
+  base.position.y = -2.06;
+  root.add(base);
+
+  const scanMat = basic(WHITE, 0.32);
+  const scan = new THREE.Mesh(new THREE.PlaneGeometry(2.8, 0.015), scanMat);
+  scan.position.z = 0.03;
+  root.add(scan);
+
+  const pulse = sprite(glow, WHITE, 0.5, 0.85);
+  root.add(pulse);
+
+  const rings: THREE.Mesh[] = [];
+  for (const y of [1.98]) {
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.62, 0.006, 4, 90), basic(BLUE, 0.2));
+    ring.rotation.x = Math.PI / 2;
+    ring.position.y = y;
+    root.add(ring);
+    rings.push(ring);
+  }
+
+  return {
+    root,
+    update: (time, state) => {
+      const added = Math.max(0, Math.min(points.length, state.count));
+      const removed = Math.max(0, Math.min(points.length - added, state.focus));
+      panelMats.forEach((mat) => {
+        mat.opacity = 0.16 + Math.sin(time * 0.7) * 0.04;
+      });
+      nodes.forEach((node, index) => {
+        const isNew = index % points.length < added;
+        const isOld = index % points.length >= points.length - removed;
+        const mat = nodeMats[index];
+        mat.color.setHex(isNew ? 0x1ab2ff : isOld ? WHITE : BLUE);
+        mat.opacity = 0.5 + Math.sin(time * 1.4 + index) * 0.2;
+        node.scale.setScalar(1 + Math.sin(time * 1.8 + index) * 0.12);
+      });
+      connectorMats.forEach((mat, index) => {
+        const isNew = index < added;
+        const isOld = index >= points.length - removed;
+        mat.color.setHex(isNew ? 0x1ab2ff : isOld ? WHITE : BLUE);
+        mat.opacity = isNew ? 0.85 : isOld ? 0.6 : 0.14;
+      });
+      const scanY = -1.95 + ((time * 0.22) % 1) * 3.9;
+      scan.position.y = scanY;
+      scanMat.opacity = 0.22 + Math.abs(Math.sin(time * 0.5)) * 0.16;
+      const pulseY = -1.9 + ((time * 0.34) % 1) * 3.8;
+      pulse.position.set(0, pulseY, 0);
+      pulse.material.opacity = 0.35 + Math.sin(time * 2) * 0.1;
+      pulse.scale.setScalar(0.55 + Math.sin(time * 3) * 0.06);
+      rings.forEach((ring, index) => {
+        ring.rotation.z = time * (index === 0 ? 0.1 : -0.08);
+        (ring.material as THREE.MeshBasicMaterial).opacity = 0.12 + Math.sin(time * 0.9 + index) * 0.05;
+      });
+    },
+  };
+}
+
 /* ---------------------------------------------------------------- fallback */
 function smoothPath(points: [number, number][]) {
   return points
@@ -1291,6 +1413,7 @@ function Fallback({ variant }: { variant: FigureVariant }) {
     dish: "Survey dish: a wireframe bowl, sweep and sixteen contacts",
     ascent: "Escalation ascent: eight gate rings on a rising route through the constellation",
     atlas: "Account constellation: sixteen nodes, arcs and an orbital ring",
+    drift: "Drift split: before and after panels joined by changed escalation edges",
     prism: "Command prism: a wireframe monolith with a scan plane and rings",
     bloom: "Primitive bloom: six interlocking rings with eighteen technique nodes",
     stack: "System stack: five alternating layers and a rising beam",
@@ -1301,6 +1424,7 @@ function Fallback({ variant }: { variant: FigureVariant }) {
     dish: "SURVEY DISH",
     ascent: "ESCALATION ASCENT",
     atlas: "ACCOUNT CONSTELLATION",
+    drift: "DRIFT SPLIT",
     prism: "COMMAND PRISM",
     bloom: "PRIMITIVE BLOOM",
     stack: "SYSTEM STACK",
@@ -1311,6 +1435,7 @@ function Fallback({ variant }: { variant: FigureVariant }) {
     dish: "16 CONTACTS / SWEEP",
     ascent: "08 GATES / ONE ROUTE",
     atlas: "16 NODES / ONE FLEET",
+    drift: "BEFORE / AFTER",
     prism: "114 RUNS / READ-ONLY",
     bloom: "18 NODES / SIX RINGS",
     stack: "FIVE LAYERS / ONE EXPORT",
@@ -1493,6 +1618,34 @@ function Fallback({ variant }: { variant: FigureVariant }) {
             </>
           ) : null}
 
+          {variant === "drift" ? (
+            <>
+              <rect x="160" y="96" width="150" height="286" strokeOpacity=".45" />
+              <rect x="330" y="96" width="150" height="286" strokeOpacity=".45" />
+              {[96, 138, 180, 222, 264, 306, 348, 382].map((y) => (
+                <g key={`dgrid${y}`}>
+                  <line x1="160" y1={y} x2="310" y2={y} strokeOpacity=".14" />
+                  <line x1="330" y1={y} x2="480" y2={y} strokeOpacity=".14" />
+                </g>
+              ))}
+              {[235, 320, 405].map((x) => (
+                <g key={`dcol${x}`}>
+                  <line x1={x} y1="96" x2={x} y2="382" strokeOpacity=".12" />
+                </g>
+              ))}
+              {[130, 174, 218, 262, 306, 350].map((y, index) => (
+                <g key={`dr${y}`}>
+                  <line x1={190 + (index % 2) * 34} y1={y} x2={360 + (index % 2) * 34} y2={y} strokeOpacity={index < 2 ? ".8" : ".2"} className={index < 2 ? "fb-accent" : undefined} />
+                  <circle cx={190 + (index % 2) * 34} cy={y} r={index < 2 ? 5 : 3.5} className={index < 2 ? "fb-accent" : "fb-node"} />
+                  <circle cx={360 + (index % 2) * 34} cy={y} r={index < 2 ? 5 : 3.5} className={index < 2 ? "fb-accent" : "fb-node"} />
+                </g>
+              ))}
+              <line x1="320" y1="76" x2="320" y2="402" className="fb-accent" strokeOpacity=".65" />
+              <text className="fb-label" x="235" y="414" textAnchor="middle">BEFORE</text>
+              <text className="fb-label" x="405" y="414" textAnchor="middle">AFTER</text>
+            </>
+          ) : null}
+
           {variant === "prism" ? (
             <>
               <path d="M236 372 L236 138 L422 92 L422 326 Z" strokeWidth="2" />
@@ -1584,6 +1737,7 @@ const CAMERA: Record<FigureVariant, { position: [number, number, number]; look: 
   atlas: { position: [0, 3.1, 6.2], look: [0, 0.1, 0], fov: 42, auto: 0.0005, span: 3.55 },
   prism: { position: [0, 0.5, 8.2], look: [0, 0, 0], fov: 40, auto: 0.0006, span: 2.3 },
   bloom: { position: [0, 1.2, 8.8], look: [0, 0, 0], fov: 40, auto: 0.0005, span: 2.5 },
+  drift: { position: [0, 0.14, 7.4], look: [0, 0, 0], fov: 40, auto: 0.0004, span: 3.1 },
   stack: { position: [0, 2.4, 8.6], look: [0, 0, 0], fov: 40, auto: 0.0003, span: 2.3 },
 };
 
@@ -1671,6 +1825,7 @@ export function Figure3D({
     else if (variant === "dish") built = buildDish(glow);
     else if (variant === "ascent") built = buildAscent(glow);
     else if (variant === "atlas") built = buildAtlas(glow);
+    else if (variant === "drift") built = buildDrift(glow);
     else if (variant === "prism") built = buildPrism(glow);
     else if (variant === "bloom") built = buildBloom(glow);
     else built = buildStack();
@@ -1868,3 +2023,6 @@ export function Figure3D({
     </div>
   );
 }
+
+
+

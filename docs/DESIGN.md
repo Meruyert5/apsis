@@ -1,176 +1,91 @@
-# Apsis — design system
+# Apsis - design system
 
-Apsis is four cyber decks of one orbital operations console. The account is a
-living orrery; the console is the instrument that reads it. The title is the
-design: every route reaches its apsis.
+Apsis is one control surface over an AWS identity graph. The account is an
+orrery; the dashboard is the instrument that reads it. Every route reaches its
+apsis.
 
-The reference trail is in `docs/design-research.md`. The first pass was a
-darkroom observatory plate series; the final pass keeps the research structure
-(visible grid, one ink per act, numbered specimens, real figure captions) and
-moves the surface to a futuristic console: deep navy glass, gradient borders,
-scanlines and neon HUD labels. This page records the final system.
+This is the current system. The shipped implementation and interaction
+inventory are in [`DASHBOARD.md`](DASHBOARD.md); the revision trail is in
+[`design-agency.md`](design-agency.md).
 
-## 1. Concept
+## Concept
 
-One account is one orrery. The administrator is the primary star; identities are
-bodies on hop shells; escalations are flux tubes. The console exposes the route
-to an administrator and the minimum cut that closes it.
+One account is one field. The administrator is the primary star, identities are
+bodies at their hop depth, and an escalation is a route through them. Eight views
+each carry a different instrument:
 
-Four decks, one instrument:
-
-| Deck | Console archetype | Ink family | Surface |
-| --- | --- | --- | --- |
-| Signal | Holographic uplink | cyan + amber | beveled glass, scanline, full-bleed field |
-| Map | Magnetic array | blue + violet + mint | square tactical grid, crosshair stage |
-| Decide | Containment bay | emerald + magenta + cyan | organic rounded glass, radial specimen |
-| Prove | Flight recorder | rust + amber + rose | terminal, tape deck, forensic scanline |
-
-Every glow has a data job. Nothing is a decorative chart.
-
-## 2. Colour
-
-Base tokens live in `console/src/styles/cyber.css`.
-
-| Token | Value | Job |
+| View | Instrument | Question |
 | --- | --- | --- |
-| `--paper` | `#04070d` | page field |
-| `--plate` | `#07111f` | panel field |
-| `--well` | `#030811` | data wells and terminal |
-| `--ink` | `#eaf7ff` | display, primary text |
-| `--text` | `#b9d2e4` | body |
-| `--mute` | `#86a8c0` | secondary labels |
-| `--faint` | `#6f93ad` | tertiary labels |
-| `--line` | `rgba(120,210,255,.20)` | hairlines and panel borders |
-| `--gold` | `#ffc46b` | shared apsis accent, Signal amber |
-| `--ultramarine` | `#6f9bff` | Map ink |
-| `--verdigris` | `#4fffc4` | Decide ink |
-| `--rust` | `#ff8a6b` | Prove ink |
+| Overview | Orb | Fleet posture and the signature orbit |
+| Survey | Dish | Exposure, severity and account ranking |
+| Path map | Ascent | One route, hop by hop, then the cut |
+| Atlas | Constellation | Accounts, identities and trust |
+| Drift | Split | Before and after, route aware |
+| Commands | Prism | Recorded CLI runs |
+| Extensions | Bloom | Primitives, coverage, contracts, case |
+| Blueprint | Stack | Architecture, roadmap and release |
 
-Act families:
+## Colour
 
-- Signal `#4fe3ff → #7aa2ff → #ffc46b`
-- Map `#4f7cff → #8b6cff → #4fe3c1`
-- Decide `#3ff0b0 → #4fe3ff → #ff6fa5`
-- Prove `#ff6f91 → #ff8a6b → #ffc46b`
-
-The gradient is a subject on the deck accent and primary action; it is not a
-wallpaper. One act ink leads. The base field stays navy.
-
-## 3. Typography
-
-| Role | Family | Notes |
+| Token | Value | Use |
 | --- | --- | --- |
-| Display | Sora 600 | deck titles, closure zero, the accent phrase |
-| Reading | Sora 400 | decks, body, notes, FAQ |
-| HUD / data | IBM Plex Mono 400–500 | deck numbers, nav, labels, terminal, tags, buttons, captions |
+| Void | `#05070d` | Page and instrument background |
+| Ultramarine | `#2b3cff` | Primary ink, routes, active state |
+| Bright blue | `#4e5fff` | Focus and active borders |
+| Violet | `#7a6cff` | Secondary data and severity |
+| Electric cyan | `#1ab2ff` | Added edges, live pulse, accents |
+| Periwinkle | `#8db7ff` | HUD labels and secondary text |
+| Ice | `#d6ecff` | Highlights and display glow |
+| Ink | `#eef4ff` | Primary text |
+| Muted | `#8493aa` | Body copy |
 
-Self-hosted from `console/public/fonts`; Instrument Serif is no longer shipped.
-The 14px floor is absolute. Display never sets paragraphs. Data uses tabular
-numbers where it aligns in columns.
+The palette is deliberately narrow. Ultramarine and white do the work; cyan,
+cobalt and periwinkle add atmosphere without turning the console into a
+rainbow.
 
-Display line-height is 0.94–1.0; body 1.6–1.68; HUD labels one line. The accent
-phrase is a gradient fill, not italic. The uppercase treatment belongs to the
-wordmark and HUD labels, not paragraphs.
+## Type
 
-## 4. Surfaces and shape
+- **Sora** - display and section headings. Weight 600-800, tight tracking.
+- **IBM Plex Sans** - reading copy, labels, controls.
+- **IBM Plex Mono** - HUD labels, figures, commands, ledgers.
 
-- **Glass** — deep navy gradient, 1px gradient border, inner top highlight,
-  8–12px blur on the hero and one readout per deck.
-- **Tactical** — Map is square: 0px radius, blueprint grid, 1px rules.
-- **Organic** — Decide is rounded: 30px / 10px asymmetric radii, dot matrix,
-  soft green glass.
-- **Recorder** — Prove is flat and warm: 2px / 18px, scanlines, rusty well.
+Scale: 17px body, 15.5-17px data and notes, 13.5-15.5px labels, 11.5-13.5px
+micro-labels, a 110-196px display title. Nothing that carries a decision is
+smaller than 13px; HUD microcopy is the only exception.
 
-Corners, borders and shadows are not interchangeable between decks. The deck
-radius is a token (`--panel-radius`) and is overridden per act.
+## Surface and geometry
 
-Controls are 44px minimum, squared or 4–6px radius. The primary action is a
-gradient fill with dark text; the secondary is a transparent glass outline that
-glows on hover. No pill buttons.
+- Sharp 2px panels and controls, 0px tags. No corner variant.
+- Deep glass: `rgb(10 16 28 / .6)` over blur, 1px `rgb(150 175 255 / .14)`.
+- The desktop topbar floats as a glass pill; the rail stays fixed.
+- The hero sits over a cyan/cobalt mesh aura; a grain and scanline layer sits
+  over the whole field.
+- Animated field: drifting grid, aurora, constellation particles, shooting
+  stars and a slow scan sweep. Every layer stops under `prefers-reduced-motion`.
 
-## 5. The four decks
+## Motion
 
-**Signal — holographic uplink.** A full-bleed 3D signature transfer, a live light
-curve and scrubber, a phase readout, the observer figure and the five-stage bus.
-The copy is a glass command slab with a cyan/amber edge. The deck border is a
-gradient. Scanlines sit over the field at low opacity. The phase advances until
-held; scrubbing stops it. Reduced motion holds the final frame.
+Motion explains state, never decorates a static claim:
 
-**Map — magnetic array.** A Three.js orrery on a square blueprint stage:
-primary star, hop shells, identity bodies, flux tubes and a faint membrane. The
-workbench adds a principal rail, Route/Node/Cut readout, field meter, compass,
-field toggle, account selector and hop rail. The selected route is a tube with
-two travelling pulses; the cut turns tubes rust. The hop rail flows a gradient
-while playing and restarts from the first hop at the end. Reduced motion renders
-a static frame.
+- auto-rotating instruments with a visible `Auto` badge and a `Paused` state;
+- the Path map advances hops, carries a pulse and fractures on cut;
+- Atlas nodes pulse, the focus beam rises, the orbital ring turns;
+- Drift scans before and after and lights added edges in cyan;
+- fullscreen on every figure, closes on Escape;
+- 32fps cap (10fps when motion is off), offscreen pause, `2D` board fallback.
 
-**Decide — containment bay.** A Three.js specimen of 16 account rings and 18
-technique ribs with photophores at the intersections, sonar rings, a species
-legend and an organic ledger. Identity is magenta, compute emerald, trust cyan.
-The 2D radial core is the explicit alternate view and the reduced-motion
-fallback. The ledger is the exact reading path with the fix and the guardrail.
+## Content rules
 
-**Prove — flight recorder.** The recorded terminal, a seekable waveform of the
-recorded output, the 3D field collapse, the zero, the revocation and guardrail
-ledgers, the Penumbra handoff and the EVA diver. The terminal is a warm black
-box with scanlines and a rose/amber border. The waveform cursor highlights the
-line it is playing. The closure zero is a gradient numeral, not a glow blob.
+- Every figure has a title, a one-line explanation and a footer naming its
+  animation.
+- Numbers are the fixture totals, never invented.
+- The synthetic nature of the data is stated in the rail, README and footer.
+- Read-only is a product promise: the console never writes to an account.
 
-## 6. People
+## Accessibility
 
-Three crew figures, drawn in the console palette and marked `aria-hidden`
-because the data lives in the surrounding text:
-
-- **Observer / AP-01** in Signal: seated at a curved telemetry console with a
-  headset and a light-curve screen.
-- **Field biologist / Specimen 03** in Decide: coat, headlamp, satchel and a
-  glowing specimen jar.
-- **DIVE-01** in Prove: a full suit with visor, chest console, tanks, hoses,
-  wrist slate, fins, lamp and tether, paired with a ROLE / DEPTH / TETHER /
-  STATUS card.
-
-They keep their ink, gain an act-coloured drop shadow, float slowly, and stop
-under reduced motion. They are the human scale of the instrument.
-
-## 7. Motion
-
-- One staged entrance per deck: 16px rise + fade + 4px blur, 0.78s, under 1.2s.
-- Ambient orbit, drift and sonar are slower than the entrance.
-- Hover 160ms; press 100ms; state 280ms; scene 620ms.
-- HUD LEDs blink at 1.4–2s; scanlines run at low opacity.
-- Live instruments: Signal phase, Map walk and hop sheen, Prove waveform and
-  active line. These are the only things that play.
-- `prefers-reduced-motion` keeps the final frame and stops the LEDs, sonar,
-  reels, waveform scan and entrance.
-
-## 8. Accessibility
-
-- 14px minimum text; 44px minimum controls; visible focus ring on every control.
-- Every text pair is checked; muted labels stay above the contrast floor.
-- Colour never carries meaning alone: every ink is paired with a label, a
-  numbered specimen or a state word.
-- The 3D scenes are decorative and `aria-hidden`; the same data is in the
-  readout, ledger, terminal and captions.
-- Reduced motion is honoured in CSS and in the Three.js scenes. The Map renders
-  a static frame; Decide defaults to the 2D core.
-- The audit is run at 1440 and 390: no contrast failures, heading skips, small
-  targets or sub-14px text.
-
-## 9. Performance
-
-- One visible WebGL scene at a time; each pauses offscreen.
-- Self-hosted fonts, no network font request; the serif was removed.
-- CSS gradients and transforms; no canvas-based decoration beyond the existing
-  field and scenes.
-- The `prefers-reduced-motion` path keeps the final state and stops the loops.
-
-## 10. Ownership
-
-Apsis owns cloud identity and the route. Penumbra owns detection and incident
-response; the third project owns network evidence. The shared contract is
-`schema/alert.schema.json` and `schema/evidence.schema.json`; the handoff is the
-`path.opened` card in Prove.
-
-The research, evidence table and the two-pass direction log are in
-`docs/design-research.md`. This file and `docs/design-agency.md` are the binding
-product record; the shipped dashboard is documented in `docs/DASHBOARD.md`.
+- Semantic headings, labelled controls, `aria-current`, `aria-pressed`,
+  `aria-expanded`, table captions and focus-visible rings.
+- Full-screen and 2D fallbacks are keyboard operable.
+- Contrast, target size and overflow are gated across all eight views at 1440
+  and 390. Lighthouse gates accessibility, best practices and SEO.

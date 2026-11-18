@@ -41,6 +41,9 @@ export interface GraphEdge {
   evidence: string;
   narration: string;
   fix: string;
+  observed?: boolean;
+  firstSeen?: string | null;
+  lastSeen?: string | null;
 }
 
 export interface RouteStep {
@@ -52,6 +55,9 @@ export interface RouteStep {
   mitre: string;
   evidence: string;
   conditional: boolean;
+  observed?: boolean;
+  firstSeen?: string | null;
+  lastSeen?: string | null;
 }
 
 export interface Route {

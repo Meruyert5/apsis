@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T18:48:43+00:00",
+  "generated": "2026-11-18T11:41:54+00:00",
   "engine": {
     "name": "apsis",
     "version": "0.2.0"
@@ -265,6 +265,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": true,
+      "firstSeen": "2026-11-16T18:12:03Z",
+      "lastSeen": "2026-11-16T18:12:03Z",
       "evidence": "gs-art-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-server",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -281,6 +284,9 @@
         "iam:CreatePolicyVersion"
       ],
       "conditional": false,
+      "observed": true,
+      "firstSeen": "2026-11-16T18:33:40Z",
+      "lastSeen": "2026-11-16T18:33:40Z",
       "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
       "narration": "Publish a new policy version that grants more than the current one.",
       "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant."
@@ -299,6 +305,9 @@
         "lambda:InvokeFunction"
       ],
       "conditional": false,
+      "observed": true,
+      "firstSeen": "2026-11-16T18:08:44Z",
+      "lastSeen": "2026-11-16T18:08:44Z",
       "evidence": "gs-build-policy allows iam:PassRole on arn:aws:iam::555566667777:role/gs-art; gs-build-policy allows lambda:CreateFunction on *",
       "narration": "Pass a privileged role to a new function, then invoke it.",
       "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist."
@@ -315,6 +324,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gs-contractor-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-build",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -331,6 +343,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": true,
+      "firstSeen": "2026-11-16T18:04:12Z",
+      "lastSeen": "2026-11-16T18:04:12Z",
       "evidence": "gs-intern-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-build",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -347,6 +362,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": true,
+      "firstSeen": "2026-11-16T18:22:31Z",
+      "lastSeen": "2026-11-16T18:22:31Z",
       "evidence": "gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -364,6 +382,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gs-live-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::555566667777:role/gs-ops; gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
       "narration": "Add yourself to a role's trust policy, then assume it.",
       "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads."
@@ -380,6 +401,9 @@
         "iam:AddUserToGroup"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gs-mod-policy allows iam:AddUserToGroup on arn:aws:iam::555566667777:group/gs-powerusers",
       "narration": "Add yourself to a group that carries wider policies.",
       "fix": "Group membership changes are privilege changes; route them through review."
@@ -396,6 +420,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": true,
+      "firstSeen": "2026-11-16T18:27:09Z",
+      "lastSeen": "2026-11-16T18:27:09Z",
       "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -413,6 +440,9 @@
         "ec2:RunInstances"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gs-player-policy allows iam:PassRole on arn:aws:iam::555566667777:role/gs-telemetry; gs-player-policy allows ec2:RunInstances on *",
       "narration": "Launch an instance with an instance profile and read its metadata credentials.",
       "fix": "Deny iam:PassRole for EC2 unless the caller owns the instance profile."
@@ -429,6 +459,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": true,
+      "firstSeen": "2026-11-16T18:17:55Z",
+      "lastSeen": "2026-11-16T18:17:55Z",
       "evidence": "gs-server-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-live",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -445,6 +478,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gs-support-policy allows iam:CreateAccessKey on arn:aws:iam::555566667777:user/gs-admin",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -461,6 +497,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gs-support-policy allows iam:CreateAccessKey on arn:aws:iam::555566667777:user/gs-analyst",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -477,6 +516,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gs-support-policy allows iam:CreateAccessKey on arn:aws:iam::555566667777:user/gs-contractor",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -493,6 +535,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gs-support-policy allows iam:CreateAccessKey on arn:aws:iam::555566667777:user/gs-intern",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -509,6 +554,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gs-support-policy allows iam:CreateAccessKey on arn:aws:iam::555566667777:user/gs-mod",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -558,7 +606,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-intern-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-build",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:04:12Z",
+            "lastSeen": "2026-11-16T18:04:12Z"
           },
           {
             "edge": "e2",
@@ -572,7 +623,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "gs-build-policy allows iam:PassRole on arn:aws:iam::555566667777:role/gs-art; gs-build-policy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:08:44Z",
+            "lastSeen": "2026-11-16T18:08:44Z"
           },
           {
             "edge": "e0",
@@ -584,7 +638,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-art-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-server",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:12:03Z",
+            "lastSeen": "2026-11-16T18:12:03Z"
           },
           {
             "edge": "e10",
@@ -596,7 +653,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-server-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-live",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:17:55Z",
+            "lastSeen": "2026-11-16T18:17:55Z"
           },
           {
             "edge": "e5",
@@ -608,7 +668,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:22:31Z",
+            "lastSeen": "2026-11-16T18:22:31Z"
           },
           {
             "edge": "e8",
@@ -620,7 +683,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:27:09Z",
+            "lastSeen": "2026-11-16T18:27:09Z"
           },
           {
             "edge": "e1",
@@ -632,7 +698,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       },
@@ -678,7 +747,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-intern-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-build",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:04:12Z",
+            "lastSeen": "2026-11-16T18:04:12Z"
           },
           {
             "edge": "e2",
@@ -692,7 +764,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "gs-build-policy allows iam:PassRole on arn:aws:iam::555566667777:role/gs-art; gs-build-policy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:08:44Z",
+            "lastSeen": "2026-11-16T18:08:44Z"
           },
           {
             "edge": "e0",
@@ -704,7 +779,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-art-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-server",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:12:03Z",
+            "lastSeen": "2026-11-16T18:12:03Z"
           },
           {
             "edge": "e10",
@@ -716,7 +794,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-server-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-live",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:17:55Z",
+            "lastSeen": "2026-11-16T18:17:55Z"
           },
           {
             "edge": "e6",
@@ -729,7 +810,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-live-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::555566667777:role/gs-ops; gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -741,7 +825,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:27:09Z",
+            "lastSeen": "2026-11-16T18:27:09Z"
           },
           {
             "edge": "e1",
@@ -753,7 +840,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       }
@@ -800,7 +890,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "gs-build-policy allows iam:PassRole on arn:aws:iam::555566667777:role/gs-art; gs-build-policy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:08:44Z",
+            "lastSeen": "2026-11-16T18:08:44Z"
           },
           {
             "edge": "e0",
@@ -812,7 +905,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-art-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-server",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:12:03Z",
+            "lastSeen": "2026-11-16T18:12:03Z"
           },
           {
             "edge": "e10",
@@ -824,7 +920,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-server-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-live",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:17:55Z",
+            "lastSeen": "2026-11-16T18:17:55Z"
           },
           {
             "edge": "e5",
@@ -836,7 +935,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:22:31Z",
+            "lastSeen": "2026-11-16T18:22:31Z"
           },
           {
             "edge": "e8",
@@ -848,7 +950,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:27:09Z",
+            "lastSeen": "2026-11-16T18:27:09Z"
           },
           {
             "edge": "e1",
@@ -860,7 +965,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       },
@@ -905,7 +1013,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "gs-build-policy allows iam:PassRole on arn:aws:iam::555566667777:role/gs-art; gs-build-policy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:08:44Z",
+            "lastSeen": "2026-11-16T18:08:44Z"
           },
           {
             "edge": "e0",
@@ -917,7 +1028,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-art-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-server",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:12:03Z",
+            "lastSeen": "2026-11-16T18:12:03Z"
           },
           {
             "edge": "e10",
@@ -929,7 +1043,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-server-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-live",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:17:55Z",
+            "lastSeen": "2026-11-16T18:17:55Z"
           },
           {
             "edge": "e6",
@@ -942,7 +1059,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-live-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::555566667777:role/gs-ops; gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -954,7 +1074,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:27:09Z",
+            "lastSeen": "2026-11-16T18:27:09Z"
           },
           {
             "edge": "e1",
@@ -966,7 +1089,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       }
@@ -1008,7 +1134,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-art-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-server",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:12:03Z",
+            "lastSeen": "2026-11-16T18:12:03Z"
           },
           {
             "edge": "e10",
@@ -1020,7 +1149,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-server-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-live",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:17:55Z",
+            "lastSeen": "2026-11-16T18:17:55Z"
           },
           {
             "edge": "e5",
@@ -1032,7 +1164,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:22:31Z",
+            "lastSeen": "2026-11-16T18:22:31Z"
           },
           {
             "edge": "e8",
@@ -1044,7 +1179,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:27:09Z",
+            "lastSeen": "2026-11-16T18:27:09Z"
           },
           {
             "edge": "e1",
@@ -1056,7 +1194,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       },
@@ -1096,7 +1237,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-art-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-server",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:12:03Z",
+            "lastSeen": "2026-11-16T18:12:03Z"
           },
           {
             "edge": "e10",
@@ -1108,7 +1252,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-server-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-live",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:17:55Z",
+            "lastSeen": "2026-11-16T18:17:55Z"
           },
           {
             "edge": "e6",
@@ -1121,7 +1268,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-live-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::555566667777:role/gs-ops; gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -1133,7 +1283,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:27:09Z",
+            "lastSeen": "2026-11-16T18:27:09Z"
           },
           {
             "edge": "e1",
@@ -1145,7 +1298,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       }
@@ -1184,7 +1340,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-server-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-live",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:17:55Z",
+            "lastSeen": "2026-11-16T18:17:55Z"
           },
           {
             "edge": "e5",
@@ -1196,7 +1355,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:22:31Z",
+            "lastSeen": "2026-11-16T18:22:31Z"
           },
           {
             "edge": "e8",
@@ -1208,7 +1370,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:27:09Z",
+            "lastSeen": "2026-11-16T18:27:09Z"
           },
           {
             "edge": "e1",
@@ -1220,7 +1385,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       },
@@ -1257,7 +1425,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-server-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-live",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:17:55Z",
+            "lastSeen": "2026-11-16T18:17:55Z"
           },
           {
             "edge": "e6",
@@ -1270,7 +1441,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-live-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::555566667777:role/gs-ops; gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -1282,7 +1456,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:27:09Z",
+            "lastSeen": "2026-11-16T18:27:09Z"
           },
           {
             "edge": "e1",
@@ -1294,7 +1471,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       }
@@ -1330,7 +1510,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:22:31Z",
+            "lastSeen": "2026-11-16T18:22:31Z"
           },
           {
             "edge": "e8",
@@ -1342,7 +1525,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:27:09Z",
+            "lastSeen": "2026-11-16T18:27:09Z"
           },
           {
             "edge": "e1",
@@ -1354,7 +1540,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       },
@@ -1389,7 +1578,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-live-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::555566667777:role/gs-ops; gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -1401,7 +1593,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:27:09Z",
+            "lastSeen": "2026-11-16T18:27:09Z"
           },
           {
             "edge": "e1",
@@ -1413,7 +1608,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       }
@@ -1446,7 +1644,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:27:09Z",
+            "lastSeen": "2026-11-16T18:27:09Z"
           },
           {
             "edge": "e1",
@@ -1458,7 +1659,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       }
@@ -1488,7 +1692,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       }
@@ -1536,7 +1743,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-contractor-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-build",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e2",
@@ -1550,7 +1760,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "gs-build-policy allows iam:PassRole on arn:aws:iam::555566667777:role/gs-art; gs-build-policy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:08:44Z",
+            "lastSeen": "2026-11-16T18:08:44Z"
           },
           {
             "edge": "e0",
@@ -1562,7 +1775,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-art-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-server",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:12:03Z",
+            "lastSeen": "2026-11-16T18:12:03Z"
           },
           {
             "edge": "e10",
@@ -1574,7 +1790,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-server-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-live",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:17:55Z",
+            "lastSeen": "2026-11-16T18:17:55Z"
           },
           {
             "edge": "e5",
@@ -1586,7 +1805,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:22:31Z",
+            "lastSeen": "2026-11-16T18:22:31Z"
           },
           {
             "edge": "e8",
@@ -1598,7 +1820,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:27:09Z",
+            "lastSeen": "2026-11-16T18:27:09Z"
           },
           {
             "edge": "e1",
@@ -1610,7 +1835,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       },
@@ -1656,7 +1884,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-contractor-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-build",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e2",
@@ -1670,7 +1901,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "gs-build-policy allows iam:PassRole on arn:aws:iam::555566667777:role/gs-art; gs-build-policy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:08:44Z",
+            "lastSeen": "2026-11-16T18:08:44Z"
           },
           {
             "edge": "e0",
@@ -1682,7 +1916,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-art-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-server",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:12:03Z",
+            "lastSeen": "2026-11-16T18:12:03Z"
           },
           {
             "edge": "e10",
@@ -1694,7 +1931,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-server-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-live",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:17:55Z",
+            "lastSeen": "2026-11-16T18:17:55Z"
           },
           {
             "edge": "e6",
@@ -1707,7 +1947,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-live-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::555566667777:role/gs-ops; gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -1719,7 +1962,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:27:09Z",
+            "lastSeen": "2026-11-16T18:27:09Z"
           },
           {
             "edge": "e1",
@@ -1731,7 +1977,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": true,
+            "firstSeen": "2026-11-16T18:33:40Z",
+            "lastSeen": "2026-11-16T18:33:40Z"
           }
         ]
       }
@@ -1761,7 +2010,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "gs-support-policy allows iam:CreateAccessKey on arn:aws:iam::555566667777:user/gs-admin",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -1840,7 +2092,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "gs-intern-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-build",
-        "conditional": false
+        "conditional": false,
+        "observed": true,
+        "firstSeen": "2026-11-16T18:04:12Z",
+        "lastSeen": "2026-11-16T18:04:12Z"
       },
       {
         "edge": "e2",
@@ -1854,7 +2109,10 @@
         ],
         "mitre": "T1098.001",
         "evidence": "gs-build-policy allows iam:PassRole on arn:aws:iam::555566667777:role/gs-art; gs-build-policy allows lambda:CreateFunction on *",
-        "conditional": false
+        "conditional": false,
+        "observed": true,
+        "firstSeen": "2026-11-16T18:08:44Z",
+        "lastSeen": "2026-11-16T18:08:44Z"
       },
       {
         "edge": "e0",
@@ -1866,7 +2124,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "gs-art-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-server",
-        "conditional": false
+        "conditional": false,
+        "observed": true,
+        "firstSeen": "2026-11-16T18:12:03Z",
+        "lastSeen": "2026-11-16T18:12:03Z"
       },
       {
         "edge": "e10",
@@ -1878,7 +2139,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "gs-server-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-live",
-        "conditional": false
+        "conditional": false,
+        "observed": true,
+        "firstSeen": "2026-11-16T18:17:55Z",
+        "lastSeen": "2026-11-16T18:17:55Z"
       },
       {
         "edge": "e5",
@@ -1890,7 +2154,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "gs-live-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-ops",
-        "conditional": false
+        "conditional": false,
+        "observed": true,
+        "firstSeen": "2026-11-16T18:22:31Z",
+        "lastSeen": "2026-11-16T18:22:31Z"
       },
       {
         "edge": "e8",
@@ -1902,7 +2169,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "gs-ops-policy allows sts:AssumeRole on arn:aws:iam::555566667777:role/gs-backup",
-        "conditional": false
+        "conditional": false,
+        "observed": true,
+        "firstSeen": "2026-11-16T18:27:09Z",
+        "lastSeen": "2026-11-16T18:27:09Z"
       },
       {
         "edge": "e1",
@@ -1914,7 +2184,10 @@
         ],
         "mitre": "T1098.003",
         "evidence": "gs-backup-policy allows iam:CreatePolicyVersion on arn:aws:iam::555566667777:policy/gs-backup-policy",
-        "conditional": false
+        "conditional": false,
+        "observed": true,
+        "firstSeen": "2026-11-16T18:33:40Z",
+        "lastSeen": "2026-11-16T18:33:40Z"
       }
     ]
   },

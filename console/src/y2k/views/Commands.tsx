@@ -93,7 +93,7 @@ export function Commands({
     <>
       <section className="view-hero commands-hero">
         <div className="hero-copy">
-          <p className="eyebrow"><span>05</span> Commands / Recorded runs</p>
+          <p className="eyebrow"><span>06</span> Commands / Recorded runs</p>
           <h1>Recorded runs. <em>Replayable.</em></h1>
           <p className="lede">
             {commands.length} captured CLI invocations, the exact arguments and the output they
@@ -115,7 +115,7 @@ export function Commands({
         </div>
         <FigurePanel
           variant="prism"
-          index="FIG. 05"
+          index="FIG. 06"
           title="Command prism"
           meta="Recorded output / read-only"
           tags={[`${commands.length} runs`, `${commandVerbs.length} verbs`, `${commandScenarios.length} scenarios`]}
@@ -246,3 +246,4 @@ export function Commands({
     </>
   );
 }
+

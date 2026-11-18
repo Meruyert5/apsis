@@ -23,6 +23,8 @@ shots/
 .superpowers/
 *.log
 *.tsbuildinfo
+.lighthouseci/
+console/.lighthouseci/
 
 # Generated reports
 apsis-report.md
