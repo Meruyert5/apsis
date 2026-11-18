@@ -43,17 +43,31 @@ switches account, and the Bloom node selects a primitive. Each pickable node
 carries an oversized invisible hit sphere, so the target is comfortable at any
 stage size.
 
-Typography is set for reading: 15.5px body, 14–15px data and notes, 12–13.5px
-labels, 10–12px micro-labels, and SVG graph labels sized for the rendered panel.
-The display numerals and headings keep their own scale.
+Typography is set for reading: 16.5px body, 15–16.5px data and notes, 13–15px
+labels, 11–13px micro-labels, a 100–174px display title and SVG graph labels
+sized for the rendered panel.
 
 ## Soft geometry
 
-The dashboard uses a small fixed radius rather than a corner variant: 7px on
-panels, cards, figure stages and the palette shell; 5px on buttons, fields,
-chips, rails and nav items; 3px on tags, badges and matrix cells. The screen
-frame, tables and barcode stay square so the console keeps its technical edge.
-There is no toggle and no `?corners` parameter.
+The dashboard uses a small fixed radius rather than a corner variant: 5px on
+panels, cards, figure stages and the palette shell; 4px on buttons, fields,
+chips, rails and nav items; 2px on tags, badges and matrix cells. The accent KPI
+gets a 16px top-right sweep and the primary button a 12px top-right sweep, so
+the shape language has one deliberate variation. The screen frame, tables and
+barcode stay square.
+
+On desktop the topbar floats as a glass pill; the hero sits over a cyan/cobalt
+aura with a grain and scanline texture. Deep void, electric cyan, cobalt and
+periwinkle sit beside the original ultramarine.
+
+### 2D fallback
+
+Every figure has an annotated SVG fallback. The fallback is a full-frame board
+with a title, a note, a grid and the same geometry as the 3D instrument. It is
+wrapped so the `viewBox` fits the stage with `xMidYMid meet`; in fullscreen it
+shows the whole board instead of cropping the lower half. The Path map fallback
+draws the gate route and the context stars; Atlas draws the disc, arcs and
+orbital ring; Bloom draws the six rings and eighteen nodes.
 
 ## Data
 
@@ -126,12 +140,12 @@ python -m unittest discover -s tests -v
 The Vite build emits `dist/index.html` (legacy console) and
 `dist/dashboard.html` (this dashboard). The Pages workflow publishes `dist/`.
 
-Last verification: build pass; 9/9 logic tests; 67/67 Python tests; contracts
-valid against both schemas; no horizontal overflow on any of the seven views at
-390, 768 or 1440; local audit reports no contrast, heading, unnamed-control,
-small-target or overflow failures; fullscreen, Escape-close and 3D node picking
-verified in the browser. The audit's 14px floor still flags intentional HUD
-micro-labels.
+Last verification: build pass; 9/9 logic tests; 73/73 Python tests (including
+contract tests); contracts valid against both schemas; no horizontal overflow on
+any of the seven views at 390, 768 or 1440; local audit reports no contrast,
+heading, unnamed-control, small-target or overflow failures; fullscreen (3D and
+2D), Escape-close, portrait fit and 3D node picking verified in the browser. The
+audit's 14px floor still flags intentional HUD micro-labels.
 
 ## Boundaries
 

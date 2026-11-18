@@ -1270,104 +1270,309 @@ function buildStack(): Built {
 }
 
 /* ---------------------------------------------------------------- fallback */
+function smoothPath(points: [number, number][]) {
+  return points
+    .map((point, index) => {
+      if (index === 0) return `M ${point[0]} ${point[1]}`;
+      const previous = points[index - 1];
+      const control = (previous[0] + point[0]) / 2;
+      return `C ${control} ${previous[1]}, ${control} ${point[1]}, ${point[0]} ${point[1]}`;
+    })
+    .join(" ");
+}
+
+function polarPoint(cx: number, cy: number, rx: number, ry: number, angle: number): [number, number] {
+  return [cx + Math.cos(angle) * rx, cy + Math.sin(angle) * ry];
+}
+
 function Fallback({ variant }: { variant: FigureVariant }) {
   const label = {
-    orb: "Wireframe globe with a seven-node orbit",
-    dish: "Wireframe survey dish with a radar sweep",
-    ascent: "Rising wireframe escalation path with seven steps",
-    atlas: "Constellation of sixteen account nodes",
-    prism: "Wireframe terminal monolith with a scan plane",
-    bloom: "Six interlocking rings with eighteen technique nodes",
-    stack: "Five stacked wireframe layers",
+    orb: "Fleet orb: a wireframe globe with a seven-node orbit and comet",
+    dish: "Survey dish: a wireframe bowl, sweep and sixteen contacts",
+    ascent: "Escalation ascent: eight gate rings on a rising route through the constellation",
+    atlas: "Account constellation: sixteen nodes, arcs and an orbital ring",
+    prism: "Command prism: a wireframe monolith with a scan plane and rings",
+    bloom: "Primitive bloom: six interlocking rings with eighteen technique nodes",
+    stack: "System stack: five alternating layers and a rising beam",
   }[variant];
 
+  const title = {
+    orb: "FLEET ORB",
+    dish: "SURVEY DISH",
+    ascent: "ESCALATION ASCENT",
+    atlas: "ACCOUNT CONSTELLATION",
+    prism: "COMMAND PRISM",
+    bloom: "PRIMITIVE BLOOM",
+    stack: "SYSTEM STACK",
+  }[variant];
+
+  const note = {
+    orb: "07 NODES / 01 ORBIT",
+    dish: "16 CONTACTS / SWEEP",
+    ascent: "08 GATES / ONE ROUTE",
+    atlas: "16 NODES / ONE FLEET",
+    prism: "114 RUNS / READ-ONLY",
+    bloom: "18 NODES / SIX RINGS",
+    stack: "FIVE LAYERS / ONE EXPORT",
+  }[variant];
+
+  const nodes: [number, number][] = [
+    [70, 378],
+    [150, 342],
+    [225, 366],
+    [300, 286],
+    [380, 310],
+    [455, 220],
+    [520, 186],
+    [566, 138],
+  ];
+
+  const atlasNodes = Array.from({ length: 16 }, (_, index) => {
+    const angle = index * 2.399 + 0.3;
+    const radius = 0.42 + (index % 8) * 0.075;
+    return polarPoint(320, 250, radius * 270, radius * 120, angle);
+  });
+
+  const orbitNodes = Array.from({ length: 7 }, (_, index) => {
+    const angle = (index / 7) * Math.PI * 2 + 0.2;
+    return polarPoint(320, 236, 214, 70, angle);
+  });
+
+  const bloomRings = [0, 30, 60, 90, 120, 150];
+
   return (
-    <svg className="fig-fallback" viewBox="0 0 640 480" role="img" aria-label={label}>
-      <defs>
-        <linearGradient id={`fallback-${variant}`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#1a1aff" stopOpacity=".8" />
-          <stop offset=".55" stopColor="#ffffff" stopOpacity=".9" />
-          <stop offset="1" stopColor="#1a1aff" stopOpacity=".25" />
-        </linearGradient>
-      </defs>
-      <g fill="none" stroke={`url(#fallback-${variant})`} strokeWidth="1.2" opacity=".85">
-        {variant === "orb" ? (
-          <>
-            <circle cx="320" cy="240" r="150" />
-            <ellipse cx="320" cy="240" rx="150" ry="54" />
-            <ellipse cx="320" cy="240" rx="54" ry="150" />
-            <ellipse cx="320" cy="240" rx="210" ry="62" transform="rotate(-18 320 240)" />
-            <circle cx="320" cy="240" r="92" fill="rgba(26,26,255,.18)" />
-            <g fill="#fff"><circle cx="128" cy="212" r="4" /><circle cx="216" cy="172" r="4" /><circle cx="320" cy="196" r="5" /><circle cx="438" cy="264" r="4" /><circle cx="518" cy="292" r="6" /></g>
-          </>
-        ) : null}
-        {variant === "dish" ? (
-          <>
-            <path d="M120 250 Q320 70 520 250" />
-            <path d="M170 250 Q320 120 470 250" />
-            <path d="M220 250 Q320 168 420 250" />
-            <line x1="320" y1="250" x2="320" y2="404" />
-            <line x1="320" y1="118" x2="320" y2="250" />
-            <circle cx="320" cy="118" r="5" fill="#fff" />
-            <circle cx="320" cy="250" r="190" strokeDasharray="3 8" opacity=".4" />
-            <g fill="#fff"><circle cx="180" cy="154" r="3" /><circle cx="256" cy="110" r="3" /><circle cx="420" cy="136" r="3" /><circle cx="496" cy="190" r="3" /></g>
-          </>
-        ) : null}
-        {variant === "ascent" ? (
-          <>
-            <path d="M120 380 L200 330 L280 350 L360 260 L440 280 L520 170 L560 130" />
-            <g fill="#1a1aff" stroke="#fff">
-              <circle cx="120" cy="380" r="6" /><circle cx="200" cy="330" r="6" /><circle cx="280" cy="350" r="6" /><circle cx="360" cy="260" r="6" /><circle cx="440" cy="280" r="6" /><circle cx="520" cy="170" r="6" /><circle cx="560" cy="130" r="7" />
-            </g>
-          </>
-        ) : null}
-        {variant === "atlas" ? (
-          <>
-            <g fill="#fff">
+    <div className="fig-fallback">
+      <svg
+        viewBox="0 0 640 480"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label={label}
+      >
+        <defs>
+          <radialGradient id={`${variant}-bg`} cx="54%" cy="42%" r="72%">
+            <stop offset="0" stopColor="#0d1633" />
+            <stop offset="0.55" stopColor="#070b16" />
+            <stop offset="1" stopColor="#03050b" />
+          </radialGradient>
+          <linearGradient id={`${variant}-line`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#8db7ff" stopOpacity="0.9" />
+            <stop offset="0.5" stopColor="#ffffff" stopOpacity="0.95" />
+            <stop offset="1" stopColor="#2b3cff" stopOpacity="0.55" />
+          </linearGradient>
+          <radialGradient id={`${variant}-core`} cx="50%" cy="50%" r="50%">
+            <stop offset="0" stopColor="#ffffff" />
+            <stop offset="0.45" stopColor="#b9c8ff" />
+            <stop offset="1" stopColor="#2b3cff" stopOpacity="0" />
+          </radialGradient>
+          <filter id={`${variant}-glow`} x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="2.4" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        <rect width="640" height="480" fill={`url(#${variant}-bg)`} />
+        <g className="fb-grid" aria-hidden="true">
+          {[80, 160, 240, 320, 400, 480, 560].map((x) => (
+            <line key={`x${x}`} x1={x} y1="24" x2={x} y2="456" />
+          ))}
+          {[80, 160, 240, 320, 400].map((y) => (
+            <line key={`y${y}`} x1="24" y1={y} x2="616" y2={y} />
+          ))}
+        </g>
+
+        <g
+          fill="none"
+          stroke={`url(#${variant}-line)`}
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          filter={`url(#${variant}-glow)`}
+        >
+          {variant === "orb" ? (
+            <>
+              <circle cx="320" cy="236" r="116" />
+              <ellipse cx="320" cy="236" rx="116" ry="38" strokeOpacity=".55" />
+              <ellipse cx="320" cy="236" rx="116" ry="78" strokeOpacity=".35" />
+              <ellipse cx="320" cy="236" rx="38" ry="116" strokeOpacity=".55" />
+              <ellipse cx="320" cy="236" rx="78" ry="116" strokeOpacity=".35" />
+              <circle cx="320" cy="236" r="18" fill={`url(#${variant}-core)`} stroke="none" />
+              <ellipse cx="320" cy="236" rx="214" ry="70" transform="rotate(-14 320 236)" strokeOpacity=".8" />
+              {orbitNodes.map(([x, y], index) => (
+                <circle key={`on${index}`} cx={x} cy={y} r={index === 6 ? 6 : 3.5} className={index === 6 ? "fb-accent" : "fb-node"} />
+              ))}
+              <path d="M468 158 L472 178 L492 182 L472 186 L468 206 L464 186 L444 182 L464 178 Z" className="fb-accent" stroke="none" />
+              <path d="M160 132 L163 144 L175 147 L163 150 L160 162 L157 150 L145 147 L157 144 Z" className="fb-star" stroke="none" />
+              <path d="M498 318 L501 328 L511 331 L501 334 L498 344 L495 334 L485 331 L495 328 Z" className="fb-star" stroke="none" />
+              <circle cx="320" cy="418" r="42" strokeOpacity=".2" />
+              <ellipse cx="320" cy="418" rx="78" ry="14" strokeOpacity=".15" />
+            </>
+          ) : null}
+
+          {variant === "dish" ? (
+            <>
+              <path d="M126 258 Q320 96 514 258" strokeWidth="2" />
+              <path d="M170 258 Q320 140 470 258" strokeOpacity=".55" />
+              <path d="M214 258 Q320 184 426 258" strokeOpacity=".45" />
+              <path d="M126 258 Q320 420 514 258" strokeOpacity=".18" />
+              <line x1="320" y1="258" x2="320" y2="112" />
+              <path d="M320 100 L330 116 L320 132 L310 116 Z" className="fb-accent" />
+              <path d="M320 258 L320 392" strokeOpacity=".65" />
+              <path d="M270 414 Q320 432 370 414" strokeOpacity=".5" />
+              <ellipse cx="320" cy="258" rx="194" ry="26" strokeOpacity=".2" />
+              <path d="M320 258 L500 258 A194 26 0 0 0 470 196 Z" className="fb-sweep" stroke="none" />
+              <line x1="320" y1="258" x2="500" y2="258" strokeWidth="2" />
               {Array.from({ length: 16 }, (_, index) => {
                 const angle = index * 2.399;
-                const radius = 60 + (index % 8) * 24;
-                return <circle key={index} cx={320 + Math.cos(angle) * radius} cy={240 + Math.sin(angle) * radius * 0.55} r={index % 4 === 0 ? 5 : 3} />;
+                const radius = 0.34 + (index % 6) * 0.11;
+                const [x, y] = polarPoint(320, 274, radius * 360, radius * 110, angle);
+                return <circle key={`contact${index}`} cx={x} cy={y} r={index % 5 === 0 ? 4 : 2.6} className={index % 5 === 0 ? "fb-accent" : "fb-node"} />;
               })}
-            </g>
-            <circle cx="320" cy="240" r="220" strokeDasharray="2 7" opacity=".4" />
-          </>
-        ) : null}
-        {variant === "prism" ? (
-          <>
-            <path d="M220 360 L220 120 L420 80 L420 320 Z" />
-            <path d="M220 120 L280 160 L480 120 L420 80" />
-            <path d="M420 320 L480 360 L480 120" />
-            <path d="M220 240 L420 200" stroke="#1a1aff" />
-            <path d="M240 290 L440 250" strokeDasharray="4 6" opacity=".5" />
-            <g fill="#fff"><rect x="160" y="350" width="6" height="6" /><rect x="500" y="110" width="6" height="6" /><rect x="140" y="150" width="4" height="4" /></g>
-          </>
-        ) : null}
-        {variant === "bloom" ? (
-          <>
-            <ellipse cx="320" cy="240" rx="180" ry="62" transform="rotate(22 320 240)" />
-            <ellipse cx="320" cy="240" rx="180" ry="62" transform="rotate(-42 320 240)" />
-            <ellipse cx="320" cy="240" rx="180" ry="62" transform="rotate(82 320 240)" />
-            <circle cx="320" cy="240" r="17" fill="rgba(26,26,255,.4)" />
-            <g fill="#fff">
-              {Array.from({ length: 18 }, (_, index) => {
-                const angle = (index / 18) * Math.PI * 2;
-                return <circle key={index} cx={320 + Math.cos(angle) * (150 + (index % 3) * 18)} cy={240 + Math.sin(angle) * (150 + (index % 3) * 18) * 0.55} r={index % 6 === 0 ? 4 : 2.5} />;
+            </>
+          ) : null}
+
+          {variant === "ascent" ? (
+            <>
+              <path d={smoothPath(nodes)} strokeWidth="2.2" />
+              {Array.from({ length: 10 }, (_, index) => {
+                const angle = index * 2.399 + 0.7;
+                const radius = 0.76 + (index % 4) * 0.1;
+                const [x, y] = polarPoint(320, 250, radius * 380, radius * 190, angle);
+                const anchor = nodes[index % nodes.length];
+                return (
+                  <g key={`ctx${index}`}>
+                    <line x1={x} y1={y} x2={anchor[0]} y2={anchor[1]} strokeOpacity=".12" />
+                    <circle cx={x} cy={y} r="3" className="fb-node" />
+                  </g>
+                );
               })}
-            </g>
-          </>
-        ) : null}
-        {variant === "stack" ? (
-          <>
-            {[0, 1, 2, 3, 4].map((index) => (
-              <rect key={index} x={150 + index * 22} y={130 + index * 44} width={340 - index * 44} height={40 + index * 8} transform={`skewX(-12)`} opacity={0.35 + index * 0.12} />
-            ))}
-            <line x1="150" y1="380" x2="150" y2="120" />
-            <line x1="490" y1="400" x2="490" y2="140" />
-          </>
-        ) : null}
-      </g>
-    </svg>
+              {nodes.map(([x, y], index) => (
+                <g key={`hop${index}`}>
+                  <ellipse cx={x} cy={y + 13} rx="24" ry="7" strokeOpacity={index <= 3 ? ".6" : ".22"} />
+                  <line x1={x} y1={y - 10} x2={x} y2={y + 10} strokeOpacity=".35" />
+                  <path d={`M${x - 8} ${y - 8} L${x} ${y - 16} L${x + 8} ${y - 8} L${x} ${y}`} className={index <= 3 ? "fb-node" : "fb-dim"} />
+                </g>
+              ))}
+              <line x1="566" y1="138" x2="566" y2="86" className="fb-accent" />
+              <ellipse cx="566" cy="82" rx="16" ry="5" className="fb-accent" />
+              <path d="M566 62 L569 76 L583 80 L569 84 L566 98 L563 84 L549 80 L563 76 Z" className="fb-accent" stroke="none" />
+              <text className="fb-label" x="54" y="402">START</text>
+              <text className="fb-label" x="520" y="118">ADMIN</text>
+            </>
+          ) : null}
+
+          {variant === "atlas" ? (
+            <>
+              <ellipse cx="320" cy="250" rx="266" ry="100" strokeOpacity=".3" transform="rotate(-6 320 250)" />
+              <ellipse cx="320" cy="250" rx="238" ry="86" strokeOpacity=".18" transform="rotate(6 320 250)" />
+              <path
+                d={atlasNodes
+                  .map(([x, y], index) => {
+                    if (index === 0) return `M ${x} ${y}`;
+                    const [cx, cy] = atlasNodes[index - 1];
+                    const mx = (cx + x) / 2 + (y - cy) * 0.14;
+                    const my = (cy + y) / 2 - (x - cx) * 0.14;
+                    return `Q ${mx} ${my} ${x} ${y}`;
+                  })
+                  .join(" ")}
+                strokeOpacity=".22"
+              />
+              {atlasNodes.map(([x, y], index) => (
+                <g key={`an${index}`}>
+                  {index % 2 === 0 ? <line x1={x} y1={y} x2="320" y2="250" strokeOpacity=".08" /> : null}
+                  <circle cx={x} cy={y} r={index % 4 === 0 ? 6 : 4} className={index % 4 === 0 ? "fb-accent" : "fb-node"} />
+                </g>
+              ))}
+              <circle cx="320" cy="250" r="16" strokeOpacity=".8" />
+              <circle cx="320" cy="250" r="6" className="fb-accent" />
+              <ellipse cx="462" cy="214" rx="30" ry="12" strokeOpacity=".8" className="fb-accent" />
+              <line x1="462" y1="214" x2="462" y2="176" strokeOpacity=".4" />
+              <circle cx="462" cy="172" r="4" className="fb-accent" />
+            </>
+          ) : null}
+
+          {variant === "prism" ? (
+            <>
+              <path d="M236 372 L236 138 L422 92 L422 326 Z" strokeWidth="2" />
+              <path d="M236 138 L300 168 L486 122 L422 92" />
+              <path d="M422 326 L486 356 L486 122" />
+              <path d="M300 168 L300 402 L486 356" strokeOpacity=".55" />
+              <path d="M258 250 L440 208" className="fb-accent" />
+              <line x1="320" y1="40" x2="320" y2="440" strokeOpacity=".35" />
+              <ellipse cx="320" cy="150" rx="136" ry="38" strokeOpacity=".26" />
+              <ellipse cx="320" cy="250" rx="136" ry="38" strokeOpacity=".2" />
+              <ellipse cx="320" cy="350" rx="136" ry="38" strokeOpacity=".14" />
+              <path d="M236 360 L422 316 L486 346" strokeOpacity=".2" fill="#2b3cff" fillOpacity=".08" />
+              {[0, 1, 2, 3, 4, 5, 6, 7].map((index) => (
+                <rect
+                  key={`mote${index}`}
+                  x={index % 2 === 0 ? 188 + index * 34 : 524 - index * 12}
+                  y={96 + index * 38}
+                  width="4"
+                  height="4"
+                  className={index % 3 === 0 ? "fb-accent" : "fb-node"}
+                />
+              ))}
+            </>
+          ) : null}
+
+          {variant === "bloom" ? (
+            <>
+              {bloomRings.map((rotation, index) => (
+                <g key={`ring${index}`} transform={`rotate(${rotation} 320 238)`}>
+                  <ellipse cx="320" cy="238" rx="188" ry="64" strokeOpacity={index % 2 === 0 ? ".8" : ".45"} />
+                  {[0, 1, 2].map((node) => {
+                    const angle = (node / 3) * Math.PI * 2 + index * 0.5;
+                    const [x, y] = polarPoint(320, 238, 188, 64, angle);
+                    return <circle key={`bn${index}-${node}`} cx={x} cy={y} r="3.4" className={node === 0 ? "fb-accent" : "fb-node"} />;
+                  })}
+                </g>
+              ))}
+              <circle cx="320" cy="238" r="24" strokeOpacity=".85" />
+              <circle cx="320" cy="238" r="9" className="fb-accent" />
+            </>
+          ) : null}
+
+          {variant === "stack" ? (
+            <>
+              {[0, 1, 2, 3, 4].map((index) => {
+                const y = 126 + index * 56;
+                const inset = index * 18;
+                return (
+                  <g key={`layer${index}`}>
+                    <path d={`M${172 + inset} ${y} L${468 - inset} ${y} L${438 - inset} ${y + 34} L${142 + inset} ${y + 34} Z`} strokeOpacity={index === 4 ? ".95" : ".45"} />
+                    {[0, 1, 2, 3].map((line) => (
+                      <line
+                        key={`l${line}`}
+                        x1={172 + inset + (line * (296 - inset * 2)) / 4}
+                        y1={y}
+                        x2={142 + inset + (line * (296 - inset * 2)) / 4}
+                        y2={y + 34}
+                        strokeOpacity=".14"
+                      />
+                    ))}
+                  </g>
+                );
+              })}
+              {[0, 1].map((side) => (
+                <g key={`conn${side}`}>
+                  <line x1={162 + side * 310} y1="126" x2={132 + side * 310} y2="418" strokeOpacity=".22" />
+                  <line x1={478 - side * 10} y1="126" x2={448 - side * 10} y2="418" strokeOpacity=".22" />
+                </g>
+              ))}
+              <line x1="320" y1="404" x2="320" y2="106" className="fb-accent" strokeOpacity=".6" />
+              <path d="M320 84 L323 100 L338 104 L323 108 L320 124 L317 108 L302 104 L317 100 Z" className="fb-accent" stroke="none" />
+              <ellipse cx="320" cy="420" rx="150" ry="24" strokeOpacity=".22" />
+            </>
+          ) : null}
+        </g>
+
+        <text className="fb-tag" x="26" y="36">{title}</text>
+        <text className="fb-note" x="614" y="456" textAnchor="end">{note}</text>
+      </svg>
+    </div>
   );
 }
 

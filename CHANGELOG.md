@@ -2,6 +2,26 @@
 
 ### Changed
 
+- The 2D fallback was rebuilt as a wrapped, full-frame board for every figure:
+  annotated grids, orbit/nucleus/route geometry and `xMidYMid meet` sizing.
+  Fullscreen now shows the whole board in landscape and portrait instead of
+  cropping the lower half.
+- Typography moved up again: 16.5px body, 15-16.5px data, 13-15px labels and a
+  100-174px display title. The display gains a soft orbital glow.
+- Corners sharpened to 5px / 4px / 2px, with a 16px sweep on the accent KPI and a
+  12px sweep on the primary button. The desktop topbar is now a floating glass
+  pill, the hero carries a cyan/cobalt aura over the grain, and the palette gained
+  electric cyan, cobalt and periwinkle.
+- New brand mark: `favicon.svg` (A inside an orbit), 512px and Apple touch PNGs,
+  a web manifest, and a purpose-built 1200x630 `og.png`. Both HTML entries carry
+  the new icon, manifest and social metadata.
+- Extensions now lists the validated alert instance and the delivered Penumbra
+  handoff, and the case shows both paths. Blueprint is marked complete and ready
+  for upload.
+- Added six stdlib contract tests (`tests/test_contracts.py`), taking the Python
+  suite to 73. README now has a reviewer path, repository map and dashboard
+  screenshots.
+
 - The console is now four cyber decks of one orbital operations console:
   Signal (holographic uplink, cyan/amber), Map (magnetic array, blue/violet),
   Decide (containment bay, emerald/magenta) and Prove (flight recorder,
@@ -67,24 +87,20 @@
 - The dashboard gained an `Auto` / `Paused` badge per figure, clickable 3D nodes
   on Path map, Atlas and Extensions, a scanline and grain texture over the
   animated field, and hover glow on panels.
-- Path map and Atlas were rebuilt: the ascent is now a rising ladder of gates,
-  hex platforms, a target beacon, shock rings and a travelling pulse on a wider
-  stage; the constellation gained a nucleus, base stems, node rings, an orbital
-  ring with data pulses and a nebula field. The identity graph moved to a
-  uniform-fit layout with curved directed edges, short labels, shape-by-kind
-  nodes and an animated trust flow. All 3D pickables now carry oversized
-  invisible hit targets.
-- Corner geometry was softened rather than toggled: a fixed 7px panel radius,
-  5px controls and 3px tags, with the screen frame and tables left square. The
-  corner switch and `?corners` parameter were removed.
-- Typography moved up one step across the console: 15.5px body, 14–15px data and
-  notes, larger labels and micro-labels. Every figure now has a fullscreen
+- Path map and Atlas were rebuilt: the ascent is now a constellation-threaded
+  route in depth, with gate rings, hex platforms, context stars, a beacon, shock
+  rings and a travelling pulse; the constellation gained a nucleus, base stems,
+  node rings, an orbital ring with data pulses and a nebula field. The identity
+  graph moved to a uniform-fit layout with curved directed edges, short labels,
+  shape-by-kind nodes and an animated trust flow. All 3D pickables now carry
+  oversized invisible hit targets.
+- Corner geometry is fixed at 5px panels, 4px controls and 2px tags, with a 16px
+  sweep on the accent KPI and a 12px sweep on the primary button. The screen
+  frame and tables stay square; there is no corner toggle.
+- Typography moved up across the console: 16.5px body, 15–16.5px data and notes,
+  13–15px labels and a 100–174px display. Every figure now has a fullscreen
   control that expands the panel over the console, keeps the header and footer,
   and closes on Escape.
-- The Path map ascent is now a constellation-threaded route: an S-curve in depth
-  with gate rings, hex platforms, context stars linked to the hops, a target
-  beacon, shock rings and a travelling pulse. The selected account's source,
-  hops and cut remain the same data.
 - Added `cases/01-observed-path/alert.json` (`penumbra.alert/v1`), validated
   between the alert and evidence schemas, and delivered the handoff to
   `detection-lab/integrations/apsis/`.

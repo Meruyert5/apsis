@@ -32,7 +32,7 @@ const ARCH = [
   { label: "Engine", detail: "Python, no AWS client", icon: "blueprint" as const },
   { label: "Static export", detail: "16 bundles + evidence", icon: "extensions" as const },
   { label: "Dashboard", detail: "React + Three.js", icon: "overview" as const },
-  { label: "Penumbra", detail: "alert + evidence contract", icon: "atlas" as const },
+  { label: "Penumbra", detail: "alert + evidence / delivered", icon: "atlas" as const },
 ];
 
 export function Blueprint({
@@ -66,7 +66,7 @@ export function Blueprint({
           <div className="meta-line">
             <span><i />{snapshot.accounts} accounts</span>
             <span>{techniqueCount} primitives</span>
-            <span>Upload after approval</span>
+            <span>Complete / ready for upload</span>
           </div>
         </div>
         <FigurePanel
@@ -107,7 +107,7 @@ export function Blueprint({
         <Panel title="Release state" meta={generatedLabel}>
           <div className="release-state">
             <span className="release-mark"><Icon name="check" size={20} /></span>
-            <div><b>Ready for approval</b><p>The complete dashboard is built. Publishing waits for your sign-off.</p></div>
+            <div><b>Complete — ready for upload</b><p>The full system is built and the Penumbra handoff is delivered. Creating the GitHub repository and pushing are the only remaining steps.</p></div>
           </div>
           <ul className="check-list">
             {CHECKS.map((check) => (

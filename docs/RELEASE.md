@@ -34,7 +34,7 @@ npm run preview -- --port 4180 --strictPort
 $env:BASE_URL='http://localhost:4180/dashboard.html'; npm run audit
 ```
 
-Expected: build pass, 9/9 logic tests, 67/67 Python tests, contracts valid,
+Expected: build pass, 9/9 logic tests, 73/73 Python tests, contracts valid,
 no contrast, heading, control-name, target-size or overflow findings at 1440
 and 390.
 
@@ -67,7 +67,7 @@ token, a backend, or a custom domain.
 ## Post-deploy checks
 
 - `/` shows the legacy console, `/dashboard.html` the fleet dashboard.
-- No 404 on `assets/`, fonts, `favicon.svg` or `og.jpg`.
+- No 404 on `assets/`, fonts, `favicon.svg`, `icon-512.png`, `apple-touch-icon.png` or `og.png`.
 - `#/survey`, `#/path`, `#/atlas`, `#/commands`, `#/extensions`, `#/blueprint`
   all load directly.
 - Command palette (`Cmd/Ctrl+K`), motion toggle and fullscreen work.

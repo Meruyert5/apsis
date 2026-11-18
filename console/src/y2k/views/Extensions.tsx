@@ -279,7 +279,7 @@ export function Extensions({
             actions={<button type="button" className="ghost-toggle" onClick={copyAlert}><Icon name="copy" size={12} />Copy</button>}
           >
             <pre className="contract-code">{ALERT_SAMPLE}</pre>
-            <p className="detail-note">Apsis produces; Penumbra consumes. No connector API, no shared database, no cross-repository import.</p>
+            <p className="detail-note">The emitted case alert is in <code>cases/01-observed-path/alert.json</code>; the delivered copy is in <code>detection-lab/integrations/apsis/</code>. Apsis produces; Penumbra consumes. No connector API, no shared database, no cross-repository import.</p>
           </Panel>
         </div>
       ) : null}
@@ -303,6 +303,10 @@ export function Extensions({
               <div><span className="case-label">Guardrails</span><ul>{caseStudy.guardrails.map((item) => <li key={item}>{item}</li>)}</ul></div>
             </div>
             <div className="case-after"><span>After</span><b>{caseStudy.after}</b></div>
+            <div className="case-links">
+              <span><b>Alert</b><code>{caseStudy.alert}</code></span>
+              <span><b>Handoff</b><code>{caseStudy.handoff}</code></span>
+            </div>
             <p className="detail-note">{caseStudy.note}</p>
           </Panel>
           <Panel title="Case timeline" meta="recorded">

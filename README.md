@@ -14,7 +14,25 @@ orbital console you can inspect, step, and sever.
 [![Console: React + Vite](https://img.shields.io/badge/console-React%20%2B%20Vite-d9b36a)](console/package.json)
 [![Data: synthetic](https://img.shields.io/badge/data-synthetic%20fixtures-e0799a)](docs/RESEARCH.md)
 
-![Apsis: a signature transfer ending at the primary star, and the fleet readout](docs/img/signal.png)
+![Apsis fleet dashboard: the APSIS display, KPI strip and Fleet orb](docs/img/dashboard.png)
+
+## Reviewer path
+
+1. **Overview** — read the six fleet figures and the orbit. Every number is a
+   fixture total: 16 accounts, 194 identities, 144 routes, 37 cut edges, 07 deep,
+   0 writes.
+2. **Path map** — press play, watch the hops advance, then **Apply cut**. The
+   route state closes and the 3D ascent fractures.
+3. **Atlas** — switch account from the list, click a node in the 3D
+   constellation, then inspect its trust and routes in the graph.
+4. **Extensions** — open the 288-cell coverage field, the alert/evidence
+   contracts and the observed-path case.
+5. **Blueprint** — read the pipeline, architecture, roadmap and the release
+   state. The only open items are approval and the GitHub push.
+
+The full architecture and interaction inventory are in
+[docs/DASHBOARD.md](docs/DASHBOARD.md). The release gate is
+[docs/RELEASE.md](docs/RELEASE.md).
 
 ## What this is
 
@@ -54,17 +72,19 @@ with `iam:PassRole` and `lambda:CreateFunction` is not obviously dangerous until
 you see that it can hand a role to a function and invoke it. Apsis composes
 those steps into edges and searches for the shortest walk to an administrator.
 
-The orbital console is an explanatory layer over that graph:
+The dashboard is an explanatory layer over that graph:
 
-- the administrator is the primary star;
-- each principal is a body on the orbit its hop count allows;
-- the bright flux tube is the selected route;
-- severing the cut collapses the field.
+- the **Overview orb** carries the fleet totals, the seven-hop orbit and the live
+  evidence feed;
+- the **Path map** threads one route through the account constellation, with a
+  gate for each hop and a cut that fractures the ascent;
+- the **Atlas** turns the same identities into a directed trust graph you can
+  click and inspect;
+- applying the cut closes the route and the guardrails keep it closed.
 
-The specimen is a second view of the same export: 18 escalation primitives as
-ribs against the 16 fixture accounts as rings. A photophore is an edge the
-engine observed; its size encodes the count, its tone the category. Exact
-counts stay in the ledger and the accessible names.
+The **Extensions coverage field** is a second view of the same export: 18
+primitives by 16 accounts. A lit cell is an edge in that account; exact counts
+stay in the tooltip and the ledger.
 
 ## How it works
 
@@ -82,12 +102,14 @@ counts stay in the ledger and the accessible names.
 ## Repository map
 
 ```text
-apsis/             engine: model, policy matcher, techniques, paths, cut, diff, renderers, cli
+apsis/                engine: model, policy matcher, techniques, paths, cut, diff, renderers, cli
 scenarios/            sixteen account fixtures
+schema/               penumbra.alert/v1 and penumbra.evidence/v1 contracts
+cases/                observed-path case, validated alert, evidence, guardrails
 scripts/              export_commands.py, records CLI output for the console
-tests/                engine tests, standard library only
-console/             Apsis: React site, generated data, verify and audit tooling
-docs/                 design, research, assumptions, deployment, screenshots
+tests/                engine tests and contract tests, standard library only
+console/              React site, four-deck console, seven-view dashboard, audit tooling
+docs/                 design, research, assumptions, deployment, release, screenshots
 ```
 
 ## Quick start
@@ -229,22 +251,29 @@ legacy console remains at `/`.
 
 - **Overview** — orb; fleet figures, module map, fleet pulse, evidence.
 - **Survey** — radar dish; severity, ranking, coverage, searchable ledger.
-- **Path map** - gate ladder; autoplay, step, speed, cut/restore, clickable 3D
-  hops, hop detail, route ledger.
+- **Path map** - constellation-threaded ascent; autoplay, step, speed,
+  cut/restore, clickable 3D hops, hop detail, route ledger.
 - **Atlas** - account constellation; curved directed trust graph with short
   labels and flow, filters, inspector.
-- **Commands** — prism; 114 recorded runs, typewriter output, replay, copy.
-- **Extensions** — bloom; 18 primitives, 288-cell coverage matrix, contracts,
-  alert sample and the observed-path case.
-- **Blueprint** — layered stack; pipeline, architecture, modules, roadmap,
-  verification and open release items.
+- **Commands** - prism; 114 recorded runs, typewriter output, replay, copy.
+- **Extensions** - bloom; 18 primitives, 288-cell coverage matrix, six contracts
+  including the handoff, alert sample and the observed-path case.
+- **Blueprint** - layered stack; pipeline, architecture, modules, roadmap,
+  verification and release state.
 
 Global: `Cmd/Ctrl+K` command palette, motion toggle, fullscreen on every figure,
-soft 7px panel geometry, hash deep links, animated particle/grid/aurora
-background with a grain and scanline texture, bloom-lit glass panels, neon focus
-states, 2D fallback on every figure, clickable 3D nodes on Path map, Atlas and
-Extensions, and the same read-only export. The architecture and interaction
-inventory are in [docs/DASHBOARD.md](docs/DASHBOARD.md).
+sharp 5px panel geometry with a chamfered accent card, floating glass topbar,
+hero aurora, hash deep links, animated particle/grid background with a grain and
+scanline texture, bloom-lit glass panels, neon focus states, 2D fallback on every
+figure, clickable 3D nodes on Path map, Atlas and Extensions, and the same
+read-only export. The architecture and interaction inventory are in
+[docs/DASHBOARD.md](docs/DASHBOARD.md).
+
+### Dashboard screenshots
+
+![Path map: the constellation ascent and the hop detail](docs/img/dashboard-path.png)
+
+![Atlas: the account constellation and the directed trust graph](docs/img/dashboard-atlas.png)
 
 The Neon Luxe dashboard is retired. This is the dashboard build.
 

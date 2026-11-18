@@ -379,3 +379,15 @@ Global:
 - Alert instance: `cases/01-observed-path/alert.json` validates against `schema/alert.schema.json`; the evidence manifest validates against its schema.
 - Handoff: the alert, evidence, case, guardrail, before/after snapshots and schemas are delivered to Penumbra under `detection-lab/integrations/apsis/`.
 - Cleanup: removed the stale bioluminescent verify script and unused screenshots; updated README, CONTRIBUTING, INTEGRATIONS, roadmap and release state; added `docs/RELEASE.md`; prepared the `origin` remote without pushing.
+
+---
+
+## Revision 14 - final portfolio pass
+
+- Type: 16.5px body, 15-16.5px data, 13-15px labels, 100-174px display. The display title gains a soft orbital glow band and slightly open tracking.
+- Shape: 5px panels, 4px controls, 2px tags. One deliberate variation: the accent KPI sweeps to 16px at the top-right, the primary button to 12px. The screen frame and tables stay square.
+- Surface: desktop topbar is a floating glass pill; the hero carries a cyan/cobalt aura over the existing grain and scanline texture; the palette adds electric cyan, cobalt and periwinkle beside ultramarine.
+- 2D: every fallback is now a wrapped board with a title, note, grid and the same geometry as its 3D instrument. Fullscreen fits the whole board with `xMidYMid meet`.
+- Brand: a new A-orbit favicon, 512px icon, Apple touch icon, manifest and a 1200x630 OG card. Both HTML entries carry the new metadata.
+- Product: Extensions lists the validated alert and the delivered Penumbra handoff; the case shows both paths. Blueprint is complete and ready for upload. Contract tests cover alert/evidence consistency.
+- Verification: build pass, 9/9 logic, 73/73 Python, contracts valid, no overflow at 390/768/1440, a11y audit clean, fullscreen 2D/3D and node picking checked.

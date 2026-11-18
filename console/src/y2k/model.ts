@@ -174,6 +174,8 @@ export const caseStudy = {
     "CloudTrail alarm: CreateAccessKey outside the key service.",
   ],
   after: "0 routes after the cut",
+  alert: "cases/01-observed-path/alert.json",
+  handoff: "detection-lab/integrations/apsis/",
   note:
     "Synthetic, reproducible case built from the shipped fixture. No customer account, credential, or live export.",
 };
@@ -207,6 +209,20 @@ export const contracts = [
     detail: "SCP, Config and alarm conditions",
     owner: "Apsis",
     status: "ready",
+  },
+  {
+    file: "cases/01-observed-path/alert.json",
+    name: "Alert instance",
+    detail: "Validated penumbra.alert/v1 path.opened payload",
+    owner: "Apsis",
+    status: "ready",
+  },
+  {
+    file: "detection-lab/integrations/apsis/",
+    name: "Penumbra handoff",
+    detail: "Alert, evidence, case, guardrails and before/after snapshots",
+    owner: "Penumbra",
+    status: "delivered",
   },
   {
     file: "penumbra.alert/v1",
