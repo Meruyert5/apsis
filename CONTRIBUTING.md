@@ -1,11 +1,14 @@
 # Contributing
 
-Thanks for taking the time to improve Apsis or Apsis.
+Thanks for taking the time to improve Apsis.
 
 ## Ground rules
 
+By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
+
 - The engine and the console are one repository, but two surfaces. Keep the
-  boundary explicit: **Apsis** is the engine; **Apsis** is the console.
+  boundary explicit: **Apsis** is the Python engine; **the console** is the
+  React/Vite site that reads its export.
 - New behaviour is test-first where practical. The engine uses only the Python
   standard library.
 - Never commit real account exports, credentials, ARNs, or customer data. The

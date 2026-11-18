@@ -50,7 +50,7 @@ rainbow.
 - **IBM Plex Mono** - HUD labels, figures, commands, ledgers.
 
 Scale: 17px body, 15.5-17px data and notes, 13.5-15.5px labels, 11.5-13.5px
-micro-labels, a 110-196px display title. Nothing that carries a decision is
+micro-labels, a 124-216px display title. Nothing that carries a decision is
 smaller than 13px; HUD microcopy is the only exception.
 
 ## Surface and geometry
@@ -62,6 +62,14 @@ smaller than 13px; HUD microcopy is the only exception.
   over the whole field.
 - Animated field: drifting grid, aurora, constellation particles, shooting
   stars and a slow scan sweep. Every layer stops under `prefers-reduced-motion`.
+
+## Mark
+
+The mark is a sharp 2px tile: a HUD frame, a faint coordinate grid, two inclined
+orbits, an ice A with a cyan crossbar, and a white planet sitting at the apsis
+of the outer orbit. The same silhouette is used for `favicon.svg`, the 512px and
+Apple touch PNGs, and the 34px rail mark, so the tab, the home screen and the
+console header read as one system.
 
 ## Motion
 

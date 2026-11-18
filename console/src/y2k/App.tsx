@@ -127,8 +127,29 @@ export function App() {
       <aside className={`rail ${rail ? "is-open" : ""}`} aria-label="Primary">
         <div className="rail-head">
           <div className="brand">
-            <b>APSIS</b>
-            <span>Control surface</span>
+            <span className="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 64 64">
+                <defs>
+                  <linearGradient id="rail-ice" x1="0" y1="0" x2="0.7" y2="1">
+                    <stop offset="0" stopColor="#ffffff" />
+                    <stop offset="0.5" stopColor="#d6ecff" />
+                    <stop offset="1" stopColor="#8db7ff" />
+                  </linearGradient>
+                  <linearGradient id="rail-orbit" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stopColor="#7a6cff" />
+                    <stop offset="1" stopColor="#2b3cff" />
+                  </linearGradient>
+                </defs>
+                <ellipse cx="32" cy="34" rx="27" ry="10" transform="rotate(-18 32 34)" fill="none" stroke="url(#rail-orbit)" strokeWidth="2.4" />
+                <path d="M18 48 L32 13 L46 48" fill="none" stroke="url(#rail-ice)" strokeWidth="4.6" strokeLinejoin="miter" />
+                <path d="M24.2 36.6 H39.8" stroke="#1ab2ff" strokeWidth="2.6" />
+                <circle cx="52.6" cy="20.4" r="3.1" fill="#ffffff" />
+              </svg>
+            </span>
+            <div>
+              <b>APSIS</b>
+              <span>Control surface</span>
+            </div>
           </div>
           <button type="button" className="rail-close" onClick={() => setRail(false)} aria-label="Close navigation">
             <Icon name="close" />

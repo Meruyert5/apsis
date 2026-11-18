@@ -4,8 +4,8 @@
 
 Apsis reads an AWS account as a permission system, finds every route from a
 low-privilege principal to administrator, and computes the smallest set of grants
-to revoke so that no route remains. Apsis turns that output into a
-orbital console you can inspect, step, and sever.
+to revoke so that no route remains. Apsis turns that output into an orbital
+console you can inspect, step, and sever.
 
 [![CI](https://github.com/Meruyert5/apsis/actions/workflows/ci.yml/badge.svg)](https://github.com/Meruyert5/apsis/actions/workflows/ci.yml)
 [![Pages](https://github.com/Meruyert5/apsis/actions/workflows/pages.yml/badge.svg)](https://github.com/Meruyert5/apsis/actions/workflows/pages.yml)
@@ -21,15 +21,17 @@ orbital console you can inspect, step, and sever.
 1. **Overview** — read the six fleet figures and the orbit. Every number is a
    fixture total: 16 accounts, 194 identities, 144 routes, 37 cut edges, 07 deep,
    0 writes.
-2. **Path map** — press play, watch the hops advance, then **Apply cut**. The
+2. **Survey** — rank the accounts, replay the scan, then download the route
+   ledger as CSV.
+3. **Path map** — press play, watch the hops advance, then **Apply cut**. The
    route state closes and the 3D ascent fractures.
-3. **Atlas** - switch account from the list, click a node in the 3D
+4. **Atlas** — switch account from the list, click a node in the 3D
    constellation, then inspect its trust and routes in the graph.
-4. **Drift** - compare the CI/CD baseline with the after snapshot; two new routes
+5. **Drift** — compare the CI/CD baseline with the after snapshot; two new routes
    and one new edge are called out.
-5. **Extensions** - open the 288-cell coverage field, the alert/evidence
+6. **Extensions** — open the 288-cell coverage field, the alert/evidence
    contracts and the observed-path case.
-6. **Blueprint** - read the pipeline, architecture, roadmap and the release
+7. **Blueprint** — read the pipeline, architecture, roadmap and the release
    state. The only open items are approval and the GitHub push.
 
 The full architecture and interaction inventory are in
@@ -47,8 +49,9 @@ asks a different question: **what do all those statements add up to?**
   second pass groups them into IAM actions a human can approve.
 - **Recorded evidence.** The console is a static export. The commands you see are
   the engine's recorded output for the included fixtures.
-- **Read-only by construction.** The engine has no AWS client and no network
-  code. It parses an export and prints a report.
+- **Read-only by construction.** The engine has no AWS SDK and never writes. It
+  parses an export and prints a report. The optional import shells out to the
+  AWS CLI for a read-only IAM dump.
 
 > The included fleet is synthetic. No customer data, credentials, or live
 > account exports are in this repository.
@@ -263,7 +266,9 @@ the export; `.gitignore` excludes authorization dumps.
 
 ## Security
 
-- Read-only: the engine has no AWS client, no shell execution, and no network.
+- Read-only: the engine has no AWS SDK and never calls a mutating API. The only
+  shell call is the optional, read-only `aws iam get-account-authorization-details`
+  import.
 - The site is static: no analytics, no cookies, no third-party scripts, no runtime
   data fetching.
 - The build injects a restrictive CSP; `script-src 'self'` and `connect-src

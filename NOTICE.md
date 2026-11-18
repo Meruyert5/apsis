@@ -28,7 +28,6 @@ included at `console/public/fonts/OFL.txt`.
 - **Three.js** — MIT.
 - **React** and **React DOM** — MIT.
 - **Vite** — MIT.
-- **Lucide** — ISC.
 - **TypeScript** — Apache-2.0.
 
 Dependency licence texts remain with their packages in `console/node_modules`

@@ -33,7 +33,7 @@ const CHECKS = [
 ];
 
 const ARCH = [
-  { label: "Engine", detail: "Python, no AWS client", icon: "blueprint" as const },
+  { label: "Engine", detail: "Python / AWS CLI import", icon: "blueprint" as const },
   { label: "Static export", detail: "16 bundles + evidence", icon: "extensions" as const },
   { label: "Dashboard", detail: "React + Three.js", icon: "overview" as const },
   { label: "Penumbra", detail: "alert + evidence / delivered", icon: "atlas" as const },

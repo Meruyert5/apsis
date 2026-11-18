@@ -1,4 +1,4 @@
-/* Apsis — Fleet dashboard multi-view dashboard.
+/* Apsis — fleet dashboard.
    Dark glass, electric ultramarine, one white edge. The 3D instruments carry
    the poster language; the data surfaces stay quiet and readable. */
 
@@ -244,6 +244,9 @@ a { color: inherit; }
 }
 
 .rail-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand-mark { display: block; flex: none; width: 34px; height: 34px; }
+.brand-mark svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 0 8px rgb(43 60 255 / .45)); }
 .brand b {
   display: block;
   font-family: var(--sans);
@@ -592,7 +595,7 @@ a { color: inherit; }
   isolation: isolate;
   margin: 14px 0 0;
   font-family: var(--sans);
-  font-size: clamp(110px, 11.4vw, 196px);
+  font-size: clamp(124px, 12.8vw, 216px);
   font-weight: 800;
   line-height: .79;
   letter-spacing: -.05em;
@@ -621,11 +624,11 @@ a { color: inherit; }
   display: block;
   margin-top: -.05em;
   color: transparent;
-  -webkit-text-stroke: 1.4px var(--blue-bright);
+  -webkit-text-stroke: .012em var(--blue-bright);
 }
 
-.view-hero h1,
-.view-head h1 {
+.view-hero h1:not(.display),
+.view-head h1:not(.display) {
   margin: 13px 0 0;
   max-width: 24ch;
   font-family: var(--sans);
@@ -2624,7 +2627,7 @@ a { color: inherit; }
 /* ---------------------------------------------------------------- responsive */
 @media (max-width: 1320px) {
   .view-hero { gap: 22px; }
-  .display { font-size: clamp(74px, 9vw, 112px); }
+  .display { font-size: clamp(96px, 10.4vw, 140px); }
   .kpi-value { font-size: 38px; }
   .path-layout { grid-template-columns: 248px minmax(0, 1fr) 280px; }
   .atlas-layout { grid-template-columns: 220px minmax(0, 1fr) 260px; }
@@ -2684,7 +2687,7 @@ a { color: inherit; }
   .top-actions { grid-area: meta; }
   .search-launch { grid-area: search; }
   .figure-panel { min-height: 350px; }
-  .display { font-size: clamp(66px, 15vw, 100px); }
+  .display { font-size: clamp(78px, 16vw, 120px); }
   .overview-lower { grid-template-columns: 1fr; }
   .pipeline { grid-template-columns: repeat(3, 1fr); }
   .pipeline-stage:nth-child(4) i, .pipeline-stage:nth-child(5) i { display: none; }
@@ -2767,7 +2770,7 @@ a { color: inherit; }
 }
 
 @media (max-width: 520px) {
-  .display { font-size: 74px; }
+  .display { font-size: 88px; }
   .view-hero h1, .view-head h1 { font-size: 34px; }
   .lede { font-size: 15.5px; }
   .kpi-value { font-size: 34px; }
@@ -2935,3 +2938,4 @@ a { color: inherit; }
     transition-duration: .001ms !important;
   }
 }
+

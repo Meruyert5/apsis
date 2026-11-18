@@ -81,11 +81,10 @@ Both payloads validate against the schemas above. Penumbra reads the alert and
 the evidence manifest; it does not import Apsis code, and Apsis never writes to
 the account.
 
-The alert is a validated contract instance generated from the shipped case, not
-yet from a live CloudTrail import. The engine overlay that derives `observed`
-from a real export is the next roadmap item; the schema, the case and the
-handoff are final.
+The alert is a validated contract instance generated from the shipped case. The
+same payload shape is produced when `apsis overlay` marks edges from a
+CloudTrail export; the schema, the case and the handoff stay fixed.
 
-Penumbra received the handoff in its own commit `b28717b` (local, pending
+Penumbra received the handoff in its own commit `5903b79` (local, pending
 push), with the same payloads and a roadmap entry that marks the case, the
 guardrail contract and the alert/evidence delivery as done.

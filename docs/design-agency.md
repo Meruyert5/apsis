@@ -398,7 +398,7 @@ Global:
 ## Revision 15 - one dashboard, engine complete
 
 - The site is one Vite entry at `/`. The legacy four-deck console, its component tree and the design-lab v2-v7 mocks were removed. Old screenshots were deleted with them.
-- Corners returned to a sharp 2px/0px scale. The display moved to 110-196px and body copy to 17px; the palette and mono labels carry the Style 1/2 typography.
+- Corners returned to a sharp 2px/0px scale. The display moved to 124-216px and body copy to 17px; the palette and mono labels carry the Style 1/2 typography.
 - The desktop topbar is a floating glass pill over a cyan/cobalt hero aura. The background gains a particle constellation with shooting stars, a rotating ribbon and a slow scan sweep. All motion stops under reduced motion.
 - Drift is the fifth view: two snapshots, a split 3D instrument, added/closed routes and edge changes. Survey adds a route ledger and CSV download; the engine adds `apsis ledger`.
 - Engine: CloudTrail overlay (`apsis overlay`, `scan/export --cloudtrail`), live IAM import from `GetAccountAuthorizationDetails`, condition evaluation, resource policies, route-aware drift and CSV. Tests: 89 Python, 5 dashboard logic.

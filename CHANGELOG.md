@@ -2,6 +2,19 @@
 
 ### Changed
 
+- The Overview wordmark is monumental again: 124-216px display type with a
+  scaled outline echo, so the hero leads the page instead of sitting at heading
+  size. The rest of the type scale is unchanged.
+- New mark: a sharp 2px tile with a HUD frame, two inclined orbits, an ice A, a
+  cyan crossbar and a white planet at the apsis. `favicon.svg`, the 512px and
+  Apple touch PNGs, and the 34px rail mark share the silhouette.
+- Repository readiness: `CODE_OF_CONDUCT.md`, corrected NOTICE/SECURITY and
+  CONTRIBUTING claims about the optional AWS CLI import, refreshed CITATION and
+  package metadata, and an upload runbook with the exact repository
+  description, topics and post-deploy edits in `docs/RELEASE.md`.
+- Cleanup: removed `console/verify.log`, `console/shots/` and the TS build
+  artifact; the working tree now contains only source, fixtures, docs and the
+  five README screenshots.
 - The dashboard is now the only site entry at `/`. The legacy four-deck console,
   its component tree and the design-lab v2-v7 mocks were removed.
 - Engine: a CloudTrail overlay marks observed edges and routes, `apsis import`

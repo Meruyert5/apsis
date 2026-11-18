@@ -46,7 +46,7 @@ pickable node carries an oversized invisible hit sphere, so the target is
 comfortable at any stage size.
 
 Typography is set for reading: 17px body, 15.5–17px data and notes, 13.5–15.5px
-labels, 11.5–13.5px micro-labels, a 110–196px display title and SVG graph labels
+labels, 11.5–13.5px micro-labels, a 124–216px display title and SVG graph labels
 sized for the rendered panel.
 
 ## Soft geometry
@@ -78,9 +78,10 @@ stay square; the only soft element is the floating glass topbar.
   performance score is a warning, not an error, because the instruments are
   WebGL.
 
-On desktop the topbar floats as a glass pill; the hero sits over a cyan/cobalt
-aura with a grain and scanline texture. Deep void, electric cyan, cobalt and
-periwinkle sit beside the original ultramarine.
+On desktop the topbar floats as a glass pill; the rail carries the 34px orbital
+mark beside the wordmark. The hero sits over a cyan/cobalt aura with a grain and
+scanline texture. Deep void, electric cyan, cobalt and periwinkle sit beside the
+original ultramarine.
 
 ### 2D fallback
 

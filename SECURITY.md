@@ -23,15 +23,18 @@ fixtures.
 
 ## Scope
 
-Apsis is a read-only analyser. It has no AWS client, no shell execution, and no
-network code. Apsis is a static site with no server, no analytics, no cookies,
-and no runtime data fetching.
+Apsis is a read-only analyser. It has no AWS SDK and never calls a mutating API.
+The one shell call is the optional AWS CLI import (`apsis import --from-aws`),
+which performs a read-only `GetAccountAuthorizationDetails` request. The site is
+static: no server, no analytics, no cookies, and no runtime data fetching.
 
 Properties that matter to this project:
 
 - **No writes.** The engine parses policy JSON and prints reports. It does not
   call a mutating AWS API.
-- **Offline.** The package does not make network requests.
+- **Offline by default.** Scanning, severing, diffing and exporting are local.
+  Only the optional import invokes the AWS CLI, and the site never makes a
+  request.
 - **Escaped output.** The console renders engine strings through React, never
   through `dangerouslySetInnerHTML`.
 - **No secrets in the repository.** The fixtures and bundles are synthetic. Local
