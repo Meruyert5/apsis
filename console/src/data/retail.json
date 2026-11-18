@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T18:48:43+00:00",
+  "generated": "2026-11-18T20:01:29+00:00",
   "engine": {
     "name": "apsis",
     "version": "0.2.0"
@@ -250,6 +250,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "build-role allows sts:AssumeRole on arn:aws:iam::777700001111:role/deploy-admin",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -267,6 +270,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "build-role allows iam:UpdateAssumeRolePolicy on arn:aws:iam::777700001111:role/deploy-admin; build-role allows sts:AssumeRole on arn:aws:iam::777700001111:role/deploy-admin",
       "narration": "Add yourself to a role's trust policy, then assume it.",
       "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads."
@@ -284,6 +290,9 @@
         "ec2:DescribeInstances"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "contractor-dev allows ssm:SendCommand on arn:aws:ec2:eu-west-2:777700001111:instance/i-0f9e8d7c6b5a; contractor-dev allows ec2:DescribeInstances on *",
       "narration": "Run a command on an instance and use its instance profile.",
       "fix": "Scope ssm:SendCommand to document ARNs and tag-gated instances."
@@ -300,6 +309,9 @@
         "iam:CreatePolicyVersion"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "data-platform-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700001111:policy/data-platform-policy",
       "narration": "Publish a new policy version that grants more than the current one.",
       "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant."
@@ -316,6 +328,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "hr-onboarding allows iam:CreateAccessKey on arn:aws:iam::777700001111:user/finance-reader",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -333,6 +348,9 @@
         "sagemaker:CreateNotebookInstance"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "ml-intern allows iam:PassRole on arn:aws:iam::777700001111:role/ml-runtime; ml-intern allows sagemaker:CreateNotebookInstance on *",
       "narration": "Create a notebook instance with the passed role, then open its terminal.",
       "fix": "Deny sagemaker:CreateNotebookInstance with an arbitrary execution role."
@@ -349,6 +367,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "ml-runtime-access allows sts:AssumeRole on arn:aws:iam::777700001111:role/data-platform",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -365,6 +386,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "deploy-release allows sts:AssumeRole on arn:aws:iam::777700001111:role/build-role",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -381,6 +405,9 @@
         "iam:AttachUserPolicy"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "security-incident-tooling allows iam:AttachUserPolicy on *",
       "narration": "Attach AdministratorAccess to your own user and inherit it.",
       "fix": "No human or machine identity should hold iam:AttachUserPolicy on its own ARN."
@@ -397,6 +424,9 @@
         "iam:AddUserToGroup"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "vendor-audit-access allows iam:AddUserToGroup on arn:aws:iam::777700001111:group/security",
       "narration": "Add yourself to a group that carries wider policies.",
       "fix": "Group membership changes are privilege changes; route them through review."
@@ -431,7 +461,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "vendor-audit-access allows iam:AddUserToGroup on arn:aws:iam::777700001111:group/security",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -443,7 +476,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "security-incident-tooling allows iam:AttachUserPolicy on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -480,7 +516,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "ml-intern allows iam:PassRole on arn:aws:iam::777700001111:role/ml-runtime; ml-intern allows sagemaker:CreateNotebookInstance on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e6",
@@ -492,7 +531,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "ml-runtime-access allows sts:AssumeRole on arn:aws:iam::777700001111:role/data-platform",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e3",
@@ -504,7 +546,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "data-platform-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700001111:policy/data-platform-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -537,7 +582,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "ml-runtime-access allows sts:AssumeRole on arn:aws:iam::777700001111:role/data-platform",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e3",
@@ -549,7 +597,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "data-platform-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700001111:policy/data-platform-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -579,7 +630,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "data-platform-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700001111:policy/data-platform-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -613,7 +667,10 @@
             ],
             "mitre": "T1651",
             "evidence": "contractor-dev allows ssm:SendCommand on arn:aws:ec2:eu-west-2:777700001111:instance/i-0f9e8d7c6b5a; contractor-dev allows ec2:DescribeInstances on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e0",
@@ -625,7 +682,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "build-role allows sts:AssumeRole on arn:aws:iam::777700001111:role/deploy-admin",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -657,7 +717,10 @@
             ],
             "mitre": "T1651",
             "evidence": "contractor-dev allows ssm:SendCommand on arn:aws:ec2:eu-west-2:777700001111:instance/i-0f9e8d7c6b5a; contractor-dev allows ec2:DescribeInstances on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e1",
@@ -670,7 +733,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "build-role allows iam:UpdateAssumeRolePolicy on arn:aws:iam::777700001111:role/deploy-admin; build-role allows sts:AssumeRole on arn:aws:iam::777700001111:role/deploy-admin",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -700,7 +766,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "build-role allows sts:AssumeRole on arn:aws:iam::777700001111:role/deploy-admin",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -729,7 +798,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "build-role allows iam:UpdateAssumeRolePolicy on arn:aws:iam::777700001111:role/deploy-admin; build-role allows sts:AssumeRole on arn:aws:iam::777700001111:role/deploy-admin",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -762,7 +834,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "deploy-release allows sts:AssumeRole on arn:aws:iam::777700001111:role/build-role",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e0",
@@ -774,7 +849,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "build-role allows sts:AssumeRole on arn:aws:iam::777700001111:role/deploy-admin",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -805,7 +883,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "deploy-release allows sts:AssumeRole on arn:aws:iam::777700001111:role/build-role",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e1",
@@ -818,7 +899,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "build-role allows iam:UpdateAssumeRolePolicy on arn:aws:iam::777700001111:role/deploy-admin; build-role allows sts:AssumeRole on arn:aws:iam::777700001111:role/deploy-admin",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -893,7 +977,10 @@
         ],
         "mitre": "T1098.003",
         "evidence": "vendor-audit-access allows iam:AddUserToGroup on arn:aws:iam::777700001111:group/security",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e8",
@@ -905,7 +992,10 @@
         ],
         "mitre": "T1098.003",
         "evidence": "security-incident-tooling allows iam:AttachUserPolicy on *",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       }
     ]
   },

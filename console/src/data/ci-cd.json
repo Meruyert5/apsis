@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T18:48:43+00:00",
+  "generated": "2026-11-18T20:01:29+00:00",
   "engine": {
     "name": "apsis",
     "version": "0.2.0"
@@ -139,6 +139,9 @@
         "lambda:InvokeFunction"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gha-deploy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-west-2:999900001111:function:delivery-worker; gha-deploy allows lambda:InvokeFunction on arn:aws:lambda:us-west-2:999900001111:function:delivery-worker",
       "narration": "Replace the handler of an existing function that already holds a strong role.",
       "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions."
@@ -155,6 +158,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "release-manager allows sts:AssumeRole on arn:aws:iam::999900001111:role/gha-deploy",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."

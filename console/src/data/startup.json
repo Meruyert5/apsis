@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T18:48:43+00:00",
+  "generated": "2026-11-18T20:01:29+00:00",
   "engine": {
     "name": "apsis",
     "version": "0.2.0"
@@ -209,6 +209,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -226,6 +229,9 @@
         "lambda:InvokeFunction"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "ci-deploy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; ci-deploy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
       "narration": "Replace the handler of an existing function that already holds a strong role.",
       "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions."
@@ -244,6 +250,9 @@
         "lambda:InvokeFunction"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "ci-deploy allows iam:PassRole on arn:aws:iam::111122223333:role/deploy-role; ci-deploy allows lambda:CreateFunction on *",
       "narration": "Pass a privileged role to a new function, then invoke it.",
       "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist."
@@ -260,6 +269,9 @@
         "sts:AssumeRole"
       ],
       "conditional": true,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -277,6 +289,9 @@
         "sts:AssumeRole"
       ],
       "conditional": true,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
       "narration": "Add yourself to a role's trust policy, then assume it.",
       "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads."
@@ -293,6 +308,9 @@
         "iam:CreatePolicyVersion"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "deploy-role-policy allows iam:CreatePolicyVersion on arn:aws:iam::111122223333:policy/deploy-role-policy",
       "narration": "Publish a new policy version that grants more than the current one.",
       "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant."
@@ -310,6 +328,9 @@
         "lambda:InvokeFunction"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "deploy-role-policy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; deploy-role-policy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
       "narration": "Replace the handler of an existing function that already holds a strong role.",
       "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions."
@@ -328,6 +349,9 @@
         "lambda:InvokeFunction"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "oncall-deploy-worker allows iam:PassRole on arn:aws:iam::111122223333:role/app-runtime; oncall-deploy-worker allows lambda:CreateFunction on *",
       "narration": "Pass a privileged role to a new function, then invoke it.",
       "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist."
@@ -344,6 +368,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "support-rotate-oncall-key allows iam:CreateAccessKey on arn:aws:iam::111122223333:user/platform-oncall",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -384,7 +411,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "support-rotate-oncall-key allows iam:CreateAccessKey on arn:aws:iam::111122223333:user/platform-oncall",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e7",
@@ -398,7 +428,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "oncall-deploy-worker allows iam:PassRole on arn:aws:iam::111122223333:role/app-runtime; oncall-deploy-worker allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e0",
@@ -410,7 +443,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e3",
@@ -422,7 +458,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-            "conditional": true
+            "conditional": true,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -459,7 +498,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "support-rotate-oncall-key allows iam:CreateAccessKey on arn:aws:iam::111122223333:user/platform-oncall",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e7",
@@ -473,7 +515,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "oncall-deploy-worker allows iam:PassRole on arn:aws:iam::111122223333:role/app-runtime; oncall-deploy-worker allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e0",
@@ -485,7 +530,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e4",
@@ -498,7 +546,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-            "conditional": true
+            "conditional": true,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -536,7 +587,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "oncall-deploy-worker allows iam:PassRole on arn:aws:iam::111122223333:role/app-runtime; oncall-deploy-worker allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e0",
@@ -548,7 +602,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e3",
@@ -560,7 +617,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-            "conditional": true
+            "conditional": true,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -596,7 +656,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "oncall-deploy-worker allows iam:PassRole on arn:aws:iam::111122223333:role/app-runtime; oncall-deploy-worker allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e0",
@@ -608,7 +671,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e4",
@@ -621,7 +687,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-            "conditional": true
+            "conditional": true,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -654,7 +723,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e3",
@@ -666,7 +738,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-            "conditional": true
+            "conditional": true,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -697,7 +772,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e4",
@@ -710,7 +788,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-            "conditional": true
+            "conditional": true,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -740,7 +821,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-            "conditional": true
+            "conditional": true,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -769,7 +853,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-            "conditional": true
+            "conditional": true,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -804,7 +891,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "ci-deploy allows iam:PassRole on arn:aws:iam::111122223333:role/deploy-role; ci-deploy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e5",
@@ -816,7 +906,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "deploy-role-policy allows iam:CreatePolicyVersion on arn:aws:iam::111122223333:policy/deploy-role-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -851,7 +944,10 @@
             ],
             "mitre": "T1648",
             "evidence": "ci-deploy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; ci-deploy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e0",
@@ -863,7 +959,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e3",
@@ -875,7 +974,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-            "conditional": true
+            "conditional": true,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -910,7 +1012,10 @@
             ],
             "mitre": "T1648",
             "evidence": "ci-deploy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; ci-deploy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e0",
@@ -922,7 +1027,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e4",
@@ -935,7 +1043,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-            "conditional": true
+            "conditional": true,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -974,7 +1085,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "ci-deploy allows iam:PassRole on arn:aws:iam::111122223333:role/deploy-role; ci-deploy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e6",
@@ -987,7 +1101,10 @@
             ],
             "mitre": "T1648",
             "evidence": "deploy-role-policy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; deploy-role-policy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e0",
@@ -999,7 +1116,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e3",
@@ -1011,7 +1131,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-            "conditional": true
+            "conditional": true,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -1041,7 +1164,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "deploy-role-policy allows iam:CreatePolicyVersion on arn:aws:iam::111122223333:policy/deploy-role-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -1076,7 +1202,10 @@
             ],
             "mitre": "T1648",
             "evidence": "deploy-role-policy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; deploy-role-policy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e0",
@@ -1088,7 +1217,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e3",
@@ -1100,7 +1232,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-            "conditional": true
+            "conditional": true,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -1135,7 +1270,10 @@
             ],
             "mitre": "T1648",
             "evidence": "deploy-role-policy allows lambda:UpdateFunctionCode on arn:aws:lambda:us-east-1:111122223333:function:app-worker; deploy-role-policy allows lambda:InvokeFunction on arn:aws:lambda:us-east-1:111122223333:function:app-worker",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e0",
@@ -1147,7 +1285,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e4",
@@ -1160,7 +1301,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "data-eng-pipeline allows iam:UpdateAssumeRolePolicy on arn:aws:iam::111122223333:role/platform-admin; data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-            "conditional": true
+            "conditional": true,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -1233,7 +1377,10 @@
         ],
         "mitre": "T1098.001",
         "evidence": "support-rotate-oncall-key allows iam:CreateAccessKey on arn:aws:iam::111122223333:user/platform-oncall",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e7",
@@ -1247,7 +1394,10 @@
         ],
         "mitre": "T1098.001",
         "evidence": "oncall-deploy-worker allows iam:PassRole on arn:aws:iam::111122223333:role/app-runtime; oncall-deploy-worker allows lambda:CreateFunction on *",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e0",
@@ -1259,7 +1409,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "app-runtime-access allows sts:AssumeRole on arn:aws:iam::111122223333:role/data-eng",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e3",
@@ -1271,7 +1424,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "data-eng-pipeline allows sts:AssumeRole on arn:aws:iam::111122223333:role/platform-admin",
-        "conditional": true
+        "conditional": true,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       }
     ]
   },

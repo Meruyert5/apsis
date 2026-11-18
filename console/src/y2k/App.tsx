@@ -18,7 +18,7 @@ import { Extensions } from "./views/Extensions";
 import { Overview } from "./views/Overview";
 import { PathMap } from "./views/PathMap";
 import { Survey } from "./views/Survey";
-import { Barcode, Chevrons, Icon } from "./ui";
+import { Barcode, Icon } from "./ui";
 import type { IconName } from "./ui";
 
 const VIEW_IDS = new Set(modules.map((module) => module.id));
@@ -133,23 +133,7 @@ export function App() {
         <div className="rail-head">
           <div className="brand">
             <span className="brand-mark" aria-hidden="true">
-              <svg viewBox="0 0 64 64">
-                <defs>
-                  <linearGradient id="rail-ice" x1="0" y1="0" x2="0.7" y2="1">
-                    <stop offset="0" stopColor="#fffaf0" />
-                    <stop offset="0.5" stopColor="#f4efe3" />
-                    <stop offset="1" stopColor="#cfc7b6" />
-                  </linearGradient>
-                  <linearGradient id="rail-orbit" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stopColor="#ffb26b" />
-                    <stop offset="1" stopColor="#7ce7ff" />
-                  </linearGradient>
-                </defs>
-                <ellipse cx="32" cy="34" rx="27" ry="10" transform="rotate(-18 32 34)" fill="none" stroke="url(#rail-orbit)" strokeWidth="2.4" />
-                <path d="M18 48 L32 13 L46 48" fill="none" stroke="url(#rail-ice)" strokeWidth="4.6" strokeLinejoin="miter" />
-                <path d="M24.2 36.6 H39.8" stroke="#ffb26b" strokeWidth="2.6" />
-                <circle cx="52.6" cy="20.4" r="3.1" fill="#fffaf0" />
-              </svg>
+              <img src="./favicon.svg" alt="" width={34} height={34} />
             </span>
             <div>
               <b>APSIS</b>
@@ -179,18 +163,22 @@ export function App() {
 
         <div className="rail-note">
           <span>Snapshot</span>
-          <b>{generatedLabel}</b>
+          <b>{generatedLabel.split(" / ")[0]}</b>
+          <em>{generatedLabel.split(" / ")[1]}</em>
           <p>Read-only. The console never writes to an account.</p>
+          <div className="rail-status"><i />Read-only <em>0 writes</em></div>
         </div>
 
         <div className="rail-foot">
+          <div className="rail-metrics">
+            <div><b>{snapshot.accounts}</b><span>accounts</span></div>
+            <div><b>{snapshot.identities}</b><span>identities</span></div>
+          </div>
           <Barcode />
           <div className="rail-foot-row">
-            <Chevrons />
-            <Icon name="star" size={14} />
+            <span>Synthetic fleet</span>
+            <span>Apsis 0.2.0</span>
           </div>
-          <div className="status"><i />Read-only / 0 writes</div>
-          <p>{snapshot.accounts} accounts / {snapshot.identities} identities</p>
         </div>
       </aside>
 

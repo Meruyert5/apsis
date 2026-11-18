@@ -1,7 +1,19 @@
 import { useEffect, useRef } from "react";
 import type { ViewId } from "./model";
 
-type BodyKind = "planet" | "ringed" | "star" | "hole" | "binary" | "gas" | "moon" | "cluster";
+type BodyKind =
+  | "planet"
+  | "ringed"
+  | "star"
+  | "hole"
+  | "binary"
+  | "gas"
+  | "moon"
+  | "cluster"
+  | "galaxy"
+  | "pulsar"
+  | "nebula"
+  | "comet";
 
 interface BodySpec {
   kind: BodyKind;
@@ -14,13 +26,13 @@ interface BodySpec {
 }
 
 const SPECS: Record<ViewId, BodySpec> = {
-  overview: { kind: "planet", accent: "#7ce7ff", x: 1.06, y: 0.58, r: 0.27, alpha: 0.42, tilt: -0.18 },
+  overview: { kind: "comet", accent: "#7ce7ff", x: 1.04, y: 0.42, r: 0.24, alpha: 0.38, tilt: -0.42 },
   survey: { kind: "ringed", accent: "#9ff0c8", x: 1.02, y: 0.62, r: 0.28, alpha: 0.38, tilt: -0.22 },
   path: { kind: "star", accent: "#ffb26b", x: 1.07, y: 0.26, r: 0.24, alpha: 0.36, tilt: 0 },
-  atlas: { kind: "cluster", accent: "#a78bfa", x: 1.02, y: 0.62, r: 0.27, alpha: 0.35, tilt: 0 },
+  atlas: { kind: "galaxy", accent: "#a78bfa", x: 1.01, y: 0.5, r: 0.34, alpha: 0.32, tilt: 0 },
   drift: { kind: "binary", accent: "#ff9ecb", x: 1.02, y: 0.6, r: 0.25, alpha: 0.38, tilt: 0 },
-  commands: { kind: "gas", accent: "#9ff0c8", x: 1.02, y: 0.62, r: 0.29, alpha: 0.35, tilt: 0.1 },
-  extensions: { kind: "moon", accent: "#a78bfa", x: 1.02, y: 0.6, r: 0.23, alpha: 0.38, tilt: 0 },
+  commands: { kind: "pulsar", accent: "#9ff0c8", x: 1.02, y: 0.34, r: 0.24, alpha: 0.38, tilt: 0.1 },
+  extensions: { kind: "nebula", accent: "#a78bfa", x: 1.0, y: 0.46, r: 0.42, alpha: 0.3, tilt: 0 },
   blueprint: { kind: "hole", accent: "#ffb26b", x: 1.02, y: 0.62, r: 0.26, alpha: 0.4, tilt: 0.1 },
 };
 
@@ -236,25 +248,46 @@ function drawHole(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: numb
   ctx.save();
   ctx.translate(cx, cy);
   ctx.rotate(spec.tilt);
-  for (let i = 0; i < 7; i += 1) {
-    const rr = r * (1.35 + i * 0.18);
-    ctx.globalAlpha = 0.3 - i * 0.03;
-    const g = ctx.createLinearGradient(-rr, 0, rr, 0);
-    g.addColorStop(0, "rgba(255,178,107,0)");
-    g.addColorStop(0.32, "rgba(255,196,140,.75)");
-    g.addColorStop(0.62, "rgba(124,231,255,.55)");
-    g.addColorStop(1, "rgba(124,231,255,0)");
-    ctx.strokeStyle = g;
-    ctx.lineWidth = r * 0.035;
+  ctx.scale(1, 0.32);
+
+  const disk = ctx.createRadialGradient(0, 0, r * 0.9, 0, 0, r * 2.9);
+  disk.addColorStop(0, "rgba(255,244,224,.72)");
+  disk.addColorStop(0.22, "rgba(255,196,120,.55)");
+  disk.addColorStop(0.52, "rgba(124,231,255,.22)");
+  disk.addColorStop(0.78, "rgba(255,178,107,.08)");
+  disk.addColorStop(1, "rgba(255,178,107,0)");
+  ctx.fillStyle = disk;
+  ctx.beginPath();
+  ctx.arc(0, 0, r * 2.9, 0, Math.PI * 2);
+  ctx.fill();
+
+  const hot = ctx.createRadialGradient(r * 1.12, 0, 0, r * 1.12, 0, r * 0.82);
+  hot.addColorStop(0, "rgba(255,253,244,.9)");
+  hot.addColorStop(0.4, "rgba(255,208,150,.5)");
+  hot.addColorStop(1, "rgba(255,178,107,0)");
+  ctx.fillStyle = hot;
+  ctx.beginPath();
+  ctx.arc(r * 1.12, 0, r * 0.82, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.globalAlpha = 0.38;
+  ctx.strokeStyle = "rgba(255,244,224,.7)";
+  ctx.lineWidth = Math.max(0.8, r * 0.006);
+  for (let i = 0; i < 4; i += 1) {
     ctx.beginPath();
-    ctx.ellipse(0, 0, rr, rr * 0.24, 0, 0, Math.PI * 2);
+    ctx.arc(0, 0, r * (1.38 + i * 0.36), 0, Math.PI * 2);
     ctx.stroke();
   }
+  ctx.restore();
+
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(spec.tilt);
   ctx.globalAlpha = 0.95;
   ctx.strokeStyle = "#fff4e0";
   ctx.lineWidth = Math.max(1.2, r * 0.012);
   ctx.shadowColor = "#ffd9a8";
-  ctx.shadowBlur = r * 0.14;
+  ctx.shadowBlur = r * 0.18;
   ctx.beginPath();
   ctx.ellipse(0, 0, r * 1.16, r * 0.2, 0, 0, Math.PI * 2);
   ctx.stroke();
@@ -278,6 +311,216 @@ function drawHole(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: numb
   ctx.arc(cx, cy, r * 1.2, -0.6, 0.9);
   ctx.stroke();
   ctx.restore();
+}
+
+function drawGalaxy(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  r: number,
+  spec: BodySpec,
+  rand: () => number,
+  t: number,
+) {
+  const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 1.25);
+  core.addColorStop(0, "rgba(255,250,240,.9)");
+  core.addColorStop(0.18, "rgba(255,226,196,.45)");
+  core.addColorStop(0.5, "rgba(167,139,250,.16)");
+  core.addColorStop(1, "rgba(167,139,250,0)");
+  ctx.fillStyle = core;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 1.25, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(t * 0.012 + spec.tilt);
+  ctx.scale(1, 0.48);
+  for (let arm = 0; arm < 2; arm += 1) {
+    for (let i = 0; i < 90; i += 1) {
+      const theta = i * 0.17 + arm * Math.PI;
+      const d = r * (0.14 + (i / 90) * 1.65);
+      const spread = (rand() - 0.5) * r * 0.12;
+      const x = Math.cos(theta) * d + Math.cos(theta + 1.57) * spread;
+      const y = Math.sin(theta) * d + Math.sin(theta + 1.57) * spread;
+      const alpha = (1 - i / 90) * 0.55;
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = i % 5 === 0 ? "#fff4e0" : arm === 0 ? "#a78bfa" : "#7ce7ff";
+      ctx.beginPath();
+      ctx.arc(x, y, r * (0.008 + rand() * 0.012), 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.restore();
+
+  ctx.globalAlpha = 0.5;
+  for (let i = 0; i < 60; i += 1) {
+    const a = rand() * Math.PI * 2;
+    const d = r * (1.2 + rand() * 1.2);
+    ctx.fillStyle = rand() > 0.7 ? "#fff4e0" : "#a78bfa";
+    ctx.fillRect(cx + Math.cos(a) * d, cy + Math.sin(a) * d * 0.55, r * 0.006, r * 0.006);
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawPulsar(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  r: number,
+  spec: BodySpec,
+  t: number,
+) {
+  ctx.save();
+  ctx.translate(cx, cy);
+  for (const dir of [0, Math.PI]) {
+    ctx.save();
+    ctx.rotate(t * 0.55 + dir);
+    const beam = ctx.createLinearGradient(0, 0, 0, r * 3.2);
+    beam.addColorStop(0, "rgba(159,240,200,.42)");
+    beam.addColorStop(0.45, "rgba(124,231,255,.14)");
+    beam.addColorStop(1, "rgba(124,231,255,0)");
+    ctx.fillStyle = beam;
+    ctx.beginPath();
+    ctx.moveTo(-r * 0.14, 0);
+    ctx.lineTo(r * 0.7, r * 3.2);
+    ctx.lineTo(-r * 0.7, r * 3.2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+  ctx.restore();
+
+  const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 0.85);
+  core.addColorStop(0, "rgba(255,255,255,1)");
+  core.addColorStop(0.28, "rgba(214,255,240,.85)");
+  core.addColorStop(0.65, "rgba(124,231,255,.3)");
+  core.addColorStop(1, "rgba(124,231,255,0)");
+  ctx.fillStyle = core;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.85, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(t * 0.2);
+  ctx.globalAlpha = 0.35;
+  ctx.strokeStyle = spec.accent;
+  ctx.lineWidth = Math.max(1, r * 0.01);
+  ctx.beginPath();
+  ctx.ellipse(0, 0, r * 1.7, r * 0.42, 0.5, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.ellipse(0, 0, r * 1.35, r * 0.3, -0.5, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.restore();
+
+  for (let i = 0; i < 3; i += 1) {
+    const pulse = ((t * 0.3 + i / 3) % 1);
+    ctx.globalAlpha = (1 - pulse) * 0.25;
+    ctx.strokeStyle = spec.accent;
+    ctx.lineWidth = Math.max(1, r * 0.008);
+    ctx.beginPath();
+    ctx.arc(cx, cy, r * (1 + pulse * 1.6), 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawNebula(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  r: number,
+  spec: BodySpec,
+  rand: () => number,
+  t: number,
+) {
+  const clouds = [
+    { x: -0.22, y: -0.16, r: 0.72, color: "167,139,250" },
+    { x: 0.3, y: 0.16, r: 0.62, color: "124,231,255" },
+    { x: -0.34, y: 0.3, r: 0.46, color: "255,178,107" },
+    { x: 0.12, y: -0.34, r: 0.5, color: "244,239,227" },
+  ];
+  const drift = Math.sin(t * 0.05) * 0.04;
+  for (const cloud of clouds) {
+    const px = cx + r * (cloud.x + drift);
+    const py = cy + r * (cloud.y - drift);
+    const grad = ctx.createRadialGradient(px, py, 0, px, py, r * cloud.r);
+    grad.addColorStop(0, `rgba(${cloud.color},.2)`);
+    grad.addColorStop(0.5, `rgba(${cloud.color},.07)`);
+    grad.addColorStop(1, `rgba(${cloud.color},0)`);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(px, py, r * cloud.r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  for (let i = 0; i < 150; i += 1) {
+    const a = rand() * Math.PI * 2;
+    const d = Math.sqrt(rand()) * r * 1.7;
+    ctx.globalAlpha = 0.25 + rand() * 0.6;
+    ctx.fillStyle = rand() > 0.75 ? "#fff4e0" : spec.accent;
+    ctx.beginPath();
+    ctx.arc(cx + Math.cos(a) * d, cy + Math.sin(a) * d * 0.7, r * (0.004 + rand() * 0.006), 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawComet(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  r: number,
+  spec: BodySpec,
+  rand: () => number,
+  t: number,
+) {
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(spec.tilt);
+  const tail = ctx.createLinearGradient(0, 0, -r * 4.2, r * 0.9);
+  tail.addColorStop(0, "rgba(214,236,255,.55)");
+  tail.addColorStop(0.3, "rgba(124,231,255,.22)");
+  tail.addColorStop(1, "rgba(124,231,255,0)");
+  ctx.fillStyle = tail;
+  ctx.beginPath();
+  ctx.moveTo(0, -r * 0.18);
+  ctx.quadraticCurveTo(-r * 2.4, -r * 0.8, -r * 4.2, r * 0.9);
+  ctx.quadraticCurveTo(-r * 2.0, r * 0.2, 0, r * 0.18);
+  ctx.closePath();
+  ctx.fill();
+  for (let i = 0; i < 80; i += 1) {
+    const p = rand();
+    const x = -p * r * 3.8;
+    const y = (rand() - 0.5) * r * (0.4 + p * 1.2) + p * r * 0.8;
+    ctx.globalAlpha = (1 - p) * 0.5;
+    ctx.fillStyle = rand() > 0.6 ? "#fff4e0" : spec.accent;
+    ctx.fillRect(x, y, r * 0.008, r * 0.008);
+  }
+  ctx.restore();
+
+  const coma = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 1.15);
+  coma.addColorStop(0, "rgba(255,253,244,.95)");
+  coma.addColorStop(0.3, "rgba(214,236,255,.55)");
+  coma.addColorStop(0.7, "rgba(124,231,255,.16)");
+  coma.addColorStop(1, "rgba(124,231,255,0)");
+  ctx.fillStyle = coma;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 1.15, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#fffdf4";
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.16, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.globalAlpha = 0.4 + Math.sin(t * 0.8) * 0.1;
+  ctx.strokeStyle = spec.accent;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * (1.35 + Math.sin(t * 0.4) * 0.12), 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
 }
 
 function drawBody(
@@ -361,6 +604,14 @@ function drawBody(
     ctx.restore();
     terminator(ctx, cx, cy, r, -0.1);
     rim(ctx, cx, cy, r, spec.accent, 0.45);
+  } else if (spec.kind === "galaxy") {
+    drawGalaxy(ctx, cx, cy, r, spec, rand, t);
+  } else if (spec.kind === "pulsar") {
+    drawPulsar(ctx, cx, cy, r, spec, t);
+  } else if (spec.kind === "nebula") {
+    drawNebula(ctx, cx, cy, r, spec, rand, t);
+  } else if (spec.kind === "comet") {
+    drawComet(ctx, cx, cy, r, spec, rand, t);
   } else if (spec.kind === "moon") {
     shadeSphere(ctx, cx, cy, r, "#8f9296", "#484b4f", "#08090b");
     craters(ctx, cx, cy, r, rand);
@@ -395,13 +646,14 @@ export function SpaceBody({ view, motion }: { view: ViewId; motion: boolean }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const dpr = Math.min(1.5, window.devicePixelRatio || 1);
+    const dpr = Math.min(1.25, window.devicePixelRatio || 1);
     let width = window.innerWidth;
     let height = window.innerHeight;
     let raf = 0;
     let start = performance.now();
     let pointerX = 0;
     let targetX = 0;
+    let last = 0;
 
     const resize = () => {
       width = window.innerWidth;
@@ -414,6 +666,9 @@ export function SpaceBody({ view, motion }: { view: ViewId; motion: boolean }) {
     };
 
     const frame = (now: number) => {
+      raf = requestAnimationFrame(frame);
+      if (now - last < 40) return;
+      last = now;
       pointerX += (targetX - pointerX) * 0.03;
       const t = (now - start) / 1000;
       ctx.clearRect(0, 0, width, height);
@@ -421,7 +676,6 @@ export function SpaceBody({ view, motion }: { view: ViewId; motion: boolean }) {
       ctx.translate(pointerX, 0);
       drawBody(ctx, view, SPECS[view], width, height, t, motion);
       ctx.restore();
-      if (motion) raf = requestAnimationFrame(frame);
     };
 
     const onMove = (event: PointerEvent) => {
@@ -443,3 +697,4 @@ export function SpaceBody({ view, motion }: { view: ViewId; motion: boolean }) {
 
   return <canvas className="page-body" data-body={view} ref={canvasRef} aria-hidden="true" />;
 }
+

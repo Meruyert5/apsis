@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T18:48:43+00:00",
+  "generated": "2026-11-18T20:01:29+00:00",
   "engine": {
     "name": "apsis",
     "version": "0.2.0"
@@ -266,6 +266,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-analyst-read allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-ci",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -284,6 +287,9 @@
         "lambda:InvokeFunction"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::777700002222:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
       "narration": "Pass a privileged role to a new function, then invoke it.",
       "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist."
@@ -300,6 +306,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-build",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -316,6 +325,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-data",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -333,6 +345,9 @@
         "glue:CreateDevEndpoint"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-data-policy allows iam:PassRole on arn:aws:iam::777700002222:role/fin-etl; fin-data-policy allows glue:CreateDevEndpoint on *",
       "narration": "Create a development endpoint that runs with the passed role.",
       "fix": "Block glue:CreateDevEndpoint, or pin iam:PassRole to a known role."
@@ -349,6 +364,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-release",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -365,6 +383,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-etl-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-reporting",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -381,6 +402,9 @@
         "iam:AttachUserPolicy"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-ops-policy allows iam:AttachUserPolicy on arn:aws:iam::777700002222:user/fin-ops",
       "narration": "Attach AdministratorAccess to your own user and inherit it.",
       "fix": "No human or machine identity should hold iam:AttachUserPolicy on its own ARN."
@@ -397,6 +421,9 @@
         "iam:CreatePolicyVersion"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700002222:policy/fin-pipeline-policy",
       "narration": "Publish a new policy version that grants more than the current one.",
       "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant."
@@ -413,6 +440,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-release-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-pipeline",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -430,6 +460,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::777700002222:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-pipeline",
       "narration": "Add yourself to a role's trust policy, then assume it.",
       "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads."
@@ -446,6 +479,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-support-policy allows iam:CreateAccessKey on arn:aws:iam::777700002222:user/fin-analyst",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -462,6 +498,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-support-policy allows iam:CreateAccessKey on arn:aws:iam::777700002222:user/fin-auditor",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -478,6 +517,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-support-policy allows iam:CreateAccessKey on arn:aws:iam::777700002222:user/fin-ops",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -494,6 +536,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-support-policy allows iam:CreateAccessKey on arn:aws:iam::777700002222:user/fin-vendor",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -510,6 +555,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "fin-vendor-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-data",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -556,7 +604,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-analyst-read allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-ci",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e2",
@@ -568,7 +619,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-build",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e1",
@@ -582,7 +636,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::777700002222:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e5",
@@ -594,7 +651,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-release",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e10",
@@ -607,7 +667,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::777700002222:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -619,7 +682,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700002222:policy/fin-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -662,7 +728,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-analyst-read allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-ci",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e2",
@@ -674,7 +743,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-build",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e1",
@@ -688,7 +760,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::777700002222:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e5",
@@ -700,7 +775,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-release",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e9",
@@ -712,7 +790,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-release-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -724,7 +805,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700002222:policy/fin-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -766,7 +850,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-build",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e1",
@@ -780,7 +867,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::777700002222:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e5",
@@ -792,7 +882,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-release",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e10",
@@ -805,7 +898,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::777700002222:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -817,7 +913,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700002222:policy/fin-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -857,7 +956,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-build",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e1",
@@ -871,7 +973,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::777700002222:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e5",
@@ -883,7 +988,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-release",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e9",
@@ -895,7 +1003,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-release-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -907,7 +1018,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700002222:policy/fin-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -948,7 +1062,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::777700002222:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e5",
@@ -960,7 +1077,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-release",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e10",
@@ -973,7 +1093,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::777700002222:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -985,7 +1108,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700002222:policy/fin-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -1024,7 +1150,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::777700002222:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e5",
@@ -1036,7 +1165,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-release",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e9",
@@ -1048,7 +1180,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-release-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -1060,7 +1195,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700002222:policy/fin-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -1096,7 +1234,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-release",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e10",
@@ -1109,7 +1250,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::777700002222:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -1121,7 +1265,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700002222:policy/fin-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -1155,7 +1302,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-release",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e9",
@@ -1167,7 +1317,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-release-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -1179,7 +1332,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700002222:policy/fin-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -1213,7 +1369,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::777700002222:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -1225,7 +1384,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700002222:policy/fin-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -1256,7 +1418,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "fin-release-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e8",
@@ -1268,7 +1433,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700002222:policy/fin-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -1298,7 +1466,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700002222:policy/fin-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -1331,7 +1502,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "fin-support-policy allows iam:CreateAccessKey on arn:aws:iam::777700002222:user/fin-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e7",
@@ -1343,7 +1517,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-ops-policy allows iam:AttachUserPolicy on arn:aws:iam::777700002222:user/fin-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -1373,7 +1550,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "fin-ops-policy allows iam:AttachUserPolicy on arn:aws:iam::777700002222:user/fin-ops",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -1449,7 +1629,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "fin-analyst-read allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-ci",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e2",
@@ -1461,7 +1644,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "fin-ci-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-build",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e1",
@@ -1475,7 +1661,10 @@
         ],
         "mitre": "T1098.001",
         "evidence": "fin-build-policy allows iam:PassRole on arn:aws:iam::777700002222:role/fin-deploy; fin-build-policy allows lambda:CreateFunction on *",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e5",
@@ -1487,7 +1676,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "fin-deploy-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-release",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e10",
@@ -1500,7 +1692,10 @@
         ],
         "mitre": "T1098.003",
         "evidence": "fin-release-policy allows iam:UpdateAssumeRolePolicy on arn:aws:iam::777700002222:role/fin-pipeline; fin-release-policy allows sts:AssumeRole on arn:aws:iam::777700002222:role/fin-pipeline",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e8",
@@ -1512,7 +1707,10 @@
         ],
         "mitre": "T1098.003",
         "evidence": "fin-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::777700002222:policy/fin-pipeline-policy",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       }
     ]
   },

@@ -38,20 +38,21 @@ body at the page edge and the interactive WebGL instrument in the figure panel.
 
 | View | Accent | Page body | Figure body |
 | --- | --- | --- | --- |
-| Overview | Cyan `#7ce7ff` | Graphite planet | Graphite planet + 7 bodies |
+| Overview | Cyan `#7ce7ff` | Comet | Graphite planet + 7 bodies |
 | Survey | Mint `#9ff0c8` | Ringed planet | Ringed planet + 16 contacts |
 | Path map | Amber `#ffb26b` | Star | Solar system; cut becomes a black hole |
-| Atlas | Violet `#a78bfa` | Cluster | Star + 16 account bodies |
+| Atlas | Violet `#a78bfa` | Galaxy | Star + 16 account bodies |
 | Drift | Rose `#ff9ecb` | Binary | Two planets + edge stream |
-| Commands | Mint `#9ff0c8` | Gas giant | Dark core + data ring |
-| Extensions | Violet `#a78bfa` | Moon | Ringed planet + 18 moons |
+| Commands | Mint `#9ff0c8` | Pulsar | Dark core + beam + data ring |
+| Extensions | Violet `#a78bfa` | Nebula | Ringed planet + 18 moons |
 | Blueprint | Amber `#ffb26b` | Black hole | Orbital planes + event horizon |
 
-The **black hole** is the only state that replaces the star. The horizon is a
-black sphere that occludes the disk behind it, wrapped in a white photon ring, an
-accent secondary ring and an eight-band accretion disk. On Path map it
-crossfades in when the cut is applied; on Blueprint it is a static closing
-plate. The wireframe alternative remains a hollow sphere with three rings, so
+The **singularity** is the state that replaces the star. The horizon is a black
+sphere that occludes the disk behind it, wrapped in a white photon ring, an
+accent secondary ring and a shader-lit Doppler accretion disk with a lensing
+arc. On Path map it crossfades in when the cut is applied; on Blueprint it is
+the closing plate. The black hole is the right metaphor: nothing escapes a
+closed route. The wireframe alternative remains a hollow sphere with rings, so
 the toggle never dead-ends.
 
 ## Colour
@@ -76,12 +77,12 @@ is now one body colour among several; it never owns the whole surface.
 
 ## Type
 
-- **Instrument Serif** - display, view titles and italic accent phrases. Weight
-  400 only; the size and the contrast do the work.
+- **Syne** - display, view titles and accent words. Weight 700-800; the size,
+  weight and tight tracking do the work.
 - **Space Grotesk** - reading copy, controls, panel titles.
 - **IBM Plex Mono** - HUD labels, figures, commands, ledgers, every number.
 
-Scale: 17.5px body, 18px lede, 54-88px view titles, 128-238px wordmark,
+Scale: 17.5px body, 18px lede, 48-80px view titles, 92-154px wordmark,
 13.5-16px data, 12.5-13.5px labels. The HUD floor is 12.5px; no body copy sits
 below 17px.
 
@@ -100,9 +101,9 @@ below 17px.
 ## Mark
 
 The mark is a sharp 2px tile: a bone HUD frame, a coordinate grid, two inclined
-orbits in amber and cyan, a bone serif A with an amber crossbar, and a warm
-planet sitting at the apsis of the outer orbit. The same silhouette is used for
-`favicon.svg`, the 512px and Apple touch PNGs, the 34px rail mark and the OG
+orbits in amber and cyan, a bone Syne A whose counter holds a black hole with an
+accretion crossbar, and a warm sun at the outer orbit. The same silhouette is used
+for `favicon.svg`, the 512px and Apple touch PNGs, the 34px rail mark and the OG
 card, so the tab, the home screen and the console header read as one system.
 
 ## Motion

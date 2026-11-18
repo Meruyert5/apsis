@@ -1,27 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Apsis">
   <defs>
-    <radialGradient id="tile" cx="38%" cy="24%" r="88%">
-      <stop offset="0" stop-color="#1b1c1f" />
-      <stop offset="0.55" stop-color="#0b0c0e" />
+    <radialGradient id="tile" cx="36%" cy="22%" r="90%">
+      <stop offset="0" stop-color="#1c1d20" />
+      <stop offset="0.5" stop-color="#0b0c0e" />
       <stop offset="1" stop-color="#050607" />
     </radialGradient>
     <linearGradient id="bone" x1="0" y1="0" x2="0.7" y2="1">
       <stop offset="0" stop-color="#fffaf0" />
-      <stop offset="0.5" stop-color="#f4efe3" />
-      <stop offset="1" stop-color="#cfc7b6" />
+      <stop offset="0.48" stop-color="#f4efe3" />
+      <stop offset="1" stop-color="#c9c1b0" />
     </linearGradient>
     <linearGradient id="orbit" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#ffb26b" />
-      <stop offset="0.55" stop-color="#e8a06a" />
+      <stop offset="0.5" stop-color="#ffc98f" />
       <stop offset="1" stop-color="#7ce7ff" />
     </linearGradient>
-    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
-      <stop offset="0" stop-color="#ffd9a8" stop-opacity=".85" />
-      <stop offset="0.42" stop-color="#ffb26b" stop-opacity=".32" />
+    <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fffdf4" />
+      <stop offset="0.35" stop-color="#ffd9a8" />
+      <stop offset="0.7" stop-color="#ffb26b" stop-opacity=".45" />
       <stop offset="1" stop-color="#ffb26b" stop-opacity="0" />
     </radialGradient>
-    <filter id="soft" x="-70%" y="-70%" width="240%" height="240%">
-      <feGaussianBlur stdDeviation="1.1" result="b" />
+    <filter id="soft" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="1" result="b" />
       <feMerge>
         <feMergeNode in="b" />
         <feMergeNode in="SourceGraphic" />
@@ -30,38 +31,43 @@
   </defs>
 
   <rect width="64" height="64" rx="2" fill="url(#tile)" />
-  <rect x="0.7" y="0.7" width="62.6" height="62.6" rx="1.4" fill="none" stroke="#f4efe3" stroke-opacity=".24" />
+  <rect x="0.7" y="0.7" width="62.6" height="62.6" rx="1.4" fill="none" stroke="#f4efe3" stroke-opacity=".22" />
 
-  <g stroke="#f4efe3" stroke-opacity=".08" stroke-width=".5">
+  <g stroke="#f4efe3" stroke-opacity=".07" stroke-width=".5">
     <path d="M16 2v60M32 2v60M48 2v60M2 16h60M2 32h60M2 48h60" />
   </g>
 
-  <g fill="none" stroke="#f4efe3" stroke-opacity=".42" stroke-width=".9" stroke-linecap="square">
+  <g fill="none" stroke="#f4efe3" stroke-opacity=".4" stroke-width=".9" stroke-linecap="square">
     <path d="M5 11V5h6" />
     <path d="M53 5h6v6" />
     <path d="M59 53v6h-6" />
     <path d="M11 59H5v-6" />
   </g>
 
-  <ellipse cx="32" cy="34" rx="26.5" ry="10" transform="rotate(-18 32 34)" fill="none" stroke="#ffb26b" stroke-opacity=".18" stroke-width="3.2" />
-  <ellipse cx="32" cy="34" rx="26.5" ry="10" transform="rotate(-18 32 34)" fill="none" stroke="url(#orbit)" stroke-opacity=".9" stroke-width="1.25" />
-  <ellipse cx="32" cy="32.5" rx="21" ry="7" transform="rotate(30 32 32.5)" fill="none" stroke="#f4efe3" stroke-opacity=".24" stroke-width=".7" />
+  <ellipse cx="32" cy="35" rx="27" ry="10" transform="rotate(-18 32 35)" fill="none" stroke="#ffb26b" stroke-opacity=".16" stroke-width="3.2" />
+  <ellipse cx="32" cy="35" rx="27" ry="10" transform="rotate(-18 32 35)" fill="none" stroke="url(#orbit)" stroke-opacity=".85" stroke-width="1.2" />
+  <ellipse cx="32" cy="32" rx="20.5" ry="6.6" transform="rotate(30 32 32)" fill="none" stroke="#f4efe3" stroke-opacity=".2" stroke-width=".65" />
+
+  <g transform="rotate(-18 32 33)">
+    <ellipse cx="32" cy="33" rx="14.5" ry="4.8" fill="none" stroke="#ffb26b" stroke-opacity=".55" stroke-width="1.5" />
+    <ellipse cx="32" cy="33" rx="9.5" ry="3.1" fill="none" stroke="#fffaf0" stroke-opacity=".75" stroke-width=".55" />
+  </g>
+  <circle cx="32" cy="33" r="6" fill="#040506" stroke="#f4efe3" stroke-opacity=".55" stroke-width=".7" />
+  <path d="M26.4 30.6 A6 6 0 0 1 37.6 30.6" fill="none" stroke="#fffaf0" stroke-opacity=".8" stroke-width=".8" />
+  <path d="M26.6 35.7 A6 6 0 0 0 37.4 35.7" fill="none" stroke="#7ce7ff" stroke-opacity=".55" stroke-width=".6" />
 
   <g stroke-linecap="square" stroke-linejoin="miter">
-    <path d="M19.4 47.6 L32 14.8 L44.6 47.6" fill="none" stroke="#ffb26b" stroke-opacity=".4" stroke-width="4.4" transform="translate(1.1 1)" />
-    <path d="M18.6 47.2 L32 14.2 L45.4 47.2" fill="none" stroke="url(#bone)" stroke-width="4.2" filter="url(#soft)" />
-    <path d="M24.4 36.2 H39.6" fill="none" stroke="#ffb26b" stroke-width="2.3" />
+    <path d="M19.2 47.8 L32 12.6 L44.8 47.8" fill="none" stroke="#ffb26b" stroke-opacity=".32" stroke-width="4.5" transform="translate(1 1)" />
+    <path d="M18.4 47.4 L32 12 L45.6 47.4" fill="none" stroke="url(#bone)" stroke-width="4.3" filter="url(#soft)" />
   </g>
 
-  <circle cx="52.4" cy="20.2" r="5.6" fill="url(#halo)" />
-  <circle cx="52.4" cy="20.2" r="2.4" fill="#fffaf0" />
-  <circle cx="52.4" cy="20.2" r="4" fill="none" stroke="#ffd9a8" stroke-opacity=".5" stroke-width=".6" />
-
-  <circle cx="11.8" cy="45.6" r="1.4" fill="#7ce7ff" />
-  <circle cx="11.8" cy="45.6" r="2.9" fill="none" stroke="#7ce7ff" stroke-opacity=".35" stroke-width=".5" />
+  <circle cx="52.6" cy="18.6" r="6.2" fill="url(#sun)" />
+  <circle cx="52.6" cy="18.6" r="2.1" fill="#fffaf0" />
+  <circle cx="11.4" cy="45.2" r="1.6" fill="#7ce7ff" />
+  <circle cx="11.4" cy="45.2" r="3.1" fill="none" stroke="#7ce7ff" stroke-opacity=".35" stroke-width=".5" />
 
   <g stroke="#f4efe3" stroke-opacity=".5" stroke-width=".7" stroke-linecap="square">
-    <path d="M40.2 8.8v2.2M39.1 9.9h2.2" />
-    <path d="M23.4 53.4v1.8M22.5 54.3h1.8" />
+    <path d="M40.4 8.4v2.2M39.3 9.5h2.2" />
+    <path d="M22.8 53.6v1.8M21.9 54.5h1.8" />
   </g>
 </svg>

@@ -330,7 +330,7 @@ thumbnail and caption rather than claiming the gallery was read.
 | Attention | A single enormous serif line or a single body | The wordmark and the view title are the loud object; the body sits behind the content, cropped |
 | Structure | Six-column editorial grid, generous empty rows | Keep the rail and panels, but widen the content, put actions under the lede, give the graph a full workbench |
 | Grid | Hairline rules, numbered sections, small caps | Keep the 64px HUD grid and 1px rules; use numbered eyebrows for every view |
-| Typography | Italic high-contrast serif + mono captions | Instrument Serif for display, Space Grotesk for reading, IBM Plex Mono for telemetry |
+| Typography | Italic high-contrast serif + mono captions | Syne 700-800 for display, Space Grotesk for reading, IBM Plex Mono for telemetry |
 | Color | Warm black and bone; almost no chroma | Warm-black field, bone ink, one accent per view; amber is the warm signal, cyan/violet/mint/rose rotate by view |
 | Texture | Grain, dot fields, soft image blur | Fine SVG grain, star dust, scanlines, a soft body glow; no texture on body copy |
 | Surface | Flat print and photographic plates | Flat panels with a single glass topbar; the figure keeps the lit instrument surface |
@@ -351,11 +351,11 @@ Three moves that prove it:
 1. **Bone on warm black, one accent per view.** Overview cyan, Survey mint, Path
    amber, Atlas violet, Drift rose, Commands mint, Extensions violet, Blueprint
    amber. Blue is no longer the field; it is one body colour among several.
-2. **Editorial type with a technical counterpoint.** Instrument Serif for the
-   wordmark, view titles and italic accents; Space Grotesk for reading and UI;
+2. **Editorial type with a technical counterpoint.** Syne 700-800 for the
+   wordmark, view titles and accent words; Space Grotesk for reading and UI;
    IBM Plex Mono for every number, label and route.
 3. **Bodies leave the panel.** A fixed Canvas2D body sits at the page edge -
-   planet, ringed planet, star, cluster, binary, gas giant, moon, black hole -
+   comet, ringed planet, star, galaxy, pulsar, nebula, binary or black hole -
    and the figure panel carries the interactive version of the same language.
 
 ### Do not

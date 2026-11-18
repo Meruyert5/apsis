@@ -129,6 +129,37 @@ function sprite(map: THREE.Texture, color: number, opacity: number, scale: numbe
   return item;
 }
 
+function numberSprite(value: number, accent: number) {
+  const size = 96;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (ctx) {
+    ctx.fillStyle = "rgba(8, 9, 11, .78)";
+    ctx.beginPath();
+    ctx.arc(48, 48, 34, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#" + accent.toString(16).padStart(6, "0");
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(48, 48, 34, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = "#f4efe3";
+    ctx.font = '500 38px "IBM Plex Mono", monospace';
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(String(value), 48, 50);
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  const item = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: texture, transparent: true, depthWrite: false,
+  }));
+  item.scale.set(0.42, 0.42, 1);
+  return item;
+}
+
 function hitSphere(radius: number, index: number) {
   const mesh = new THREE.Mesh(
     new THREE.SphereGeometry(radius, 8, 6),
@@ -1434,6 +1465,7 @@ interface OrrerySpec {
   stack?: boolean;
   sweep?: boolean;
   beam?: boolean;
+  pulsar?: boolean;
 }
 
 const ORRERY: Record<Exclude<FigureVariant, "drift" | "horizon">, OrrerySpec> = {
@@ -1451,7 +1483,7 @@ const ORRERY: Record<Exclude<FigureVariant, "drift" | "horizon">, OrrerySpec> = 
     tilt: 0.3,
   },
   atlas: { core: 0.34, body: 0.13, rings: [1.2, 1.8, 2.4], bodies: 16, star: true, links: true, dust: 80, tilt: 0.34 },
-  prism: { core: 1.28, body: 0.075, rings: [1.95, 2.45], bodies: 10, beam: true, dust: 40, tilt: 0.16 },
+  prism: { core: 0.5, body: 0.075, rings: [1.95, 2.45], bodies: 10, pulsar: true, dust: 40, tilt: 0.16 },
   bloom: {
     core: 1.15,
     body: 0.075,
@@ -1604,11 +1636,54 @@ function holeBody(radius: number, glow: THREE.Texture, accent: number) {
 
   const diskMats: THREE.MeshBasicMaterial[] = [];
   const disk = new THREE.Group();
-  for (let i = 0; i < 8; i += 1) {
-    const inner = radius * (1.28 + i * 0.2);
-    const outer = inner + radius * 0.15;
-    const color = i % 3 === 0 ? BONE : i % 3 === 1 ? accent : AMBER;
-    const mat = basic(color, 0.32 - i * 0.028);
+  const diskShader = new THREE.ShaderMaterial({
+    uniforms: {
+      uAccent: { value: new THREE.Color(accent) },
+      uTime: { value: 0 },
+    },
+    vertexShader: `
+      varying vec2 vPos;
+      void main() {
+        vPos = position.xy;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform vec3 uAccent;
+      uniform float uTime;
+      varying vec2 vPos;
+      void main() {
+        float r = length(vPos);
+        float inner = 0.86;
+        float outer = 2.55;
+        float t = clamp((r - inner) / (outer - inner), 0.0, 1.0);
+        float angle = atan(vPos.y, vPos.x);
+        float bands = 0.5 + 0.5 * sin(angle * 11.0 + r * 17.0 - uTime * 2.4);
+        float fine = 0.5 + 0.5 * sin(angle * 29.0 - r * 31.0 + uTime * 1.3);
+        float hot = smoothstep(0.42, 1.0, bands) * (1.0 - t * 0.55);
+        float doppler = 0.55 + 0.55 * cos(angle + 0.7);
+        vec3 warm = vec3(1.0, 0.86, 0.68);
+        vec3 col = mix(uAccent, warm, hot * 0.8);
+        float edge = smoothstep(0.0, 0.12, t) * (1.0 - smoothstep(0.68, 1.0, t));
+        float alpha = edge * (0.28 + bands * 0.34 + fine * 0.08) * doppler;
+        gl_FragColor = vec4(col * (0.8 + hot * 1.7), alpha);
+      }
+    `,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  });
+  const diskPlane = new THREE.Mesh(new THREE.RingGeometry(radius * 1.22, radius * 3.2, 180, 40), diskShader);
+  diskPlane.rotation.x = -Math.PI / 2;
+  diskPlane.renderOrder = 2;
+  disk.add(diskPlane);
+
+  for (let i = 0; i < 4; i += 1) {
+    const inner = radius * (1.3 + i * 0.34);
+    const outer = inner + radius * 0.08;
+    const color = i % 2 === 0 ? BONE : accent;
+    const mat = basic(color, 0.28 - i * 0.045);
     const ring = new THREE.Mesh(new THREE.RingGeometry(inner, outer, 160), mat);
     ring.rotation.x = -Math.PI / 2;
     disk.add(ring);
@@ -1619,7 +1694,7 @@ function holeBody(radius: number, glow: THREE.Texture, accent: number) {
 
   const halo = sprite(glow, BONE, 0.55, radius * 9);
   group.add(halo, disk, horizon, photon, photonCyan, lens);
-  return { group, disk, diskMats, halo, horizon, photon, photonCyan, lens };
+  return { group, disk, diskMats, diskShader, halo, horizon, photon, photonCyan, lens };
 }
 
 function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow: THREE.Texture, accent: number): Built {
@@ -1647,13 +1722,51 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
       mesh.rotation.x = -Math.PI / 2;
       system.add(mesh);
     }
+    for (let i = 0; i < 7; i += 1) {
+      if (i === 3) continue;
+      const radius = spec.core * (1.62 + i * 0.13);
+      const mesh = new THREE.Mesh(
+        new THREE.RingGeometry(radius, radius + 0.007, 160),
+        basic(i % 2 ? accent : BONE, 0.18 - i * 0.018),
+      );
+      mesh.rotation.x = -Math.PI / 2;
+      system.add(mesh);
+    }
   }
 
   let coreMesh: THREE.Mesh | null = null;
   let sun: ReturnType<typeof sunBody> | null = null;
   let hole: ReturnType<typeof holeBody> | null = null;
+  let pulsar: THREE.Group | null = null;
 
-  if (spec.star) {
+  if (spec.pulsar) {
+    pulsar = new THREE.Group();
+    const core = new THREE.Mesh(
+      new THREE.SphereGeometry(spec.core, 48, 32),
+      basic(0xfffdf6, 1),
+    );
+    const halo = sprite(glow, accent, 0.85, spec.core * 7.5);
+    pulsar.add(core, halo);
+    for (const dir of [-1, 1]) {
+      const beam = new THREE.Mesh(
+        new THREE.ConeGeometry(spec.core * 0.72, 6.4, 24, 1, true),
+        basic(dir > 0 ? BONE : accent, 0.18),
+      );
+      beam.position.y = dir * 3.2;
+      beam.rotation.z = dir > 0 ? Math.PI : 0;
+      pulsar.add(beam);
+    }
+    for (let i = 0; i < 2; i += 1) {
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(spec.core * (1.6 + i * 0.55), 0.008, 5, 96),
+        basic(i === 0 ? accent : BONE, 0.3),
+      );
+      ring.rotation.x = 1.1 + i * 0.28;
+      ring.rotation.z = 0.4 - i * 0.2;
+      pulsar.add(ring);
+    }
+    system.add(pulsar);
+  } else if (spec.star) {
     sun = sunBody(spec.core, glow);
     system.add(sun.group);
   } else {
@@ -1710,19 +1823,35 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
     bodies.push({ mesh, mat, halo, base: spec.body });
   }
 
-  if (spec.links) {
-    for (let i = 0; i < positions.length - 1; i += 1) {
-      system.add(curveLink(
-        positions[i],
-        positions[i + 1],
-        0.4,
-        variant === "ascent" ? accent : VIOLET,
-        variant === "ascent" ? 0.4 : 0.24,
-      ));
-    }
+  const numbers: THREE.Sprite[] = [];
+  if (variant === "ascent") {
+    positions.forEach((pos, index) => {
+      const badge = numberSprite(index + 1, accent);
+      badge.position.copy(pos).add(new THREE.Vector3(0, 0.34, 0));
+      system.add(badge);
+      numbers.push(badge);
+    });
   }
 
   let sweep: THREE.Mesh | null = null;
+  let routeCurve: THREE.CatmullRomCurve3 | null = null;
+  let routePulse: THREE.Sprite | null = null;
+  if (spec.links) {
+    if (variant === "ascent" && positions.length > 2) {
+      routeCurve = new THREE.CatmullRomCurve3(positions);
+      const tube = new THREE.Mesh(
+        new THREE.TubeGeometry(routeCurve, 160, 0.022, 6, false),
+        basic(accent, 0.8),
+      );
+      system.add(tube);
+      routePulse = sprite(glow, BONE, 0.9, 0.4);
+      system.add(routePulse);
+    } else {
+      for (let i = 0; i < positions.length - 1; i += 1) {
+        system.add(curveLink(positions[i], positions[i + 1], 0.4, VIOLET, 0.24));
+      }
+    }
+  }
   if (spec.sweep) {
     sweep = new THREE.Mesh(
       new THREE.RingGeometry(spec.rings[0] * 0.88, spec.rings[0], 64, 1, 0, Math.PI / 3),
@@ -1774,6 +1903,14 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
         sun.halo.scale.setScalar(spec.core * (7.2 + Math.sin(time * 1.2) * 0.3));
         sun.inner.scale.setScalar(spec.core * (3.2 + Math.sin(time * 1.8) * 0.14));
       }
+      if (pulsar) {
+        pulsar.rotation.y = time * 0.65;
+        pulsar.children.forEach((child, index) => {
+          if (index < 2) return;
+          const mat = (child as THREE.Mesh).material as THREE.MeshBasicMaterial;
+          mat.opacity = 0.12 + Math.abs(Math.sin(time * 0.9 + index)) * 0.16;
+        });
+      }
       bodies.forEach((body, index) => {
         const active = index === state.active;
         const focus = index === state.focus;
@@ -1795,7 +1932,17 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
           mat.opacity = active ? 0.95 : 0.6;
         }
       });
+      numbers.forEach((badge, index) => {
+        badge.scale.setScalar(index === state.active ? 0.5 : 0.38);
+        (badge.material as THREE.SpriteMaterial).opacity = 0.95;
+      });
       if (sweep) sweep.rotation.z = -time * 0.5;
+      if (routeCurve && routePulse) {
+        const pulse = routeCurve.getPointAt((time * 0.055) % 1);
+        routePulse.position.copy(pulse);
+        (routePulse.material as THREE.SpriteMaterial).opacity = 0.55 + Math.sin(time * 2.4) * 0.2;
+        routePulse.scale.setScalar(0.34 + Math.sin(time * 3) * 0.04);
+      }
       if (beam) {
         (beam.material as THREE.MeshBasicMaterial).opacity = 0.18 + Math.sin(time * 1.3) * 0.08;
       }
@@ -1804,8 +1951,9 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
         hole.group.visible = cutAmount > 0.02;
         hole.group.scale.setScalar(0.55 + cutAmount * 0.45);
         hole.disk.rotation.y = time * 0.6;
+        hole.diskShader.uniforms.uTime.value = time;
         hole.diskMats.forEach((mat, index) => {
-          mat.opacity = (0.22 - index * 0.025) * cutAmount;
+          mat.opacity = (0.28 - index * 0.045) * cutAmount;
         });
         (hole.photon.material as THREE.MeshBasicMaterial).opacity = 0.95 * cutAmount;
         (hole.photonCyan.material as THREE.MeshBasicMaterial).opacity = 0.6 * cutAmount;
@@ -1817,6 +1965,9 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
         }
         bodies.forEach((body) => {
           body.mat.emissiveIntensity *= 1 - cutAmount * 0.55;
+        });
+        numbers.forEach((badge) => {
+          (badge.material as THREE.SpriteMaterial).opacity = 0.9 * (1 - cutAmount * 0.75);
         });
       }
     },
@@ -1892,8 +2043,9 @@ function buildHorizon(glow: THREE.Texture, mode: FigureMode, accent: number): Bu
     root,
     update: (time) => {
       hole.disk.rotation.y = time * 0.7;
+      hole.diskShader.uniforms.uTime.value = time;
       hole.diskMats.forEach((mat, index) => {
-        mat.opacity = (0.24 - index * 0.026) * (0.9 + Math.sin(time * 0.8 + index) * 0.1);
+        mat.opacity = (0.28 - index * 0.045) * (0.9 + Math.sin(time * 0.8 + index) * 0.1);
       });
       (hole.halo.material as THREE.SpriteMaterial).opacity = 0.4 + Math.sin(time * 0.9) * 0.05;
       (hole.photonCyan.material as THREE.MeshBasicMaterial).opacity = 0.5 + Math.sin(time * 1.2) * 0.12;
@@ -2427,7 +2579,7 @@ export function Figure3D({
     }
 
     renderer.setClearColor(0x08090b, 1);
-    renderer.setPixelRatio(Math.min(1.7, window.devicePixelRatio || 1));
+    renderer.setPixelRatio(Math.min(1.5, window.devicePixelRatio || 1));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     const scene = new THREE.Scene();
@@ -2439,7 +2591,7 @@ export function Figure3D({
     camera.lookAt(...preset.look);
 
     const composer = new EffectComposer(renderer);
-    composer.setPixelRatio(Math.min(1.35, window.devicePixelRatio || 1));
+    composer.setPixelRatio(Math.min(1.2, window.devicePixelRatio || 1));
     composer.addPass(new RenderPass(scene, camera));
     const bloom = new UnrealBloomPass(
       new THREE.Vector2(1, 1),
@@ -2666,6 +2818,7 @@ export function Figure3D({
     </div>
   );
 }
+
 
 
 

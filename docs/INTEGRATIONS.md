@@ -88,3 +88,11 @@ CloudTrail export; the schema, the case and the handoff stay fixed.
 Penumbra received the handoff in its own commit `5903b79` (local, pending
 push), with the same payloads and a roadmap entry that marks the case, the
 guardrail contract and the alert/evidence delivery as done.
+
+Penumbra's cloud pack reports **CLOUD-003 as no match** in this case. That is a
+coverage status, not a missing Apsis field: the pack has three rules, two of
+which fire on the case window, and CLOUD-003 (CloudTrail tampering via
+`StopLogging`, `DeleteTrail` or `UpdateTrail`) is `not_exercised` because the
+window contains no such event. The alert and evidence contracts are complete.
+To exercise CLOUD-003, add a trail-tampering event to a Penumbra test window; it
+does not require a change to the handoff.

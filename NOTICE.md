@@ -17,7 +17,7 @@ console repository and publish the built site from there; see
 
 ## Fonts
 
-- **Instrument Serif** — SIL Open Font License 1.1.
+- **Syne** — SIL Open Font License 1.1.
 - **Space Grotesk** — SIL Open Font License 1.1.
 - **IBM Plex Mono** — SIL Open Font License 1.1.
 

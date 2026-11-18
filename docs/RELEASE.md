@@ -33,9 +33,10 @@ npm run preview -- --port 4180 --strictPort
 $env:BASE_URL='http://localhost:4180/'; npm run audit
 ```
 
-Expected: build pass, 5/5 logic tests, 89/89 Python tests, contracts valid, no
-contrast, heading, control-name, target-size or overflow findings across all
-eight views at 1440 and 390.
+Expected: build pass, 5/5 logic tests, 89/89 Python tests, contracts valid, the
+ship budget within its JS/CSS/font limits, and no contrast, heading,
+control-name, target-size or overflow findings across all eight views at 1440
+and 390.
 
 ## Repository metadata
 
@@ -99,7 +100,7 @@ The six screenshots in `docs/img/` are committed because the README uses them.
   all load directly.
 - Command palette (`Cmd/Ctrl+K`), motion toggle and fullscreen work.
 - `Planets` / `Wire` changes the instrument on every figure; **Apply cut** on
-  Path map shows the black hole; Blueprint shows the event horizon.
+  Path map shows the black hole; Blueprint shows the black-hole event horizon.
 - Reduced motion stops CSS animation and the 3D clock.
 - The Penumbra handoff is present at `detection-lab/integrations/apsis/` in the
   Penumbra repository.

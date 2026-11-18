@@ -431,15 +431,15 @@ export const roadmap = {
     "Eight-view dashboard, CloudTrail overlay, live IAM import",
     "Condition and resource-policy evaluation, drift, CSV ledger",
     "Penumbra handoff, CI accessibility + Lighthouse, Pages workflow",
+    "Bundle/font budget and a text-overflow gate in CI",
   ],
   next: [
-    "Benchmark against PMapper",
-    "Expand condition coverage and real-account import coverage",
-    "A performance budget for the 3D instruments",
+    "PMapper comparison on the shipped fleet (external tool)",
+    "Condition context from a real-account request (needs a live export)",
   ],
   later: [
+    "Wider service coverage for imported accounts",
     "Network threat-hunting lab",
-    "More primitives with fixture coverage",
   ],
 };
 

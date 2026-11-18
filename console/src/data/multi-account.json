@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T18:48:43+00:00",
+  "generated": "2026-11-18T20:01:29+00:00",
   "engine": {
     "name": "apsis",
     "version": "0.2.0"
@@ -222,6 +222,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "vendor-audit allows iam:CreateAccessKey on arn:aws:iam::666677778888:user/break-glass",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -239,6 +242,9 @@
         "lambda:InvokeFunction"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "deploy-policy allows lambda:UpdateFunctionCode on arn:aws:lambda:eu-central-1:666677778888:function:worker; deploy-policy allows lambda:InvokeFunction on arn:aws:lambda:eu-central-1:666677778888:function:worker",
       "narration": "Replace the handler of an existing function that already holds a strong role.",
       "fix": "Separate UpdateFunctionCode permission from InvokeFunction on production functions."
@@ -255,6 +261,9 @@
         "iam:AddUserToGroup"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "platform-self-service allows iam:AddUserToGroup on arn:aws:iam::666677778888:group/ops",
       "narration": "Add yourself to a group that carries wider policies.",
       "fix": "Group membership changes are privilege changes; route them through review."
@@ -273,6 +282,9 @@
         "lambda:InvokeFunction"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "Ops group/ops-group allows iam:PassRole on arn:aws:iam::666677778888:role/deploy-role; Ops group/ops-group allows lambda:CreateFunction on *",
       "narration": "Pass a privileged role to a new function, then invoke it.",
       "fix": "Restrict iam:PassRole with iam:PassedToService and an explicit role allowlist."
@@ -289,6 +301,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "terraform-platform allows sts:AssumeRole on arn:aws:iam::666677778888:role/org-admin",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -306,6 +321,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "terraform-platform allows iam:UpdateAssumeRolePolicy on arn:aws:iam::666677778888:role/org-admin; terraform-platform allows sts:AssumeRole on arn:aws:iam::666677778888:role/org-admin",
       "narration": "Add yourself to a role's trust policy, then assume it.",
       "fix": "iam:UpdateAssumeRolePolicy belongs only to the identity plane, never to workloads."
@@ -322,6 +340,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "vendor-audit-assume allows sts:AssumeRole on arn:aws:iam::666677778888:role/audit-role",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -353,7 +374,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "terraform-platform allows sts:AssumeRole on arn:aws:iam::666677778888:role/org-admin",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       },
@@ -382,7 +406,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "terraform-platform allows iam:UpdateAssumeRolePolicy on arn:aws:iam::666677778888:role/org-admin; terraform-platform allows sts:AssumeRole on arn:aws:iam::666677778888:role/org-admin",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -415,7 +442,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "vendor-audit-assume allows sts:AssumeRole on arn:aws:iam::666677778888:role/audit-role",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e0",
@@ -427,7 +457,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "vendor-audit allows iam:CreateAccessKey on arn:aws:iam::666677778888:user/break-glass",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -457,7 +490,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "vendor-audit allows iam:CreateAccessKey on arn:aws:iam::666677778888:user/break-glass",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -524,7 +560,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "vendor-audit-assume allows sts:AssumeRole on arn:aws:iam::666677778888:role/audit-role",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e0",
@@ -536,7 +575,10 @@
         ],
         "mitre": "T1098.001",
         "evidence": "vendor-audit allows iam:CreateAccessKey on arn:aws:iam::666677778888:user/break-glass",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       }
     ]
   },

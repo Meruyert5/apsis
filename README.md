@@ -182,6 +182,7 @@ cd console
 npm run build
 npm run test:logic  # graph, depth and route-placement tests
 npm run audit       # contrast, headings, names, target size
+npm run budget      # JS/CSS/font size ceilings
 ```
 
 `audit` drives a local Chrome over the DevTools protocol; set
@@ -192,9 +193,9 @@ npm run audit       # contrast, headings, names, target size
 `/` is the dashboard: eight views over the same static export, each with a
 glossy planet scene and a wireframe instrument. One Vite entry, one shell, no
 legacy console. Every figure carries a `Planets` / `Wire` switch. The register is
-an observatory ledger: warm black and bone, Instrument Serif display, Space
-Grotesk reading, IBM Plex Mono telemetry, one accent per view and a cropped
-celestial body at the page edge.
+an observatory ledger: warm black and bone, Syne display, Space Grotesk reading,
+IBM Plex Mono telemetry, one accent per view and a cropped celestial body at the
+page edge.
 
 - **Overview** - orrery; fleet figures, module map, fleet pulse, evidence.
 - **Survey** - ringed orbit; severity, ranking, coverage, searchable ledger.
@@ -206,20 +207,20 @@ celestial body at the page edge.
 - **Drift** - planet pair; route-aware diff, new and closed routes, edge
   changes, the same comparator as `apsis diff`.
 - **Commands** - command core; 114 recorded runs, typewriter output, replay, copy.
-- **Extensions** - ringed system; 18 primitives, 288-cell coverage matrix, six
+- **Extensions** - ringed system; 18 primitives, 288-cell coverage matrix, seven
   contracts including the handoff, alert sample and the observed-path case.
 - **Blueprint** - orbital planes plus the event-horizon plate; pipeline,
   architecture, modules, roadmap, verification and release state.
 
 Global: `Cmd/Ctrl+K` command palette, motion toggle, fullscreen on every figure,
 a `Planets` / `Wire` switch on every instrument, sharp 2px panel geometry,
-floating glass topbar, warm-black field with a view accent, Instrument Serif
-display type, a cropped planet or black hole at the page edge, 64px HUD grid,
-fine grain, CRT scanlines, ambient edge glow, hero aura, moving constellation
-background, bloom-lit glass panels, neon focus states, automatic 2D fallback
-when WebGL is unavailable, clickable bodies on Path map, Atlas, Drift and
-Extensions, and the same read-only export. The architecture and interaction
-inventory are in [docs/DASHBOARD.md](docs/DASHBOARD.md).
+floating glass topbar, warm-black field with a view accent, Syne display type, a
+cropped comet, planet, galaxy, pulsar, nebula or black hole at the page edge,
+64px HUD grid, fine grain, CRT scanlines, ambient edge glow, hero aura, moving
+constellation background, bloom-lit glass panels, neon focus states, automatic
+2D fallback when WebGL is unavailable, clickable bodies on Path map, Atlas,
+Drift and Extensions, and the same read-only export. The architecture and
+interaction inventory are in [docs/DASHBOARD.md](docs/DASHBOARD.md).
 
 ### Dashboard screenshots
 
@@ -307,11 +308,13 @@ Details, custom domains, and the CLI steps are in
 
 | Now | Next | Later |
 | --- | --- | --- |
-| 18 primitives, 16 fixtures, route survey, minimum cut; eight-view dashboard with CloudTrail overlay, live IAM import, condition/resource-policy evaluation, drift and CSV ledger; Penumbra handoff, CI gate and Pages workflow | Benchmark against PMapper; expand condition and import coverage; a performance budget for the 3D instruments | Network threat-hunting lab; more primitives with fixture coverage |
+| 18 primitives, 16 fixtures, route survey, minimum cut; eight-view dashboard with CloudTrail overlay, live IAM import, condition/resource-policy evaluation, drift and CSV ledger; Penumbra handoff, CI gate, Pages workflow, bundle/font budget and overflow gate | PMapper comparison on the shipped fleet (external tool); condition context from a real-account request (needs a live export) | Wider service coverage for imported accounts; network threat-hunting lab |
 
-Everything in the static/demo scope is delivered. The next work is engine depth:
-condition coverage against real requests, a PMapper benchmark, and a performance
-budget for the eight WebGL instruments.
+Everything in the static/demo scope is delivered. The remaining next items are
+not placeholders: PMapper is a separate third-party tool and a fair comparison
+needs its own graph import, and real-account condition context needs an
+authorized export rather than another fixture. The performance budget and the
+overflow gate are now enforced in CI.
 
 - **[docs/RELEASE.md](docs/RELEASE.md)** - preflight, GitHub Pages setup, upload
   gate and post-deploy checks.
@@ -324,9 +327,9 @@ test:logic` / `npm run audit` before a UI change.
 
 ## Credits
 
-Instrument Serif, Space Grotesk and IBM Plex Mono are licensed under the SIL
-Open Font License. Three.js, React and Vite retain their upstream licences. The
-full attribution is in [NOTICE.md](NOTICE.md).
+Syne, Space Grotesk and IBM Plex Mono are licensed under the SIL Open Font
+License. Three.js, React and Vite retain their upstream licences. The full
+attribution is in [NOTICE.md](NOTICE.md).
 
 ## License
 

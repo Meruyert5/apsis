@@ -3,33 +3,39 @@
 ### Changed
 
 - The observatory edition replaces the all-blue field: warm black and bone,
-  Instrument Serif display, Space Grotesk reading and IBM Plex Mono telemetry.
+  Syne 700-800 display, Space Grotesk reading and IBM Plex Mono telemetry.
   Each view carries one accent (cyan, mint, amber, violet or rose) across the
   hero aura, figure rim, rail state and controls.
-- Celestial bodies leave the figure panel. A cropped Canvas2D body - planet,
-  ringed planet, star, cluster, binary, gas giant, moon or black hole - sits at
-  the page edge on every view, with pointer parallax and a reduced-motion still.
+- Celestial bodies leave the figure panel. A cropped Canvas2D body - comet,
+  ringed planet, star, galaxy, pulsar, nebula, binary or black hole - sits at
+  the page edge on every view, with pointer parallax, a 30fps cap and a
+  reduced-motion still.
 - The identity graph is rebuilt as a full workbench: a 16-account strip, a
   940x600 graph with 17px labels, depth rings, accent arrows, a selected-node
-  edge glow, and a 340px inspector. On mobile the graph scrolls at 720px so
-  labels stay legible.
+  halo pulse, a travelling dash on active edges, and a 340px inspector. On
+  mobile the graph scrolls at 720px so labels stay legible.
 - Texture and chrome: SVG grain, 64px HUD grid, CRT scanlines, ambient edge glow,
   warm glass topbar, cream primary button, bone hairline panels. Interactive
   states now follow the view accent instead of the old ultramarine.
-- New mark in bone, amber and cyan, a matching 512/180 icon set and a rebuilt OG
-  card. Sora and IBM Plex Sans are removed; the font payload is now Instrument
-  Serif, Space Grotesk and IBM Plex Mono.
+- New mark in bone, amber and cyan: a Syne A whose counter holds a black hole
+  with an accretion crossbar. Matching 512/180 icons and a rebuilt OG card.
+  Sora, IBM Plex Sans and Instrument Serif are removed; the payload is Syne,
+  Space Grotesk and IBM Plex Mono.
 - The wireframe pass is bone and periwinkle with a depth fog, larger nodes and
   accent selection rings; it stays a schematic, not a second planet scene.
-- Every figure now has two instruments. A `Planets` / `Wire` switch replaces the
-  old `3D` / `2D` toggle: the default is a glossy planet scene (graphite sphere,
-  lit terminator, small metal-rough bodies, orbit rings), and the wireframe
-  schematic remains one click away. A static 2D board still appears
-  automatically when WebGL is unavailable.
-- Path map is a solar system: an ivory star, eight planets on eight orbits and a
-  cyan route thread. Applying the cut crossfades the star into a black hole with
-  a photon ring and an eight-band accretion disk; restoring the route brings the
-  star back.
+- Every figure has two instruments. A `Planets` / `Wire` switch replaces the old
+  `3D` / `2D` toggle: the default is a glossy scene (graphite sphere, lit
+  terminator, small metal-rough bodies, orbit rings), and the wireframe remains
+  one click away. A static 2D board appears automatically when WebGL is
+  unavailable.
+- The sidebar snapshot is a proper card: date, time, read-only status with a
+  pulse, and 16 / 194 metrics above a quiet synthetic-fleet footer.
+- Chart and graph motion: pulsing halos, flowing active edges, a soft glow on
+  the rank bars, verb bars and donut, all stopped by reduced motion.
+- Path map is a solar system: an ivory star, eight planets on eight orbits, a
+  clear numbered route with a travelling pulse, and a cut that crossfades the
+  star into a shader-lit black hole with a Doppler accretion disk, photon ring
+  and lensing arc. Restoring the route brings the star back.
 - Atlas is the same language at account scale: an ivory star, sixteen glossy
   account bodies and trust arcs, with a selection ring on the focused account.
 - Blueprint gains an event-horizon plate: a black hole, accretion disk and

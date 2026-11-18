@@ -80,6 +80,7 @@ export function Atlas({
   const [query, setQuery] = useState("");
   const [kind, setKind] = useState<KindFilter>("all");
   const [selectedId, setSelectedId] = useState<string | null>(bundle.nodes[0]?.id ?? null);
+  const [hoverId, setHoverId] = useState<string | null>(null);
 
   useEffect(() => {
     setSelectedId(bundle.nodes[0]?.id ?? null);
@@ -92,27 +93,104 @@ export function Atlas({
   const positions = useMemo(() => {
     const map = new Map<string, Point>();
     if (!nodes.length) return map;
-    const xs = nodes.map((node) => node.x);
-    const ys = nodes.map((node) => node.y);
-    const minX = Math.min(...xs);
-    const maxX = Math.max(...xs);
-    const minY = Math.min(...ys);
-    const maxY = Math.max(...ys);
-    const spanX = maxX - minX || 1;
-    const spanY = maxY - minY || 1;
-    const scale = Math.min(840 / spanX, 510 / spanY);
-    const width = spanX * scale;
-    const height = spanY * scale;
-    const originX = (940 - width) / 2;
-    const originY = (600 - height) / 2 + 10;
-    nodes.forEach((node) => {
-      map.set(node.id, {
-        x: originX + (node.x - minX) * scale,
-        y: originY + (node.y - minY) * scale,
+    const cx = 470;
+    const cy = 300;
+    const admins = nodes.filter((node) => node.admin);
+    const roles = nodes.filter((node) => !node.admin && node.kind === "role");
+    const users = nodes.filter((node) => !node.admin && node.kind === "user");
+    const outer = nodes.filter(
+      (node) => !node.admin && node.kind !== "role" && node.kind !== "user",
+    );
+
+    admins.forEach((node, index) => {
+      map.set(node.id, index === 0 ? { x: cx, y: cy } : { x: cx + 54, y: cy - 42 });
+    });
+
+    const rings = [
+      { items: roles, radius: 126, offset: -Math.PI / 2 },
+      { items: users, radius: 194, offset: -Math.PI / 2 + 0.32 },
+      { items: outer, radius: 258, offset: -Math.PI / 2 + 0.12 },
+    ];
+    rings.forEach(({ items, radius, offset }) => {
+      items.forEach((node, index) => {
+        const angle = offset + (index / Math.max(1, items.length)) * Math.PI * 2;
+        map.set(node.id, {
+          x: cx + Math.cos(angle) * radius,
+          y: cy + Math.sin(angle) * radius,
+        });
       });
+    });
+
+    nodes.forEach((node, index) => {
+      if (!map.has(node.id)) {
+        const angle = (index / nodes.length) * Math.PI * 2;
+        map.set(node.id, { x: cx + Math.cos(angle) * 210, y: cy + Math.sin(angle) * 210 });
+      }
     });
     return map;
   }, [nodes]);
+
+  const labels = useMemo(() => {
+    const result = new Map<string, { x: number; y: number; anchor: string }>();
+    const placed: { x: number; y: number; w: number; h: number }[] = [];
+    const centers = nodes
+      .map((node) => ({ id: node.id, point: positions.get(node.id) }))
+      .filter((item): item is { id: string; point: Point } => Boolean(item.point));
+    const ordered = [...centers].sort((a, b) => {
+      const da = Math.hypot(a.point.x - 470, a.point.y - 300);
+      const db = Math.hypot(b.point.x - 470, b.point.y - 300);
+      return db - da;
+    });
+
+    const overlaps = (rect: { x: number; y: number; w: number; h: number }, id: string) => {
+      if (rect.x < 8 || rect.y < 8 || rect.x + rect.w > 932 || rect.y + rect.h > 592) return true;
+      const labelHit = placed.some((other) =>
+        rect.x < other.x + other.w + 4 &&
+        rect.x + rect.w + 4 > other.x &&
+        rect.y < other.y + other.h + 4 &&
+        rect.y + rect.h + 4 > other.y,
+      );
+      if (labelHit) return true;
+      return centers.some((item) => {
+        if (item.id === id) return false;
+        return (
+          rect.x < item.point.x + 18 &&
+          rect.x + rect.w > item.point.x - 18 &&
+          rect.y < item.point.y + 18 &&
+          rect.y + rect.h > item.point.y - 18
+        );
+      });
+    };
+
+    ordered.forEach(({ id, point }) => {
+      const label = shortLabel(nodes.find((node) => node.id === id)!);
+      const w = Math.min(138, label.length * 8.6 + 10);
+      const h = 18;
+      const dx = point.x - 470;
+      const dy = point.y - 300;
+      const len = Math.hypot(dx, dy) || 1;
+      const candidates = [
+        { x: point.x + (dx / len) * 32, y: point.y + (dy / len) * 32 },
+        { x: point.x - (dx / len) * 32, y: point.y - (dy / len) * 32 },
+        { x: point.x, y: point.y - 34 },
+        { x: point.x, y: point.y + 34 },
+        { x: point.x - 52, y: point.y },
+        { x: point.x + 52, y: point.y },
+      ];
+      let chosen = candidates[0];
+      for (const candidate of candidates) {
+        const rect = { x: candidate.x - w / 2, y: candidate.y - h / 2, w, h };
+        if (!overlaps(rect, id)) {
+          chosen = candidate;
+          break;
+        }
+      }
+      const rect = { x: chosen.x - w / 2, y: chosen.y - h / 2, w, h };
+      placed.push(rect);
+      result.set(id, { x: chosen.x, y: chosen.y + 5, anchor: "middle" });
+    });
+    return result;
+  }, [nodes, positions]);
 
   const adjacent = useMemo(() => {
     const map = new Map<string, Set<string>>();
@@ -285,12 +363,29 @@ export function Atlas({
                   if (!point) return null;
                   return (
                     <g key={`orbit-${node.id}`}>
-                      <circle cx={point.x} cy={point.y} r="48" />
-                      <circle className="is-dashed" cx={point.x} cy={point.y} r="92" />
-                      <circle className="is-dashed is-outer" cx={point.x} cy={point.y} r="140" />
+                      <circle cx={point.x} cy={point.y} r="54" />
+                      <circle className="is-dashed" cx={point.x} cy={point.y} r="126" />
+                      <circle className="is-dashed" cx={point.x} cy={point.y} r="194" />
+                      <circle className="is-dashed is-outer" cx={point.x} cy={point.y} r="258" />
                     </g>
                   );
                 })}
+              </g>
+              <g className="graph-ring-labels" aria-hidden="true">
+                {[
+                  { radius: 126, label: "ROLE ORBIT" },
+                  { radius: 194, label: "USER ORBIT" },
+                  { radius: 258, label: "RESOURCE ORBIT" },
+                ].map((ring) => (
+                  <text
+                    key={ring.label}
+                    x={470 + Math.cos(0.42) * ring.radius}
+                    y={300 + Math.sin(0.42) * ring.radius}
+                    textAnchor="start"
+                  >
+                    {ring.label}
+                  </text>
+                ))}
               </g>
               <g className="graph-edges">
                 {bundle.edges.map((edge, index) => {
@@ -312,22 +407,13 @@ export function Atlas({
                 })}
               </g>
               <g className="graph-nodes">
-                {nodes.map((node, index) => {
+                {nodes.map((node) => {
                   const point = positions.get(node.id);
                   if (!point) return null;
                   const on = visible(node);
                   const isSelected = node.id === selectedId;
                   const isNeighbor = neighbors.has(node.id);
-                  const edgeRight = point.x > 760;
-                  const edgeLeft = point.x < 180;
-                  const clustered = point.y > 340 && point.y < 450;
-                  const labelX = edgeRight ? 28 : edgeLeft ? -28 : 0;
-                  const labelAnchor = edgeRight ? "start" : edgeLeft ? "end" : "middle";
-                  const labelY = edgeRight || edgeLeft
-                    ? 5
-                    : clustered && index % 2 === 1
-                      ? 36
-                      : -28;
+                  const label = labels.get(node.id);
                   return (
                     <g
                       key={node.id}
@@ -337,6 +423,10 @@ export function Atlas({
                       tabIndex={0}
                       aria-label={`${node.label}, ${node.kind}${node.admin ? ", administrator" : ""}`}
                       onClick={() => setSelectedId(node.id)}
+                      onMouseEnter={() => setHoverId(node.id)}
+                      onMouseLeave={() => setHoverId(null)}
+                      onFocus={() => setHoverId(node.id)}
+                      onBlur={() => setHoverId(null)}
                       onKeyDown={(event) => {
                         if (event.key === "Enter" || event.key === " ") {
                           event.preventDefault();
@@ -382,15 +472,27 @@ export function Atlas({
                           fill={KIND_COLOR[node.kind] ?? "#7b86c9"}
                         />
                       )}
-                      <text
-                        className={`node-label ${isSelected ? "is-selected" : ""} ${node.admin ? "is-admin" : ""}`.trim()}
-                        x={labelX}
-                        y={labelY}
-                        textAnchor={labelAnchor}
-                      >
-                        {shortLabel(node)}
-                      </text>
                     </g>
+                  );
+                })}
+              </g>
+              <g className="graph-labels" aria-hidden="true">
+                {nodes.map((node) => {
+                  const label = labels.get(node.id);
+                  if (!label) return null;
+                  const isSelected = node.id === selectedId;
+                  const show = node.admin || isSelected || neighbors.has(node.id) || node.id === hoverId;
+                  if (!show) return null;
+                  return (
+                    <text
+                      key={`label-${node.id}`}
+                      className={`node-label ${isSelected ? "is-selected" : ""} ${node.admin ? "is-admin" : ""}`.trim()}
+                      x={label.x}
+                      y={label.y}
+                      textAnchor={(label.anchor ?? "middle") as "middle" | "start" | "end"}
+                    >
+                      {shortLabel(node)}
+                    </text>
                   );
                 })}
               </g>

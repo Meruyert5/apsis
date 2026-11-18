@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T18:48:43+00:00",
+  "generated": "2026-11-18T20:01:29+00:00",
   "engine": {
     "name": "apsis",
     "version": "0.2.0"
@@ -236,6 +236,9 @@
         "ec2:DescribeInstances"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gc-build-policy allows ssm:SendCommand on arn:aws:ec2:us-gov-west-1:666677778888:instance/gc-batch-ec2; gc-build-policy allows ec2:DescribeInstances on *",
       "narration": "Run a command on an instance and use its instance profile.",
       "fix": "Scope ssm:SendCommand to document ARNs and tag-gated instances."
@@ -253,6 +256,9 @@
         "ec2:RunInstances"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gc-data-policy allows iam:PassRole on arn:aws:iam::666677778888:role/gc-archive; gc-data-policy allows ec2:RunInstances on *",
       "narration": "Launch an instance with an instance profile and read its metadata credentials.",
       "fix": "Deny iam:PassRole for EC2 unless the caller owns the instance profile."
@@ -269,6 +275,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gc-deploy-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-release",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -285,6 +294,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gc-fleet-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-deploy",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -301,6 +313,9 @@
         "iam:CreatePolicyVersion"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::666677778888:policy/gc-pipeline-policy",
       "narration": "Publish a new policy version that grants more than the current one.",
       "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant."
@@ -317,6 +332,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-pipeline",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -333,6 +351,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gc-support-policy allows iam:CreateAccessKey on arn:aws:iam::666677778888:user/gc-admin",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -349,6 +370,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gc-support-policy allows iam:CreateAccessKey on arn:aws:iam::666677778888:user/gc-auditor",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -365,6 +389,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gc-support-policy allows iam:CreateAccessKey on arn:aws:iam::666677778888:user/gc-change-manager",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -381,6 +408,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gc-support-policy allows iam:CreateAccessKey on arn:aws:iam::666677778888:user/gc-helpdesk",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -397,6 +427,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gc-support-policy allows iam:CreateAccessKey on arn:aws:iam::666677778888:user/gc-vendor",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -413,6 +446,9 @@
         "sts:AssumeRole"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "gc-vendor-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-build",
       "narration": "The trust policy admits this principal and its policy allows sts:AssumeRole.",
       "fix": "Scope the trust policy to a role ARN or aws:PrincipalArn condition, not the account root."
@@ -459,7 +495,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gc-vendor-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-build",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e0",
@@ -472,7 +511,10 @@
             ],
             "mitre": "T1651",
             "evidence": "gc-build-policy allows ssm:SendCommand on arn:aws:ec2:us-gov-west-1:666677778888:instance/gc-batch-ec2; gc-build-policy allows ec2:DescribeInstances on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e3",
@@ -484,7 +526,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gc-fleet-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-deploy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e2",
@@ -496,7 +541,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gc-deploy-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-release",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e5",
@@ -508,7 +556,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e4",
@@ -520,7 +571,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::666677778888:policy/gc-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -563,7 +617,10 @@
             ],
             "mitre": "T1651",
             "evidence": "gc-build-policy allows ssm:SendCommand on arn:aws:ec2:us-gov-west-1:666677778888:instance/gc-batch-ec2; gc-build-policy allows ec2:DescribeInstances on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e3",
@@ -575,7 +632,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gc-fleet-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-deploy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e2",
@@ -587,7 +647,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gc-deploy-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-release",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e5",
@@ -599,7 +662,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e4",
@@ -611,7 +677,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::666677778888:policy/gc-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -650,7 +719,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gc-fleet-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-deploy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e2",
@@ -662,7 +734,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gc-deploy-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-release",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e5",
@@ -674,7 +749,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e4",
@@ -686,7 +764,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::666677778888:policy/gc-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -722,7 +803,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gc-deploy-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-release",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e5",
@@ -734,7 +818,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e4",
@@ -746,7 +833,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::666677778888:policy/gc-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -779,7 +869,10 @@
             ],
             "mitre": "T1078.004",
             "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-pipeline",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e4",
@@ -791,7 +884,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::666677778888:policy/gc-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -821,7 +917,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::666677778888:policy/gc-pipeline-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -851,7 +950,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "gc-support-policy allows iam:CreateAccessKey on arn:aws:iam::666677778888:user/gc-admin",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -927,7 +1029,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "gc-vendor-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-build",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e0",
@@ -940,7 +1045,10 @@
         ],
         "mitre": "T1651",
         "evidence": "gc-build-policy allows ssm:SendCommand on arn:aws:ec2:us-gov-west-1:666677778888:instance/gc-batch-ec2; gc-build-policy allows ec2:DescribeInstances on *",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e3",
@@ -952,7 +1060,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "gc-fleet-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-deploy",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e2",
@@ -964,7 +1075,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "gc-deploy-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-release",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e5",
@@ -976,7 +1090,10 @@
         ],
         "mitre": "T1078.004",
         "evidence": "gc-release-policy allows sts:AssumeRole on arn:aws:iam::666677778888:role/gc-pipeline",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e4",
@@ -988,7 +1105,10 @@
         ],
         "mitre": "T1098.003",
         "evidence": "gc-pipeline-policy allows iam:CreatePolicyVersion on arn:aws:iam::666677778888:policy/gc-pipeline-policy",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       }
     ]
   },

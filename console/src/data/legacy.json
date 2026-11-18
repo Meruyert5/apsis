@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16T18:48:43+00:00",
+  "generated": "2026-11-18T20:01:29+00:00",
   "engine": {
     "name": "apsis",
     "version": "0.2.0"
@@ -160,6 +160,9 @@
         "ec2:RunInstances"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "developer-policy allows iam:PassRole on arn:aws:iam::121212121212:role/legacy-role; developer-policy allows ec2:RunInstances on *",
       "narration": "Launch an instance with an instance profile and read its metadata credentials.",
       "fix": "Deny iam:PassRole for EC2 unless the caller owns the instance profile."
@@ -176,6 +179,9 @@
         "iam:AttachUserPolicy"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "helpdesk-policy allows iam:AttachUserPolicy on arn:aws:iam::121212121212:user/helpdesk",
       "narration": "Attach AdministratorAccess to your own user and inherit it.",
       "fix": "No human or machine identity should hold iam:AttachUserPolicy on its own ARN."
@@ -192,6 +198,9 @@
         "iam:CreatePolicyVersion"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "legacy-role-policy allows iam:CreatePolicyVersion on arn:aws:iam::121212121212:policy/legacy-role-policy",
       "narration": "Publish a new policy version that grants more than the current one.",
       "fix": "CreatePolicyVersion on a policy you can also attach is a standing admin grant."
@@ -208,6 +217,9 @@
         "iam:CreateAccessKey"
       ],
       "conditional": false,
+      "observed": false,
+      "firstSeen": null,
+      "lastSeen": null,
       "evidence": "backup-rotate-keys allows iam:CreateAccessKey on arn:aws:iam::121212121212:user/legacy-admin",
       "narration": "Create an access key for a user with more access than you.",
       "fix": "Deny iam:CreateAccessKey on all principals except a tightly held recovery role."
@@ -239,7 +251,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "backup-rotate-keys allows iam:CreateAccessKey on arn:aws:iam::121212121212:user/legacy-admin",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -269,7 +284,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "helpdesk-policy allows iam:AttachUserPolicy on arn:aws:iam::121212121212:user/helpdesk",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -303,7 +321,10 @@
             ],
             "mitre": "T1098.001",
             "evidence": "developer-policy allows iam:PassRole on arn:aws:iam::121212121212:role/legacy-role; developer-policy allows ec2:RunInstances on *",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           },
           {
             "edge": "e2",
@@ -315,7 +336,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "legacy-role-policy allows iam:CreatePolicyVersion on arn:aws:iam::121212121212:policy/legacy-role-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -345,7 +369,10 @@
             ],
             "mitre": "T1098.003",
             "evidence": "legacy-role-policy allows iam:CreatePolicyVersion on arn:aws:iam::121212121212:policy/legacy-role-policy",
-            "conditional": false
+            "conditional": false,
+            "observed": false,
+            "firstSeen": null,
+            "lastSeen": null
           }
         ]
       }
@@ -418,7 +445,10 @@
         ],
         "mitre": "T1098.001",
         "evidence": "developer-policy allows iam:PassRole on arn:aws:iam::121212121212:role/legacy-role; developer-policy allows ec2:RunInstances on *",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       },
       {
         "edge": "e2",
@@ -430,7 +460,10 @@
         ],
         "mitre": "T1098.003",
         "evidence": "legacy-role-policy allows iam:CreatePolicyVersion on arn:aws:iam::121212121212:policy/legacy-role-policy",
-        "conditional": false
+        "conditional": false,
+        "observed": false,
+        "firstSeen": null,
+        "lastSeen": null
       }
     ]
   },

@@ -420,10 +420,6 @@ export function Donut({
   );
 }
 
-export function Chevrons() {
-  return <span className="chevrons" aria-hidden="true">‹‹‹‹</span>;
-}
-
 export function Barcode({ vertical = false }: { vertical?: boolean }) {
   return <span className={`barcode ${vertical ? "vertical" : ""}`} aria-hidden="true" />;
 }

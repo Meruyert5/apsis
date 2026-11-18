@@ -51,8 +51,8 @@ pickable node carries an oversized invisible hit sphere, so the target is
 comfortable at any stage size.
 
 Typography is set for reading: 17.5px body, 18px lede, 15.5-16px data and notes,
-13.5-15.5px labels, 12.5-13.5px micro-labels, a 54-88px view title and a
-128-238px wordmark. SVG graph labels are 17px in the 940-unit viewBox, which
+13.5-15.5px labels, 12.5-13.5px micro-labels, a 48-80px view title and a
+92-154px wordmark. SVG graph labels are 17px in the 940-unit viewBox, which
 renders at 14-15px in the 1440 panel.
 
 ## Soft geometry
@@ -79,26 +79,27 @@ stay square; the only soft element is the floating glass topbar.
   target and technique, then re-derive added and lost routes.
 - **CSV ledger** - `apsis ledger -s <fixture>` writes one row per route edge;
   Survey can download the same ledger from the browser.
-- **CI gate** - the site workflow audits all eight views at 1440 and 390 and
-  runs Lighthouse with accessibility, best-practice and SEO assertions. The
-  performance score is a warning, not an error, because the instruments are
-  WebGL.
+- **CI gate** - the site workflow audits all eight views at 1440 and 390, runs
+  Lighthouse with accessibility, best-practice and SEO assertions, and enforces
+  the JS/CSS/font budget. The performance score is a warning, not an error,
+  because the instruments are WebGL.
 
 On desktop the topbar floats as a glass pill; the rail carries the 34px orbital
 mark beside the wordmark. The hero sits over a bone-on-warm-black aura with a
-grain and scanline texture. A cropped Canvas2D body - planet, ringed planet,
-star, cluster, binary, gas giant, moon or black hole - sits at the page edge and
+grain and scanline texture. A cropped Canvas2D body - comet, ringed planet,
+star, galaxy, pulsar, nebula, binary or black hole - sits at the page edge and
 takes the view accent. The page field is `#08090b`; one accent is active per
 view (cyan, mint, amber, violet or rose).
 
 ### Atlas workbench
 
 The identity graph is no longer a narrow centre column. The page uses a
-full-width account strip (eight cards per row, then four, then two), a graph
-panel at 940x600 with 17px labels, depth rings around the administrator and
-argon-filled edge arrows, and a 340px inspector. Selecting a node dims the
-unrelated edges and lights its own. On small screens the graph keeps a 720px
-minimum and scrolls inside its panel, so labels never shrink to unreadable.
+full-width account strip (four cards per row, then two), a graph panel at 940x600
+with 17px labels, depth rings around the administrator, argon-filled edge arrows
+and a pulsing halo on the selected body, plus a 340px inspector. Selecting a node
+dims the unrelated edges, lights its own and runs a travelling dash along them. On small screens the
+graph keeps a 720px minimum and scrolls inside its panel, so labels never shrink
+to unreadable.
 
 ### 2D fallback
 
@@ -183,10 +184,11 @@ The Vite build emits `dist/index.html`; the Pages workflow publishes `dist/`.
 
 Last verification: build pass; 5/5 logic tests; 89/89 Python tests (contracts,
 conditions, import, overlay and ledger included); contracts valid against both
-schemas; no horizontal overflow on any of the eight views at 390, 768 or 1440;
-the audit gate reports no contrast, heading, unnamed-control, small-target or
-overflow failures across all views at 1440 and 390; Lighthouse accessibility,
-best practices and SEO pass; fullscreen (planet, wireframe and 2D), Escape-close,
+schemas; no horizontal overflow on any of the eight views at 390 or 1440 (a
+dedicated text-overflow scan); the audit gate reports no contrast, heading,
+unnamed-control, small-target or overflow failures across all views; the ship
+budget passes (2.6MB JS, 96KB CSS, 93KB fonts); Lighthouse accessibility, best
+practices and SEO pass; fullscreen (planet, wireframe and 2D), Escape-close,
 portrait fit and body picking verified in the browser. The audit's 14px floor
 still flags intentional HUD micro-labels.
 
