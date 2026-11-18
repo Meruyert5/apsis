@@ -3,6 +3,10 @@
 The site is a static Vite build in `console/dist`. It has no server, no runtime
 API, no analytics, and no third-party scripts.
 
+The build has two HTML entries: `dist/index.html` (legacy four-deck console)
+and `dist/dashboard.html` (the current Path + Atlas dashboard). Both are static
+and deploy together.
+
 ## GitHub Pages
 
 The repository ships `.github/workflows/pages.yml`. It builds the console on

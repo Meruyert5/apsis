@@ -43,6 +43,10 @@ runs, the site is at:
 The build uses relative paths, so it also works from a project subpath or a
 custom domain. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
+The current dashboard is `/dashboard.html`; the legacy four-deck console remains
+at `/`. The dashboard architecture and interaction inventory are in
+[docs/DASHBOARD.md](docs/DASHBOARD.md).
+
 ## Why routes
 
 The unit of risk is not a single policy; it is a reachable authority. A principal
@@ -219,25 +223,27 @@ Only the palette, background light and surface noise change. No new objects.
 
 ### Path + Atlas dashboard (current build)
 
-`/dashboard.html` is the Y2K / Path + Atlas dashboard. It is a separate Vite
-entry with its own shell, components and stylesheet; the old console and the
-Neon Luxe dashboard are not reused. It reads the real bundles for the figures
-and the Games Studio signature route.
+`/dashboard.html` is the current dashboard: seven views over the same static
+export, each with its own WebGL instrument. It is a separate Vite entry; the
+legacy console remains at `/`.
 
-- Black shell with white linework and electric ultramarine accents.
-- White paper KPI strip: 16 accounts, 194 identities, 144 routes, 37 edges cut,
-  07 deep, 0 writes.
-- Route atlas of the real 7-hop Games Studio path, with the cut marked.
-- A real WebGL mascot built from a **path** and an **atlas**: a 7-node orbit
-  around a wireframe globe, dust field and liquid-cobalt core. Drag, zoom,
-  reset and a 2D fallback.
-- A dotted atlas field rendered as a second WebGL point mesh.
-- Sortable, searchable 16-account fleet table, posture and evidence panels,
-  JSON snapshot export.
-- Responsive to 390px; the rail becomes a drawer and the table drops the
-  identities/severity columns.
+- **Overview** — orb; fleet figures, module map, fleet pulse, evidence.
+- **Survey** — radar dish; severity, ranking, coverage, searchable ledger.
+- **Path map** — ascending path; autoplay, step, speed, cut/restore, hop
+  detail, route ledger.
+- **Atlas** — account constellation; identity graph, filters, inspector.
+- **Commands** — prism; 114 recorded runs, typewriter output, replay, copy.
+- **Extensions** — bloom; 18 primitives, 288-cell coverage matrix, contracts,
+  alert sample and the observed-path case.
+- **Blueprint** — layered stack; pipeline, architecture, modules, roadmap,
+  verification and open release items.
 
-The Neon Luxe dashboard is retired. This replaces it as the dashboard build.
+Global: `Cmd/Ctrl+K` command palette, motion toggle, hash deep links, animated
+background, glass panels, neon focus states, 2D fallback on every figure, and
+the same read-only export. The architecture and interaction inventory are in
+[docs/DASHBOARD.md](docs/DASHBOARD.md).
+
+The Neon Luxe dashboard is retired. This is the dashboard build.
 
 ### Y2K / Acid Graphics mascot (current mock)
 

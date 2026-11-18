@@ -301,3 +301,25 @@ The shell is black with a blue grid, white linework and electric ultramarine. Th
 The data moves onto white paper panels: a six-cell KPI strip (16 / 194 / 144 / 37 / 07 / 0), the real Games Studio route atlas, the 16-account fleet table, posture and evidence. Black headers, white bodies, blue state accents. The fleet table is sortable and searchable, totals are sticky, and the snapshot exports as JSON. The layout collapses to 390px with a drawer rail and a four-column mobile table.
 
 This build keeps the Y2K vector language but treats it as a control surface, not a poster: fewer stamps, larger type, paper panels for the dense data.
+
+---
+
+## Revision 10 - multi-view Path + Atlas dashboard
+
+The dashboard is now a seven-view control surface at `/dashboard.html`, built in its own Vite entry from `console/src/y2k/`. The single-page Y2K dashboard and the Neon Luxe implementation are retired.
+
+Views and instruments:
+
+- Overview - orb (sphere + seven-node orbit). Fleet figures, module map, pulse chart, evidence.
+- Survey - radar dish. Severity, exposure ranking, coverage summary, searchable fleet ledger.
+- Path map - rising ascent. Account/source/route selection, autoplay loop, play/pause, step, speed, cut/restore, hop detail and a clickable route ledger.
+- Atlas - flattened constellation. Raycast account selection, identity graph, filters, inspector.
+- Commands - prism. 114 recorded runs, verb/scenario/format filters, typewriter output, replay, copy.
+- Extensions - bloom. Techniques, 18 x 16 coverage matrix, contracts, alert sample, observed-path case.
+- Blueprint - stack. Pipeline selection, architecture, module map, roadmap, release checklist and open items.
+
+The shell uses dark glass, electric ultramarine, an animated particle/grid/aurora field, a `Cmd/Ctrl+K` palette across views/accounts/commands/techniques, a motion toggle, hash deep links, toasts and responsive drawers. Every figure has drag, zoom, reset and a 2D SVG fallback; motion is paused offscreen and on reduced-motion.
+
+Verification: `npm --prefix console run build` passes; `npm --prefix console run test:logic` passes 9 tests; `python -m unittest discover -s tests -v` passes 67 tests. The local accessibility audit at 1440 and 390 reports no contrast, heading, unnamed-control, small-target or overflow failures. Documentation is in `docs/DASHBOARD.md`.
+
+Open before publish: approval, git remote configuration and the Pages workflow. The legacy console remains at `/`; the new dashboard is `/dashboard.html`.

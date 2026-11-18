@@ -51,10 +51,14 @@
   path (7-node orbit) and an atlas (wireframe globe, dust field, polar grid),
   with drag/zoom/reset and an SVG fallback.
 - The Path + Atlas dashboard at `console/dashboard.html` now renders
-  `console/src/y2k/`: black/white/ultramarine shell, white paper KPI and data
-  panels, the real 7-hop route atlas, sortable fleet table, posture, evidence
-  and JSON export. It carries the WebGL mascot (path + atlas) and a second
-  dotted atlas field. The Neon Luxe dashboard implementation was retired.
+  `console/src/y2k/` as a seven-view control surface: Overview, Survey, Path map,
+  Atlas, Commands, Extensions and Blueprint. Each view has a distinct WebGL
+  instrument (orb, dish, ascent, constellation, prism, bloom, stack) with
+  drag/zoom/reset and a 2D fallback. Adds a `Cmd/Ctrl+K` command palette, motion
+  toggle, animated background, auto-escalation and cut, 114 recorded commands
+  with typewriting, an 18 × 16 coverage matrix, contracts, the observed-path
+  case, and the full architecture/release plan. The Neon Luxe dashboard
+  implementation was retired. `docs/DASHBOARD.md` records the architecture.
 - A live Signal instrument: auto-advancing phase, gradient light curve with
   area fill and echo, T−/phase readout, and a hold control that stops on scrub.
 - A hop rail with a flowing gradient progress bar, a pulsing play head and a
