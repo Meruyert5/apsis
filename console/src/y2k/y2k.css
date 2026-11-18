@@ -2281,7 +2281,7 @@ a { color: inherit; }
 .open-items p { grid-column: 2; margin: 0; font-size: 14px; line-height: 1.55; color: var(--muted); }
 
 /* ---------------------------------------------------------------- palette */
-.palette-wrap { position: fixed; inset: 0; z-index: 120; display: grid; place-items: start center; padding: 9vh 16px 16px; }
+.palette-wrap { position: fixed; inset: 0; z-index: 160; display: grid; place-items: start center; padding: 9vh 16px 16px; }
 .palette-scrim { position: absolute; inset: 0; border: 0; background: rgb(2 4 9 / .72); backdrop-filter: blur(8px); }
 .palette {
   position: relative;
@@ -2341,7 +2341,7 @@ a { color: inherit; }
   position: fixed;
   left: 50%;
   bottom: 26px;
-  z-index: 140;
+  z-index: 180;
   padding: 11px 16px;
   border: 1px solid var(--blue-bright);
   background: rgb(7 11 19 / .92);
