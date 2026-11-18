@@ -19,6 +19,7 @@ shots/
 # Local tool profiles and captures
 .chrome-profile/
 .cdp-profile/
+.cdp-*/
 .superpowers/
 *.log
 *.tsbuildinfo

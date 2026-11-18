@@ -268,9 +268,12 @@ export const modules = [
 
 export const roadmap = {
   now: [
-    "18 primitives, 16 fixtures, route survey, minimum cut, static console, Pages workflow",
+    "18 primitives, 16 fixtures, route survey, minimum cut",
+    "Seven-view read-only dashboard, observed-path case and guardrail contract",
+    "Penumbra alert/evidence handoff and Pages workflow",
   ],
   next: [
+    "CloudTrail overlay that marks theoretical and observed edges",
     "Live import from GetAccountAuthorizationDetails",
     "Condition and resource-policy evaluation",
     "A CSV view of the ledger",

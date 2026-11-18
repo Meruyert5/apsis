@@ -10,6 +10,7 @@ evidence. They meet through an evidence contract, not shared code.
 | --- | --- |
 | `schema/alert.schema.json` | One finding, `penumbra.alert/v1` |
 | `schema/evidence.schema.json` | The events and graph facts behind it |
+| `cases/<id>/alert.json` | The emitted alert for that case |
 | `cases/<id>/case.md` | The human narrative |
 | `cases/<id>/before.json`, `after.json` | Route snapshots around a change |
 
@@ -58,3 +59,29 @@ shared contract is the only coupling.
 - No shared database.
 - No cross-repository imports.
 - No Apsis SIEM, no Penumbra graph engine.
+
+## Delivered handoff
+
+The observed-path case is emitted as a real alert and handed to Penumbra at:
+
+```text
+detection-lab/integrations/apsis/
+  alert.json
+  evidence.json
+  case.md
+  guardrail.md
+  before.json
+  after.json
+  cloudtrail.json
+  schema/alert.schema.json
+  schema/evidence.schema.json
+```
+
+Both payloads validate against the schemas above. Penumbra reads the alert and
+the evidence manifest; it does not import Apsis code, and Apsis never writes to
+the account.
+
+The alert is a validated contract instance generated from the shipped case, not
+yet from a live CloudTrail import. The engine overlay that derives `observed`
+from a real export is the next roadmap item; the schema, the case and the
+handoff are final.

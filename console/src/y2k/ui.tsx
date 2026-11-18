@@ -22,6 +22,8 @@ export type IconName =
   | "copy"
   | "check"
   | "motion"
+  | "expand"
+  | "collapse"
   | "star"
   | "shield"
   | "chevron";
@@ -116,6 +118,10 @@ export function Icon({ name, size = 16 }: { name: IconName; size?: number }) {
       return <svg {...common}><path d="m2.5 8 3.5 3.5 7.5-8" /></svg>;
     case "motion":
       return <svg {...common}><path d="M2 10c2-6 4 4 6-2s4-2 6-4" /><circle cx="2" cy="10" r="1" fill="currentColor" /></svg>;
+    case "expand":
+      return <svg {...common}><path d="M6 2H2v4M10 2h4v4M2 10v4h4M14 10v4h-4" /></svg>;
+    case "collapse":
+      return <svg {...common}><path d="M2 6h4V2M14 6h-4V2M2 10h4v4M14 10h-4v4" /></svg>;
     case "shield":
       return (
         <svg {...common}>
@@ -215,8 +221,24 @@ export function FigurePanel({
   badge?: boolean;
   className?: string;
 }) {
+  const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    if (!expanded) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setExpanded(false);
+    };
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [expanded]);
+
   return (
-    <section className={`figure-panel ${className}`.trim()}>
+    <section className={`figure-panel ${expanded ? "is-expanded" : ""} ${className}`.trim()}>
       <header className="figure-head">
         <span className="figure-index">{index}</span>
         <div>
@@ -228,6 +250,16 @@ export function FigurePanel({
             <i />{motion ? "Auto" : "Paused"}
           </span>
           <span className="live"><i />Live</span>
+          <button
+            type="button"
+            className="figure-expand"
+            aria-pressed={expanded}
+            aria-label={expanded ? "Collapse figure" : "Expand figure"}
+            title={expanded ? "Collapse figure" : "Expand figure"}
+            onClick={() => setExpanded((value) => !value)}
+          >
+            <Icon name={expanded ? "collapse" : "expand"} size={14} />
+          </button>
         </span>
       </header>
       <div className="figure-stage">

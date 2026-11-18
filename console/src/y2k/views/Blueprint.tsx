@@ -22,6 +22,8 @@ const CHECKS = [
   { label: "Schema contracts / alert + evidence", state: "ready" },
   { label: "Fixture validation / 16 bundles", state: "ready" },
   { label: "Reproducible / snapshot", state: "ready" },
+  { label: "Fullscreen / every figure", state: "verified" },
+  { label: "Penumbra handoff / alert + evidence", state: "delivered" },
   { label: "Pages workflow", state: "present" },
   { label: "Remote / publish", state: "approval" },
 ];
@@ -176,7 +178,7 @@ export function Blueprint({
       <Panel title="Open items" meta="before publish">
         <div className="open-items">
           <div><span>01</span><b>Approval</b><p>You sign off on the dashboard direction and the release shape.</p></div>
-          <div><span>02</span><b>Remote</b><p>Configure the GitHub remote and confirm the Pages workflow picks up the build.</p></div>
+          <div><span>02</span><b>Upload</b><p>Origin is configured. Create the GitHub repository, then push; the Pages workflow builds <code>console/dist</code>.</p></div>
           <div><span>03</span><b>Live import</b><p>GetAccountAuthorizationDetails remains roadmap; the shipped console reads static fixtures.</p></div>
         </div>
       </Panel>

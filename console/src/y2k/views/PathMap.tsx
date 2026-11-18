@@ -218,7 +218,7 @@ export function PathMap({
             title="Escalation ascent"
             meta={`${group?.source ?? "Source"} → administrator`}
             tags={[`${route.hops} hops`, `${conditional} conditional`, cut ? "cut" : "open"]}
-            note="Auto: hops advance / click a node to jump"
+            note="Auto: the route threads the constellation / click a hop"
             foot={`${active + 1} / ${labels.length}`}
             motion={motion}
             active={active}

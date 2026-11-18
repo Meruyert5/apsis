@@ -410,7 +410,7 @@ function buildDish(glow: THREE.Texture): Built {
 function buildAscent(glow: THREE.Texture): Built {
   const root = new THREE.Group();
   root.rotation.x = 0.05;
-  root.position.set(0.55, -0.05, 0);
+  root.position.set(0.12, -0.05, 0);
 
   const nodeCount = 8;
   const nodes: THREE.Mesh[] = [];
@@ -509,6 +509,34 @@ function buildAscent(glow: THREE.Texture): Built {
     new THREE.Vector3(2.74, -2.15, 0),
     new THREE.Vector3(2.74, 2.15, 0),
   ], BLUE, 0.08));
+  root.add(line([
+    new THREE.Vector3(0, -2.3, 0),
+    new THREE.Vector3(0, 2.3, 0),
+  ], BLUE, 0.09));
+
+  const contextItems: { star: THREE.Mesh; link: THREE.Line }[] = [];
+  for (let i = 0; i < 16; i += 1) {
+    const angle = i * 2.399 + 0.6;
+    const radius = 2.45 + (i % 4) * 0.35;
+    const y = -1.95 + ((i * 0.618) % 1) * 3.85;
+    const star = new THREE.Mesh(
+      new THREE.OctahedronGeometry(i % 5 === 0 ? 0.095 : 0.06, 0),
+      basic(BLUE, 0.35),
+    );
+    star.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius * 0.72);
+    root.add(star);
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3));
+    const link = new THREE.Line(
+      geometry,
+      new THREE.LineBasicMaterial({
+        color: BLUE, transparent: true, opacity: 0.05,
+        blending: THREE.AdditiveBlending, depthWrite: false,
+      }),
+    );
+    root.add(link);
+    contextItems.push({ star, link });
+  }
 
   const floor = new THREE.Mesh(
     new THREE.RingGeometry(1.9, 3.2, 64),
@@ -578,10 +606,12 @@ function buildAscent(glow: THREE.Texture): Built {
 
       for (let i = 0; i < count; i += 1) {
         const u = i / (count - 1);
+        const angle = -0.35 + u * Math.PI * 2 * 0.72;
+        const radius = 1.9 - u * 0.18;
         const point = new THREE.Vector3(
-          -2.15 + u * 3.9 + Math.sin(u * Math.PI * 1.8) * 0.26,
-          -2.0 + u * 3.9,
-          Math.sin(u * Math.PI * 1.2) * 0.5,
+          Math.cos(angle) * radius,
+          -2.0 + u * 4.0,
+          Math.sin(angle) * radius * 0.8,
         );
         positions.push(point);
         const isActive = i === active && !state.cut;
@@ -741,6 +771,18 @@ function buildAscent(glow: THREE.Texture): Built {
         mesh.position.set(activePoint.x, activePoint.y - 0.28, activePoint.z);
         mesh.scale.setScalar(0.4 + phase * 1.5);
         mat.opacity = (1 - phase) * 0.075;
+      });
+
+      contextItems.forEach((item, index) => {
+        const anchor = positions[index % count];
+        const attribute = item.link.geometry.getAttribute("position") as THREE.BufferAttribute;
+        attribute.setXYZ(0, item.star.position.x, item.star.position.y, item.star.position.z);
+        attribute.setXYZ(1, anchor.x, anchor.y, anchor.z);
+        attribute.needsUpdate = true;
+        (item.star.material as THREE.MeshBasicMaterial).opacity =
+          0.2 + Math.sin(time * 0.5 + index * 1.3) * 0.09;
+        (item.link.material as THREE.LineBasicMaterial).opacity =
+          0.04 + Math.sin(time * 0.4 + index) * 0.02;
       });
 
       const targetPoint = positions[count - 1];

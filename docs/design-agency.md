@@ -368,3 +368,14 @@ Global:
 
 - Corners are softened to a fixed 7px / 5px / 3px scale. The corner toggle and URL parameter are gone.
 - Path map and Atlas bloom strength is tuned separately so the additive white linework stays readable.
+
+---
+
+## Revision 13 - readable type, fullscreen, constellation ascent
+
+- Type scale raised across the console: 15.5px body, 14-15px data and notes, 12-13.5px labels, 10-12px micro-labels. The display and headings keep their own scale.
+- Every figure now has a fullscreen control. The panel expands over the console, keeps its header, controls and footer, locks page scroll, and closes on Escape or the collapse control. The view transition is now opacity-only so fixed positioning is never trapped by a transformed ancestor.
+- Path map: the ascent is a constellation-threaded S-curve in depth, with gate rings, hex platforms, context stars linked to the hops, a target beacon, expanding shock rings and a travelling pulse. Hop labels use three lines so they stay readable.
+- Alert instance: `cases/01-observed-path/alert.json` validates against `schema/alert.schema.json`; the evidence manifest validates against its schema.
+- Handoff: the alert, evidence, case, guardrail, before/after snapshots and schemas are delivered to Penumbra under `detection-lab/integrations/apsis/`.
+- Cleanup: removed the stale bioluminescent verify script and unused screenshots; updated README, CONTRIBUTING, INTEGRATIONS, roadmap and release state; added `docs/RELEASE.md`; prepared the `origin` remote without pushing.

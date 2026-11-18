@@ -63,7 +63,7 @@ export function Commands({
     }
     setTyped(0);
     let value = 0;
-    const increment = Math.max(1, Math.ceil(text.length / 220));
+    const increment = Math.max(1, Math.ceil(text.length / 140));
     const timer = window.setInterval(() => {
       value = Math.min(text.length, value + increment);
       setTyped(value);

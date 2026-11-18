@@ -144,11 +144,11 @@ cd console && npm run build
 ```bash
 cd console
 npm run build
-npm run verify     # flows, responsive layout, motion parity
-npm run audit      # contrast, headings, names, target size
+npm run test:logic  # graph, depth and route-placement tests
+npm run audit       # contrast, headings, names, target size
 ```
 
-`verify` and `audit` drive a local Chrome over the DevTools protocol; set
+`audit` drives a local Chrome over the DevTools protocol; set
 `CHROME_PATH` if Chrome is not in the default Windows location.
 
 ## The console
@@ -239,12 +239,12 @@ legacy console remains at `/`.
 - **Blueprint** — layered stack; pipeline, architecture, modules, roadmap,
   verification and open release items.
 
-Global: `Cmd/Ctrl+K` command palette, motion toggle, soft 7px panel geometry,
-hash deep links, animated particle/grid/aurora background with a grain and
-scanline texture, bloom-lit glass panels, neon focus states, 2D fallback on
-every figure, clickable 3D nodes on Path map, Atlas and Extensions, and the
-same read-only export. The architecture and interaction inventory are in
-[docs/DASHBOARD.md](docs/DASHBOARD.md).
+Global: `Cmd/Ctrl+K` command palette, motion toggle, fullscreen on every figure,
+soft 7px panel geometry, hash deep links, animated particle/grid/aurora
+background with a grain and scanline texture, bloom-lit glass panels, neon focus
+states, 2D fallback on every figure, clickable 3D nodes on Path map, Atlas and
+Extensions, and the same read-only export. The architecture and interaction
+inventory are in [docs/DASHBOARD.md](docs/DASHBOARD.md).
 
 The Neon Luxe dashboard is retired. This is the dashboard build.
 
@@ -336,13 +336,20 @@ Details, custom domains, and the CLI steps are in
 
 | Now | Next | Later |
 | --- | --- | --- |
-| 18 primitives, 16 fixtures, route survey, minimum cut, static console, Pages workflow | Live import from `GetAccountAuthorizationDetails`; condition and resource-policy evaluation; a CSV view of the ledger | Benchmark against PMapper; drift view in the console; more primitives with fixture coverage |
+| 18 primitives, 16 fixtures, route survey, minimum cut; seven-view read-only dashboard, observed-path case and guardrail contract; Penumbra handoff and Pages workflow | CloudTrail overlay that marks theoretical and observed edges; live import from `GetAccountAuthorizationDetails`; condition and resource-policy evaluation; a CSV view of the ledger | Benchmark against PMapper; drift view in the console; more primitives with fixture coverage |
+
+The console, observed-path case, guardrail contract and Penumbra handoff are
+shipped. The live CloudTrail overlay, live import and condition evaluation
+remain the next engine work.
+
+- **[docs/RELEASE.md](docs/RELEASE.md)** - preflight, GitHub Pages setup, upload
+  gate and post-deploy checks.
 
 ## Contributing
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md). Keep new behaviour test-first, keep
 fixtures synthetic, never commit an authorization export, and run `npm run
-verify` / `npm run audit` before a UI change.
+test:logic` / `npm run audit` before a UI change.
 
 ## Credits
 

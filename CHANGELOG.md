@@ -77,6 +77,20 @@
 - Corner geometry was softened rather than toggled: a fixed 7px panel radius,
   5px controls and 3px tags, with the screen frame and tables left square. The
   corner switch and `?corners` parameter were removed.
+- Typography moved up one step across the console: 15.5px body, 14–15px data and
+  notes, larger labels and micro-labels. Every figure now has a fullscreen
+  control that expands the panel over the console, keeps the header and footer,
+  and closes on Escape.
+- The Path map ascent is now a constellation-threaded route: an S-curve in depth
+  with gate rings, hex platforms, context stars linked to the hops, a target
+  beacon, shock rings and a travelling pulse. The selected account's source,
+  hops and cut remain the same data.
+- Added `cases/01-observed-path/alert.json` (`penumbra.alert/v1`), validated
+  between the alert and evidence schemas, and delivered the handoff to
+  `detection-lab/integrations/apsis/`.
+- Added `docs/RELEASE.md`, finished the roadmap state in the Blueprint view and
+  README, removed the stale bioluminescent verify script and unused screenshots,
+  and prepared the `origin` remote without pushing.
 - The internal working title was removed from every surface; the dashboard,
   docs, design lab and metadata now use the product language only.
 - A live Signal instrument: auto-advancing phase, gradient light curve with

@@ -34,13 +34,13 @@ cd console
 npm ci
 npm run dev
 npm run build
-npm run verify
+npm run test:logic
 npm run audit
 ```
 
-`verify` exercises the real flows at 1440 and 390; `audit` measures contrast,
-heading order, accessible names, and target size. Both use Chrome over the
-DevTools protocol; set `CHROME_PATH` if needed.
+`test:logic` exercises the graph and route logic; `audit` measures contrast,
+heading order, accessible names, and target size. The audit uses Chrome over
+the DevTools protocol; set `CHROME_PATH` if needed.
 
 Regenerate data after an engine change:
 

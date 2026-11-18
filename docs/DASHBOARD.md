@@ -10,17 +10,19 @@ control surface with one distinct WebGL instrument per view.
 | --- | --- | --- | --- | --- |
 | 01 | Overview | What is the fleet posture and where do I go? | Orb | Sphere + 7-node orbit |
 | 02 | Survey | Which accounts carry the exposure? | Dish | Wireframe bowl + radar sweep |
-| 03 | Path map | How does one escalation walk, hop by hop? | Ascent | Rising gate ladder |
+| 03 | Path map | How does one escalation walk, hop by hop? | Ascent | Constellation-threaded ascent |
 | 04 | Atlas | Which identity, role and trust edges connect? | Constellation | 16-node disc + orbital ring |
 | 05 | Commands | What did the engine actually run? | Prism | Monolith + scan plane |
 | 06 | Extensions | Which primitives, coverage, contracts and cases exist? | Bloom | Six rings + 18 nodes |
 | 07 | Blueprint | What is the whole system and is it ready? | Stack | Five stacked layers |
 
-Each figure supports drag, scroll zoom, double-click reset, a `2D` SVG fallback
-and a reduced-motion path. Auto rotation and node pulses are consistent across
-views; the Path map adds an autoplaying hop sequence and a cut state. A small
-`Auto` / `Paused` badge in the figure header reports the current motion state,
-and the footer names the animation that is playing.
+Each figure supports drag, scroll zoom, double-click reset, a `2D` SVG fallback,
+a **fullscreen** toggle and a reduced-motion path. Fullscreen expands the panel
+over the console, locks page scroll, keeps the header and footer, and closes on
+Escape or the collapse control. Auto rotation and node pulses are consistent
+across views; the Path map adds an autoplaying hop sequence and a cut state. A
+small `Auto` / `Paused` badge in the figure header reports the current motion
+state, and the footer names the animation that is playing.
 
 Every figure renders through an `EffectComposer` with `UnrealBloomPass` and
 `OutputPass`. The canvas is screen-blended over the glass stage, so only the
@@ -30,7 +32,7 @@ lit linework and halos add light. Build details:
 | --- | --- | --- |
 | Orb | Shader core, Fresnel atmosphere, orbit tube, dust, comet | Comet travels the orbit; halos breathe |
 | Dish | Lathe bowl, rim, feed, 28 contacts | Sweep rotates and wakes contacts |
-| Ascent | Eight gates, hex platforms, cylinder hops, target beacon, shock rings | Hops advance; pulse travels the live segment; rings expand from the active hop |
+| Ascent | Eight gates, hex platforms, S-curve depth, context constellation, target beacon, shock rings | Hops advance; pulse travels; rings expand; context stars link to the route |
 | Constellation | Sixteen nodes, curved tube arcs, node rings, orbital ring, nucleus, base stems | Nodes pulse; rings spin; data motes orbit; focus beam rises |
 | Prism | Glass monolith, beam, scan plane, stacked rings | Scan climbs; rings counter-rotate |
 | Bloom | Six rings, eighteen pickable nodes, wire nucleus | Rings counter-rotate; focus node swells |
@@ -40,6 +42,10 @@ Clickable figures: the Path map ascent jumps to a hop, the Atlas constellation
 switches account, and the Bloom node selects a primitive. Each pickable node
 carries an oversized invisible hit sphere, so the target is comfortable at any
 stage size.
+
+Typography is set for reading: 15.5px body, 14–15px data and notes, 12–13.5px
+labels, 10–12px micro-labels, and SVG graph labels sized for the rendered panel.
+The display numerals and headings keep their own scale.
 
 ## Soft geometry
 
@@ -93,8 +99,8 @@ All numbers are real fixture totals: 16 accounts, 194 identities, 144 routes,
   case study.
 - Blueprint: pipeline stage selection, release checklist, architecture flow,
   module map, roadmap, open items.
-- Global: command palette, motion pause, soft panel geometry, hash deep links,
-  toast feedback, hover glow on panels and cards.
+- Global: command palette, motion pause, fullscreen on every figure, soft panel
+  geometry, hash deep links, toast feedback, hover glow on panels and cards.
 
 ## Accessibility and motion
 
@@ -120,10 +126,12 @@ python -m unittest discover -s tests -v
 The Vite build emits `dist/index.html` (legacy console) and
 `dist/dashboard.html` (this dashboard). The Pages workflow publishes `dist/`.
 
-Last verification: build pass; 9/9 logic tests; 67/67 Python tests; no
-horizontal overflow on any of the seven views at 390, 768 or 1440; local audit
-reports no contrast, heading, unnamed-control, small-target or overflow
-failures. The audit's 14px floor still flags intentional HUD micro-labels.
+Last verification: build pass; 9/9 logic tests; 67/67 Python tests; contracts
+valid against both schemas; no horizontal overflow on any of the seven views at
+390, 768 or 1440; local audit reports no contrast, heading, unnamed-control,
+small-target or overflow failures; fullscreen, Escape-close and 3D node picking
+verified in the browser. The audit's 14px floor still flags intentional HUD
+micro-labels.
 
 ## Boundaries
 

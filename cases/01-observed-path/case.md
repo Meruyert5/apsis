@@ -46,11 +46,12 @@ human-readable revocation steps.
 ## After
 
 `after.json` shows zero routes. `evidence.json` lists the observed events and
-the edge facts. The guardrail is recorded in `guardrail.md`.
+the edge facts. The guardrail is recorded in `guardrail.md`, and `alert.json`
+is the validated `penumbra.alert/v1` instance handed to Penumbra.
 
 ## What this case is not
 
 This is a synthetic, reproducible case built from the shipped fixture. It does
-not describe a customer account. The Apsis engine overlay that derives
-`observed` from a real CloudTrail export is the next step; this case fixes the
-contract and the narrative first.
+not describe a customer account. The engine overlay that derives `observed`
+from a live CloudTrail export is the next step; this case fixes the contract,
+the alert and the narrative first.
