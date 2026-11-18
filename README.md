@@ -229,21 +229,22 @@ legacy console remains at `/`.
 
 - **Overview** — orb; fleet figures, module map, fleet pulse, evidence.
 - **Survey** — radar dish; severity, ranking, coverage, searchable ledger.
-- **Path map** — ascending path; autoplay, step, speed, cut/restore, hop
-  detail, route ledger.
-- **Atlas** — account constellation; identity graph, filters, inspector.
+- **Path map** - gate ladder; autoplay, step, speed, cut/restore, clickable 3D
+  hops, hop detail, route ledger.
+- **Atlas** - account constellation; curved directed trust graph with short
+  labels and flow, filters, inspector.
 - **Commands** — prism; 114 recorded runs, typewriter output, replay, copy.
 - **Extensions** — bloom; 18 primitives, 288-cell coverage matrix, contracts,
   alert sample and the observed-path case.
 - **Blueprint** — layered stack; pipeline, architecture, modules, roadmap,
   verification and open release items.
 
-Global: `Cmd/Ctrl+K` command palette, motion toggle, corner toggle (sharp or
-rounded), hash deep links, animated particle/grid/aurora background with a
-grain and scanline texture, bloom-lit glass panels, neon focus states, 2D
-fallback on every figure, clickable 3D nodes on Path map, Atlas and Extensions,
-and the same read-only export. The architecture and interaction inventory are
-in [docs/DASHBOARD.md](docs/DASHBOARD.md).
+Global: `Cmd/Ctrl+K` command palette, motion toggle, soft 7px panel geometry,
+hash deep links, animated particle/grid/aurora background with a grain and
+scanline texture, bloom-lit glass panels, neon focus states, 2D fallback on
+every figure, clickable 3D nodes on Path map, Atlas and Extensions, and the
+same read-only export. The architecture and interaction inventory are in
+[docs/DASHBOARD.md](docs/DASHBOARD.md).
 
 The Neon Luxe dashboard is retired. This is the dashboard build.
 

@@ -20,6 +20,51 @@ const KIND_COLOR: Record<string, string> = {
   cloudformation: "#5d6b8a",
 };
 
+type Point = { x: number; y: number };
+
+function curvePath(a: Point, b: Point, bend: number, trim = 16) {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const length = Math.hypot(dx, dy) || 1;
+  const ux = dx / length;
+  const uy = dy / length;
+  const sx = a.x + ux * trim;
+  const sy = a.y + uy * trim;
+  const ex = b.x - ux * trim;
+  const ey = b.y - uy * trim;
+  const cx = (sx + ex) / 2 - uy * bend;
+  const cy = (sy + ey) / 2 + ux * bend;
+  return `M ${sx} ${sy} Q ${cx} ${cy} ${ex} ${ey}`;
+}
+
+function shortLabel(node: GraphNode) {
+  const base = node.label
+    .replace(/ role$/i, "")
+    .replace(/ engineer$/i, "")
+    .replace(/ lead$/i, "")
+    .replace(/ services$/i, "");
+  const compact: Record<string, string> = {
+    Administrator: "Admin",
+    "Studio administrator": "Studio",
+    "Outsource artist": "Contractor",
+    "Tools intern": "Intern",
+    "Player insights": "Insights",
+    "Player support": "Support",
+    "Game server": "Server",
+    "Art pipeline": "Art",
+    "Live-ops": "Ops",
+    "Power users": "Power",
+  };
+  return compact[base] ?? base;
+}
+
+function hexPoints(radius: number) {
+  return Array.from({ length: 6 }, (_, index) => {
+    const angle = (index / 6) * Math.PI * 2 - Math.PI / 2;
+    return `${(Math.cos(angle) * radius).toFixed(1)},${(Math.sin(angle) * radius).toFixed(1)}`;
+  }).join(" ");
+}
+
 export function Atlas({
   account,
   setAccount,
@@ -45,7 +90,8 @@ export function Atlas({
   const focusIndex = Math.max(0, fleet.findIndex((row) => row.key === account));
   const nodes = bundle.nodes;
   const positions = useMemo(() => {
-    const map = new Map<string, { x: number; y: number }>();
+    const map = new Map<string, Point>();
+    if (!nodes.length) return map;
     const xs = nodes.map((node) => node.x);
     const ys = nodes.map((node) => node.y);
     const minX = Math.min(...xs);
@@ -54,14 +100,39 @@ export function Atlas({
     const maxY = Math.max(...ys);
     const spanX = maxX - minX || 1;
     const spanY = maxY - minY || 1;
+    const scale = Math.min(700 / spanX, 430 / spanY);
+    const width = spanX * scale;
+    const height = spanY * scale;
+    const originX = (900 - width) / 2;
+    const originY = (560 - height) / 2 + 8;
     nodes.forEach((node) => {
       map.set(node.id, {
-        x: 64 + ((node.x - minX) / spanX) * 772,
-        y: 64 + ((node.y - minY) / spanY) * 432,
+        x: originX + (node.x - minX) * scale,
+        y: originY + (node.y - minY) * scale,
       });
     });
     return map;
   }, [nodes]);
+
+  const adjacent = useMemo(() => {
+    const map = new Map<string, Set<string>>();
+    nodes.forEach((node) => map.set(node.id, new Set<string>()));
+    bundle.edges.forEach((edge) => {
+      map.get(edge.source)?.add(edge.target);
+      map.get(edge.target)?.add(edge.source);
+    });
+    return map;
+  }, [bundle, nodes]);
+
+  const neighbors = selectedId ? adjacent.get(selectedId) ?? new Set<string>() : new Set<string>();
+  const kindCounts = nodes.reduce(
+    (acc, node) => {
+      const key = node.admin ? "admin" : node.kind;
+      acc[key] = (acc[key] ?? 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   const visible = (node: GraphNode) => {
     const term = query.trim().toLowerCase();
@@ -155,8 +226,45 @@ export function Atlas({
             </div>
           </div>
           <div className="graph-wrap">
-            <svg className="identity-graph" viewBox="0 0 900 560" role="img" aria-label="Identity graph">
-              <g className="graph-grid">
+            <svg
+              className="identity-graph"
+              viewBox="0 0 900 560"
+              role="img"
+              aria-labelledby="identity-graph-title"
+            >
+              <title id="identity-graph-title">
+                Identity trust graph for {bundle.scenario.title}
+              </title>
+              <defs>
+                <radialGradient id="graph-field" cx="62%" cy="50%" r="62%">
+                  <stop offset="0" stopColor="#2b3cff" stopOpacity=".18" />
+                  <stop offset=".55" stopColor="#2b3cff" stopOpacity=".05" />
+                  <stop offset="1" stopColor="#2b3cff" stopOpacity="0" />
+                </radialGradient>
+                <marker
+                  id="graph-arrow"
+                  viewBox="0 0 8 8"
+                  refX="6"
+                  refY="4"
+                  markerWidth="5"
+                  markerHeight="5"
+                  orient="auto-start-reverse"
+                >
+                  <path d="M0 0 L8 4 L0 8 Z" fill="rgb(120 145 210 / .55)" />
+                </marker>
+                <marker
+                  id="graph-arrow-live"
+                  viewBox="0 0 8 8"
+                  refX="6"
+                  refY="4"
+                  markerWidth="6"
+                  markerHeight="6"
+                  orient="auto-start-reverse"
+                >
+                  <path d="M0 0 L8 4 L0 8 Z" fill="#8db7ff" />
+                </marker>
+              </defs>              <rect width="900" height="560" fill="url(#graph-field)" />
+              <g className="graph-grid" aria-hidden="true">
                 {Array.from({ length: 9 }, (_, index) => (
                   <line key={`v${index}`} x1={90 + index * 90} y1="30" x2={90 + index * 90} y2="530" />
                 ))}
@@ -164,62 +272,127 @@ export function Atlas({
                   <line key={`h${index}`} x1="30" y1={90 + index * 90} x2="870" y2={90 + index * 90} />
                 ))}
               </g>
-              {bundle.edges.map((edge) => {
-                const a = positions.get(edge.source);
-                const b = positions.get(edge.target);
-                if (!a || !b) return null;
-                const active = selectedId === edge.source || selectedId === edge.target;
-                return (
-                  <line
-                    key={edge.id}
-                    className={`graph-edge ${active ? "is-active" : ""}`}
-                    x1={a.x}
-                    y1={a.y}
-                    x2={b.x}
-                    y2={b.y}
-                  />
-                );
-              })}
-              {nodes.map((node) => {
-                const point = positions.get(node.id);
-                if (!point) return null;
-                const on = visible(node);
-                const isSelected = node.id === selectedId;
-                return (
-                  <g
-                    key={node.id}
-                    className={`graph-node ${isSelected ? "is-selected" : ""} ${on ? "" : "is-dim"}`.trim()}
-                    transform={`translate(${point.x} ${point.y})`}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`${node.label}, ${node.kind}${node.admin ? ", administrator" : ""}`}
-                    onClick={() => setSelectedId(node.id)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        setSelectedId(node.id);
-                      }
-                    }}
-                  >
-                    <title>{node.label}</title>
-                    {node.admin ? (
-                      <rect x="-9" y="-9" width="18" height="18" transform="rotate(45)" fill={KIND_COLOR.admin} />
-                    ) : (
-                      <circle r={node.kind === "role" ? 8 : 6.5} fill={KIND_COLOR[node.kind] ?? "#5d6b8a"} />
-                    )}
-                    <circle className="node-ring" r="15" />
-                    <text className="node-label" x="0" y="-18" textAnchor="middle">
-                      {isSelected || node.admin ? node.label : ""}
-                    </text>
-                  </g>
-                );
-              })}
+              <g className="admin-orbits" aria-hidden="true">
+                {nodes.filter((node) => node.admin).map((node) => {
+                  const point = positions.get(node.id);
+                  if (!point) return null;
+                  return (
+                    <g key={`orbit-${node.id}`}>
+                      <circle cx={point.x} cy={point.y} r="44" />
+                      <circle className="is-dashed" cx={point.x} cy={point.y} r="82" />
+                    </g>
+                  );
+                })}
+              </g>
+              <g className="graph-edges">
+                {bundle.edges.map((edge, index) => {
+                  const a = positions.get(edge.source);
+                  const b = positions.get(edge.target);
+                  if (!a || !b) return null;
+                  const active = selectedId === edge.source || selectedId === edge.target;
+                  const bend = ((index % 4) - 1.5) * 16;
+                  return (
+                    <path
+                      key={edge.id}
+                      className={`graph-edge ${active ? "is-active" : ""}`}
+                      d={curvePath(a, b, bend)}
+                      markerEnd={active ? "url(#graph-arrow-live)" : "url(#graph-arrow)"}
+                    >
+                      <title>{`${edge.source} to ${edge.target} - ${edge.technique}`}</title>
+                    </path>
+                  );
+                })}
+              </g>
+              <g className="graph-nodes">
+                {nodes.map((node, index) => {
+                  const point = positions.get(node.id);
+                  if (!point) return null;
+                  const on = visible(node);
+                  const isSelected = node.id === selectedId;
+                  const isNeighbor = neighbors.has(node.id);
+                  const clustered = point.y > 330 && point.y < 410;
+                  const edgeRight = node.x > 0.9;
+                  const edgeLeft = node.x < 0.21;
+                  const labelX = edgeRight ? 24 : edgeLeft ? -22 : 0;
+                  const labelAnchor = edgeRight ? "start" : edgeLeft ? "end" : "middle";
+                  const labelY = edgeRight || edgeLeft
+                    ? 4
+                    : clustered && index % 2 === 1
+                      ? 31
+                      : -22;
+                  return (
+                    <g
+                      key={node.id}
+                      className={`graph-node ${isSelected ? "is-selected" : ""} ${isNeighbor ? "is-neighbor" : ""} ${on ? "" : "is-dim"}`.trim()}
+                      transform={`translate(${point.x} ${point.y})`}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`${node.label}, ${node.kind}${node.admin ? ", administrator" : ""}`}
+                      onClick={() => setSelectedId(node.id)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          setSelectedId(node.id);
+                        }
+                      }}
+                    >
+                      <title>{`${node.label} - ${node.kind}${node.admin ? ", administrator" : ""} - degree ${node.degree}`}</title>
+                      {isSelected || isNeighbor ? (
+                        <circle className="node-halo" r={isSelected ? 24 : 19} />
+                      ) : null}
+                      <circle className="node-ring" r={node.kind === "admin" ? 17 : 14} />
+                      {node.kind === "admin" ? (
+                        <rect
+                          className="node-core node-diamond"
+                          x="-10"
+                          y="-10"
+                          width="20"
+                          height="20"
+                          transform="rotate(45)"
+                          fill={KIND_COLOR.admin}
+                        />
+                      ) : node.kind === "role" ? (
+                        <polygon
+                          className="node-core node-hex"
+                          points={hexPoints(10)}
+                          fill={KIND_COLOR.role}
+                        />
+                      ) : node.kind === "group" ? (
+                        <rect
+                          className="node-core node-square"
+                          x="-8"
+                          y="-8"
+                          width="16"
+                          height="16"
+                          rx="2"
+                          fill={KIND_COLOR.group}
+                        />
+                      ) : (
+                        <circle
+                          className="node-core"
+                          r={7}
+                          fill={KIND_COLOR[node.kind] ?? "#5d6b8a"}
+                        />
+                      )}
+                      <text
+                        className={`node-label ${isSelected ? "is-selected" : ""} ${node.admin ? "is-admin" : ""}`.trim()}
+                        x={labelX}
+                        y={labelY}
+                        textAnchor={labelAnchor}
+                      >
+                        {shortLabel(node)}
+                      </text>
+                    </g>
+                  );
+                })}
+              </g>
             </svg>
             <div className="graph-legend">
-              <span><i style={{ background: "#fff" }} />admin</span>
-              <span><i style={{ background: "#2b3cff" }} />role</span>
-              <span><i style={{ background: "#7a6cff" }} />user</span>
-              <span><i style={{ background: "#44506e" }} />group</span>
+              <span><i style={{ background: "#fff" }} />admin <b>{kindCounts.admin ?? 0}</b></span>
+              <span><i style={{ background: "#2b3cff" }} />role <b>{kindCounts.role ?? 0}</b></span>
+              <span><i style={{ background: "#7a6cff" }} />user <b>{kindCounts.user ?? 0}</b></span>
+              <span><i style={{ background: "#44506e" }} />group <b>{kindCounts.group ?? 0}</b></span>
+              <span className="graph-legend-note">arrow = escalation direction</span>
             </div>
           </div>
         </Panel>

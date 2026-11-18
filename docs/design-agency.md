@@ -345,6 +345,26 @@ Shell pass:
 
 - `Auto` / `Paused` badge in every figure header; footer names the running animation; the 3D hint names click, drag, scroll and reset.
 - Panel hover glow, brighter nav states, animated scanline and grain textures over the field, stronger but calmer bloom.
-- Rounded-corner variant: topbar `Corners` toggle, `?corners=round` / `?corners=sharp`, persisted in `localStorage`. Sharp remains the default.
+- Rounded-corner variant: topbar `Corners` toggle, `?corners=round` / `?corners=sharp`, persisted in `localStorage`. Sharp remains the default. (Superseded in Revision 12 by the fixed soft-geometry scale.)
 
 Verification: build passes; 9/9 logic tests; 67/67 Python tests; no horizontal overflow on all seven views at 390, 768 and 1440; accessibility audit reports no contrast, heading, control-name, target-size or overflow failures.
+
+---
+
+## Revision 12 - path and atlas second pass
+
+Path map:
+
+- The ascent was rebuilt as an eight-gate ladder on a wider diagonal: hex platforms, cylinder hop segments, a rotating gate at each hop, an oversized target beacon, expanding shock rings on the live hop, six orbiting sparks, a travelling pulse with trail, and a cut fracture. Wireframe nodes replace the solid diamonds.
+- Ruler ticks now frame both sides of the stage, and the camera was pulled back so the full climb fits without clipping.
+- Each hop carries an oversized invisible hit sphere; clicking the 3D node jumps the rail.
+
+Atlas:
+
+- The constellation gained a wire nucleus, base stems, node rings, a tilted orbital ring with two travelling pulses, a soft nebula field and a brighter focus beam. Nodes and arcs are larger.
+- The identity graph was rebuilt: uniform-fit positions preserve the authored topology, edges are curved and carry direction arrows, the selected node animates a dashed trust flow, nodes are shaped by kind, short labels are always visible with full names in the inspector, and the legend shows counts.
+
+Global:
+
+- Corners are softened to a fixed 7px / 5px / 3px scale. The corner toggle and URL parameter are gone.
+- Path map and Atlas bloom strength is tuned separately so the additive white linework stays readable.

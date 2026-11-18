@@ -66,8 +66,17 @@
   layer outlines. Figures pause offscreen and fall back to SVG without WebGL.
 - The dashboard gained an `Auto` / `Paused` badge per figure, clickable 3D nodes
   on Path map, Atlas and Extensions, a scanline and grain texture over the
-  animated field, hover glow on panels, and a rounded-corner variant behind the
-  topbar `Corners` toggle and `?corners=round`. Sharp corners remain the default.
+  animated field, and hover glow on panels.
+- Path map and Atlas were rebuilt: the ascent is now a rising ladder of gates,
+  hex platforms, a target beacon, shock rings and a travelling pulse on a wider
+  stage; the constellation gained a nucleus, base stems, node rings, an orbital
+  ring with data pulses and a nebula field. The identity graph moved to a
+  uniform-fit layout with curved directed edges, short labels, shape-by-kind
+  nodes and an animated trust flow. All 3D pickables now carry oversized
+  invisible hit targets.
+- Corner geometry was softened rather than toggled: a fixed 7px panel radius,
+  5px controls and 3px tags, with the screen frame and tables left square. The
+  corner switch and `?corners` parameter were removed.
 - The internal working title was removed from every surface; the dashboard,
   docs, design lab and metadata now use the product language only.
 - A live Signal instrument: auto-advancing phase, gradient light curve with

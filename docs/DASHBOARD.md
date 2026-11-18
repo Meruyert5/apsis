@@ -10,8 +10,8 @@ control surface with one distinct WebGL instrument per view.
 | --- | --- | --- | --- | --- |
 | 01 | Overview | What is the fleet posture and where do I go? | Orb | Sphere + 7-node orbit |
 | 02 | Survey | Which accounts carry the exposure? | Dish | Wireframe bowl + radar sweep |
-| 03 | Path map | How does one escalation walk, hop by hop? | Ascent | Rising 8-node path |
-| 04 | Atlas | Which identity, role and trust edges connect? | Constellation | Flattened 16-node disc |
+| 03 | Path map | How does one escalation walk, hop by hop? | Ascent | Rising gate ladder |
+| 04 | Atlas | Which identity, role and trust edges connect? | Constellation | 16-node disc + orbital ring |
 | 05 | Commands | What did the engine actually run? | Prism | Monolith + scan plane |
 | 06 | Extensions | Which primitives, coverage, contracts and cases exist? | Bloom | Six rings + 18 nodes |
 | 07 | Blueprint | What is the whole system and is it ready? | Stack | Five stacked layers |
@@ -30,25 +30,24 @@ lit linework and halos add light. Build details:
 | --- | --- | --- |
 | Orb | Shader core, Fresnel atmosphere, orbit tube, dust, comet | Comet travels the orbit; halos breathe |
 | Dish | Lathe bowl, rim, feed, 28 contacts | Sweep rotates and wakes contacts |
-| Ascent | Eight nodes, cylinder hops, platforms, travel pulse | Hops advance; pulse travels the live segment |
-| Constellation | Sixteen nodes, curved tube arcs, focus ring | Nodes pulse; focus ring rotates |
+| Ascent | Eight gates, hex platforms, cylinder hops, target beacon, shock rings | Hops advance; pulse travels the live segment; rings expand from the active hop |
+| Constellation | Sixteen nodes, curved tube arcs, node rings, orbital ring, nucleus, base stems | Nodes pulse; rings spin; data motes orbit; focus beam rises |
 | Prism | Glass monolith, beam, scan plane, stacked rings | Scan climbs; rings counter-rotate |
 | Bloom | Six rings, eighteen pickable nodes, wire nucleus | Rings counter-rotate; focus node swells |
 | Stack | Five wire layers, outlines, beam, connectors | Layers breathe; beam rises |
 
 Clickable figures: the Path map ascent jumps to a hop, the Atlas constellation
-switches account, and the Bloom node selects a primitive.
+switches account, and the Bloom node selects a primitive. Each pickable node
+carries an oversized invisible hit sphere, so the target is comfortable at any
+stage size.
 
-## Corner variants
+## Soft geometry
 
-Sharp corners are the default. The topbar `Corners` control switches to a
-rounded variant; the choice persists in `localStorage` and can be deep-linked:
-
-- `?corners=round` — rounded panels, cards, controls, palette and tags.
-- `?corners=sharp` — the default square geometry.
-
-The rounded variant uses a 12px panel radius, 8px control radius and 5px tag
-radius, and never changes layout or content.
+The dashboard uses a small fixed radius rather than a corner variant: 7px on
+panels, cards, figure stages and the palette shell; 5px on buttons, fields,
+chips, rails and nav items; 3px on tags, badges and matrix cells. The screen
+frame, tables and barcode stay square so the console keeps its technical edge.
+There is no toggle and no `?corners` parameter.
 
 ## Data
 
@@ -84,8 +83,9 @@ All numbers are real fixture totals: 16 accounts, 194 identities, 144 routes,
 - Path map: account/source/route selection, autoplay with loop, play/pause,
   step, reset, speed, cut/restore, clickable hop rail, clickable 3D hop nodes,
   real hop detail, clickable route ledger.
-- Atlas: 16-account constellation with raycast selection, identity graph,
-  kind filters, search, node inspector, route count.
+- Atlas: 16-account constellation with raycast selection, curved directed
+  identity edges with animated flow, shape-by-kind nodes, always-on short
+  labels, kind filters, search, node inspector, route count.
 - Commands: verb/scenario/format filters, 114-run list, typewriter output,
   replay, copy, verb mix.
 - Extensions: technique filters and expansion, clickable 3D primitive nodes,
@@ -93,8 +93,8 @@ All numbers are real fixture totals: 16 accounts, 194 identities, 144 routes,
   case study.
 - Blueprint: pipeline stage selection, release checklist, architecture flow,
   module map, roadmap, open items.
-- Global: command palette, motion pause, corner toggle, hash deep links, toast
-  feedback, hover glow on panels and cards.
+- Global: command palette, motion pause, soft panel geometry, hash deep links,
+  toast feedback, hover glow on panels and cards.
 
 ## Accessibility and motion
 
