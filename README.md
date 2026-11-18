@@ -203,7 +203,7 @@ page edge.
   bodies, hop detail, route ledger. The cut turns the star into a black hole.
 - **Atlas** - account system; star, 16 account bodies, trust arcs, plus a
   full-width identity-graph workbench with a 16-account strip, search, kind
-  filters, depth rings and an inspector.
+  filters, distinct node shapes, straight/curved edges and an inspector.
 - **Drift** - planet pair; route-aware diff, new and closed routes, edge
   changes, the same comparator as `apsis diff`.
 - **Commands** - command core; 114 recorded runs, typewriter output, replay, copy.

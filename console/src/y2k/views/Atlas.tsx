@@ -37,6 +37,15 @@ function curvePath(a: Point, b: Point, bend: number, trim = 16) {
   return `M ${sx} ${sy} Q ${cx} ${cy} ${ex} ${ey}`;
 }
 
+function straightPath(a: Point, b: Point, trim = 18) {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const length = Math.hypot(dx, dy) || 1;
+  const ux = dx / length;
+  const uy = dy / length;
+  return `M ${a.x + ux * trim} ${a.y + uy * trim} L ${b.x - ux * trim} ${b.y - uy * trim}`;
+}
+
 function shortLabel(node: GraphNode) {
   const base = node.label
     .replace(/ role$/i, "")
@@ -93,39 +102,24 @@ export function Atlas({
   const positions = useMemo(() => {
     const map = new Map<string, Point>();
     if (!nodes.length) return map;
-    const cx = 470;
-    const cy = 300;
-    const admins = nodes.filter((node) => node.admin);
-    const roles = nodes.filter((node) => !node.admin && node.kind === "role");
-    const users = nodes.filter((node) => !node.admin && node.kind === "user");
-    const outer = nodes.filter(
-      (node) => !node.admin && node.kind !== "role" && node.kind !== "user",
-    );
-
-    admins.forEach((node, index) => {
-      map.set(node.id, index === 0 ? { x: cx, y: cy } : { x: cx + 54, y: cy - 42 });
-    });
-
-    const rings = [
-      { items: roles, radius: 126, offset: -Math.PI / 2 },
-      { items: users, radius: 194, offset: -Math.PI / 2 + 0.32 },
-      { items: outer, radius: 258, offset: -Math.PI / 2 + 0.12 },
-    ];
-    rings.forEach(({ items, radius, offset }) => {
-      items.forEach((node, index) => {
-        const angle = offset + (index / Math.max(1, items.length)) * Math.PI * 2;
-        map.set(node.id, {
-          x: cx + Math.cos(angle) * radius,
-          y: cy + Math.sin(angle) * radius,
-        });
+    const xs = nodes.map((node) => node.x);
+    const ys = nodes.map((node) => node.y);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    const spanX = maxX - minX || 1;
+    const spanY = maxY - minY || 1;
+    const scale = Math.min(850 / spanX, 500 / spanY);
+    const width = spanX * scale;
+    const height = spanY * scale;
+    const originX = (940 - width) / 2;
+    const originY = (600 - height) / 2 + 12;
+    nodes.forEach((node) => {
+      map.set(node.id, {
+        x: originX + (node.x - minX) * scale,
+        y: originY + (node.y - minY) * scale,
       });
-    });
-
-    nodes.forEach((node, index) => {
-      if (!map.has(node.id)) {
-        const angle = (index / nodes.length) * Math.PI * 2;
-        map.set(node.id, { x: cx + Math.cos(angle) * 210, y: cy + Math.sin(angle) * 210 });
-      }
     });
     return map;
   }, [nodes]);
@@ -141,6 +135,7 @@ export function Atlas({
       const db = Math.hypot(b.point.x - 470, b.point.y - 300);
       return db - da;
     });
+    const roleIds = nodes.filter((node) => node.kind === "role").map((node) => node.id);
 
     const overlaps = (rect: { x: number; y: number; w: number; h: number }, id: string) => {
       if (rect.x < 8 || rect.y < 8 || rect.x + rect.w > 932 || rect.y + rect.h > 592) return true;
@@ -163,19 +158,23 @@ export function Atlas({
     };
 
     ordered.forEach(({ id, point }) => {
-      const label = shortLabel(nodes.find((node) => node.id === id)!);
-      const w = Math.min(138, label.length * 8.6 + 10);
+      const node = nodes.find((item) => item.id === id)!;
+      const label = shortLabel(node);
+      const w = Math.min(150, label.length * 9.4 + 12);
       const h = 18;
       const dx = point.x - 470;
       const dy = point.y - 300;
       const len = Math.hypot(dx, dy) || 1;
+      const roleIndex = roleIds.indexOf(id);
       const candidates = [
-        { x: point.x + (dx / len) * 32, y: point.y + (dy / len) * 32 },
-        { x: point.x - (dx / len) * 32, y: point.y - (dy / len) * 32 },
-        { x: point.x, y: point.y - 34 },
-        { x: point.x, y: point.y + 34 },
-        { x: point.x - 52, y: point.y },
-        { x: point.x + 52, y: point.y },
+        ...(roleIndex >= 0
+          ? [{ x: point.x, y: point.y + (roleIndex % 2 === 0 ? -46 : 46) }]
+          : []),
+        { x: point.x + (dx / len) * 38, y: point.y + (dy / len) * 38 },
+        { x: point.x, y: point.y - 44 },
+        { x: point.x, y: point.y + 44 },
+        { x: point.x - 58, y: point.y },
+        { x: point.x + 58, y: point.y },
       ];
       let chosen = candidates[0];
       for (const candidate of candidates) {
@@ -357,48 +356,23 @@ export function Atlas({
                   <line key={`h${index}`} x1="30" y1={90 + index * 90} x2="910" y2={90 + index * 90} />
                 ))}
               </g>
-              <g className="admin-orbits" aria-hidden="true">
-                {nodes.filter((node) => node.admin).map((node) => {
-                  const point = positions.get(node.id);
-                  if (!point) return null;
-                  return (
-                    <g key={`orbit-${node.id}`}>
-                      <circle cx={point.x} cy={point.y} r="54" />
-                      <circle className="is-dashed" cx={point.x} cy={point.y} r="126" />
-                      <circle className="is-dashed" cx={point.x} cy={point.y} r="194" />
-                      <circle className="is-dashed is-outer" cx={point.x} cy={point.y} r="258" />
-                    </g>
-                  );
-                })}
-              </g>
-              <g className="graph-ring-labels" aria-hidden="true">
-                {[
-                  { radius: 126, label: "ROLE ORBIT" },
-                  { radius: 194, label: "USER ORBIT" },
-                  { radius: 258, label: "RESOURCE ORBIT" },
-                ].map((ring) => (
-                  <text
-                    key={ring.label}
-                    x={470 + Math.cos(0.42) * ring.radius}
-                    y={300 + Math.sin(0.42) * ring.radius}
-                    textAnchor="start"
-                  >
-                    {ring.label}
-                  </text>
-                ))}
-              </g>
               <g className="graph-edges">
                 {bundle.edges.map((edge, index) => {
                   const a = positions.get(edge.source);
                   const b = positions.get(edge.target);
                   if (!a || !b) return null;
                   const active = selectedId === edge.source || selectedId === edge.target;
-                  const bend = ((index % 4) - 1.5) * 18;
+                  const sourceKind = nodes.find((node) => node.id === edge.source)?.kind;
+                  const targetKind = nodes.find((node) => node.id === edge.target)?.kind;
+                  const sameKind = Boolean(sourceKind && sourceKind === targetKind);
+                  const d = sameKind
+                    ? straightPath(a, b, 20)
+                    : curvePath(a, b, ((index % 3) - 1) * 14, 18);
                   return (
                     <path
                       key={edge.id}
-                      className={`graph-edge ${active ? "is-active" : ""}`}
-                      d={curvePath(a, b, bend, 18)}
+                      className={`graph-edge ${active ? "is-active" : ""} ${sameKind ? "is-direct" : ""} ${edge.conditional ? "is-conditional" : ""}`.trim()}
+                      d={d}
                       markerEnd={active ? "url(#graph-arrow-live)" : "url(#graph-arrow)"}
                     >
                       <title>{`${edge.source} to ${edge.target} - ${edge.technique}`}</title>
@@ -465,11 +439,17 @@ export function Atlas({
                           rx="2"
                           fill={KIND_COLOR.group}
                         />
-                      ) : (
+                      ) : node.kind === "user" ? (
                         <circle
                           className="node-core"
                           r={8}
-                          fill={KIND_COLOR[node.kind] ?? "#7b86c9"}
+                          fill={KIND_COLOR.user}
+                        />
+                      ) : (
+                        <polygon
+                          className="node-core node-triangle"
+                          points="0,-10 9,7 -9,7"
+                          fill={KIND_COLOR[node.kind] ?? "#8a8f96"}
                         />
                       )}
                     </g>
@@ -481,7 +461,7 @@ export function Atlas({
                   const label = labels.get(node.id);
                   if (!label) return null;
                   const isSelected = node.id === selectedId;
-                  const show = node.admin || isSelected || neighbors.has(node.id) || node.id === hoverId;
+                  const show = node.admin || node.kind === "role" || isSelected || neighbors.has(node.id) || node.id === hoverId;
                   if (!show) return null;
                   return (
                     <text
@@ -502,7 +482,7 @@ export function Atlas({
               <span><i style={{ background: "#7b86c9" }} />role <b>{kindCounts.role ?? 0}</b></span>
               <span><i style={{ background: "#a78bfa" }} />user <b>{kindCounts.user ?? 0}</b></span>
               <span><i style={{ background: "#5f6b7a" }} />group <b>{kindCounts.group ?? 0}</b></span>
-              <span className="graph-legend-note">arrow = escalation direction</span>
+              <span className="graph-legend-note">diamond admin · hex role · circle user · square group · triangle resource</span>
             </div>
           </div>
         </Panel>

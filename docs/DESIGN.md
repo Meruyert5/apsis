@@ -101,10 +101,11 @@ below 17px.
 ## Mark
 
 The mark is a sharp 2px tile: a bone HUD frame, a coordinate grid, two inclined
-orbits in amber and cyan, a bone Syne A whose counter holds a black hole with an
-accretion crossbar, and a warm sun at the outer orbit. The same silhouette is used
-for `favicon.svg`, the 512px and Apple touch PNGs, the 34px rail mark and the OG
-card, so the tab, the home screen and the console header read as one system.
+orbits in amber and cyan, a bone Syne A, an amber sun at the focus and a ringed
+cyan planet at the apsis of the outer orbit, tied by a dashed apsis arc. The same
+silhouette is used for `favicon.svg`, the 512px and Apple touch PNGs, the 34px
+rail mark and the OG card, so the tab, the home screen and the console header
+read as one system.
 
 ## Motion
 
@@ -113,7 +114,7 @@ Motion explains state, never decorates a static claim:
 - auto-rotating instruments with a visible `Auto` badge and a `Paused` state;
 - the Path map advances hops, carries a pulse and crossfades its star into a
   black hole on cut; Blueprint carries the same horizon as a closing plate;
-- Atlas bodies pulse, the focus ring swells, the orbits turn;
+- Atlas bodies pulse, the focus ring turns, edges flow;
 - Drift scans both planets and lights added edges in cyan;
 - the `Planets` / `Wire` switch rebuilds the scene without remounting the panel;
 - fullscreen on every figure, closes on Escape;

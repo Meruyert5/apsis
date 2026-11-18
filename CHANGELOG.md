@@ -11,16 +11,17 @@
   the page edge on every view, with pointer parallax, a 30fps cap and a
   reduced-motion still.
 - The identity graph is rebuilt as a full workbench: a 16-account strip, a
-  940x600 graph with 17px labels, depth rings, accent arrows, a selected-node
-  halo pulse, a travelling dash on active edges, and a 340px inspector. On
+  940x600 organic constellation with 15px labels, distinct shapes by kind,
+  straight edges within a kind and curves across kinds, hover/selection labels,
+  a rotating selected ring and flowing active edges, plus a 340px inspector. On
   mobile the graph scrolls at 720px so labels stay legible.
 - Texture and chrome: SVG grain, 64px HUD grid, CRT scanlines, ambient edge glow,
   warm glass topbar, cream primary button, bone hairline panels. Interactive
   states now follow the view accent instead of the old ultramarine.
-- New mark in bone, amber and cyan: a Syne A whose counter holds a black hole
-  with an accretion crossbar. Matching 512/180 icons and a rebuilt OG card.
-  Sora, IBM Plex Sans and Instrument Serif are removed; the payload is Syne,
-  Space Grotesk and IBM Plex Mono.
+- New mark in bone, amber and cyan: a Syne A with an amber sun at the focus and
+  a ringed cyan planet at the apsis, tied by a dashed arc. Matching 512/180
+  icons and a rebuilt OG card. Sora, IBM Plex Sans and Instrument Serif are
+  removed; the payload is Syne, Space Grotesk and IBM Plex Mono.
 - The wireframe pass is bone and periwinkle with a depth fog, larger nodes and
   accent selection rings; it stays a schematic, not a second planet scene.
 - Every figure has two instruments. A `Planets` / `Wire` switch replaces the old

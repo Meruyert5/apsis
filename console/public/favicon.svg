@@ -12,14 +12,19 @@
     </linearGradient>
     <linearGradient id="orbit" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#ffb26b" />
-      <stop offset="0.5" stop-color="#ffc98f" />
+      <stop offset="0.55" stop-color="#ffd2a3" />
       <stop offset="1" stop-color="#7ce7ff" />
     </linearGradient>
     <radialGradient id="sun" cx="50%" cy="50%" r="50%">
       <stop offset="0" stop-color="#fffdf4" />
-      <stop offset="0.35" stop-color="#ffd9a8" />
-      <stop offset="0.7" stop-color="#ffb26b" stop-opacity=".45" />
+      <stop offset="0.34" stop-color="#ffd9a8" />
+      <stop offset="0.68" stop-color="#ffb26b" stop-opacity=".5" />
       <stop offset="1" stop-color="#ffb26b" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="planet" cx="36%" cy="32%" r="70%">
+      <stop offset="0" stop-color="#e9fbff" />
+      <stop offset="0.55" stop-color="#7ce7ff" />
+      <stop offset="1" stop-color="#167fa8" />
     </radialGradient>
     <filter id="soft" x="-80%" y="-80%" width="260%" height="260%">
       <feGaussianBlur stdDeviation="1" result="b" />
@@ -44,30 +49,28 @@
     <path d="M11 59H5v-6" />
   </g>
 
-  <ellipse cx="32" cy="35" rx="27" ry="10" transform="rotate(-18 32 35)" fill="none" stroke="#ffb26b" stroke-opacity=".16" stroke-width="3.2" />
-  <ellipse cx="32" cy="35" rx="27" ry="10" transform="rotate(-18 32 35)" fill="none" stroke="url(#orbit)" stroke-opacity=".85" stroke-width="1.2" />
-  <ellipse cx="32" cy="32" rx="20.5" ry="6.6" transform="rotate(30 32 32)" fill="none" stroke="#f4efe3" stroke-opacity=".2" stroke-width=".65" />
-
-  <g transform="rotate(-18 32 33)">
-    <ellipse cx="32" cy="33" rx="14.5" ry="4.8" fill="none" stroke="#ffb26b" stroke-opacity=".55" stroke-width="1.5" />
-    <ellipse cx="32" cy="33" rx="9.5" ry="3.1" fill="none" stroke="#fffaf0" stroke-opacity=".75" stroke-width=".55" />
-  </g>
-  <circle cx="32" cy="33" r="6" fill="#040506" stroke="#f4efe3" stroke-opacity=".55" stroke-width=".7" />
-  <path d="M26.4 30.6 A6 6 0 0 1 37.6 30.6" fill="none" stroke="#fffaf0" stroke-opacity=".8" stroke-width=".8" />
-  <path d="M26.6 35.7 A6 6 0 0 0 37.4 35.7" fill="none" stroke="#7ce7ff" stroke-opacity=".55" stroke-width=".6" />
+  <ellipse cx="32" cy="36" rx="27" ry="10" transform="rotate(-18 32 36)" fill="none" stroke="#ffb26b" stroke-opacity=".16" stroke-width="3.2" />
+  <ellipse cx="32" cy="36" rx="27" ry="10" transform="rotate(-18 32 36)" fill="none" stroke="url(#orbit)" stroke-opacity=".85" stroke-width="1.2" />
+  <ellipse cx="32" cy="33" rx="21" ry="6.8" transform="rotate(28 32 33)" fill="none" stroke="#f4efe3" stroke-opacity=".2" stroke-width=".65" />
 
   <g stroke-linecap="square" stroke-linejoin="miter">
-    <path d="M19.2 47.8 L32 12.6 L44.8 47.8" fill="none" stroke="#ffb26b" stroke-opacity=".32" stroke-width="4.5" transform="translate(1 1)" />
+    <path d="M19.2 47.8 L32 12.6 L44.8 47.8" fill="none" stroke="#ffb26b" stroke-opacity=".3" stroke-width="4.5" transform="translate(1 1)" />
     <path d="M18.4 47.4 L32 12 L45.6 47.4" fill="none" stroke="url(#bone)" stroke-width="4.3" filter="url(#soft)" />
+    <path d="M24.6 35.8 H39.4" fill="none" stroke="#ffb26b" stroke-width="2.2" />
   </g>
 
-  <circle cx="52.6" cy="18.6" r="6.2" fill="url(#sun)" />
-  <circle cx="52.6" cy="18.6" r="2.1" fill="#fffaf0" />
-  <circle cx="11.4" cy="45.2" r="1.6" fill="#7ce7ff" />
-  <circle cx="11.4" cy="45.2" r="3.1" fill="none" stroke="#7ce7ff" stroke-opacity=".35" stroke-width=".5" />
+  <circle cx="11.5" cy="45.2" r="5" fill="url(#sun)" />
+  <circle cx="11.5" cy="45.2" r="1.55" fill="#fffaf0" />
+
+  <circle cx="52.6" cy="19.4" r="6.2" fill="url(#sun)" opacity=".45" />
+  <circle cx="52.6" cy="19.4" r="3.15" fill="url(#planet)" stroke="#d6ecff" stroke-opacity=".7" stroke-width=".5" />
+  <ellipse cx="52.6" cy="19.4" rx="5.2" ry="1.5" transform="rotate(-22 52.6 19.4)" fill="none" stroke="#7ce7ff" stroke-opacity=".55" stroke-width=".55" />
+
+  <path d="M45.8 24.2 A 8 8 0 0 1 59.4 16.3" fill="none" stroke="#f4efe3" stroke-opacity=".45" stroke-width=".6" stroke-dasharray="1.4 2.2" />
 
   <g stroke="#f4efe3" stroke-opacity=".5" stroke-width=".7" stroke-linecap="square">
     <path d="M40.4 8.4v2.2M39.3 9.5h2.2" />
     <path d="M22.8 53.6v1.8M21.9 54.5h1.8" />
+    <path d="M31.4 6.2v1.4M30.7 6.9h1.4" />
   </g>
 </svg>

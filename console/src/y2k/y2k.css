@@ -3662,3 +3662,6 @@ body {
   fill: rgb(236 231 218 / .26);
 }
 .page-body { mix-blend-mode: normal; opacity: .55; }
+.graph-edge.is-conditional { stroke-dasharray: 3 6; opacity: .24; }
+.graph-edge.is-conditional.is-active { opacity: 1; }
+.graph-legend-note { flex-basis: 100%; margin-left: 0; font-size: 11.5px; }

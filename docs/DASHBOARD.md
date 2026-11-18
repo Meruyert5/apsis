@@ -95,11 +95,11 @@ view (cyan, mint, amber, violet or rose).
 
 The identity graph is no longer a narrow centre column. The page uses a
 full-width account strip (four cards per row, then two), a graph panel at 940x600
-with 17px labels, depth rings around the administrator, argon-filled edge arrows
-and a pulsing halo on the selected body, plus a 340px inspector. Selecting a node
-dims the unrelated edges, lights its own and runs a travelling dash along them. On small screens the
-graph keeps a 720px minimum and scrolls inside its panel, so labels never shrink
-to unreadable.
+with 15px labels, distinct node shapes, straight edges within a kind and curved
+edges across kinds, hover/selection labels and a 340px inspector. Selecting a node
+dims the unrelated edges, lights its own and runs a travelling dash along them.
+On small screens the graph keeps a 720px minimum and scrolls inside its panel, so
+labels never shrink to unreadable.
 
 ### 2D fallback
 
