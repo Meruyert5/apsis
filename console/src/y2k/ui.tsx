@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from "react";
 import type { ReactNode } from "react";
-import { Figure3D, type FigureVariant } from "./Figure3D";
+import { Figure3D, type FigureMode, type FigureVariant } from "./Figure3D";
 
 export type IconName =
   | "overview"
@@ -230,6 +230,21 @@ export function FigurePanel({
   className?: string;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [mode, setMode] = useState<FigureMode>(() => {
+    try {
+      return localStorage.getItem("apsis.figure-mode") === "wireframe" ? "wireframe" : "planets";
+    } catch {
+      return "planets";
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("apsis.figure-mode", mode);
+    } catch {
+      /* private mode: the preference simply does not persist */
+    }
+  }, [mode]);
 
   useEffect(() => {
     if (!expanded) return;
@@ -273,6 +288,8 @@ export function FigurePanel({
       <div className="figure-stage">
         <Figure3D
           variant={variant}
+          mode={mode}
+          onMode={setMode}
           motion={motion}
           active={active}
           count={count}

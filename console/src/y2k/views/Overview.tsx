@@ -85,10 +85,10 @@ export function Overview({
         <FigurePanel
           variant="orb"
           index="FIG. 01"
-          title="Fleet orb"
-          meta="Wireframe globe / seven-node orbit"
+          title="Fleet orrery"
+          meta="Smooth planet / seven-node orbit"
           tags={["16 accounts", "194 identities", "07 deep"]}
-          note="Auto: the comet traces the seven-node orbit"
+          note="Auto: seven bodies trace the orbit"
           foot="Read-only"
           motion={motion}
           badge

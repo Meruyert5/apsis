@@ -89,7 +89,7 @@ backend, and no custom domain.
 - `.cdp-*` browser profiles, `.lighthouseci/`, `*.tsbuildinfo`, `*.log`
 - `.env`, keys, authorization exports, SARIF and report files
 
-The five screenshots in `docs/img/` are committed because the README uses them.
+The six screenshots in `docs/img/` are committed because the README uses them.
 
 ## Post-deploy checks
 
@@ -98,6 +98,8 @@ The five screenshots in `docs/img/` are committed because the README uses them.
 - `#/survey`, `#/path`, `#/atlas`, `#/drift`, `#/commands`, `#/extensions`, `#/blueprint`
   all load directly.
 - Command palette (`Cmd/Ctrl+K`), motion toggle and fullscreen work.
+- `Planets` / `Wire` changes the instrument on every figure; **Apply cut** on
+  Path map shows the black hole; Blueprint shows the event horizon.
 - Reduced motion stops CSS animation and the 3D clock.
 - The Penumbra handoff is present at `detection-lab/integrations/apsis/` in the
   Penumbra repository.

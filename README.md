@@ -24,7 +24,7 @@ console you can inspect, step, and sever.
 2. **Survey** — rank the accounts, replay the scan, then download the route
    ledger as CSV.
 3. **Path map** — press play, watch the hops advance, then **Apply cut**. The
-   route state closes and the 3D ascent fractures.
+   route closes and the star collapses into a black hole.
 4. **Atlas** — switch account from the list, click a node in the 3D
    constellation, then inspect its trust and routes in the graph.
 5. **Drift** — compare the CI/CD baseline with the after snapshot; two new routes
@@ -32,7 +32,8 @@ console you can inspect, step, and sever.
 6. **Extensions** — open the 288-cell coverage field, the alert/evidence
    contracts and the observed-path case.
 7. **Blueprint** — read the pipeline, architecture, roadmap and the release
-   state. The only open items are approval and the GitHub push.
+   state, then the event-horizon plate. The only open items are approval and the
+   GitHub push.
 
 The full architecture and interaction inventory are in
 [docs/DASHBOARD.md](docs/DASHBOARD.md). The release gate is
@@ -188,39 +189,45 @@ npm run audit       # contrast, headings, names, target size
 
 ## Dashboard
 
-`/` is the dashboard: eight views over the same static export, each with its
-own WebGL instrument. One Vite entry, one shell, no legacy console.
+`/` is the dashboard: eight views over the same static export, each with a
+glossy planet scene and a wireframe instrument. One Vite entry, one shell, no
+legacy console. Every figure carries a `Planets` / `Wire` switch.
 
-- **Overview** — orb; fleet figures, module map, fleet pulse, evidence.
-- **Survey** — radar dish; severity, ranking, coverage, searchable ledger.
-- **Path map** - constellation-threaded ascent; autoplay, step, speed,
-  cut/restore, clickable 3D hops, hop detail, route ledger.
-- **Atlas** - account constellation; curved directed trust graph with short
-  labels and flow, filters, inspector.
-- **Drift** - before/after split; route-aware diff, new and closed routes, edge
+- **Overview** - orrery; fleet figures, module map, fleet pulse, evidence.
+- **Survey** - ringed orbit; severity, ranking, coverage, searchable ledger.
+- **Path map** - solar system; autoplay, step, speed, cut/restore, clickable
+  bodies, hop detail, route ledger. The cut turns the star into a black hole.
+- **Atlas** - account system; star, 16 account bodies, trust arcs, filters,
+  inspector.
+- **Drift** - planet pair; route-aware diff, new and closed routes, edge
   changes, the same comparator as `apsis diff`.
-- **Commands** - prism; 114 recorded runs, typewriter output, replay, copy.
-- **Extensions** - bloom; 18 primitives, 288-cell coverage matrix, six contracts
-  including the handoff, alert sample and the observed-path case.
-- **Blueprint** - layered stack; pipeline, architecture, modules, roadmap,
-  verification and release state.
+- **Commands** - command core; 114 recorded runs, typewriter output, replay, copy.
+- **Extensions** - ringed system; 18 primitives, 288-cell coverage matrix, six
+  contracts including the handoff, alert sample and the observed-path case.
+- **Blueprint** - orbital planes plus the event-horizon plate; pipeline,
+  architecture, modules, roadmap, verification and release state.
 
 Global: `Cmd/Ctrl+K` command palette, motion toggle, fullscreen on every figure,
-sharp 2px panel geometry, floating glass topbar, hero aurora, moving constellation
-background with grain and scanline texture, bloom-lit glass panels, neon focus
-states, 2D fallback on every figure, clickable 3D nodes on Path map, Atlas,
-Drift and Extensions, and the same read-only export. The architecture and
-interaction inventory are in [docs/DASHBOARD.md](docs/DASHBOARD.md).
+a `Planets` / `Wire` switch on every instrument, sharp 2px panel geometry,
+floating glass topbar, hero aurora, moving constellation background with grain
+and scanline texture, bloom-lit glass panels, neon focus states, automatic 2D
+fallback when WebGL is unavailable, clickable bodies on Path map, Atlas, Drift
+and Extensions, and the same read-only export. The architecture and interaction
+inventory are in [docs/DASHBOARD.md](docs/DASHBOARD.md).
 
 ### Dashboard screenshots
 
-![Path map: the constellation ascent and the hop detail](docs/img/dashboard-path.png)
+![Overview: the fleet orrery, graphite planet and seven bodies](docs/img/dashboard.png)
 
-![Atlas: the account constellation and the directed trust graph](docs/img/dashboard-atlas.png)
+![Path map: the solar system, the hop rail and the cut](docs/img/dashboard-path.png)
 
-![Drift: two snapshots, the route-aware diff and the new walks](docs/img/dashboard-drift.png)
+![Atlas: the account system and the directed trust graph](docs/img/dashboard-atlas.png)
 
-![Blueprint: pipeline, architecture, engine additions and release state](docs/img/dashboard-blueprint.png)
+![Drift: two planets, the route-aware diff and the new walks](docs/img/dashboard-drift.png)
+
+![Blueprint: orbital planes, pipeline, architecture and release state](docs/img/dashboard-blueprint.png)
+
+![Event horizon: the black-hole plate on the Blueprint page](docs/img/dashboard-horizon.png)
 
 The dashboard replaces every earlier console and design-lab iteration.
 

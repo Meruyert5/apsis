@@ -5,7 +5,18 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 
-export type FigureVariant = "orb" | "dish" | "ascent" | "atlas" | "drift" | "prism" | "bloom" | "stack";
+export type FigureVariant =
+  | "orb"
+  | "dish"
+  | "ascent"
+  | "atlas"
+  | "drift"
+  | "prism"
+  | "bloom"
+  | "stack"
+  | "horizon";
+
+export type FigureMode = "planets" | "wireframe";
 
 interface FigureState {
   active: number;
@@ -1391,6 +1402,589 @@ function buildDrift(glow: THREE.Texture): Built {
   };
 }
 
+/* ---------------------------------------------------------------- orrery */
+const BODY_COLORS = [0x1ab2ff, 0x7a6cff, 0x8db7ff, 0xd6ecff, 0x2b3cff, 0x44506e];
+
+interface OrrerySpec {
+  core: number;
+  body: number;
+  rings: number[];
+  bodies: number;
+  star?: boolean;
+  hole?: boolean;
+  band?: boolean;
+  links?: boolean;
+  dust?: number;
+  tilt?: number;
+  stack?: boolean;
+  sweep?: boolean;
+  beam?: boolean;
+}
+
+const ORRERY: Record<Exclude<FigureVariant, "drift" | "horizon">, OrrerySpec> = {
+  orb: { core: 1.72, body: 0.1, rings: [2.55, 3.05], bodies: 7, dust: 90, tilt: 0.38 },
+  dish: { core: 1.5, body: 0.085, rings: [2.15], bodies: 16, band: true, dust: 50, tilt: 0.34, sweep: true },
+  ascent: {
+    core: 0.34,
+    body: 0.13,
+    rings: [1.05, 1.35, 1.65, 1.95, 2.25, 2.55, 2.85, 3.15],
+    bodies: 8,
+    star: true,
+    hole: true,
+    links: true,
+    dust: 70,
+    tilt: 0.3,
+  },
+  atlas: { core: 0.34, body: 0.13, rings: [1.2, 1.8, 2.4], bodies: 16, star: true, links: true, dust: 80, tilt: 0.34 },
+  prism: { core: 1.28, body: 0.075, rings: [1.95, 2.45], bodies: 10, beam: true, dust: 40, tilt: 0.16 },
+  bloom: {
+    core: 1.15,
+    body: 0.075,
+    rings: [1.55, 1.85, 2.15, 2.45, 2.75, 3.05],
+    bodies: 18,
+    band: true,
+    dust: 60,
+    tilt: 0.4,
+  },
+  stack: {
+    core: 0.95,
+    body: 0.09,
+    rings: [1.4, 1.8, 2.2, 2.6, 3.0],
+    bodies: 5,
+    stack: true,
+    dust: 55,
+    tilt: 0.12,
+    beam: true,
+  },
+};
+
+const PLANET_CAMERA: Record<FigureVariant, Partial<{
+  position: [number, number, number];
+  look: [number, number, number];
+  fov: number;
+  auto: number;
+  span: number;
+}>> = {
+  orb: { position: [0, 1.4, 10.6], look: [0, 0.1, 0] },
+  dish: { position: [0, 1.9, 9.4], look: [0, 0.1, 0] },
+  ascent: { position: [0, 1.2, 9.6], look: [0, 0, 0], span: 3.4 },
+  atlas: { position: [0, 2.8, 7.2], look: [0, 0.1, 0], span: 3.3 },
+  drift: { position: [0, 0.5, 7.6], look: [0, 0, 0] },
+  prism: { position: [0, 0.9, 8.4], look: [0, 0, 0] },
+  bloom: { position: [0, 1.6, 9.6], look: [0, 0, 0], span: 3.3 },
+  stack: { position: [0, 1.0, 8.8], look: [0, 0, 0], span: 3.0 },
+  horizon: { position: [0, 1.4, 8.4], look: [0, 0, 0], span: 2.8 },
+};
+
+function gloss(color: number, roughness = 0.26, metalness = 0.28) {
+  return new THREE.MeshStandardMaterial({
+    color,
+    roughness,
+    metalness,
+    emissive: new THREE.Color(color).multiplyScalar(0.1),
+    emissiveIntensity: 0.7,
+  });
+}
+
+function rimShell(radius: number, color = 0x8db7ff, power = 2.6) {
+  return new THREE.Mesh(
+    new THREE.SphereGeometry(radius, 48, 32),
+    new THREE.ShaderMaterial({
+      uniforms: { uColor: { value: new THREE.Color(color) }, uPower: { value: power } },
+      vertexShader: `
+        varying vec3 vN;
+        varying vec3 vV;
+        void main() {
+          vN = normalize(normalMatrix * normal);
+          vec4 mv = modelViewMatrix * vec4(position, 1.0);
+          vV = normalize(-mv.xyz);
+          gl_Position = projectionMatrix * mv;
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 uColor;
+        uniform float uPower;
+        varying vec3 vN;
+        varying vec3 vV;
+        void main() {
+          float rim = pow(1.0 - abs(dot(vN, vV)), uPower);
+          gl_FragColor = vec4(uColor, rim * 0.9);
+        }
+      `,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      side: THREE.FrontSide,
+    }),
+  );
+}
+
+function ringLine(radius: number, color: number, opacity: number, y = 0) {
+  const points: THREE.Vector3[] = [];
+  for (let i = 0; i <= 180; i += 1) {
+    const angle = (i / 180) * Math.PI * 2;
+    points.push(new THREE.Vector3(Math.cos(angle) * radius, y, Math.sin(angle) * radius));
+  }
+  return line(points, color, opacity);
+}
+
+function curveLink(a: THREE.Vector3, b: THREE.Vector3, bulge: number, color: number, opacity: number) {
+  const mid = a.clone().add(b).multiplyScalar(0.5);
+  const outward = mid.clone().setY(0).normalize().multiplyScalar(bulge);
+  const curve = new THREE.QuadraticBezierCurve3(a.clone(), mid.add(outward), b.clone());
+  return new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints(curve.getPoints(24)),
+    new THREE.LineBasicMaterial({
+      color, transparent: true, opacity,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    }),
+  );
+}
+
+function sunBody(radius: number, glow: THREE.Texture) {
+  const group = new THREE.Group();
+  const core = new THREE.Mesh(
+    new THREE.SphereGeometry(radius, 48, 32),
+    new THREE.MeshStandardMaterial({
+      color: 0xfff1d6,
+      emissive: 0xffd9a0,
+      emissiveIntensity: 1.0,
+      roughness: 0.4,
+    }),
+  );
+  const halo = sprite(glow, 0xffe3b0, 0.38, radius * 8);
+  const inner = sprite(glow, 0xfff4dc, 0.28, radius * 3.1);
+  group.add(core, halo, inner);
+  return { group, core, halo, inner };
+}
+
+function holeBody(radius: number, glow: THREE.Texture) {
+  const group = new THREE.Group();
+  const horizon = new THREE.Mesh(
+    new THREE.SphereGeometry(radius, 48, 32),
+    new THREE.MeshBasicMaterial({ color: 0x000000 }),
+  );
+  horizon.renderOrder = 3;
+
+  const photon = new THREE.Mesh(
+    new THREE.TorusGeometry(radius * 1.06, radius * 0.02, 8, 160),
+    basic(0xffffff, 0.95),
+  );
+  photon.rotation.x = Math.PI / 2;
+  photon.renderOrder = 4;
+
+  const photonCyan = new THREE.Mesh(
+    new THREE.TorusGeometry(radius * 1.18, radius * 0.008, 6, 160),
+    basic(0x1ab2ff, 0.6),
+  );
+  photonCyan.rotation.x = Math.PI / 2;
+  photonCyan.renderOrder = 4;
+
+  const lens = new THREE.Mesh(
+    new THREE.TorusGeometry(radius * 1.36, radius * 0.006, 6, 160, Math.PI * 1.25),
+    basic(0xd6ecff, 0.55),
+  );
+  lens.rotation.set(1.15, 0.35, -0.4);
+  lens.renderOrder = 4;
+
+  const diskMats: THREE.MeshBasicMaterial[] = [];
+  const disk = new THREE.Group();
+  for (let i = 0; i < 8; i += 1) {
+    const inner = radius * (1.28 + i * 0.2);
+    const outer = inner + radius * 0.15;
+    const color = i % 3 === 0 ? 0xffffff : i % 3 === 1 ? 0x8db7ff : 0x7a6cff;
+    const mat = basic(color, 0.32 - i * 0.028);
+    const ring = new THREE.Mesh(new THREE.RingGeometry(inner, outer, 160), mat);
+    ring.rotation.x = -Math.PI / 2;
+    disk.add(ring);
+    diskMats.push(mat);
+  }
+  disk.rotation.z = 0.22;
+  disk.renderOrder = 2;
+
+  const halo = sprite(glow, 0xd6ecff, 0.55, radius * 9);
+  group.add(halo, disk, horizon, photon, photonCyan, lens);
+  return { group, disk, diskMats, halo, horizon, photon, photonCyan, lens };
+}
+
+function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow: THREE.Texture): Built {
+  const spec = ORRERY[variant];
+  const root = new THREE.Group();
+  const system = new THREE.Group();
+  system.rotation.x = spec.tilt ?? 0.32;
+  root.add(system);
+
+  const rings = spec.rings.map((radius, index) => {
+    const y = spec.stack ? -1.0 + index * 0.5 : 0;
+    const ring = ringLine(radius, index % 2 === 0 ? 0x2b3cff : 0x8db7ff, spec.stack ? 0.2 : 0.13, y);
+    if (spec.stack) ring.rotation.x = (index % 2 === 0 ? 1 : -1) * 0.18;
+    system.add(ring);
+    return ring;
+  });
+
+  if (spec.band) {
+    for (let i = 0; i < 3; i += 1) {
+      const mat = basic(i % 2 ? 0x8db7ff : 0xd6ecff, 0.09 - i * 0.02);
+      const mesh = new THREE.Mesh(
+        new THREE.RingGeometry(spec.core * 1.85 + i * 0.14, spec.core * 2.15 + i * 0.14, 160),
+        mat,
+      );
+      mesh.rotation.x = -Math.PI / 2;
+      system.add(mesh);
+    }
+  }
+
+  let coreMesh: THREE.Mesh | null = null;
+  let sun: ReturnType<typeof sunBody> | null = null;
+  let hole: ReturnType<typeof holeBody> | null = null;
+
+  if (spec.star) {
+    sun = sunBody(spec.core, glow);
+    system.add(sun.group);
+  } else {
+    coreMesh = new THREE.Mesh(new THREE.SphereGeometry(spec.core, 96, 64), gloss(0x2a3247, 0.4, 0.22));
+    system.add(coreMesh, rimShell(spec.core * 1.015, 0x8db7ff));
+  }
+  if (spec.hole) {
+    hole = holeBody(spec.core * 1.5, glow);
+    hole.group.visible = false;
+    system.add(hole.group);
+  }
+
+  const beam = spec.beam
+    ? new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 5.6, 10), basic(0x8db7ff, 0.26))
+    : null;
+  if (beam) system.add(beam);
+
+  const bodies: Array<{
+    mesh: THREE.Mesh;
+    mat: THREE.MeshStandardMaterial;
+    halo: THREE.Sprite;
+    base: number;
+  }> = [];
+  const selectors: THREE.Mesh[] = [];
+  const positions: THREE.Vector3[] = [];
+  const pickables: THREE.Object3D[] = [];
+
+  for (let i = 0; i < spec.bodies; i += 1) {
+    const ringIndex = i % spec.rings.length;
+    const radius = spec.rings[ringIndex];
+    const angle = (i / spec.bodies) * Math.PI * 2 + ringIndex * 0.7;
+    const y = spec.stack ? -1.0 + ringIndex * 0.5 : 0;
+    const pos = new THREE.Vector3(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
+    positions.push(pos);
+
+    const color = i === 0 && !spec.star ? 0xd6ecff : BODY_COLORS[i % BODY_COLORS.length];
+    const mat = gloss(color, 0.28, 0.24);
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(spec.body, 24, 18), mat);
+    mesh.position.copy(pos);
+    const halo = sprite(glow, color, 0.4, spec.body * 6);
+    halo.position.copy(pos);
+    const hit = hitSphere(spec.body * 2.8, i);
+    hit.position.copy(pos);
+    const selector = new THREE.Mesh(
+      new THREE.TorusGeometry(spec.body * 2.4, 0.008, 6, 48),
+      basic(0xffffff, 0.9),
+    );
+    selector.position.copy(pos);
+    selector.rotation.x = Math.PI / 2;
+    selector.visible = false;
+    system.add(mesh, halo, hit, selector);
+    pickables.push(hit);
+    selectors.push(selector);
+    bodies.push({ mesh, mat, halo, base: spec.body });
+  }
+
+  if (spec.links) {
+    for (let i = 0; i < positions.length - 1; i += 1) {
+      system.add(curveLink(
+        positions[i],
+        positions[i + 1],
+        0.4,
+        variant === "ascent" ? 0x1ab2ff : 0x2b3cff,
+        variant === "ascent" ? 0.4 : 0.26,
+      ));
+    }
+  }
+
+  let sweep: THREE.Mesh | null = null;
+  if (spec.sweep) {
+    sweep = new THREE.Mesh(
+      new THREE.RingGeometry(spec.rings[0] * 0.88, spec.rings[0], 64, 1, 0, Math.PI / 3),
+      basic(0x1ab2ff, 0.32),
+    );
+    sweep.rotation.x = -Math.PI / 2;
+    system.add(sweep);
+  }
+
+  if (spec.dust) {
+    const dustPositions = new Float32Array(spec.dust * 3);
+    for (let i = 0; i < spec.dust; i += 1) {
+      const r = 3.3 + Math.random() * 3.4;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      dustPositions[i * 3] = Math.sin(phi) * Math.cos(theta) * r;
+      dustPositions[i * 3 + 1] = Math.cos(phi) * r * 0.6;
+      dustPositions[i * 3 + 2] = Math.sin(phi) * Math.sin(theta) * r;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(dustPositions, 3));
+    root.add(new THREE.Points(geo, new THREE.PointsMaterial({
+      color: 0x8db7ff, size: 0.035, transparent: true, opacity: 0.55,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    })));
+  }
+
+  const key = new THREE.DirectionalLight(0xe6efff, 3.4);
+  key.position.set(-5, 6, 8);
+  const fill = new THREE.PointLight(0x2b3cff, 18, 30);
+  fill.position.set(4, -2, 6);
+  const highlight = new THREE.PointLight(0xffffff, 12, 18);
+  highlight.position.set(-3, 3, 7);
+  root.add(key, fill, highlight, new THREE.AmbientLight(0x223055, 0.45));
+
+  let cutAmount = spec.hole ? 0 : 1;
+
+  return {
+    root,
+    pickables,
+    update: (time, state) => {
+      system.rotation.y = time * (spec.stack ? 0.05 : 0.085);
+      rings.forEach((ring, index) => {
+        const mat = ring.material as THREE.LineBasicMaterial;
+        mat.opacity = (spec.stack ? 0.18 : 0.11) + Math.sin(time * 0.8 + index) * 0.04;
+      });
+      if (coreMesh) coreMesh.rotation.y = time * 0.06;
+      if (sun) {
+        sun.halo.scale.setScalar(spec.core * (7.2 + Math.sin(time * 1.2) * 0.3));
+        sun.inner.scale.setScalar(spec.core * (3.2 + Math.sin(time * 1.8) * 0.14));
+      }
+      bodies.forEach((body, index) => {
+        const active = index === state.active;
+        const focus = index === state.focus;
+        body.mesh.scale.setScalar(active ? 2.1 : focus ? 1.55 : 1);
+        body.halo.scale.setScalar(
+          body.base * (active ? 11 : focus ? 8 : 6) * (0.92 + Math.sin(time * 1.6 + index) * 0.08),
+        );
+        body.mat.emissiveIntensity = active ? 2.2 : focus ? 1.6 : 0.7;
+        (body.halo.material as THREE.SpriteMaterial).opacity = active ? 0.85 : focus ? 0.6 : 0.34;
+      });
+      selectors.forEach((selector, index) => {
+        const active = index === state.active;
+        const focus = index === state.focus;
+        selector.visible = active || focus;
+        if (selector.visible) {
+          selector.scale.setScalar(1 + Math.sin(time * 2.2) * 0.16);
+          const mat = selector.material as THREE.MeshBasicMaterial;
+          mat.color.setHex(active ? 0xffffff : 0x1ab2ff);
+          mat.opacity = active ? 0.95 : 0.6;
+        }
+      });
+      if (sweep) sweep.rotation.z = -time * 0.5;
+      if (beam) {
+        (beam.material as THREE.MeshBasicMaterial).opacity = 0.18 + Math.sin(time * 1.3) * 0.08;
+      }
+      if (hole) {
+        cutAmount += ((state.cut ? 1 : 0) - cutAmount) * 0.08;
+        hole.group.visible = cutAmount > 0.02;
+        hole.group.scale.setScalar(0.55 + cutAmount * 0.45);
+        hole.disk.rotation.y = time * 0.6;
+        hole.diskMats.forEach((mat, index) => {
+          mat.opacity = (0.22 - index * 0.025) * cutAmount;
+        });
+        (hole.photon.material as THREE.MeshBasicMaterial).opacity = 0.95 * cutAmount;
+        (hole.photonCyan.material as THREE.MeshBasicMaterial).opacity = 0.6 * cutAmount;
+        (hole.lens.material as THREE.MeshBasicMaterial).opacity = 0.5 * cutAmount;
+        (hole.halo.material as THREE.SpriteMaterial).opacity = 0.5 * cutAmount;
+        if (sun) {
+          sun.group.visible = cutAmount < 0.9;
+          sun.group.scale.setScalar(Math.max(0.05, 1 - cutAmount));
+        }
+        bodies.forEach((body) => {
+          body.mat.emissiveIntensity *= 1 - cutAmount * 0.55;
+        });
+      }
+    },
+  };
+}
+
+function buildHorizon(glow: THREE.Texture, mode: FigureMode): Built {
+  const root = new THREE.Group();
+  root.rotation.x = 0.16;
+
+  if (mode === "wireframe") {
+    const core = new THREE.Mesh(new THREE.SphereGeometry(1.08, 32, 24), wire(WHITE, 0.55));
+    const shell = new THREE.Mesh(new THREE.SphereGeometry(1.16, 20, 14), wire(BLUE, 0.24));
+    const rings: THREE.Mesh[] = [];
+    for (let i = 0; i < 3; i += 1) {
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(1.5 + i * 0.36, 0.008, 4, 110),
+        basic(i % 2 ? 0x8db7ff : 0x2b3cff, 0.42 - i * 0.08),
+      );
+      ring.rotation.x = Math.PI / 2 + (i - 1) * 0.16;
+      root.add(ring);
+      rings.push(ring);
+    }
+    root.add(core, shell);
+    return {
+      root,
+      update: (time) => {
+        core.rotation.y = time * 0.1;
+        shell.rotation.y = -time * 0.06;
+        rings.forEach((ring, index) => {
+          ring.rotation.z = time * (index % 2 ? -0.12 : 0.1);
+          (ring.material as THREE.MeshBasicMaterial).opacity = 0.3 + Math.sin(time * 0.9 + index) * 0.1;
+        });
+      },
+    };
+  }
+
+  const hole = holeBody(1.05, glow);
+  root.add(hole.group);
+
+  const ring = ringLine(2.5, 0x2b3cff, 0.2);
+  root.add(ring);
+
+  const moonOrbit = new THREE.Group();
+  const moon = new THREE.Mesh(new THREE.SphereGeometry(0.11, 24, 18), gloss(0xd6ecff, 0.3, 0.2));
+  moon.position.set(2.5, 0, 0);
+  const moonHalo = sprite(glow, 0xd6ecff, 0.42, 0.9);
+  moonHalo.position.copy(moon.position);
+  moonOrbit.add(moon, moonHalo);
+  root.add(moonOrbit);
+
+  const dustPositions = new Float32Array(70 * 3);
+  for (let i = 0; i < 70; i += 1) {
+    const r = 2.9 + Math.random() * 3.4;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    dustPositions[i * 3] = Math.sin(phi) * Math.cos(theta) * r;
+    dustPositions[i * 3 + 1] = Math.cos(phi) * r * 0.6;
+    dustPositions[i * 3 + 2] = Math.sin(phi) * Math.sin(theta) * r;
+  }
+  const dustGeo = new THREE.BufferGeometry();
+  dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPositions, 3));
+  root.add(new THREE.Points(dustGeo, new THREE.PointsMaterial({
+    color: 0x8db7ff, size: 0.035, transparent: true, opacity: 0.5,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+  })));
+
+  const key = new THREE.DirectionalLight(0xe6efff, 3.2);
+  key.position.set(-5, 6, 8);
+  root.add(key, new THREE.AmbientLight(0x223055, 0.4));
+
+  return {
+    root,
+    update: (time) => {
+      hole.disk.rotation.y = time * 0.7;
+      hole.diskMats.forEach((mat, index) => {
+        mat.opacity = (0.24 - index * 0.026) * (0.9 + Math.sin(time * 0.8 + index) * 0.1);
+      });
+      (hole.halo.material as THREE.SpriteMaterial).opacity = 0.4 + Math.sin(time * 0.9) * 0.05;
+      (hole.photonCyan.material as THREE.MeshBasicMaterial).opacity = 0.5 + Math.sin(time * 1.2) * 0.12;
+      (hole.lens.material as THREE.MeshBasicMaterial).opacity = 0.45 + Math.sin(time * 0.7) * 0.08;
+      moonOrbit.rotation.y = time * 0.14;
+      (moonHalo.material as THREE.SpriteMaterial).opacity = 0.3 + Math.sin(time * 1.6) * 0.08;
+      (ring.material as THREE.LineBasicMaterial).opacity = 0.16 + Math.sin(time * 0.7) * 0.04;
+    },
+  };
+}
+
+function buildDriftPlanets(glow: THREE.Texture): Built {
+  const root = new THREE.Group();
+  root.rotation.x = 0.12;
+
+  const baseMat = wire(BLUE, 0.14);
+  const base = new THREE.Mesh(new THREE.PlaneGeometry(4.8, 2.0, 6, 4), baseMat);
+  base.rotation.x = -Math.PI / 2;
+  base.position.y = -1.95;
+  root.add(base);
+
+  const planets = [-1.45, 1.45].map((x) => {
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.92, 64, 48), gloss(0x2a3247, 0.38, 0.2));
+    mesh.position.set(x, 0.2, 0);
+    const shell = rimShell(0.94, 0x8db7ff);
+    shell.position.copy(mesh.position);
+    const ring = ringLine(1.32, 0x4e5fff, 0.3, 0.2);
+    ring.position.x = x;
+    const halo = sprite(glow, 0x4e5fff, 0.22, 3.2);
+    halo.position.copy(mesh.position);
+    root.add(mesh, shell, ring, halo);
+    return mesh;
+  });
+
+  const mats: THREE.MeshStandardMaterial[] = [];
+  const nodes: THREE.Mesh[] = [];
+  const halos: THREE.Sprite[] = [];
+  const points: THREE.Vector3[] = [];
+  for (let i = 0; i < 7; i += 1) {
+    const pos = new THREE.Vector3(0, 1.3 - i * 0.43, 0);
+    points.push(pos);
+    const color = i < 3 ? 0x1ab2ff : 0xd6ecff;
+    const mat = gloss(color, 0.3, 0.2);
+    const node = new THREE.Mesh(new THREE.SphereGeometry(0.13, 24, 18), mat);
+    node.position.copy(pos);
+    const halo = sprite(glow, color, 0.5, 0.9);
+    halo.position.copy(pos);
+    root.add(node, halo);
+    nodes.push(node);
+    mats.push(mat);
+    halos.push(halo);
+  }
+  const links: THREE.Line[] = [];
+  points.forEach((pos) => {
+    planets.forEach((planet) => {
+      const link = line([pos.clone(), planet.position.clone()], 0x2b3cff, 0.16);
+      root.add(link);
+      links.push(link);
+    });
+  });
+
+  const scanMat = basic(WHITE, 0.3);
+  const scan = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 0.015), scanMat);
+  root.add(scan);
+  const pulse = sprite(glow, WHITE, 0.5, 0.85);
+  root.add(pulse);
+
+  const key = new THREE.DirectionalLight(0xe6efff, 2.6);
+  key.position.set(-4, 5, 6);
+  const fill = new THREE.PointLight(0x2b3cff, 14, 26);
+  fill.position.set(4, -3, 4);
+  root.add(key, fill, new THREE.AmbientLight(0x223055, 1.2));
+
+  return {
+    root,
+    update: (time, state) => {
+      planets.forEach((planet, index) => {
+        planet.rotation.y = time * (index === 0 ? 0.2 : -0.16);
+      });
+      const added = Math.max(0, Math.min(7, state.count));
+      const removed = Math.max(0, Math.min(7 - added, state.focus));
+      nodes.forEach((node, index) => {
+        const isNew = index < added;
+        const isOld = index >= 7 - removed;
+        const mat = mats[index];
+        mat.color.setHex(isNew ? 0x1ab2ff : isOld ? 0xffffff : 0x4e5fff);
+        mat.emissive.setHex(isNew ? 0x1ab2ff : isOld ? 0xffffff : 0x2b3cff);
+        mat.emissiveIntensity = isNew ? 1.8 : isOld ? 1.2 : 0.5;
+        node.scale.setScalar(1 + Math.sin(time * 1.7 + index) * 0.1);
+        (halos[index].material as THREE.SpriteMaterial).opacity = isNew ? 0.8 : isOld ? 0.55 : 0.18;
+      });
+      links.forEach((link, index) => {
+        (link.material as THREE.LineBasicMaterial).opacity = 0.1 + Math.abs(Math.sin(time * 0.8 + index)) * 0.08;
+      });
+      const scanY = -1.9 + ((time * 0.2) % 1) * 3.8;
+      scan.position.y = scanY;
+      scanMat.opacity = 0.18 + Math.abs(Math.sin(time * 0.5)) * 0.14;
+      const pulseY = -1.85 + ((time * 0.32) % 1) * 3.7;
+      pulse.position.set(0, pulseY, 0);
+      (pulse.material as THREE.SpriteMaterial).opacity = 0.3 + Math.sin(time * 2) * 0.1;
+      pulse.scale.setScalar(0.55 + Math.sin(time * 3) * 0.06);
+      baseMat.opacity = 0.1 + Math.sin(time * 0.7) * 0.03;
+    },
+  };
+}
+
 /* ---------------------------------------------------------------- fallback */
 function smoothPath(points: [number, number][]) {
   return points
@@ -1417,6 +2011,7 @@ function Fallback({ variant }: { variant: FigureVariant }) {
     prism: "Command prism: a wireframe monolith with a scan plane and rings",
     bloom: "Primitive bloom: six interlocking rings with eighteen technique nodes",
     stack: "System stack: five alternating layers and a rising beam",
+    horizon: "Event horizon: a black hole with an accretion disk and one surviving moon",
   }[variant];
 
   const title = {
@@ -1428,6 +2023,7 @@ function Fallback({ variant }: { variant: FigureVariant }) {
     prism: "COMMAND PRISM",
     bloom: "PRIMITIVE BLOOM",
     stack: "SYSTEM STACK",
+    horizon: "EVENT HORIZON",
   }[variant];
 
   const note = {
@@ -1439,6 +2035,7 @@ function Fallback({ variant }: { variant: FigureVariant }) {
     prism: "114 RUNS / READ-ONLY",
     bloom: "18 NODES / SIX RINGS",
     stack: "FIVE LAYERS / ONE EXPORT",
+    horizon: "0 ROUTES / 37 CUTS",
   }[variant];
 
   const nodes: [number, number][] = [
@@ -1646,6 +2243,20 @@ function Fallback({ variant }: { variant: FigureVariant }) {
             </>
           ) : null}
 
+          {variant === "horizon" ? (
+            <>
+              <ellipse cx="320" cy="236" rx="176" ry="34" strokeOpacity=".22" />
+              <ellipse cx="320" cy="236" rx="148" ry="26" className="fb-accent" strokeOpacity=".75" />
+              <circle cx="320" cy="236" r="82" fill="#000" stroke="#fff" strokeOpacity=".55" />
+              <circle cx="320" cy="236" r="90" strokeOpacity=".2" />
+              <circle cx="320" cy="236" r="100" strokeOpacity=".12" />
+              <circle cx="398" cy="214" r="5" className="fb-accent" />
+              <line x1="320" y1="58" x2="320" y2="118" strokeOpacity=".24" />
+              <text className="fb-label" x="320" y="352" textAnchor="middle">0 ROUTES REMAIN</text>
+              <text className="fb-label" x="320" y="372" textAnchor="middle" strokeOpacity=".55">EVENT HORIZON VERIFIED</text>
+            </>
+          ) : null}
+
           {variant === "prism" ? (
             <>
               <path d="M236 372 L236 138 L422 92 L422 326 Z" strokeWidth="2" />
@@ -1739,10 +2350,13 @@ const CAMERA: Record<FigureVariant, { position: [number, number, number]; look: 
   bloom: { position: [0, 1.2, 8.8], look: [0, 0, 0], fov: 40, auto: 0.0005, span: 2.5 },
   drift: { position: [0, 0.14, 7.4], look: [0, 0, 0], fov: 40, auto: 0.0004, span: 3.1 },
   stack: { position: [0, 2.4, 8.6], look: [0, 0, 0], fov: 40, auto: 0.0003, span: 2.3 },
+  horizon: { position: [0, 1.2, 8.0], look: [0, 0, 0], fov: 40, auto: 0.0004, span: 2.6 },
 };
 
 export function Figure3D({
   variant,
+  mode = "planets",
+  onMode,
   motion = true,
   active = 0,
   count = 8,
@@ -1752,6 +2366,8 @@ export function Figure3D({
   label,
 }: {
   variant: FigureVariant;
+  mode?: FigureMode;
+  onMode?: (mode: FigureMode) => void;
   motion?: boolean;
   active?: number;
   count?: number;
@@ -1801,7 +2417,7 @@ export function Figure3D({
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
-    const preset = CAMERA[variant];
+    const preset = { ...CAMERA[variant], ...(mode === "planets" ? PLANET_CAMERA[variant] : {}) };
     const camera = new THREE.PerspectiveCamera(preset.fov, 1, 0.1, 100);
     camera.position.set(...preset.position);
     camera.lookAt(...preset.look);
@@ -1811,7 +2427,7 @@ export function Figure3D({
     composer.addPass(new RenderPass(scene, camera));
     const bloom = new UnrealBloomPass(
       new THREE.Vector2(1, 1),
-      variant === "ascent" ? 0.26 : variant === "atlas" ? 0.3 : 0.36,
+      variant === "ascent" ? (mode === "planets" ? 0.52 : 0.26) : variant === "atlas" ? 0.34 : mode === "planets" ? 0.42 : 0.36,
       0.55,
       0.24,
     );
@@ -1821,7 +2437,12 @@ export function Figure3D({
     const glow = glowTexture();
     const star = starTexture();
     let built: Built;
-    if (variant === "orb") built = buildOrb(glow, star);
+    if (mode === "planets") {
+      if (variant === "drift") built = buildDriftPlanets(glow);
+      else if (variant === "horizon") built = buildHorizon(glow, "planets");
+      else built = buildOrrery(variant, glow);
+    } else if (variant === "horizon") built = buildHorizon(glow, "wireframe");
+    else if (variant === "orb") built = buildOrb(glow, star);
     else if (variant === "dish") built = buildDish(glow);
     else if (variant === "ascent") built = buildAscent(glow);
     else if (variant === "atlas") built = buildAtlas(glow);
@@ -1991,35 +2612,40 @@ export function Figure3D({
       renderer.dispose();
       canvas.remove();
     };
-  }, [variant]);
-
-  const toggleFallback = () => {
-    if (failedRef.current) return;
-    const next = !fallback;
-    setFallback(next);
-    pausedRef.current = next;
-    if (!next) startRef.current();
-  };
+  }, [variant, mode]);
 
   return (
-    <div className="fig" ref={hostRef} data-variant={variant}>
+    <div className="fig" ref={hostRef} data-variant={variant} data-mode={mode}>
       {fallback ? <Fallback variant={variant} /> : null}
       <div className="fig-controls">
+        {fallback ? (
+          <span className="fig-flat">2D</span>
+        ) : (
+          <div className="fig-modes" role="group" aria-label="Figure style">
+            <button
+              type="button"
+              aria-pressed={mode === "planets"}
+              onClick={() => onMode?.("planets")}
+            >
+              Planets
+            </button>
+            <button
+              type="button"
+              aria-pressed={mode === "wireframe"}
+              onClick={() => onMode?.("wireframe")}
+            >
+              Wire
+            </button>
+          </div>
+        )}
         <button type="button" onClick={() => resetRef.current()} aria-label="Reset view">Reset</button>
-        <button
-          type="button"
-          onClick={toggleFallback}
-          aria-pressed={fallback}
-          aria-label={fallback ? "Use 3D view" : "Use 2D view"}
-          disabled={failedRef.current}
-        >
-          {fallback ? "3D" : "2D"}
-        </button>
       </div>
       <p className="fig-hint" aria-hidden="true">
-        {onPick ? "Click a node / drag / scroll / double-click reset" : "Drag / scroll / double-click reset"}
+        {onPick ? "Click a body / drag / scroll" : "Drag / scroll"}
       </p>
-      <span className="sr-only">{label}. Use Reset or 2D for a static fallback.</span>
+      <span className="sr-only">
+        {label}. Switch between the planet and wireframe instruments. A static diagram appears if WebGL is unavailable. Double-click to reset.
+      </span>
     </div>
   );
 }

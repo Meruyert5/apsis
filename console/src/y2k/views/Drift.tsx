@@ -77,10 +77,10 @@ export function Drift({
           <FigurePanel
             variant="drift"
             index="FIG. 05"
-            title="Drift split"
+            title="Drift pair"
             meta={`${summary.beforeTitle} → ${summary.afterTitle}`}
             tags={[`+${summary.added.length} edges`, `-${summary.removed.length} edges`, `${summary.newRoutes.length} new routes`]}
-            note="Auto: the scan reads before and after / the seam carries changes"
+            note="Auto: the scan reads both planets / the seam carries changes"
             foot={`${summary.beforeRoutes} → ${summary.afterRoutes} routes`}
             motion={motion}
             count={summary.added.length}

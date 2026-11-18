@@ -116,10 +116,10 @@ export function Commands({
         <FigurePanel
           variant="prism"
           index="FIG. 06"
-          title="Command prism"
+          title="Command core"
           meta="Recorded output / read-only"
           tags={[`${commands.length} runs`, `${commandVerbs.length} verbs`, `${commandScenarios.length} scenarios`]}
-          note="Auto: the scan plane climbs the monolith"
+          note="Auto: the beam reads the core"
           foot={current?.format ?? "text"}
           motion={motion}
           focus={commandVerbs.indexOf(current?.verb ?? "scan")}

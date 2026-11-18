@@ -171,10 +171,10 @@ export function Atlas({
         <FigurePanel
           variant="atlas"
           index="FIG. 04"
-          title="Account constellation"
-          meta="16 nodes / one fleet"
+          title="Account system"
+          meta="16 bodies / one fleet"
           tags={[`${fleet.length} accounts`, `${bundle.stats.identities} in focus`, `${bundle.edges.length} edges`]}
-          note="Auto: nodes pulse / click a node to switch account"
+          note="Auto: bodies orbit / click one to switch account"
           foot={bundle.scenario.title}
           motion={motion}
           focus={focusIndex}

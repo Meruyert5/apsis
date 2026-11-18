@@ -156,7 +156,37 @@ export function Blueprint({
         </Panel>
       </div>
 
-      
+      <section className="horizon-row">
+        <FigurePanel
+          variant="horizon"
+          index="FIG. 09"
+          title="Event horizon"
+          meta="0 routes remain / the cut held"
+          tags={["37 edges cut", "144 routes closed", "0 writes"]}
+          note="Auto: the disk turns / the horizon holds"
+          foot="Verified"
+          motion={motion}
+        />
+        <Panel title="Closure" meta="event horizon verified">
+          <div className="horizon-copy">
+            <h3>Every route closed.</h3>
+            <p>
+              The minimum cut removes 37 edges. Re-running the survey from every identity
+              returns no walk to an administrator; the four clean fixtures stay clean.
+            </p>
+          </div>
+          <ul className="horizon-stats">
+            <li><b>{snapshot.routes}</b><span>routes before</span></li>
+            <li><b>0</b><span>routes after</span></li>
+            <li><b>{snapshot.cut}</b><span>edges cut</span></li>
+            <li><b>{snapshot.writes}</b><span>writes</span></li>
+          </ul>
+          <p className="detail-note">
+            The horizon is the state the engine is trying to reach, not a live account. It is
+            computed from the fixture export and rendered read-only.
+          </p>
+        </Panel>
+      </section>
 
       <Panel title="Modules" meta="eight views">
         <div className="module-table">

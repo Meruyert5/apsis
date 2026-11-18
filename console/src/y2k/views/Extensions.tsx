@@ -107,7 +107,7 @@ export function Extensions({
           title="Primitive bloom"
           meta="18 nodes / six rings"
           tags={[`${techniqueCount} primitives`, `${fleet.length} accounts`, `${Math.round((coveredCells / totalCells) * 100)}% covered`]}
-          note="Auto: rings counter-rotate / click a node to select"
+          note="Auto: rings counter-rotate / click a body"
           foot={selected.mitre}
           motion={motion}
           focus={focus}

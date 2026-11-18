@@ -1,43 +1,48 @@
 # Fleet dashboard
 
 The dashboard at `/` is the single Vite entry. It reads the static Apsis export
-and renders eight views, each with a distinct WebGL instrument.
+and renders eight views, each with a glossy planet scene and a wireframe
+instrument. A `Planets` / `Wire` switch on every figure changes the language
+without changing the data, the camera or the interactions.
 
 ## View map
 
-| # | View | Question | 3D instrument | Shape |
+| # | View | Question | Planet scene | Wireframe |
 | --- | --- | --- | --- | --- |
-| 01 | Overview | What is the fleet posture and where do I go? | Orb | Sphere + 7-node orbit |
-| 02 | Survey | Which accounts carry the exposure? | Dish | Wireframe bowl + radar sweep |
-| 03 | Path map | How does one escalation walk, hop by hop? | Ascent | Constellation-threaded ascent |
-| 04 | Atlas | Which identity, role and trust edges connect? | Constellation | 16-node disc + orbital ring |
-| 05 | Drift | What changed between two snapshots? | Split | Before/after panels + seam |
-| 06 | Commands | What did the engine actually run? | Prism | Monolith + scan plane |
-| 07 | Extensions | Which primitives, coverage, contracts and cases exist? | Bloom | Six rings + 18 nodes |
-| 08 | Blueprint | What is the whole system and is it ready? | Stack | Five stacked layers |
+| 01 | Overview | What is the fleet posture and where do I go? | Graphite planet, seven glossy bodies, two orbits | Wire globe + 7-node orbit |
+| 02 | Survey | Which accounts carry the exposure? | Ringed planet, 16 contacts, radar sweep | Wire bowl + sweep |
+| 03 | Path map | How does one escalation walk, hop by hop? | Solar system: ivory star, eight planets, route thread; the cut collapses the star into a black hole | Ascent ladder |
+| 04 | Atlas | Which identity, role and trust edges connect? | Ivory star, 16 glossy account bodies, trust arcs | 16-node constellation |
+| 05 | Drift | What changed between two snapshots? | Two planets joined by the changed edge stream | Before/after wire panels |
+| 06 | Commands | What did the engine actually run? | Dark core, data ring, beam, ten moons | Monolith + scan plane |
+| 07 | Extensions | Which primitives, coverage, contracts and cases exist? | Ringed planet with 18 moons | Six rings + 18 nodes |
+| 08 | Blueprint | What is the whole system and is it ready? | Planet with five orbital planes, plus the event-horizon plate | Five stacked layers |
 
-Each figure supports drag, scroll zoom, double-click reset, a `2D` SVG fallback,
-a **fullscreen** toggle and a reduced-motion path. Fullscreen expands the panel
-over the console, locks page scroll, keeps the header and footer, and closes on
-Escape or the collapse control. Auto rotation and node pulses are consistent
-across views; the Path map adds an autoplaying hop sequence and a cut state. A
-small `Auto` / `Paused` badge in the figure header reports the current motion
-state, and the footer names the animation that is playing.
+Each figure supports drag, scroll zoom, double-click reset, a **fullscreen**
+toggle and a reduced-motion path. If WebGL is unavailable, a `2D` SVG board
+takes over automatically. Fullscreen expands the panel over the console, locks
+page scroll, keeps the header and footer, and closes on Escape or the collapse
+control. Auto rotation and body pulses are consistent across views; the Path map
+adds an autoplaying hop sequence and a cut state. A small `Auto` / `Paused` badge
+in the figure header reports the current motion state, and the footer names the
+animation that is playing.
 
 Every figure renders through an `EffectComposer` with `UnrealBloomPass` and
-`OutputPass`. The canvas is screen-blended over the glass stage, so only the
-lit linework and halos add light. Build details:
+`OutputPass`. The planet scenes use a key light, a cobalt fill and two point
+lights, so the sphere has a terminator and a specular highlight rather than a
+flat matte surface. Build details:
 
-| Instrument | Surface | Motion |
-| --- | --- | --- |
-| Orb | Shader core, Fresnel atmosphere, orbit tube, dust, comet | Comet travels the orbit; halos breathe |
-| Dish | Lathe bowl, rim, feed, 28 contacts | Sweep rotates and wakes contacts |
-| Ascent | Eight gates, hex platforms, S-curve depth, context constellation, target beacon, shock rings | Hops advance; pulse travels; rings expand; context stars link to the route |
-| Constellation | Sixteen nodes, curved tube arcs, node rings, orbital ring, nucleus, base stems | Nodes pulse; rings spin; data motes orbit; focus beam rises |
-| Split | Two vertical wire plates, seven linked nodes, seam and scan plane | Panels breathe; added edges cyan; scan reads both sides |
-| Prism | Glass monolith, beam, scan plane, stacked rings | Scan climbs; rings counter-rotate |
-| Bloom | Six rings, eighteen pickable nodes, wire nucleus | Rings counter-rotate; focus node swells |
-| Stack | Five wire layers, outlines, beam, connectors | Layers breathe; beam rises |
+| Instrument | Planet scene | Wireframe | Motion |
+| --- | --- | --- | --- |
+| Orb | Graphite sphere, rim shell, two orbits, seven glossy bodies, comet | Shader core, Fresnel atmosphere, orbit tube, dust | Comet travels; halos breathe |
+| Dish | Ringed planet, broad band, 16 contacts, rotating sweep arc | Lathe bowl, rim, feed, 28 contacts | Sweep wakes contacts |
+| Ascent | Ivory star, eight planets on eight orbits, cyan route thread, black-hole state | Eight gates, S-curve, beacon, shock rings | Hops advance; the cut crossfades to the horizon |
+| Atlas | Ivory star, 16 account bodies, trust arcs | Sixteen nodes, tube arcs, orbital ring | Bodies pulse; focus ring swells |
+| Drift | Two planets, changed-edge stream, base grid, scan bar | Two vertical wire plates, seam | Added bodies cyan; scan reads both sides |
+| Prism | Dark core, data ring, beam, ten moons | Glass monolith, scan plane, rings | Beam breathes; rings counter-rotate |
+| Bloom | Ringed planet, six moon orbits, 18 glossy nodes | Six rings, eighteen nodes | Rings counter-rotate; focus body swells |
+| Stack | Planet, five orbital planes, beam | Five wire layers, outlines | Planes turn; beam rises |
+| Horizon | Black hole, accretion disk, photon ring, one moon | Wire sphere, three rings | Disk turns; photon ring breathes |
 
 Clickable figures: the Path map ascent jumps to a hop, the Atlas constellation
 switches account, and the Bloom node selects a primitive. The Drift split is a
@@ -85,12 +90,13 @@ original ultramarine.
 
 ### 2D fallback
 
-Every figure has an annotated SVG fallback. The fallback is a full-frame board
-with a title, a note, a grid and the same geometry as the 3D instrument. It is
-wrapped so the `viewBox` fits the stage with `xMidYMid meet`; in fullscreen it
-shows the whole board instead of cropping the lower half. The Path map fallback
-draws the gate route and the context stars; Atlas draws the disc, arcs and
-orbital ring; Bloom draws the six rings and eighteen nodes.
+Every figure has an annotated SVG fallback if WebGL is unavailable. The
+fallback is a full-frame board with a title, a note, a grid and the same
+geometry as the 3D instrument. It is wrapped so the `viewBox` fits the stage
+with `xMidYMid meet`; in fullscreen it shows the whole board instead of cropping
+the lower half. The Path map fallback draws the gate route and the context
+stars; Atlas draws the disc, arcs and orbital ring; Bloom draws the six rings
+and eighteen nodes; Horizon draws the disk and the photon ring.
 
 ## Data
 
@@ -114,8 +120,9 @@ All numbers are real fixture totals: 16 accounts, 194 identities, 144 routes,
 - `CommandPalette.tsx` — `Cmd/Ctrl+K`; searches views, accounts, commands and
   techniques; arrow keys and Enter navigate.
 - `ui.tsx` — icons, count-up, panels, figure frame, chips, tabs, donut, badge.
-- `Figure3D.tsx` - one renderer and eight scene builders. State (active hop,
-  cut, focus node) is passed through a ref so scenes update without remounting.
+- `Figure3D.tsx` - one renderer over nine variants, each with a planet scene and
+  a wireframe builder. State (active hop, cut, focus body) is passed through a
+  ref so scenes update without remounting.
 - `views/*` — one file per view.
 
 ## Interaction inventory
@@ -167,9 +174,9 @@ conditions, import, overlay and ledger included); contracts valid against both
 schemas; no horizontal overflow on any of the eight views at 390, 768 or 1440;
 the audit gate reports no contrast, heading, unnamed-control, small-target or
 overflow failures across all views at 1440 and 390; Lighthouse accessibility,
-best practices and SEO pass; fullscreen (3D and 2D), Escape-close, portrait fit
-and 3D node picking verified in the browser. The audit's 14px floor still flags
-intentional HUD micro-labels.
+best practices and SEO pass; fullscreen (planet, wireframe and 2D), Escape-close,
+portrait fit and body picking verified in the browser. The audit's 14px floor
+still flags intentional HUD micro-labels.
 
 ## Boundaries
 

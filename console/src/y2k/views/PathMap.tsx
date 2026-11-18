@@ -216,10 +216,10 @@ export function PathMap({
           <FigurePanel
             variant="ascent"
             index="FIG. 03"
-            title="Escalation ascent"
+            title="Escalation system"
             meta={`${group?.source ?? "Source"} → administrator`}
             tags={[`${route.hops} hops`, `${conditional} conditional`, `${observed} observed`, cut ? "cut" : "open"]}
-            note="Auto: the route threads the constellation / click a hop"
+            note="Auto: the system carries the route / click a hop"
             foot={`${active + 1} / ${labels.length}`}
             motion={motion}
             active={active}

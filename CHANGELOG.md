@@ -2,6 +2,22 @@
 
 ### Changed
 
+- Every figure now has two instruments. A `Planets` / `Wire` switch replaces the
+  old `3D` / `2D` toggle: the default is a glossy planet scene (graphite sphere,
+  lit terminator, small metal-rough bodies, orbit rings), and the wireframe
+  schematic remains one click away. A static 2D board still appears
+  automatically when WebGL is unavailable.
+- Path map is a solar system: an ivory star, eight planets on eight orbits and a
+  cyan route thread. Applying the cut crossfades the star into a black hole with
+  a photon ring and an eight-band accretion disk; restoring the route brings the
+  star back.
+- Atlas is the same language at account scale: an ivory star, sixteen glossy
+  account bodies and trust arcs, with a selection ring on the focused account.
+- Blueprint gains an event-horizon plate: a black hole, accretion disk and
+  `0 routes` closure panel that state the cut result next to the stack.
+- Layout reshaped: view actions sit under the lede, the figure stage is taller and
+  wider, the hero grid gives the instrument more room, and the horizon row adds a
+  closing two-column plate.
 - The Overview wordmark is monumental again: 124-216px display type with a
   scaled outline echo, so the hero leads the page instead of sitting at heading
   size. The rest of the type scale is unchanged.
@@ -14,7 +30,7 @@
   description, topics and post-deploy edits in `docs/RELEASE.md`.
 - Cleanup: removed `console/verify.log`, `console/shots/` and the TS build
   artifact; the working tree now contains only source, fixtures, docs and the
-  five README screenshots.
+  README screenshots.
 - The dashboard is now the only site entry at `/`. The legacy four-deck console,
   its component tree and the design-lab v2-v7 mocks were removed.
 - Engine: a CloudTrail overlay marks observed edges and routes, `apsis import`

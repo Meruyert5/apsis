@@ -12,18 +12,34 @@ inventory are in [`DASHBOARD.md`](DASHBOARD.md); the revision trail is in
 
 One account is one field. The administrator is the primary star, identities are
 bodies at their hop depth, and an escalation is a route through them. Eight views
-each carry a different instrument:
+each carry two instruments: a glossy planet scene and a wireframe schematic.
 
-| View | Instrument | Question |
-| --- | --- | --- |
-| Overview | Orb | Fleet posture and the signature orbit |
-| Survey | Dish | Exposure, severity and account ranking |
-| Path map | Ascent | One route, hop by hop, then the cut |
-| Atlas | Constellation | Accounts, identities and trust |
-| Drift | Split | Before and after, route aware |
-| Commands | Prism | Recorded CLI runs |
-| Extensions | Bloom | Primitives, coverage, contracts, case |
-| Blueprint | Stack | Architecture, roadmap and release |
+| View | Planet scene | Wireframe | Question |
+| --- | --- | --- | --- |
+| Overview | Graphite planet + seven bodies | Orb | Fleet posture and the signature orbit |
+| Survey | Ringed planet + 16 contacts | Dish | Exposure, severity and account ranking |
+| Path map | Solar system + black-hole cut | Ascent | One route, hop by hop, then the cut |
+| Atlas | Ivory star + 16 account bodies | Constellation | Accounts, identities and trust |
+| Drift | Two planets + edge stream | Split | Before and after, route aware |
+| Commands | Dark core + data ring | Prism | Recorded CLI runs |
+| Extensions | Ringed planet + 18 moons | Bloom | Primitives, coverage, contracts, case |
+| Blueprint | Orbital planes + event horizon | Stack | Architecture, roadmap and release |
+
+## Planet language
+
+The planet scene is deliberately untextured. A graphite sphere with a cool key
+light, a cobalt fill and a white specular point gives a terminator, a rim and a
+small glossy highlight without an image download, a texture licence, or a
+photoreal surface that would fight the HUD. Bodies are small metal-rough
+spheres in cyan, violet and ice; the administrator is an ivory star. Orbit rings
+are 1px additive circles, and the route or trust relationships are thin arcs.
+
+The **black hole** is the only state that replaces the star. The horizon is a
+black sphere that occludes the disk behind it, wrapped in a white photon ring, a
+cyan secondary ring and an eight-band accretion disk. On Path map it crossfades
+in when the cut is applied; on Blueprint it is a static closing plate. The
+wireframe alternative remains a hollow sphere with three rings, so the toggle
+never dead-ends.
 
 ## Colour
 
@@ -76,11 +92,13 @@ console header read as one system.
 Motion explains state, never decorates a static claim:
 
 - auto-rotating instruments with a visible `Auto` badge and a `Paused` state;
-- the Path map advances hops, carries a pulse and fractures on cut;
-- Atlas nodes pulse, the focus beam rises, the orbital ring turns;
-- Drift scans before and after and lights added edges in cyan;
+- the Path map advances hops, carries a pulse and crossfades its star into a
+  black hole on cut; Blueprint carries the same horizon as a closing plate;
+- Atlas bodies pulse, the focus ring swells, the orbits turn;
+- Drift scans both planets and lights added edges in cyan;
+- the `Planets` / `Wire` switch rebuilds the scene without remounting the panel;
 - fullscreen on every figure, closes on Escape;
-- 32fps cap (10fps when motion is off), offscreen pause, `2D` board fallback.
+- 32fps cap (10fps when motion is off), offscreen pause, automatic `2D` fallback.
 
 ## Content rules
 
