@@ -19,10 +19,10 @@ type SortKey = "identities" | "routes" | "cut";
 type SeverityFilter = "all" | "critical" | "high" | "medium";
 
 const SEVERITY_COLOR: Record<Severity, string> = {
-  critical: "#2b3cff",
-  high: "#7a6cff",
-  medium: "#44506e",
-  low: "#242b3b",
+  critical: "#ffb26b",
+  high: "#a78bfa",
+  medium: "#7b86c9",
+  low: "#5f6b7a",
 };
 
 export function Survey({

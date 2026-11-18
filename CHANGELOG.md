@@ -2,6 +2,25 @@
 
 ### Changed
 
+- The observatory edition replaces the all-blue field: warm black and bone,
+  Instrument Serif display, Space Grotesk reading and IBM Plex Mono telemetry.
+  Each view carries one accent (cyan, mint, amber, violet or rose) across the
+  hero aura, figure rim, rail state and controls.
+- Celestial bodies leave the figure panel. A cropped Canvas2D body - planet,
+  ringed planet, star, cluster, binary, gas giant, moon or black hole - sits at
+  the page edge on every view, with pointer parallax and a reduced-motion still.
+- The identity graph is rebuilt as a full workbench: a 16-account strip, a
+  940x600 graph with 17px labels, depth rings, accent arrows, a selected-node
+  edge glow, and a 340px inspector. On mobile the graph scrolls at 720px so
+  labels stay legible.
+- Texture and chrome: SVG grain, 64px HUD grid, CRT scanlines, ambient edge glow,
+  warm glass topbar, cream primary button, bone hairline panels. Interactive
+  states now follow the view accent instead of the old ultramarine.
+- New mark in bone, amber and cyan, a matching 512/180 icon set and a rebuilt OG
+  card. Sora and IBM Plex Sans are removed; the font payload is now Instrument
+  Serif, Space Grotesk and IBM Plex Mono.
+- The wireframe pass is bone and periwinkle with a depth fog, larger nodes and
+  accent selection rings; it stays a schematic, not a second planet scene.
 - Every figure now has two instruments. A `Planets` / `Wire` switch replaces the
   old `3D` / `2D` toggle: the default is a glossy planet scene (graphite sphere,
   lit terminator, small metal-rough bodies, orbit rings), and the wireframe

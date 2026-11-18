@@ -1,26 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Apsis">
   <defs>
-    <radialGradient id="tile" cx="38%" cy="26%" r="86%">
-      <stop offset="0" stop-color="#101b3d" />
-      <stop offset="0.52" stop-color="#070c18" />
-      <stop offset="1" stop-color="#03050b" />
+    <radialGradient id="tile" cx="38%" cy="24%" r="88%">
+      <stop offset="0" stop-color="#1b1c1f" />
+      <stop offset="0.55" stop-color="#0b0c0e" />
+      <stop offset="1" stop-color="#050607" />
     </radialGradient>
-    <linearGradient id="ice" x1="0" y1="0" x2="0.7" y2="1">
-      <stop offset="0" stop-color="#ffffff" />
-      <stop offset="0.48" stop-color="#d6ecff" />
-      <stop offset="1" stop-color="#8db7ff" />
+    <linearGradient id="bone" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0" stop-color="#fffaf0" />
+      <stop offset="0.5" stop-color="#f4efe3" />
+      <stop offset="1" stop-color="#cfc7b6" />
     </linearGradient>
-    <linearGradient id="cobalt" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#7a6cff" />
-      <stop offset="1" stop-color="#2b3cff" />
+    <linearGradient id="orbit" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffb26b" />
+      <stop offset="0.55" stop-color="#e8a06a" />
+      <stop offset="1" stop-color="#7ce7ff" />
     </linearGradient>
     <radialGradient id="halo" cx="50%" cy="50%" r="50%">
-      <stop offset="0" stop-color="#d6ecff" stop-opacity=".75" />
-      <stop offset="0.4" stop-color="#1ab2ff" stop-opacity=".35" />
-      <stop offset="1" stop-color="#1ab2ff" stop-opacity="0" />
+      <stop offset="0" stop-color="#ffd9a8" stop-opacity=".85" />
+      <stop offset="0.42" stop-color="#ffb26b" stop-opacity=".32" />
+      <stop offset="1" stop-color="#ffb26b" stop-opacity="0" />
     </radialGradient>
     <filter id="soft" x="-70%" y="-70%" width="240%" height="240%">
-      <feGaussianBlur stdDeviation="1.2" result="b" />
+      <feGaussianBlur stdDeviation="1.1" result="b" />
       <feMerge>
         <feMergeNode in="b" />
         <feMergeNode in="SourceGraphic" />
@@ -29,38 +30,38 @@
   </defs>
 
   <rect width="64" height="64" rx="2" fill="url(#tile)" />
-  <rect x="0.7" y="0.7" width="62.6" height="62.6" rx="1.4" fill="none" stroke="#8db7ff" stroke-opacity=".26" />
+  <rect x="0.7" y="0.7" width="62.6" height="62.6" rx="1.4" fill="none" stroke="#f4efe3" stroke-opacity=".24" />
 
-  <g stroke="#2b3cff" stroke-opacity=".12" stroke-width=".5">
+  <g stroke="#f4efe3" stroke-opacity=".08" stroke-width=".5">
     <path d="M16 2v60M32 2v60M48 2v60M2 16h60M2 32h60M2 48h60" />
   </g>
 
-  <g fill="none" stroke="#8db7ff" stroke-opacity=".4" stroke-width=".9" stroke-linecap="square">
+  <g fill="none" stroke="#f4efe3" stroke-opacity=".42" stroke-width=".9" stroke-linecap="square">
     <path d="M5 11V5h6" />
     <path d="M53 5h6v6" />
     <path d="M59 53v6h-6" />
     <path d="M11 59H5v-6" />
   </g>
 
-  <ellipse cx="32" cy="33.5" rx="27" ry="10.2" transform="rotate(-18 32 33.5)" fill="none" stroke="#2b3cff" stroke-opacity=".28" stroke-width="3.4" />
-  <ellipse cx="32" cy="33.5" rx="27" ry="10.2" transform="rotate(-18 32 33.5)" fill="none" stroke="url(#cobalt)" stroke-opacity=".95" stroke-width="1.3" />
-  <ellipse cx="32" cy="32.5" rx="21.5" ry="7.2" transform="rotate(30 32 32.5)" fill="none" stroke="#8db7ff" stroke-opacity=".3" stroke-width=".7" />
+  <ellipse cx="32" cy="34" rx="26.5" ry="10" transform="rotate(-18 32 34)" fill="none" stroke="#ffb26b" stroke-opacity=".18" stroke-width="3.2" />
+  <ellipse cx="32" cy="34" rx="26.5" ry="10" transform="rotate(-18 32 34)" fill="none" stroke="url(#orbit)" stroke-opacity=".9" stroke-width="1.25" />
+  <ellipse cx="32" cy="32.5" rx="21" ry="7" transform="rotate(30 32 32.5)" fill="none" stroke="#f4efe3" stroke-opacity=".24" stroke-width=".7" />
 
   <g stroke-linecap="square" stroke-linejoin="miter">
-    <path d="M19.4 47.6 L32 14.8 L44.6 47.6" fill="none" stroke="#2b3cff" stroke-opacity=".55" stroke-width="4.4" transform="translate(1.1 1)" />
-    <path d="M18.6 47.2 L32 14.2 L45.4 47.2" fill="none" stroke="url(#ice)" stroke-width="4.2" filter="url(#soft)" />
-    <path d="M24.4 36.2 H39.6" fill="none" stroke="#1ab2ff" stroke-width="2.3" />
+    <path d="M19.4 47.6 L32 14.8 L44.6 47.6" fill="none" stroke="#ffb26b" stroke-opacity=".4" stroke-width="4.4" transform="translate(1.1 1)" />
+    <path d="M18.6 47.2 L32 14.2 L45.4 47.2" fill="none" stroke="url(#bone)" stroke-width="4.2" filter="url(#soft)" />
+    <path d="M24.4 36.2 H39.6" fill="none" stroke="#ffb26b" stroke-width="2.3" />
   </g>
 
-  <circle cx="52.8" cy="19.8" r="5.4" fill="url(#halo)" />
-  <circle cx="52.8" cy="19.8" r="2.5" fill="#ffffff" />
-  <circle cx="52.8" cy="19.8" r="4.1" fill="none" stroke="#d6ecff" stroke-opacity=".45" stroke-width=".6" />
+  <circle cx="52.4" cy="20.2" r="5.6" fill="url(#halo)" />
+  <circle cx="52.4" cy="20.2" r="2.4" fill="#fffaf0" />
+  <circle cx="52.4" cy="20.2" r="4" fill="none" stroke="#ffd9a8" stroke-opacity=".5" stroke-width=".6" />
 
-  <circle cx="11.6" cy="45.7" r="1.5" fill="#4e5fff" />
-  <circle cx="11.6" cy="45.7" r="3" fill="none" stroke="#4e5fff" stroke-opacity=".35" stroke-width=".5" />
+  <circle cx="11.8" cy="45.6" r="1.4" fill="#7ce7ff" />
+  <circle cx="11.8" cy="45.6" r="2.9" fill="none" stroke="#7ce7ff" stroke-opacity=".35" stroke-width=".5" />
 
-  <g stroke="#d6ecff" stroke-opacity=".55" stroke-width=".7" stroke-linecap="square">
-    <path d="M40.4 9.1v2.2M39.3 10.2h2.2" />
-    <path d="M23.2 53.4v1.8M22.3 54.3h1.8" />
+  <g stroke="#f4efe3" stroke-opacity=".5" stroke-width=".7" stroke-linecap="square">
+    <path d="M40.2 8.8v2.2M39.1 9.9h2.2" />
+    <path d="M23.4 53.4v1.8M22.5 54.3h1.8" />
   </g>
 </svg>

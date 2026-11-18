@@ -4,8 +4,8 @@
   "description": "Every route reaches its apsis. A read-only AWS IAM route console.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#05070d",
-  "theme_color": "#05070d",
+  "background_color": "#08090b",
+  "theme_color": "#08090b",
   "icons": [
     {
       "src": "./icon-512.png",
@@ -15,3 +15,4 @@
     }
   ]
 }
+

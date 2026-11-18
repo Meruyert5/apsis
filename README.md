@@ -191,14 +191,18 @@ npm run audit       # contrast, headings, names, target size
 
 `/` is the dashboard: eight views over the same static export, each with a
 glossy planet scene and a wireframe instrument. One Vite entry, one shell, no
-legacy console. Every figure carries a `Planets` / `Wire` switch.
+legacy console. Every figure carries a `Planets` / `Wire` switch. The register is
+an observatory ledger: warm black and bone, Instrument Serif display, Space
+Grotesk reading, IBM Plex Mono telemetry, one accent per view and a cropped
+celestial body at the page edge.
 
 - **Overview** - orrery; fleet figures, module map, fleet pulse, evidence.
 - **Survey** - ringed orbit; severity, ranking, coverage, searchable ledger.
 - **Path map** - solar system; autoplay, step, speed, cut/restore, clickable
   bodies, hop detail, route ledger. The cut turns the star into a black hole.
-- **Atlas** - account system; star, 16 account bodies, trust arcs, filters,
-  inspector.
+- **Atlas** - account system; star, 16 account bodies, trust arcs, plus a
+  full-width identity-graph workbench with a 16-account strip, search, kind
+  filters, depth rings and an inspector.
 - **Drift** - planet pair; route-aware diff, new and closed routes, edge
   changes, the same comparator as `apsis diff`.
 - **Commands** - command core; 114 recorded runs, typewriter output, replay, copy.
@@ -209,10 +213,12 @@ legacy console. Every figure carries a `Planets` / `Wire` switch.
 
 Global: `Cmd/Ctrl+K` command palette, motion toggle, fullscreen on every figure,
 a `Planets` / `Wire` switch on every instrument, sharp 2px panel geometry,
-floating glass topbar, hero aurora, moving constellation background with grain
-and scanline texture, bloom-lit glass panels, neon focus states, automatic 2D
-fallback when WebGL is unavailable, clickable bodies on Path map, Atlas, Drift
-and Extensions, and the same read-only export. The architecture and interaction
+floating glass topbar, warm-black field with a view accent, Instrument Serif
+display type, a cropped planet or black hole at the page edge, 64px HUD grid,
+fine grain, CRT scanlines, ambient edge glow, hero aura, moving constellation
+background, bloom-lit glass panels, neon focus states, automatic 2D fallback
+when WebGL is unavailable, clickable bodies on Path map, Atlas, Drift and
+Extensions, and the same read-only export. The architecture and interaction
 inventory are in [docs/DASHBOARD.md](docs/DASHBOARD.md).
 
 ### Dashboard screenshots
@@ -318,9 +324,9 @@ test:logic` / `npm run audit` before a UI change.
 
 ## Credits
 
-Sora and IBM Plex are licensed under the SIL Open Font License. Three.js,
-React, Vite and Lucide retain their upstream licences. The full attribution is
-in [NOTICE.md](NOTICE.md).
+Instrument Serif, Space Grotesk and IBM Plex Mono are licensed under the SIL
+Open Font License. Three.js, React and Vite retain their upstream licences. The
+full attribution is in [NOTICE.md](NOTICE.md).
 
 ## License
 

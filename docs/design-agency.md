@@ -405,3 +405,12 @@ Global:
 - Blueprint is complete and ready for upload; the left column now holds pipeline, architecture and the engine additions so the release panel has no empty counterpart.
 - CI audits all eight views at 1440/390 and runs Lighthouse with accessibility, best-practice and SEO assertions.
 
+## Revision 16 - the observatory edition
+
+- Warm black and bone replace the all-blue field. Instrument Serif, Space Grotesk and IBM Plex Mono replace Sora and IBM Plex Sans; one accent per view drives the hero, figure rim, rail and controls.
+- Celestial bodies leave the panel: a cropped Canvas2D planet, ringed planet, star, cluster, binary, gas giant, moon or black hole sits at the page edge on every view. The figure panels keep the interactive version.
+- The identity graph becomes a full workbench: a 16-account strip, a 940x600 graph with 17px labels and accent arrows, and a 340px inspector. The graph scrolls at 720px on mobile rather than shrinking.
+- Texture: SVG grain, 64px HUD grid, CRT scanlines, ambient edge glow, warm glass topbar, cream primary button. Interactive states follow the view accent.
+- New bone/amber/cyan mark, icon set and OG card; the wireframe becomes bone and periwinkle with depth fog and accent selection rings.
+
+

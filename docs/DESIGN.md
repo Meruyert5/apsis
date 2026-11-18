@@ -27,65 +27,83 @@ each carry two instruments: a glossy planet scene and a wireframe schematic.
 
 ## Planet language
 
-The planet scene is deliberately untextured. A graphite sphere with a cool key
-light, a cobalt fill and a white specular point gives a terminator, a rim and a
+The planet scene is deliberately untextured. A graphite sphere with a warm key
+light, an accent fill and a white specular point gives a terminator, a rim and a
 small glossy highlight without an image download, a texture licence, or a
-photoreal surface that would fight the HUD. Bodies are small metal-rough
-spheres in cyan, violet and ice; the administrator is an ivory star. Orbit rings
-are 1px additive circles, and the route or trust relationships are thin arcs.
+photoreal surface that would fight the HUD. Bodies are small metal-rough spheres
+in the view accent, bone, violet, mint and amber; the administrator is an ivory
+star. Orbit rings are 1px additive circles, and the route or trust relationships
+are thin arcs. The same body language appears twice: a large, cropped Canvas2D
+body at the page edge and the interactive WebGL instrument in the figure panel.
+
+| View | Accent | Page body | Figure body |
+| --- | --- | --- | --- |
+| Overview | Cyan `#7ce7ff` | Graphite planet | Graphite planet + 7 bodies |
+| Survey | Mint `#9ff0c8` | Ringed planet | Ringed planet + 16 contacts |
+| Path map | Amber `#ffb26b` | Star | Solar system; cut becomes a black hole |
+| Atlas | Violet `#a78bfa` | Cluster | Star + 16 account bodies |
+| Drift | Rose `#ff9ecb` | Binary | Two planets + edge stream |
+| Commands | Mint `#9ff0c8` | Gas giant | Dark core + data ring |
+| Extensions | Violet `#a78bfa` | Moon | Ringed planet + 18 moons |
+| Blueprint | Amber `#ffb26b` | Black hole | Orbital planes + event horizon |
 
 The **black hole** is the only state that replaces the star. The horizon is a
-black sphere that occludes the disk behind it, wrapped in a white photon ring, a
-cyan secondary ring and an eight-band accretion disk. On Path map it crossfades
-in when the cut is applied; on Blueprint it is a static closing plate. The
-wireframe alternative remains a hollow sphere with three rings, so the toggle
-never dead-ends.
+black sphere that occludes the disk behind it, wrapped in a white photon ring, an
+accent secondary ring and an eight-band accretion disk. On Path map it
+crossfades in when the cut is applied; on Blueprint it is a static closing
+plate. The wireframe alternative remains a hollow sphere with three rings, so
+the toggle never dead-ends.
 
 ## Colour
 
 | Token | Value | Use |
 | --- | --- | --- |
-| Void | `#05070d` | Page and instrument background |
-| Ultramarine | `#2b3cff` | Primary ink, routes, active state |
-| Bright blue | `#4e5fff` | Focus and active borders |
-| Violet | `#7a6cff` | Secondary data and severity |
-| Electric cyan | `#1ab2ff` | Added edges, live pulse, accents |
-| Periwinkle | `#8db7ff` | HUD labels and secondary text |
-| Ice | `#d6ecff` | Highlights and display glow |
-| Ink | `#eef4ff` | Primary text |
-| Muted | `#8493aa` | Body copy |
+| Void | `#08090b` | Page and instrument background |
+| Bone | `#f4efe3` | Primary ink, display, admin |
+| Paper | `#eee6d2` | Primary button, display echo |
+| Muted | `#9d9a90` | Body copy, labels |
+| Amber | `#ffb26b` | Warm signal, Path/Blueprint accent, critical |
+| Cyan | `#7ce7ff` | Overview accent, added state |
+| Violet | `#a78bfa` | Atlas/Extensions accent, users |
+| Mint | `#9ff0c8` | Survey/Commands accent, contained |
+| Rose | `#ff9ecb` | Drift accent |
+| Periwinkle | `#7b86c9` | Roles, wireframe structure |
+| Line | `rgb(236 231 218 / .10)` | Hairline rules |
 
-The palette is deliberately narrow. Ultramarine and white do the work; cyan,
-cobalt and periwinkle add atmosphere without turning the console into a
-rainbow.
+The field is warm black, not blue. One accent is active per view: it drives the
+hero aura, the figure rim, the rail selection and the interactive states. Blue
+is now one body colour among several; it never owns the whole surface.
 
 ## Type
 
-- **Sora** - display and section headings. Weight 600-800, tight tracking.
-- **IBM Plex Sans** - reading copy, labels, controls.
-- **IBM Plex Mono** - HUD labels, figures, commands, ledgers.
+- **Instrument Serif** - display, view titles and italic accent phrases. Weight
+  400 only; the size and the contrast do the work.
+- **Space Grotesk** - reading copy, controls, panel titles.
+- **IBM Plex Mono** - HUD labels, figures, commands, ledgers, every number.
 
-Scale: 17px body, 15.5-17px data and notes, 13.5-15.5px labels, 11.5-13.5px
-micro-labels, a 124-216px display title. Nothing that carries a decision is
-smaller than 13px; HUD microcopy is the only exception.
+Scale: 17.5px body, 18px lede, 54-88px view titles, 128-238px wordmark,
+13.5-16px data, 12.5-13.5px labels. The HUD floor is 12.5px; no body copy sits
+below 17px.
 
 ## Surface and geometry
 
 - Sharp 2px panels and controls, 0px tags. No corner variant.
-- Deep glass: `rgb(10 16 28 / .6)` over blur, 1px `rgb(150 175 255 / .14)`.
-- The desktop topbar floats as a glass pill; the rail stays fixed.
-- The hero sits over a cyan/cobalt mesh aura; a grain and scanline layer sits
-  over the whole field.
-- Animated field: drifting grid, aurora, constellation particles, shooting
-  stars and a slow scan sweep. Every layer stops under `prefers-reduced-motion`.
+- Warm glass: `rgb(20 22 26 / .74)` over blur, 1px bone at 10%.
+- The desktop topbar floats as a glass pill; the rail stays fixed at 224px.
+- Page bodies sit at the right edge, cropped and low-contrast; the hero aura and
+  the ambient edge glow take the view accent.
+- Texture: 64px HUD grid, fine SVG grain, 4px CRT scanlines, half-seen orbits.
+  Every layer stops under `prefers-reduced-motion`.
+- View actions sit under the lede; the figure stage is 430px tall and the Atlas
+  graph is a full workbench, not a column.
 
 ## Mark
 
-The mark is a sharp 2px tile: a HUD frame, a faint coordinate grid, two inclined
-orbits, an ice A with a cyan crossbar, and a white planet sitting at the apsis
-of the outer orbit. The same silhouette is used for `favicon.svg`, the 512px and
-Apple touch PNGs, and the 34px rail mark, so the tab, the home screen and the
-console header read as one system.
+The mark is a sharp 2px tile: a bone HUD frame, a coordinate grid, two inclined
+orbits in amber and cyan, a bone serif A with an amber crossbar, and a warm
+planet sitting at the apsis of the outer orbit. The same silhouette is used for
+`favicon.svg`, the 512px and Apple touch PNGs, the 34px rail mark and the OG
+card, so the tab, the home screen and the console header read as one system.
 
 ## Motion
 

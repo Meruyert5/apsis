@@ -8,16 +8,16 @@ import { Chip, FigurePanel, Icon, Panel } from "../ui";
 type KindFilter = "all" | "user" | "role" | "group" | "admin";
 
 const KIND_COLOR: Record<string, string> = {
-  admin: "#ffffff",
-  role: "#2b3cff",
-  user: "#7a6cff",
-  group: "#44506e",
-  lambda: "#5d6b8a",
-  ec2: "#5d6b8a",
-  ecs: "#5d6b8a",
-  glue: "#5d6b8a",
-  sagemaker: "#5d6b8a",
-  cloudformation: "#5d6b8a",
+  admin: "#f4efe3",
+  role: "#7b86c9",
+  user: "#a78bfa",
+  group: "#5f6b7a",
+  lambda: "#8a8f96",
+  ec2: "#8a8f96",
+  ecs: "#8a8f96",
+  glue: "#8a8f96",
+  sagemaker: "#8a8f96",
+  cloudformation: "#8a8f96",
 };
 
 type Point = { x: number; y: number };
@@ -100,11 +100,11 @@ export function Atlas({
     const maxY = Math.max(...ys);
     const spanX = maxX - minX || 1;
     const spanY = maxY - minY || 1;
-    const scale = Math.min(700 / spanX, 430 / spanY);
+    const scale = Math.min(840 / spanX, 510 / spanY);
     const width = spanX * scale;
     const height = spanY * scale;
-    const originX = (900 - width) / 2;
-    const originY = (560 - height) / 2 + 8;
+    const originX = (940 - width) / 2;
+    const originY = (600 - height) / 2 + 10;
     nodes.forEach((node) => {
       map.set(node.id, {
         x: originX + (node.x - minX) * scale,
@@ -185,24 +185,30 @@ export function Atlas({
         />
       </section>
 
-      <div className="atlas-layout">
-        <Panel title="Accounts" meta={`${fleet.length} nodes`} className="account-panel">
-          <div className="account-list">
-            {fleet.map((row, index) => (
-              <button
-                key={row.key}
-                type="button"
-                className={row.key === account ? "is-active" : undefined}
-                onClick={() => setAccount(row.key)}
-              >
-                <span className="account-index">{String(index + 1).padStart(2, "0")}</span>
-                <span className="account-copy"><b>{row.short}</b><em>{row.identities} identities</em></span>
-                <span className={`mark ${row.severity}`} />
-              </button>
-            ))}
-          </div>
-        </Panel>
+      <div className="account-strip-wrap">
+        <span className="strip-label">Accounts / select focus</span>
+        <div className="account-strip" role="tablist" aria-label="Accounts">
+          {fleet.map((row, index) => (
+            <button
+              key={row.key}
+              type="button"
+              role="tab"
+              aria-selected={row.key === account}
+              className={row.key === account ? "is-active" : undefined}
+              onClick={() => setAccount(row.key)}
+            >
+              <span className="account-index">{String(index + 1).padStart(2, "0")}</span>
+              <span className="account-copy">
+                <b>{row.short}</b>
+                <em>{row.routes} routes</em>
+              </span>
+              <span className={`mark ${row.severity}`} />
+            </button>
+          ))}
+        </div>
+      </div>
 
+      <div className="atlas-workbench">
         <Panel
           title="Identity graph"
           meta={`${bundle.stats.identities} identities / ${bundle.edges.length} edges`}
@@ -228,7 +234,7 @@ export function Atlas({
           <div className="graph-wrap">
             <svg
               className="identity-graph"
-              viewBox="0 0 900 560"
+              viewBox="0 0 940 600"
               role="img"
               aria-labelledby="identity-graph-title"
             >
@@ -236,24 +242,13 @@ export function Atlas({
                 Identity trust graph for {bundle.scenario.title}
               </title>
               <defs>
-                <radialGradient id="graph-field" cx="62%" cy="50%" r="62%">
-                  <stop offset="0" stopColor="#2b3cff" stopOpacity=".18" />
-                  <stop offset=".55" stopColor="#2b3cff" stopOpacity=".05" />
-                  <stop offset="1" stopColor="#2b3cff" stopOpacity="0" />
+                <radialGradient id="graph-field" cx="58%" cy="50%" r="64%">
+                  <stop offset="0" stopColor="#a78bfa" stopOpacity=".12" />
+                  <stop offset=".55" stopColor="#ffb26b" stopOpacity=".035" />
+                  <stop offset="1" stopColor="#08090b" stopOpacity="0" />
                 </radialGradient>
                 <marker
                   id="graph-arrow"
-                  viewBox="0 0 8 8"
-                  refX="6"
-                  refY="4"
-                  markerWidth="5"
-                  markerHeight="5"
-                  orient="auto-start-reverse"
-                >
-                  <path d="M0 0 L8 4 L0 8 Z" fill="rgb(120 145 210 / .55)" />
-                </marker>
-                <marker
-                  id="graph-arrow-live"
                   viewBox="0 0 8 8"
                   refX="6"
                   refY="4"
@@ -261,15 +256,27 @@ export function Atlas({
                   markerHeight="6"
                   orient="auto-start-reverse"
                 >
-                  <path d="M0 0 L8 4 L0 8 Z" fill="#8db7ff" />
+                  <path d="M0 0 L8 4 L0 8 Z" fill="rgb(236 231 218 / .4)" />
                 </marker>
-              </defs>              <rect width="900" height="560" fill="url(#graph-field)" />
+                <marker
+                  id="graph-arrow-live"
+                  viewBox="0 0 8 8"
+                  refX="6"
+                  refY="4"
+                  markerWidth="7"
+                  markerHeight="7"
+                  orient="auto-start-reverse"
+                >
+                  <path d="M0 0 L8 4 L0 8 Z" fill="#a78bfa" />
+                </marker>
+              </defs>
+              <rect width="940" height="600" fill="url(#graph-field)" />
               <g className="graph-grid" aria-hidden="true">
                 {Array.from({ length: 9 }, (_, index) => (
-                  <line key={`v${index}`} x1={90 + index * 90} y1="30" x2={90 + index * 90} y2="530" />
+                  <line key={`v${index}`} x1={94 + index * 94} y1="30" x2={94 + index * 94} y2="570" />
                 ))}
                 {Array.from({ length: 6 }, (_, index) => (
-                  <line key={`h${index}`} x1="30" y1={90 + index * 90} x2="870" y2={90 + index * 90} />
+                  <line key={`h${index}`} x1="30" y1={90 + index * 90} x2="910" y2={90 + index * 90} />
                 ))}
               </g>
               <g className="admin-orbits" aria-hidden="true">
@@ -278,8 +285,9 @@ export function Atlas({
                   if (!point) return null;
                   return (
                     <g key={`orbit-${node.id}`}>
-                      <circle cx={point.x} cy={point.y} r="44" />
-                      <circle className="is-dashed" cx={point.x} cy={point.y} r="82" />
+                      <circle cx={point.x} cy={point.y} r="48" />
+                      <circle className="is-dashed" cx={point.x} cy={point.y} r="92" />
+                      <circle className="is-dashed is-outer" cx={point.x} cy={point.y} r="140" />
                     </g>
                   );
                 })}
@@ -290,12 +298,12 @@ export function Atlas({
                   const b = positions.get(edge.target);
                   if (!a || !b) return null;
                   const active = selectedId === edge.source || selectedId === edge.target;
-                  const bend = ((index % 4) - 1.5) * 16;
+                  const bend = ((index % 4) - 1.5) * 18;
                   return (
                     <path
                       key={edge.id}
                       className={`graph-edge ${active ? "is-active" : ""}`}
-                      d={curvePath(a, b, bend)}
+                      d={curvePath(a, b, bend, 18)}
                       markerEnd={active ? "url(#graph-arrow-live)" : "url(#graph-arrow)"}
                     >
                       <title>{`${edge.source} to ${edge.target} - ${edge.technique}`}</title>
@@ -310,16 +318,16 @@ export function Atlas({
                   const on = visible(node);
                   const isSelected = node.id === selectedId;
                   const isNeighbor = neighbors.has(node.id);
-                  const clustered = point.y > 330 && point.y < 410;
-                  const edgeRight = node.x > 0.9;
-                  const edgeLeft = node.x < 0.21;
-                  const labelX = edgeRight ? 24 : edgeLeft ? -22 : 0;
+                  const edgeRight = point.x > 760;
+                  const edgeLeft = point.x < 180;
+                  const clustered = point.y > 340 && point.y < 450;
+                  const labelX = edgeRight ? 28 : edgeLeft ? -28 : 0;
                   const labelAnchor = edgeRight ? "start" : edgeLeft ? "end" : "middle";
                   const labelY = edgeRight || edgeLeft
-                    ? 4
+                    ? 5
                     : clustered && index % 2 === 1
-                      ? 31
-                      : -22;
+                      ? 36
+                      : -28;
                   return (
                     <g
                       key={node.id}
@@ -338,40 +346,40 @@ export function Atlas({
                     >
                       <title>{`${node.label} - ${node.kind}${node.admin ? ", administrator" : ""} - degree ${node.degree}`}</title>
                       {isSelected || isNeighbor ? (
-                        <circle className="node-halo" r={isSelected ? 24 : 19} />
+                        <circle className="node-halo" r={isSelected ? 30 : 23} />
                       ) : null}
-                      <circle className="node-ring" r={node.kind === "admin" ? 17 : 14} />
+                      <circle className="node-ring" r={node.kind === "admin" ? 21 : 17} />
                       {node.kind === "admin" ? (
                         <rect
                           className="node-core node-diamond"
-                          x="-10"
-                          y="-10"
-                          width="20"
-                          height="20"
+                          x="-12"
+                          y="-12"
+                          width="24"
+                          height="24"
                           transform="rotate(45)"
                           fill={KIND_COLOR.admin}
                         />
                       ) : node.kind === "role" ? (
                         <polygon
                           className="node-core node-hex"
-                          points={hexPoints(10)}
+                          points={hexPoints(12)}
                           fill={KIND_COLOR.role}
                         />
                       ) : node.kind === "group" ? (
                         <rect
                           className="node-core node-square"
-                          x="-8"
-                          y="-8"
-                          width="16"
-                          height="16"
+                          x="-9"
+                          y="-9"
+                          width="18"
+                          height="18"
                           rx="2"
                           fill={KIND_COLOR.group}
                         />
                       ) : (
                         <circle
                           className="node-core"
-                          r={7}
-                          fill={KIND_COLOR[node.kind] ?? "#5d6b8a"}
+                          r={8}
+                          fill={KIND_COLOR[node.kind] ?? "#7b86c9"}
                         />
                       )}
                       <text
@@ -388,10 +396,10 @@ export function Atlas({
               </g>
             </svg>
             <div className="graph-legend">
-              <span><i style={{ background: "#fff" }} />admin <b>{kindCounts.admin ?? 0}</b></span>
-              <span><i style={{ background: "#2b3cff" }} />role <b>{kindCounts.role ?? 0}</b></span>
-              <span><i style={{ background: "#7a6cff" }} />user <b>{kindCounts.user ?? 0}</b></span>
-              <span><i style={{ background: "#44506e" }} />group <b>{kindCounts.group ?? 0}</b></span>
+              <span><i style={{ background: "#f4efe3" }} />admin <b>{kindCounts.admin ?? 0}</b></span>
+              <span><i style={{ background: "#7b86c9" }} />role <b>{kindCounts.role ?? 0}</b></span>
+              <span><i style={{ background: "#a78bfa" }} />user <b>{kindCounts.user ?? 0}</b></span>
+              <span><i style={{ background: "#5f6b7a" }} />group <b>{kindCounts.group ?? 0}</b></span>
               <span className="graph-legend-note">arrow = escalation direction</span>
             </div>
           </div>

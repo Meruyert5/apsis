@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { BackgroundFX } from "./BackgroundFX";
+import { SpaceBody } from "./SpaceBody";
 import { CommandPalette } from "./CommandPalette";
 import {
   commands,
@@ -112,12 +113,16 @@ export function App() {
   const current = modules.find((module) => module.id === view) ?? modules[0];
 
   return (
-    <div className={`app ${motion ? "" : "motion-off"}`}>
+    <div className={`app ${motion ? "" : "motion-off"}`} data-view={view}>
       <BackgroundFX motion={motion} />
+      <SpaceBody view={view} motion={motion} />
       <div className="bg-grid" aria-hidden="true" />
       <div className="bg-aurora" aria-hidden="true" />
       <div className="bg-ribbon" aria-hidden="true" />
       <div className="bg-scan" aria-hidden="true" />
+      <div className="bg-grain" aria-hidden="true" />
+      <div className="edge-glow" aria-hidden="true" />
+      <div className="crt" aria-hidden="true" />
       <div className="screen-edge" aria-hidden="true">
         <i className="corner tl" /><i className="corner tr" /><i className="corner bl" /><i className="corner br" />
       </div>
@@ -131,19 +136,19 @@ export function App() {
               <svg viewBox="0 0 64 64">
                 <defs>
                   <linearGradient id="rail-ice" x1="0" y1="0" x2="0.7" y2="1">
-                    <stop offset="0" stopColor="#ffffff" />
-                    <stop offset="0.5" stopColor="#d6ecff" />
-                    <stop offset="1" stopColor="#8db7ff" />
+                    <stop offset="0" stopColor="#fffaf0" />
+                    <stop offset="0.5" stopColor="#f4efe3" />
+                    <stop offset="1" stopColor="#cfc7b6" />
                   </linearGradient>
                   <linearGradient id="rail-orbit" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stopColor="#7a6cff" />
-                    <stop offset="1" stopColor="#2b3cff" />
+                    <stop offset="0" stopColor="#ffb26b" />
+                    <stop offset="1" stopColor="#7ce7ff" />
                   </linearGradient>
                 </defs>
                 <ellipse cx="32" cy="34" rx="27" ry="10" transform="rotate(-18 32 34)" fill="none" stroke="url(#rail-orbit)" strokeWidth="2.4" />
                 <path d="M18 48 L32 13 L46 48" fill="none" stroke="url(#rail-ice)" strokeWidth="4.6" strokeLinejoin="miter" />
-                <path d="M24.2 36.6 H39.8" stroke="#1ab2ff" strokeWidth="2.6" />
-                <circle cx="52.6" cy="20.4" r="3.1" fill="#ffffff" />
+                <path d="M24.2 36.6 H39.8" stroke="#ffb26b" strokeWidth="2.6" />
+                <circle cx="52.6" cy="20.4" r="3.1" fill="#fffaf0" />
               </svg>
             </span>
             <div>

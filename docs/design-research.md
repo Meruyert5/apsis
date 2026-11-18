@@ -281,3 +281,100 @@ grid, hierarchy, one ink per act, numbered specimens, and the archival figure
 caption. The two-pass decision log is the point: the research was not discarded
 when the surface changed.
 
+---
+
+## Observatory edition - current visual research
+
+Date: 18 November 2026. A second reference pass, after the dashboard, planet
+instruments and the event horizon were built. The prompt was specific: stop the
+field from being plain blue, make the typography better and larger, keep the
+glow and CRT/HUD grid, and let real space bodies live on the page rather than
+only inside the figure panels.
+
+### Sources opened
+
+- **NOCTRA — Observatory Website Design**, Maria Knyazeva. Pinterest pin
+  `20758848278854123`, Behance gallery `248063485`. Caption: the night sky as a
+  narrative, "the cosmos as a space of constructed meaning." Observed: warm-black
+  field, high-contrast italic serif headlines, mono uppercase captions, a
+  six-column grid with hairline rules, huge negative space, dot fields and a
+  full-bleed swirl image. The strongest lesson is the register: an observatory
+  catalogue, not a SaaS dashboard.
+- **Interstellar typographic poster**, Pinterest pin `7318418140630771`. Observed:
+  one black hole as the mass of the composition; cream display type wraps around
+  the event horizon and the letterforms compress where they meet it. The lesson
+  is that a body can be a layout anchor, not an illustration in a box.
+- **Space Odyssey web design**, Pinterest pin `178947785164024039`. Observed: a
+  planet horizon cropped by the viewport, a centered condensed title, cyan
+  telemetry, a dark field. The lesson is the half-seen body at the page edge.
+- **Sci Fi UI Designs** board (`rbarlow177/sci-fi-ui-designs`) and **Cosmic HUD
+  Design** (`/ideas/cosmic-hud-design`). Observed: instrument panels, mono
+  telemetry, grids, scanlines, restrained glow. The lesson is to keep the HUD
+  layer, but make it a quiet frame around one loud celestial object.
+- **Saturno space template**, Pinterest pin `681802831131499846`. Observed: large
+  planet, orange/blue gradient, centered "effective solutions" SaaS copy. The
+  lesson is what not to do: the gradient and stock planet read as a template.
+- **Black hole typography** pins (`416723771794474348`, `730286895896675418`).
+  Observed: monochrome/cream type, one high-contrast object, no second accent.
+  The lesson is to let the horizon be the only spectacle on the closing plate.
+
+Pinterest's full pin pages are partly login-walled; the public oEmbed thumbnail,
+the pin caption and the Behance project page supplied the visual evidence. The
+Behance full gallery returned 403, so the observations above use the public pin
+thumbnail and caption rather than claiming the gallery was read.
+
+### Evidence table
+
+| Domain | Observed | Decision |
+| --- | --- | --- |
+| Attention | A single enormous serif line or a single body | The wordmark and the view title are the loud object; the body sits behind the content, cropped |
+| Structure | Six-column editorial grid, generous empty rows | Keep the rail and panels, but widen the content, put actions under the lede, give the graph a full workbench |
+| Grid | Hairline rules, numbered sections, small caps | Keep the 64px HUD grid and 1px rules; use numbered eyebrows for every view |
+| Typography | Italic high-contrast serif + mono captions | Instrument Serif for display, Space Grotesk for reading, IBM Plex Mono for telemetry |
+| Color | Warm black and bone; almost no chroma | Warm-black field, bone ink, one accent per view; amber is the warm signal, cyan/violet/mint/rose rotate by view |
+| Texture | Grain, dot fields, soft image blur | Fine SVG grain, star dust, scanlines, a soft body glow; no texture on body copy |
+| Surface | Flat print and photographic plates | Flat panels with a single glass topbar; the figure keeps the lit instrument surface |
+| Motion | Slow, atmospheric, one subject | Slow orbits and grain; no entrance carnival; reduced motion keeps the final state |
+| Interface | Tiny mono nav, outline buttons, one cream CTA | Mono HUD controls; one cream primary button; secondary actions outline |
+| Icons | One thin, technical family | Keep the custom SVG HUD icon set; recolour to bone and the view accent |
+| Accents | A numbered rule, a dot, a date stamp | Section numbers, live dots, the event horizon, the barcode foot |
+
+### Direction
+
+**An observatory ledger printed on a dark instrument.** Warm-black paper, bone
+serif headlines, mono telemetry, one accent per view, and a celestial body
+half-off the page. The instrument panels remain, but they are quiet frames
+around the subject rather than the subject itself.
+
+Three moves that prove it:
+
+1. **Bone on warm black, one accent per view.** Overview cyan, Survey mint, Path
+   amber, Atlas violet, Drift rose, Commands mint, Extensions violet, Blueprint
+   amber. Blue is no longer the field; it is one body colour among several.
+2. **Editorial type with a technical counterpoint.** Instrument Serif for the
+   wordmark, view titles and italic accents; Space Grotesk for reading and UI;
+   IBM Plex Mono for every number, label and route.
+3. **Bodies leave the panel.** A fixed Canvas2D body sits at the page edge -
+   planet, ringed planet, star, cluster, binary, gas giant, moon, black hole -
+   and the figure panel carries the interactive version of the same language.
+
+### Do not
+
+- No photoreal Earth textures, no image licensing, no stock planets.
+- No five-accent rainbow; colour marks state and identity, not wallpaper.
+- No glass on every card; the topbar is the only soft floating surface.
+- No 10px body copy; 12.5px is the HUD floor, 13.5px the metadata floor, 17.5px
+  the reading size.
+- No blue-only field and no generic purple SaaS gradient.
+- No moving body behind dense table copy at full opacity; the page body is
+  masked by the dark field and sits behind the content.
+
+### Trade-offs
+
+- A serif display is less "control room" than a grotesque; it buys the
+  observatory register and the reference's editorial authority.
+- Warm black plus per-view accents means more CSS variables and more attention
+  to contrast; the audit remains the gate.
+- Page bodies add atmosphere but cost one Canvas2D loop; it is capped at 1.5 DPR
+  and stops with reduced motion.
+

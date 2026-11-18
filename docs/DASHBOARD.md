@@ -50,9 +50,10 @@ before/after comparison with its own selectors and route-aware diff. Each
 pickable node carries an oversized invisible hit sphere, so the target is
 comfortable at any stage size.
 
-Typography is set for reading: 17px body, 15.5–17px data and notes, 13.5–15.5px
-labels, 11.5–13.5px micro-labels, a 124–216px display title and SVG graph labels
-sized for the rendered panel.
+Typography is set for reading: 17.5px body, 18px lede, 15.5-16px data and notes,
+13.5-15.5px labels, 12.5-13.5px micro-labels, a 54-88px view title and a
+128-238px wordmark. SVG graph labels are 17px in the 940-unit viewBox, which
+renders at 14-15px in the 1440 panel.
 
 ## Soft geometry
 
@@ -84,9 +85,20 @@ stay square; the only soft element is the floating glass topbar.
   WebGL.
 
 On desktop the topbar floats as a glass pill; the rail carries the 34px orbital
-mark beside the wordmark. The hero sits over a cyan/cobalt aura with a grain and
-scanline texture. Deep void, electric cyan, cobalt and periwinkle sit beside the
-original ultramarine.
+mark beside the wordmark. The hero sits over a bone-on-warm-black aura with a
+grain and scanline texture. A cropped Canvas2D body - planet, ringed planet,
+star, cluster, binary, gas giant, moon or black hole - sits at the page edge and
+takes the view accent. The page field is `#08090b`; one accent is active per
+view (cyan, mint, amber, violet or rose).
+
+### Atlas workbench
+
+The identity graph is no longer a narrow centre column. The page uses a
+full-width account strip (eight cards per row, then four, then two), a graph
+panel at 940x600 with 17px labels, depth rings around the administrator and
+argon-filled edge arrows, and a 340px inspector. Selecting a node dims the
+unrelated edges and lights its own. On small screens the graph keeps a 720px
+minimum and scrolls inside its panel, so labels never shrink to unreadable.
 
 ### 2D fallback
 

@@ -17,8 +17,9 @@ console repository and publish the built site from there; see
 
 ## Fonts
 
-- **Sora** — SIL Open Font License 1.1.
-- **IBM Plex Sans** and **IBM Plex Mono** — SIL Open Font License 1.1.
+- **Instrument Serif** — SIL Open Font License 1.1.
+- **Space Grotesk** — SIL Open Font License 1.1.
+- **IBM Plex Mono** — SIL Open Font License 1.1.
 
 The font binaries are self-hosted in `console/public/fonts`. The SIL OFL text is
 included at `console/public/fonts/OFL.txt`.

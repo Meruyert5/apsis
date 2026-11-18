@@ -32,10 +32,27 @@ interface Built {
   pickables?: THREE.Object3D[];
 }
 
-const BLUE = 0x1a1aff;
-const WHITE = 0xffffff;
+const BLUE = 0x7b86c9;
+const WHITE = 0xf2eee4;
 
-function wire(color = WHITE, opacity = 0.6) {
+const VARIANT_ACCENT: Record<FigureVariant, number> = {
+  orb: 0x7ce7ff,
+  dish: 0x9ff0c8,
+  ascent: 0xffb26b,
+  atlas: 0xa78bfa,
+  drift: 0xff9ecb,
+  prism: 0x9ff0c8,
+  bloom: 0xa78bfa,
+  stack: 0xffb26b,
+  horizon: 0xffb26b,
+};
+
+const BONE = 0xf2eee4;
+const MINT = 0x9ff0c8;
+const AMBER = 0xffb26b;
+const VIOLET = 0xa78bfa;
+
+function wire(color = WHITE, opacity = 0.68) {
   return new THREE.MeshBasicMaterial({
     color, wireframe: true, transparent: true, opacity,
     blending: THREE.AdditiveBlending, depthWrite: false,
@@ -1403,8 +1420,6 @@ function buildDrift(glow: THREE.Texture): Built {
 }
 
 /* ---------------------------------------------------------------- orrery */
-const BODY_COLORS = [0x1ab2ff, 0x7a6cff, 0x8db7ff, 0xd6ecff, 0x2b3cff, 0x44506e];
-
 interface OrrerySpec {
   core: number;
   body: number;
@@ -1558,7 +1573,7 @@ function sunBody(radius: number, glow: THREE.Texture) {
   return { group, core, halo, inner };
 }
 
-function holeBody(radius: number, glow: THREE.Texture) {
+function holeBody(radius: number, glow: THREE.Texture, accent: number) {
   const group = new THREE.Group();
   const horizon = new THREE.Mesh(
     new THREE.SphereGeometry(radius, 48, 32),
@@ -1575,14 +1590,14 @@ function holeBody(radius: number, glow: THREE.Texture) {
 
   const photonCyan = new THREE.Mesh(
     new THREE.TorusGeometry(radius * 1.18, radius * 0.008, 6, 160),
-    basic(0x1ab2ff, 0.6),
+    basic(accent, 0.6),
   );
   photonCyan.rotation.x = Math.PI / 2;
   photonCyan.renderOrder = 4;
 
   const lens = new THREE.Mesh(
     new THREE.TorusGeometry(radius * 1.36, radius * 0.006, 6, 160, Math.PI * 1.25),
-    basic(0xd6ecff, 0.55),
+    basic(BONE, 0.55),
   );
   lens.rotation.set(1.15, 0.35, -0.4);
   lens.renderOrder = 4;
@@ -1592,7 +1607,7 @@ function holeBody(radius: number, glow: THREE.Texture) {
   for (let i = 0; i < 8; i += 1) {
     const inner = radius * (1.28 + i * 0.2);
     const outer = inner + radius * 0.15;
-    const color = i % 3 === 0 ? 0xffffff : i % 3 === 1 ? 0x8db7ff : 0x7a6cff;
+    const color = i % 3 === 0 ? BONE : i % 3 === 1 ? accent : AMBER;
     const mat = basic(color, 0.32 - i * 0.028);
     const ring = new THREE.Mesh(new THREE.RingGeometry(inner, outer, 160), mat);
     ring.rotation.x = -Math.PI / 2;
@@ -1602,12 +1617,12 @@ function holeBody(radius: number, glow: THREE.Texture) {
   disk.rotation.z = 0.22;
   disk.renderOrder = 2;
 
-  const halo = sprite(glow, 0xd6ecff, 0.55, radius * 9);
+  const halo = sprite(glow, BONE, 0.55, radius * 9);
   group.add(halo, disk, horizon, photon, photonCyan, lens);
   return { group, disk, diskMats, halo, horizon, photon, photonCyan, lens };
 }
 
-function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow: THREE.Texture): Built {
+function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow: THREE.Texture, accent: number): Built {
   const spec = ORRERY[variant];
   const root = new THREE.Group();
   const system = new THREE.Group();
@@ -1616,7 +1631,7 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
 
   const rings = spec.rings.map((radius, index) => {
     const y = spec.stack ? -1.0 + index * 0.5 : 0;
-    const ring = ringLine(radius, index % 2 === 0 ? 0x2b3cff : 0x8db7ff, spec.stack ? 0.2 : 0.13, y);
+    const ring = ringLine(radius, index % 2 === 0 ? accent : BONE, spec.stack ? 0.2 : 0.13, y);
     if (spec.stack) ring.rotation.x = (index % 2 === 0 ? 1 : -1) * 0.18;
     system.add(ring);
     return ring;
@@ -1624,7 +1639,7 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
 
   if (spec.band) {
     for (let i = 0; i < 3; i += 1) {
-      const mat = basic(i % 2 ? 0x8db7ff : 0xd6ecff, 0.09 - i * 0.02);
+      const mat = basic(i % 2 ? accent : BONE, 0.09 - i * 0.02);
       const mesh = new THREE.Mesh(
         new THREE.RingGeometry(spec.core * 1.85 + i * 0.14, spec.core * 2.15 + i * 0.14, 160),
         mat,
@@ -1643,16 +1658,16 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
     system.add(sun.group);
   } else {
     coreMesh = new THREE.Mesh(new THREE.SphereGeometry(spec.core, 96, 64), gloss(0x2a3247, 0.4, 0.22));
-    system.add(coreMesh, rimShell(spec.core * 1.015, 0x8db7ff));
+    system.add(coreMesh, rimShell(spec.core * 1.015, accent));
   }
   if (spec.hole) {
-    hole = holeBody(spec.core * 1.5, glow);
+    hole = holeBody(spec.core * 1.5, glow, accent);
     hole.group.visible = false;
     system.add(hole.group);
   }
 
   const beam = spec.beam
-    ? new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 5.6, 10), basic(0x8db7ff, 0.26))
+    ? new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 5.6, 10), basic(accent, 0.26))
     : null;
   if (beam) system.add(beam);
 
@@ -1674,7 +1689,7 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
     const pos = new THREE.Vector3(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
     positions.push(pos);
 
-    const color = i === 0 && !spec.star ? 0xd6ecff : BODY_COLORS[i % BODY_COLORS.length];
+    const color = i === 0 && !spec.star ? BONE : [accent, BONE, VIOLET, MINT, AMBER, 0x7b86c9][i % 6];
     const mat = gloss(color, 0.28, 0.24);
     const mesh = new THREE.Mesh(new THREE.SphereGeometry(spec.body, 24, 18), mat);
     mesh.position.copy(pos);
@@ -1701,8 +1716,8 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
         positions[i],
         positions[i + 1],
         0.4,
-        variant === "ascent" ? 0x1ab2ff : 0x2b3cff,
-        variant === "ascent" ? 0.4 : 0.26,
+        variant === "ascent" ? accent : VIOLET,
+        variant === "ascent" ? 0.4 : 0.24,
       ));
     }
   }
@@ -1711,7 +1726,7 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
   if (spec.sweep) {
     sweep = new THREE.Mesh(
       new THREE.RingGeometry(spec.rings[0] * 0.88, spec.rings[0], 64, 1, 0, Math.PI / 3),
-      basic(0x1ab2ff, 0.32),
+      basic(accent, 0.32),
     );
     sweep.rotation.x = -Math.PI / 2;
     system.add(sweep);
@@ -1730,14 +1745,14 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
     const geo = new THREE.BufferGeometry();
     geo.setAttribute("position", new THREE.BufferAttribute(dustPositions, 3));
     root.add(new THREE.Points(geo, new THREE.PointsMaterial({
-      color: 0x8db7ff, size: 0.035, transparent: true, opacity: 0.55,
+      color: accent, size: 0.035, transparent: true, opacity: 0.55,
       blending: THREE.AdditiveBlending, depthWrite: false,
     })));
   }
 
   const key = new THREE.DirectionalLight(0xe6efff, 3.4);
   key.position.set(-5, 6, 8);
-  const fill = new THREE.PointLight(0x2b3cff, 18, 30);
+  const fill = new THREE.PointLight(accent, 18, 30);
   fill.position.set(4, -2, 6);
   const highlight = new THREE.PointLight(0xffffff, 12, 18);
   highlight.position.set(-3, 3, 7);
@@ -1776,7 +1791,7 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
         if (selector.visible) {
           selector.scale.setScalar(1 + Math.sin(time * 2.2) * 0.16);
           const mat = selector.material as THREE.MeshBasicMaterial;
-          mat.color.setHex(active ? 0xffffff : 0x1ab2ff);
+          mat.color.setHex(active ? BONE : accent);
           mat.opacity = active ? 0.95 : 0.6;
         }
       });
@@ -1808,7 +1823,7 @@ function buildOrrery(variant: Exclude<FigureVariant, "drift" | "horizon">, glow:
   };
 }
 
-function buildHorizon(glow: THREE.Texture, mode: FigureMode): Built {
+function buildHorizon(glow: THREE.Texture, mode: FigureMode, accent: number): Built {
   const root = new THREE.Group();
   root.rotation.x = 0.16;
 
@@ -1819,7 +1834,7 @@ function buildHorizon(glow: THREE.Texture, mode: FigureMode): Built {
     for (let i = 0; i < 3; i += 1) {
       const ring = new THREE.Mesh(
         new THREE.TorusGeometry(1.5 + i * 0.36, 0.008, 4, 110),
-        basic(i % 2 ? 0x8db7ff : 0x2b3cff, 0.42 - i * 0.08),
+        basic(i % 2 ? accent : BONE, 0.42 - i * 0.08),
       );
       ring.rotation.x = Math.PI / 2 + (i - 1) * 0.16;
       root.add(ring);
@@ -1839,16 +1854,16 @@ function buildHorizon(glow: THREE.Texture, mode: FigureMode): Built {
     };
   }
 
-  const hole = holeBody(1.05, glow);
+  const hole = holeBody(1.05, glow, accent);
   root.add(hole.group);
 
-  const ring = ringLine(2.5, 0x2b3cff, 0.2);
+  const ring = ringLine(2.5, accent, 0.2);
   root.add(ring);
 
   const moonOrbit = new THREE.Group();
-  const moon = new THREE.Mesh(new THREE.SphereGeometry(0.11, 24, 18), gloss(0xd6ecff, 0.3, 0.2));
+  const moon = new THREE.Mesh(new THREE.SphereGeometry(0.11, 24, 18), gloss(BONE, 0.3, 0.2));
   moon.position.set(2.5, 0, 0);
-  const moonHalo = sprite(glow, 0xd6ecff, 0.42, 0.9);
+  const moonHalo = sprite(glow, BONE, 0.42, 0.9);
   moonHalo.position.copy(moon.position);
   moonOrbit.add(moon, moonHalo);
   root.add(moonOrbit);
@@ -1865,7 +1880,7 @@ function buildHorizon(glow: THREE.Texture, mode: FigureMode): Built {
   const dustGeo = new THREE.BufferGeometry();
   dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPositions, 3));
   root.add(new THREE.Points(dustGeo, new THREE.PointsMaterial({
-    color: 0x8db7ff, size: 0.035, transparent: true, opacity: 0.5,
+    color: accent, size: 0.035, transparent: true, opacity: 0.5,
     blending: THREE.AdditiveBlending, depthWrite: false,
   })));
 
@@ -1890,11 +1905,11 @@ function buildHorizon(glow: THREE.Texture, mode: FigureMode): Built {
   };
 }
 
-function buildDriftPlanets(glow: THREE.Texture): Built {
+function buildDriftPlanets(glow: THREE.Texture, accent: number): Built {
   const root = new THREE.Group();
   root.rotation.x = 0.12;
 
-  const baseMat = wire(BLUE, 0.14);
+  const baseMat = wire(accent, 0.16);
   const base = new THREE.Mesh(new THREE.PlaneGeometry(4.8, 2.0, 6, 4), baseMat);
   base.rotation.x = -Math.PI / 2;
   base.position.y = -1.95;
@@ -1903,11 +1918,11 @@ function buildDriftPlanets(glow: THREE.Texture): Built {
   const planets = [-1.45, 1.45].map((x) => {
     const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.92, 64, 48), gloss(0x2a3247, 0.38, 0.2));
     mesh.position.set(x, 0.2, 0);
-    const shell = rimShell(0.94, 0x8db7ff);
+    const shell = rimShell(0.94, accent);
     shell.position.copy(mesh.position);
-    const ring = ringLine(1.32, 0x4e5fff, 0.3, 0.2);
+    const ring = ringLine(1.32, accent, 0.3, 0.2);
     ring.position.x = x;
-    const halo = sprite(glow, 0x4e5fff, 0.22, 3.2);
+    const halo = sprite(glow, accent, 0.22, 3.2);
     halo.position.copy(mesh.position);
     root.add(mesh, shell, ring, halo);
     return mesh;
@@ -1920,7 +1935,7 @@ function buildDriftPlanets(glow: THREE.Texture): Built {
   for (let i = 0; i < 7; i += 1) {
     const pos = new THREE.Vector3(0, 1.3 - i * 0.43, 0);
     points.push(pos);
-    const color = i < 3 ? 0x1ab2ff : 0xd6ecff;
+    const color = i < 3 ? accent : BONE;
     const mat = gloss(color, 0.3, 0.2);
     const node = new THREE.Mesh(new THREE.SphereGeometry(0.13, 24, 18), mat);
     node.position.copy(pos);
@@ -1934,7 +1949,7 @@ function buildDriftPlanets(glow: THREE.Texture): Built {
   const links: THREE.Line[] = [];
   points.forEach((pos) => {
     planets.forEach((planet) => {
-      const link = line([pos.clone(), planet.position.clone()], 0x2b3cff, 0.16);
+      const link = line([pos.clone(), planet.position.clone()], accent, 0.16);
       root.add(link);
       links.push(link);
     });
@@ -1948,9 +1963,9 @@ function buildDriftPlanets(glow: THREE.Texture): Built {
 
   const key = new THREE.DirectionalLight(0xe6efff, 2.6);
   key.position.set(-4, 5, 6);
-  const fill = new THREE.PointLight(0x2b3cff, 14, 26);
-  fill.position.set(4, -3, 4);
-  root.add(key, fill, new THREE.AmbientLight(0x223055, 1.2));
+  const fill = new THREE.PointLight(accent, 18, 26);
+  fill.position.set(4, -2, 6);
+  root.add(key, fill, new THREE.AmbientLight(0x223055, 0.45));
 
   return {
     root,
@@ -1964,8 +1979,8 @@ function buildDriftPlanets(glow: THREE.Texture): Built {
         const isNew = index < added;
         const isOld = index >= 7 - removed;
         const mat = mats[index];
-        mat.color.setHex(isNew ? 0x1ab2ff : isOld ? 0xffffff : 0x4e5fff);
-        mat.emissive.setHex(isNew ? 0x1ab2ff : isOld ? 0xffffff : 0x2b3cff);
+        mat.color.setHex(isNew ? accent : isOld ? BONE : VIOLET);
+        mat.emissive.setHex(isNew ? accent : isOld ? BONE : VIOLET);
         mat.emissiveIntensity = isNew ? 1.8 : isOld ? 1.2 : 0.5;
         node.scale.setScalar(1 + Math.sin(time * 1.7 + index) * 0.1);
         (halos[index].material as THREE.SpriteMaterial).opacity = isNew ? 0.8 : isOld ? 0.55 : 0.18;
@@ -2411,12 +2426,13 @@ export function Figure3D({
       return;
     }
 
-    renderer.setClearColor(0x000000, 1);
+    renderer.setClearColor(0x08090b, 1);
     renderer.setPixelRatio(Math.min(1.7, window.devicePixelRatio || 1));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000);
+    scene.background = new THREE.Color(0x08090b);
+    scene.fog = new THREE.FogExp2(0x08090b, 0.012);
     const preset = { ...CAMERA[variant], ...(mode === "planets" ? PLANET_CAMERA[variant] : {}) };
     const camera = new THREE.PerspectiveCamera(preset.fov, 1, 0.1, 100);
     camera.position.set(...preset.position);
@@ -2436,12 +2452,13 @@ export function Figure3D({
 
     const glow = glowTexture();
     const star = starTexture();
+    const accent = VARIANT_ACCENT[variant];
     let built: Built;
     if (mode === "planets") {
-      if (variant === "drift") built = buildDriftPlanets(glow);
-      else if (variant === "horizon") built = buildHorizon(glow, "planets");
-      else built = buildOrrery(variant, glow);
-    } else if (variant === "horizon") built = buildHorizon(glow, "wireframe");
+      if (variant === "drift") built = buildDriftPlanets(glow, accent);
+      else if (variant === "horizon") built = buildHorizon(glow, "planets", accent);
+      else built = buildOrrery(variant, glow, accent);
+    } else if (variant === "horizon") built = buildHorizon(glow, "wireframe", accent);
     else if (variant === "orb") built = buildOrb(glow, star);
     else if (variant === "dish") built = buildDish(glow);
     else if (variant === "ascent") built = buildAscent(glow);
