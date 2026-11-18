@@ -218,12 +218,13 @@ export function PathMap({
             title="Escalation ascent"
             meta={`${group?.source ?? "Source"} → administrator`}
             tags={[`${route.hops} hops`, `${conditional} conditional`, cut ? "cut" : "open"]}
-            note="The active node is the current hop"
+            note="Auto: hops advance / click a node to jump"
             foot={`${active + 1} / ${labels.length}`}
             motion={motion}
             active={active}
             count={labels.length}
             cut={cut}
+            onPick={(index) => jumpTo(index)}
           />
 
           <div className="path-controls">

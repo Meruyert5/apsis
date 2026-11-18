@@ -101,7 +101,7 @@ export function Survey({
           title="Survey dish"
           meta="Account contacts / sweep"
           tags={[`${snapshot.accounts} accounts`, `${techniqueCount} primitives`, `${snapshot.deepest} deep`]}
-          note="Contacts pulse as the sweep passes"
+          note="Auto: the sweep wakes each contact"
           foot={scanning ? "Scanning" : "Idle"}
           motion={motion}
           className={scanning ? "is-scanning" : ""}

@@ -103,7 +103,7 @@ export function Atlas({
           title="Account constellation"
           meta="16 nodes / one fleet"
           tags={[`${fleet.length} accounts`, `${bundle.stats.identities} in focus`, `${bundle.edges.length} edges`]}
-          note="Click a node to focus an account"
+          note="Auto: nodes pulse / click a node to switch account"
           foot={bundle.scenario.title}
           motion={motion}
           focus={focusIndex}

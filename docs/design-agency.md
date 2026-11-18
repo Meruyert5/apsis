@@ -292,7 +292,7 @@ This direction drops the emerald/crimson editorial system and the Neon Luxe dash
 
 ---
 
-## Revision 9 - Path + Atlas dashboard
+## Revision 9 - Fleet dashboard
 
 The Y2K direction is now the dashboard. `/dashboard.html` renders a new entry at `console/src/y2k/`; the Neon Luxe dashboard implementation has been retired.
 
@@ -304,7 +304,7 @@ This build keeps the Y2K vector language but treats it as a control surface, not
 
 ---
 
-## Revision 10 - multi-view Path + Atlas dashboard
+## Revision 10 - multi-view Fleet dashboard
 
 The dashboard is now a seven-view control surface at `/dashboard.html`, built in its own Vite entry from `console/src/y2k/`. The single-page Y2K dashboard and the Neon Luxe implementation are retired.
 
@@ -323,3 +323,28 @@ The shell uses dark glass, electric ultramarine, an animated particle/grid/auror
 Verification: `npm --prefix console run build` passes; `npm --prefix console run test:logic` passes 9 tests; `python -m unittest discover -s tests -v` passes 67 tests. The local accessibility audit at 1440 and 390 reports no contrast, heading, unnamed-control, small-target or overflow failures. Documentation is in `docs/DASHBOARD.md`.
 
 Open before publish: approval, git remote configuration and the Pages workflow. The legacy console remains at `/`; the new dashboard is `/dashboard.html`.
+
+---
+
+## Revision 11 - instrument polish and corner variants
+
+The internal working title is gone from every surface. The dashboard now speaks only product language: fleet, control surface, instruments, accounts, routes.
+
+Instrument pass:
+
+- Every figure renders through `EffectComposer` + `UnrealBloomPass` + `OutputPass`. Canvas is screen-blended over the glass stage so only lit linework adds light.
+- Orb: shader core, Fresnel atmosphere, equator, seven orbit nodes with halos, a travelling comet and trail.
+- Dish: lathed bowl and skin, stand, base, bright rim, feed glow, sweep wedge and 28 pulsing contacts.
+- Ascent: eight nodes on a raised arc, cylinder hop segments, platform rings, a travelling pulse, click-to-jump and a clear target node.
+- Constellation: sixteen larger nodes, curved tube arcs, per-node halos, rotating focus ring, click-to-switch account.
+- Prism: glass monolith, beam, three counter-rotating rings, scan plane and motes.
+- Bloom: six rings with eighteen pickable nodes, halos and a wire nucleus; click-to-select primitive.
+- Stack: five wire layers with edge outlines, breathing separation, rising beam and connectors.
+
+Shell pass:
+
+- `Auto` / `Paused` badge in every figure header; footer names the running animation; the 3D hint names click, drag, scroll and reset.
+- Panel hover glow, brighter nav states, animated scanline and grain textures over the field, stronger but calmer bloom.
+- Rounded-corner variant: topbar `Corners` toggle, `?corners=round` / `?corners=sharp`, persisted in `localStorage`. Sharp remains the default.
+
+Verification: build passes; 9/9 logic tests; 67/67 Python tests; no horizontal overflow on all seven views at 390, 768 and 1440; accessibility audit reports no contrast, heading, control-name, target-size or overflow failures.

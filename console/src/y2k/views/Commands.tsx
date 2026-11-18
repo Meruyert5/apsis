@@ -119,7 +119,7 @@ export function Commands({
           title="Command prism"
           meta="Recorded output / read-only"
           tags={[`${commands.length} runs`, `${commandVerbs.length} verbs`, `${commandScenarios.length} scenarios`]}
-          note="A monolith for a run that never writes"
+          note="Auto: the scan plane climbs the monolith"
           foot={current?.format ?? "text"}
           motion={motion}
           focus={commandVerbs.indexOf(current?.verb ?? "scan")}

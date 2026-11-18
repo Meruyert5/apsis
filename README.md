@@ -221,7 +221,7 @@ point-cloud cluster and route - and re-grades it three ways:
 
 Only the palette, background light and surface noise change. No new objects.
 
-### Path + Atlas dashboard (current build)
+### Fleet dashboard (current build)
 
 `/dashboard.html` is the current dashboard: seven views over the same static
 export, each with its own WebGL instrument. It is a separate Vite entry; the
@@ -238,10 +238,12 @@ legacy console remains at `/`.
 - **Blueprint** — layered stack; pipeline, architecture, modules, roadmap,
   verification and open release items.
 
-Global: `Cmd/Ctrl+K` command palette, motion toggle, hash deep links, animated
-background, glass panels, neon focus states, 2D fallback on every figure, and
-the same read-only export. The architecture and interaction inventory are in
-[docs/DASHBOARD.md](docs/DASHBOARD.md).
+Global: `Cmd/Ctrl+K` command palette, motion toggle, corner toggle (sharp or
+rounded), hash deep links, animated particle/grid/aurora background with a
+grain and scanline texture, bloom-lit glass panels, neon focus states, 2D
+fallback on every figure, clickable 3D nodes on Path map, Atlas and Extensions,
+and the same read-only export. The architecture and interaction inventory are
+in [docs/DASHBOARD.md](docs/DASHBOARD.md).
 
 The Neon Luxe dashboard is retired. This is the dashboard build.
 

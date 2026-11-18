@@ -55,7 +55,7 @@ export function Overview({
     <>
       <section className="view-hero overview-hero">
         <div className="hero-copy">
-          <p className="eyebrow"><span>01</span> Overview / Path + Atlas</p>
+          <p className="eyebrow"><span>01</span> Overview / Fleet</p>
           <h1 className="display" aria-label="Apsis">
             <span className="solid">APSIS</span>
             <span className="outline" aria-hidden="true">APSIS</span>
@@ -84,10 +84,10 @@ export function Overview({
         <FigurePanel
           variant="orb"
           index="FIG. 01"
-          title="Path + Atlas"
-          meta="Wireframe mascot / live"
-          tags={["16 nodes", "07 hops", "01 path"]}
-          note="Atlas = wireframe shell / path = seven-node orbit"
+          title="Fleet orb"
+          meta="Wireframe globe / seven-node orbit"
+          tags={["16 accounts", "194 identities", "07 deep"]}
+          note="Auto: the comet traces the seven-node orbit"
           foot="Read-only"
           motion={motion}
           badge

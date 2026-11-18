@@ -73,7 +73,7 @@ export function Blueprint({
           title="System stack"
           meta="Five layers / one export"
           tags={["5 stages", "7 views", "read-only"]}
-          note="The stack assembles without writing back"
+          note="Auto: layers breathe and the beam rises"
           foot="Ready for review"
           motion={motion}
         />

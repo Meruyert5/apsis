@@ -107,10 +107,14 @@ export function Extensions({
           title="Primitive bloom"
           meta="18 nodes / six rings"
           tags={[`${techniqueCount} primitives`, `${fleet.length} accounts`, `${Math.round((coveredCells / totalCells) * 100)}% covered`]}
-          note="The active node follows the selected primitive"
+          note="Auto: rings counter-rotate / click a node to select"
           foot={selected.mitre}
           motion={motion}
           focus={focus}
+          onPick={(index) => {
+            const next = techniqueRows[index];
+            if (next) setTechniqueId(next.id);
+          }}
         />
       </section>
 

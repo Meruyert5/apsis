@@ -50,7 +50,7 @@
   band and Y2K vector stamps. The 3D mascot is a real WebGL object built from a
   path (7-node orbit) and an atlas (wireframe globe, dust field, polar grid),
   with drag/zoom/reset and an SVG fallback.
-- The Path + Atlas dashboard at `console/dashboard.html` now renders
+- The Fleet dashboard at `console/dashboard.html` now renders
   `console/src/y2k/` as a seven-view control surface: Overview, Survey, Path map,
   Atlas, Commands, Extensions and Blueprint. Each view has a distinct WebGL
   instrument (orb, dish, ascent, constellation, prism, bloom, stack) with
@@ -59,6 +59,17 @@
   with typewriting, an 18 × 16 coverage matrix, contracts, the observed-path
   case, and the full architecture/release plan. The Neon Luxe dashboard
   implementation was retired. `docs/DASHBOARD.md` records the architecture.
+- The instruments now render through an `EffectComposer` with
+  `UnrealBloomPass`: a shader core and Fresnel atmosphere on the orb, a lathed
+  survey bowl, curved constellation arcs, ascents with platforms and a travelling
+  pulse, a glass prism with beam and rings, blooming primitive nodes and stacked
+  layer outlines. Figures pause offscreen and fall back to SVG without WebGL.
+- The dashboard gained an `Auto` / `Paused` badge per figure, clickable 3D nodes
+  on Path map, Atlas and Extensions, a scanline and grain texture over the
+  animated field, hover glow on panels, and a rounded-corner variant behind the
+  topbar `Corners` toggle and `?corners=round`. Sharp corners remain the default.
+- The internal working title was removed from every surface; the dashboard,
+  docs, design lab and metadata now use the product language only.
 - A live Signal instrument: auto-advancing phase, gradient light curve with
   area fill and echo, T−/phase readout, and a hold control that stops on scrub.
 - A hop rail with a flowing gradient progress bar, a pulsing play head and a

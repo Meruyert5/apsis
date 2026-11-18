@@ -223,7 +223,12 @@ export function FigurePanel({
           <h2>{title}</h2>
           <p>{meta}</p>
         </div>
-        <span className="live"><i />Live</span>
+        <span className="figure-status">
+          <span className={`auto-badge ${motion ? "is-on" : ""}`}>
+            <i />{motion ? "Auto" : "Paused"}
+          </span>
+          <span className="live"><i />Live</span>
+        </span>
       </header>
       <div className="figure-stage">
         <Figure3D

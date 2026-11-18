@@ -44,6 +44,16 @@ export function App() {
   const [rail, setRail] = useState(false);
   const [palette, setPalette] = useState(false);
   const [note, setNote] = useState("");
+  const [rounded, setRounded] = useState(() => {
+    const query = new URLSearchParams(window.location.search).get("corners");
+    if (query === "round") return true;
+    if (query === "sharp") return false;
+    try {
+      return window.localStorage.getItem("apsis-corners") === "round";
+    } catch {
+      return false;
+    }
+  });
   const timer = useRef<number | undefined>(undefined);
 
   useEffect(() => {
@@ -68,6 +78,14 @@ export function App() {
       /* ignore */
     }
   }, [motion]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("apsis-corners", rounded ? "round" : "sharp");
+    } catch {
+      /* ignore */
+    }
+  }, [rounded]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -111,7 +129,7 @@ export function App() {
   const current = modules.find((module) => module.id === view) ?? modules[0];
 
   return (
-    <div className={`app ${motion ? "" : "motion-off"}`}>
+    <div className={`app ${motion ? "" : "motion-off"}`} data-corners={rounded ? "round" : "sharp"}>
       <BackgroundFX motion={motion} />
       <div className="bg-grid" aria-hidden="true" />
       <div className="bg-aurora" aria-hidden="true" />
@@ -125,7 +143,7 @@ export function App() {
         <div className="rail-head">
           <div className="brand">
             <b>APSIS</b>
-            <span>Path + Atlas</span>
+            <span>Control surface</span>
           </div>
           <button type="button" className="rail-close" onClick={() => setRail(false)} aria-label="Close navigation">
             <Icon name="close" />
@@ -189,6 +207,21 @@ export function App() {
           <div className="top-actions">
             <button
               type="button"
+              className={`corner-toggle ${rounded ? "is-on" : ""}`}
+              aria-pressed={rounded}
+              aria-label="Toggle rounded corners"
+              title="Toggle rounded corners"
+              onClick={() => {
+                const next = !rounded;
+                setRounded(next);
+                notify(next ? "Rounded corners" : "Sharp corners");
+              }}
+            >
+              <i />
+              <span>Corners</span>
+            </button>
+            <button
+              type="button"
               className={`motion-toggle ${motion ? "is-on" : ""}`}
               aria-pressed={motion}
               aria-label={motion ? "Pause motion" : "Enable motion"}
@@ -241,7 +274,7 @@ export function App() {
         </main>
 
         <footer className="app-foot">
-          <span>APSIS / PATH + ATLAS / 2026</span>
+          <span>APSIS / FLEET DASHBOARD / 2026</span>
           <span>{snapshot.accounts} accounts · {snapshot.identities} identities · {snapshot.routes} routes · {snapshot.cut} edges</span>
           <span>Read-only / 0 writes</span>
         </footer>

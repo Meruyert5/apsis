@@ -257,7 +257,7 @@ export const pipeline = [
 ];
 
 export const modules = [
-  { id: "overview", index: "01", label: "Overview", detail: "Fleet posture and the live path + atlas" },
+  { id: "overview", index: "01", label: "Overview", detail: "Fleet posture and the live instruments" },
   { id: "survey", index: "02", label: "Survey", detail: "Exposure, severity and account ranking" },
   { id: "path", index: "03", label: "Path map", detail: "Step and sever the signature escalation" },
   { id: "atlas", index: "04", label: "Atlas", detail: "Accounts, identities and trust in one map" },
