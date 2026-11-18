@@ -172,5 +172,5 @@ response; the third project owns network evidence. The shared contract is
 `path.opened` card in Prove.
 
 The research, evidence table and the two-pass direction log are in
-`docs/design-research.md`. The binding product spec remains under
-`docs/superpowers/specs/`.
+`docs/design-research.md`. This file and `docs/design-agency.md` are the binding
+product record; the shipped dashboard is documented in `docs/DASHBOARD.md`.

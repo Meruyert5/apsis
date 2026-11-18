@@ -63,7 +63,6 @@ token, a backend, or a custom domain.
 - `console/node_modules/`, `console/dist/`
 - `.cdp-*` browser profiles and `docs/img` captures
 - `.env`, keys, authorization exports, SARIF and report files
-- `docs/superpowers/` planning notes (tracked design history, not published)
 
 ## Post-deploy checks
 

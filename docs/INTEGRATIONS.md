@@ -85,3 +85,7 @@ The alert is a validated contract instance generated from the shipped case, not
 yet from a live CloudTrail import. The engine overlay that derives `observed`
 from a real export is the next roadmap item; the schema, the case and the
 handoff are final.
+
+Penumbra received the handoff in its own commit `b28717b` (local, pending
+push), with the same payloads and a roadmap entry that marks the case, the
+guardrail contract and the alert/evidence delivery as done.

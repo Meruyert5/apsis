@@ -1372,14 +1372,14 @@ function Fallback({ variant }: { variant: FigureVariant }) {
 }
 
 /* ---------------------------------------------------------------- camera */
-const CAMERA: Record<FigureVariant, { position: [number, number, number]; look: [number, number, number]; fov: number; auto: number }> = {
-  orb: { position: [0, 1.1, 10.4], look: [0, 0.1, 0], fov: 40, auto: 0.0008 },
-  dish: { position: [0, 1.8, 8.2], look: [0, 0.55, 0], fov: 40, auto: 0.0004 },
-  ascent: { position: [0, 0.45, 9.0], look: [0, 0.05, 0], fov: 40, auto: 0.0005 },
-  atlas: { position: [0, 3.1, 6.2], look: [0, 0.1, 0], fov: 42, auto: 0.0005 },
-  prism: { position: [0, 0.5, 8.2], look: [0, 0, 0], fov: 40, auto: 0.0006 },
-  bloom: { position: [0, 1.2, 8.8], look: [0, 0, 0], fov: 40, auto: 0.0005 },
-  stack: { position: [0, 2.4, 8.6], look: [0, 0, 0], fov: 40, auto: 0.0003 },
+const CAMERA: Record<FigureVariant, { position: [number, number, number]; look: [number, number, number]; fov: number; auto: number; span: number }> = {
+  orb: { position: [0, 1.1, 10.4], look: [0, 0.1, 0], fov: 40, auto: 0.0008, span: 3.2 },
+  dish: { position: [0, 1.8, 8.2], look: [0, 0.55, 0], fov: 40, auto: 0.0004, span: 2.9 },
+  ascent: { position: [0, 0.45, 9.0], look: [0, 0.05, 0], fov: 40, auto: 0.0005, span: 2.9 },
+  atlas: { position: [0, 3.1, 6.2], look: [0, 0.1, 0], fov: 42, auto: 0.0005, span: 3.55 },
+  prism: { position: [0, 0.5, 8.2], look: [0, 0, 0], fov: 40, auto: 0.0006, span: 2.3 },
+  bloom: { position: [0, 1.2, 8.8], look: [0, 0, 0], fov: 40, auto: 0.0005, span: 2.5 },
+  stack: { position: [0, 2.4, 8.6], look: [0, 0, 0], fov: 40, auto: 0.0003, span: 2.3 },
 };
 
 export function Figure3D({
@@ -1481,6 +1481,7 @@ export function Figure3D({
     let rotX = 0;
     let rotY = 0;
     let zoom = 1;
+    let fitScale = 1;
     let autoY = 0;
     let raf = 0;
     let visible = true;
@@ -1494,6 +1495,9 @@ export function Figure3D({
       renderer.setSize(width, height, false);
       composer.setSize(width, height);
       camera.aspect = width / height;
+      const halfWidth =
+        Math.tan((preset.fov * Math.PI) / 360) * preset.position[2] * camera.aspect;
+      fitScale = Math.min(3.2, Math.max(1, preset.span / Math.max(0.001, halfWidth)));
       camera.updateProjectionMatrix();
     };
 
@@ -1572,9 +1576,9 @@ export function Figure3D({
       built.root.rotation.x = 0.12 + rotX;
       built.root.rotation.y = autoY + rotY;
       camera.position.set(
-        preset.position[0] / zoom,
-        preset.position[1] / zoom,
-        preset.position[2] / zoom,
+        (preset.position[0] / zoom) * fitScale,
+        (preset.position[1] / zoom) * fitScale,
+        (preset.position[2] / zoom) * fitScale,
       );
       camera.lookAt(...preset.look);
       built.update(time, state);
