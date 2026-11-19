@@ -25,6 +25,12 @@ each carry two instruments: a glossy planet scene and a wireframe schematic.
 | Extensions | Ringed planet + 18 moons | Bloom | Primitives, coverage, contracts, case |
 | Blueprint | Orbital planes + event horizon | Stack | Architecture, roadmap and release |
 
+In wire mode every scene is drawn in the view accent rather than a shared
+periwinkle: cyan on Overview, mint on Survey and Commands, amber on Path map and
+Blueprint, violet on Atlas and Extensions, rose on Drift. `palette.base` holds the
+structure, `pale` marks changed or active lines, `hot` is the former bone
+highlight, and the static 2D fallback inherits the same three tones.
+
 ## Planet language
 
 The planet scene is deliberately untextured. A graphite sphere with a warm key
@@ -68,7 +74,7 @@ the toggle never dead-ends.
 | Violet | `#a78bfa` | Atlas/Extensions accent, users |
 | Mint | `#9ff0c8` | Survey/Commands accent, contained |
 | Rose | `#ff9ecb` | Drift accent |
-| Periwinkle | `#7b86c9` | Roles, wireframe structure |
+| Periwinkle | `#7b86c9` | Roles, planet-scene structure |
 | Line | `rgb(236 231 218 / .10)` | Hairline rules |
 
 The field is warm black, not blue. One accent is active per view: it drives the

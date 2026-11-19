@@ -26,8 +26,10 @@
   The OG card pairs it with the solid/outline APSIS wordmark in Syne. Matching
   512/180 icons. Sora, IBM Plex Sans and Instrument Serif are removed; the
   payload is Syne, Space Grotesk and IBM Plex Mono.
-- The wireframe pass is bone and periwinkle with a depth fog, larger nodes and
-  accent selection rings; it stays a schematic, not a second planet scene.
+- The wireframe pass is tinted to each view accent - cyan, mint, amber, violet or
+  rose - with base, pale and hot tones for structure, active lines and highlights,
+  a depth fog, larger nodes and accent selection rings. The 2D fallback inherits
+  the same accent.
 - Every figure has two instruments. A `Planets` / `Wire` switch replaces the old
   `3D` / `2D` toggle: the default is a glossy scene (graphite sphere, lit
   terminator, small metal-rough bodies, orbit rings), and the wireframe remains

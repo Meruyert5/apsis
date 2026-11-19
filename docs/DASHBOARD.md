@@ -3,7 +3,8 @@
 The dashboard at `/` is the single Vite entry. It reads the static Apsis export
 and renders eight views, each with a glossy planet scene and a wireframe
 instrument. A `Planets` / `Wire` switch on every figure changes the language
-without changing the data, the camera or the interactions.
+without changing the data, the camera or the interactions. Every wire scene is
+tinted to the view accent, so the schematic changes colour with the page.
 
 ## View map
 
@@ -38,7 +39,7 @@ flat matte surface. Build details:
 | Dish | Ringed planet, broad band, 16 contacts, rotating sweep arc | Lathe bowl, rim, feed, 28 contacts | Sweep wakes contacts |
 | Ascent | Ivory star, eight planets on eight orbits, cyan route thread, black-hole state | Eight gates, S-curve, beacon, shock rings | Hops advance; the cut crossfades to the horizon |
 | Atlas | Ivory star, 16 account bodies, trust arcs | Sixteen nodes, tube arcs, orbital ring | Bodies pulse; focus ring swells |
-| Drift | Two planets, changed-edge stream, base grid, scan bar | Two vertical wire plates, seam | Added bodies cyan; scan reads both sides |
+| Drift | Two planets, changed-edge stream, base grid, scan bar | Two vertical wire plates, seam | Added bodies pale rose; scan reads both sides |
 | Prism | Dark core, data ring, beam, ten moons | Glass monolith, scan plane, rings | Beam breathes; rings counter-rotate |
 | Bloom | Ringed planet, six moon orbits, 18 glossy nodes | Six rings, eighteen nodes | Rings counter-rotate; focus body swells |
 | Stack | Planet, five orbital planes, beam | Five wire layers, outlines | Planes turn; beam rises |

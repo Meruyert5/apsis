@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import * as THREE from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
@@ -51,6 +52,19 @@ const BONE = 0xf2eee4;
 const MINT = 0x9ff0c8;
 const AMBER = 0xffb26b;
 const VIOLET = 0xa78bfa;
+
+/**
+ * The wire pass is tinted to the view accent: `base` for structure, `pale` for
+ * changed/active lines and `hot` for the highlight that used to be bone.
+ */
+function wirePalette(accent: number) {
+  const base = new THREE.Color(accent);
+  return {
+    base: accent,
+    pale: base.clone().lerp(new THREE.Color(BONE), 0.36).getHex(),
+    hot: base.clone().lerp(new THREE.Color(BONE), 0.6).getHex(),
+  };
+}
 
 function wire(color = WHITE, opacity = 0.68) {
   return new THREE.MeshBasicMaterial({
@@ -175,7 +189,8 @@ function hitSphere(radius: number, index: number) {
 }
 
 /* ---------------------------------------------------------------- orb */
-function buildOrb(glow: THREE.Texture, star: THREE.Texture): Built {
+function buildOrb(glow: THREE.Texture, star: THREE.Texture, accent: number): Built {
+  const palette = wirePalette(accent);
   const root = new THREE.Group();
   root.rotation.x = 0.12;
   const uniforms = { uTime: { value: 0 } };
@@ -217,8 +232,8 @@ function buildOrb(glow: THREE.Texture, star: THREE.Texture): Built {
   );
   root.add(core);
 
-  root.add(new THREE.Mesh(new THREE.SphereGeometry(2.36, 32, 22), wire(BLUE, 0.34)));
-  root.add(new THREE.Mesh(new THREE.SphereGeometry(2.58, 16, 12), wire(WHITE, 0.08)));
+  root.add(new THREE.Mesh(new THREE.SphereGeometry(2.36, 32, 22), wire(palette.base, 0.34)));
+  root.add(new THREE.Mesh(new THREE.SphereGeometry(2.58, 16, 12), wire(palette.hot, 0.08)));
 
   const atmosphere = new THREE.Mesh(
     new THREE.SphereGeometry(2.08, 64, 48),
@@ -250,7 +265,7 @@ function buildOrb(glow: THREE.Texture, star: THREE.Texture): Built {
   );
   root.add(atmosphere);
 
-  const equator = new THREE.Mesh(new THREE.TorusGeometry(2.52, 0.006, 6, 180), basic(WHITE, 0.22));
+  const equator = new THREE.Mesh(new THREE.TorusGeometry(2.52, 0.006, 6, 180), basic(palette.hot, 0.22));
   equator.rotation.x = 1.18;
   equator.rotation.z = -0.2;
   root.add(equator);
@@ -267,7 +282,7 @@ function buildOrb(glow: THREE.Texture, star: THREE.Texture): Built {
   const orbit = new THREE.CatmullRomCurve3(orbitPoints, true);
   root.add(new THREE.Mesh(
     new THREE.TubeGeometry(orbit, 200, 0.012, 6, true),
-    basic(WHITE, 0.68),
+    basic(palette.hot, 0.68),
   ));
 
   const orbitNodes: THREE.Mesh[] = [];
@@ -276,19 +291,19 @@ function buildOrb(glow: THREE.Texture, star: THREE.Texture): Built {
     const point = orbit.getPointAt(i / 7);
     const node = new THREE.Mesh(
       new THREE.OctahedronGeometry(i === 6 ? 0.1 : 0.065, 0),
-      basic(i === 6 ? BLUE : WHITE, i === 6 ? 1 : 0.9),
+      basic(i === 6 ? palette.base : palette.hot, i === 6 ? 1 : 0.9),
     );
     node.position.copy(point);
     root.add(node);
     orbitNodes.push(node);
-    const halo = sprite(glow, i === 6 ? BLUE : WHITE, 0.28, 0.8);
+    const halo = sprite(glow, i === 6 ? palette.base : palette.hot, 0.28, 0.8);
     halo.position.copy(point);
     root.add(halo);
     orbitHalos.push(halo);
   }
 
-  const comet = sprite(glow, WHITE, 0.9, 1.2);
-  const cometTrail = sprite(glow, BLUE, 0.5, 2.6);
+  const comet = sprite(glow, palette.hot, 0.9, 1.2);
+  const cometTrail = sprite(glow, palette.base, 0.5, 2.6);
   root.add(comet, cometTrail);
 
   const dustCount = 400;
@@ -305,26 +320,26 @@ function buildOrb(glow: THREE.Texture, star: THREE.Texture): Built {
   const dustGeo = new THREE.BufferGeometry();
   dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPositions, 3));
   const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({
-    color: BLUE, size: 0.02, transparent: true, opacity: 0.7,
+    color: palette.base, size: 0.02, transparent: true, opacity: 0.7,
     blending: THREE.AdditiveBlending, depthWrite: false,
   }));
   root.add(dust);
 
-  const ghost = new THREE.Mesh(new THREE.SphereGeometry(0.92, 16, 12), wire(BLUE, 0.15));
+  const ghost = new THREE.Mesh(new THREE.SphereGeometry(0.92, 16, 12), wire(palette.base, 0.15));
   ghost.position.set(-3.25, 2.15, -2.5);
   root.add(ghost);
 
-  const polar = new THREE.PolarGridHelper(4.2, 8, 4, 64, BLUE, BLUE);
+  const polar = new THREE.PolarGridHelper(4.2, 8, 4, 64, palette.base, palette.base);
   const polarMaterial = polar.material as THREE.LineBasicMaterial;
   polarMaterial.transparent = true;
   polarMaterial.opacity = 0.1;
   polar.position.y = -2.6;
   root.add(polar);
 
-  const coreGlow = sprite(glow, BLUE, 0.55, 4.2);
+  const coreGlow = sprite(glow, palette.base, 0.55, 4.2);
   root.add(coreGlow);
   [ [-2.9, 2.1, 1.0, 0.55], [2.9, -1.7, 0.8, 0.4] ].forEach(([x, y, z, scale]) => {
-    const item = sprite(star, WHITE, 0.9, scale);
+    const item = sprite(star, palette.hot, 0.9, scale);
     item.position.set(x, y, z);
     root.add(item);
   });
@@ -354,7 +369,8 @@ function buildOrb(glow: THREE.Texture, star: THREE.Texture): Built {
 }
 
 /* ---------------------------------------------------------------- dish */
-function buildDish(glow: THREE.Texture): Built {
+function buildDish(glow: THREE.Texture, accent: number): Built {
+  const palette = wirePalette(accent);
   const root = new THREE.Group();
   root.rotation.x = 0.22;
 
@@ -364,12 +380,12 @@ function buildDish(glow: THREE.Texture): Built {
     profile.push(new THREE.Vector2(0.16 + t * 2.45, t * t * 0.92));
   }
   const lathe = new THREE.LatheGeometry(profile, 72);
-  const dish = new THREE.Mesh(lathe, wire(BLUE, 0.26));
+  const dish = new THREE.Mesh(lathe, wire(palette.base, 0.26));
   dish.position.y = -0.46;
   root.add(dish);
 
   const skin = new THREE.Mesh(lathe, new THREE.MeshBasicMaterial({
-    color: BLUE,
+    color: palette.base,
     transparent: true,
     opacity: 0.035,
     side: THREE.DoubleSide,
@@ -379,15 +395,15 @@ function buildDish(glow: THREE.Texture): Built {
   skin.position.y = -0.46;
   root.add(skin);
 
-  const stand = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.16, 1.05, 12), wire(BLUE, 0.35));
+  const stand = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.16, 1.05, 12), wire(palette.base, 0.35));
   stand.position.y = -1.0;
   root.add(stand);
-  const base = new THREE.Mesh(new THREE.TorusGeometry(0.72, 0.02, 6, 64), basic(BLUE, 0.4));
+  const base = new THREE.Mesh(new THREE.TorusGeometry(0.72, 0.02, 6, 64), basic(palette.base, 0.4));
   base.rotation.x = Math.PI / 2;
   base.position.y = -1.5;
   root.add(base);
 
-  const rim = new THREE.Mesh(new THREE.TorusGeometry(2.61, 0.022, 8, 180), basic(WHITE, 0.8));
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(2.61, 0.022, 8, 180), basic(palette.hot, 0.8));
   rim.rotation.x = Math.PI / 2;
   rim.position.y = 0.46;
   root.add(rim);
@@ -395,7 +411,7 @@ function buildDish(glow: THREE.Texture): Built {
   for (let i = 1; i <= 3; i += 1) {
     const ring = new THREE.Mesh(
       new THREE.TorusGeometry((i / 3.6) * 2.3, 0.01, 6, 140),
-      basic(BLUE, 0.34),
+      basic(palette.base, 0.34),
     );
     ring.rotation.x = Math.PI / 2;
     ring.position.y = 0.46 - i * 0.13 - i * i * 0.02;
@@ -405,12 +421,12 @@ function buildDish(glow: THREE.Texture): Built {
   const feedLine = line([
     new THREE.Vector3(0, 0.5, 0),
     new THREE.Vector3(0, 2.2, 0),
-  ], WHITE, 0.8);
+  ], palette.hot, 0.8);
   root.add(feedLine);
-  const feed = new THREE.Mesh(new THREE.OctahedronGeometry(0.13, 0), basic(WHITE, 1));
+  const feed = new THREE.Mesh(new THREE.OctahedronGeometry(0.13, 0), basic(palette.hot, 1));
   feed.position.y = 2.2;
   root.add(feed);
-  const feedGlow = sprite(glow, BLUE, 0.55, 1.4);
+  const feedGlow = sprite(glow, palette.base, 0.55, 1.4);
   feedGlow.position.y = 2.2;
   root.add(feedGlow);
 
@@ -418,11 +434,11 @@ function buildDish(glow: THREE.Texture): Built {
   sweep.add(line([
     new THREE.Vector3(0, 0.48, 0),
     new THREE.Vector3(2.45, 0.48, 0),
-  ], WHITE, 0.6));
+  ], palette.hot, 0.6));
   const wedge = new THREE.Mesh(
     new THREE.CircleGeometry(2.45, 36, 0, 0.26),
     new THREE.MeshBasicMaterial({
-      color: BLUE, transparent: true, opacity: 0.18, side: THREE.DoubleSide,
+      color: palette.base, transparent: true, opacity: 0.18, side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }),
   );
@@ -437,14 +453,14 @@ function buildDish(glow: THREE.Texture): Built {
     const radius = 0.55 + (i % 8) * 0.24;
     const dot = new THREE.Mesh(
       new THREE.OctahedronGeometry(0.05, 0),
-      basic(i % 5 === 0 ? BLUE : WHITE, 0.8),
+      basic(i % 5 === 0 ? palette.base : palette.hot, 0.8),
     );
     dot.position.set(Math.cos(angle) * radius, 0.9 + (i % 5) * 0.14, Math.sin(angle) * radius);
     root.add(dot);
     contacts.push(dot);
   }
 
-  const floorRing = new THREE.Mesh(new THREE.TorusGeometry(3.1, 0.01, 6, 180), basic(BLUE, 0.3));
+  const floorRing = new THREE.Mesh(new THREE.TorusGeometry(3.1, 0.01, 6, 180), basic(palette.base, 0.3));
   floorRing.rotation.x = Math.PI / 2;
   floorRing.position.y = -1.5;
   root.add(floorRing);
@@ -466,7 +482,8 @@ function buildDish(glow: THREE.Texture): Built {
 }
 
 /* ---------------------------------------------------------------- ascent */
-function buildAscent(glow: THREE.Texture): Built {
+function buildAscent(glow: THREE.Texture, accent: number): Built {
+  const palette = wirePalette(accent);
   const root = new THREE.Group();
   root.rotation.x = 0.05;
   root.position.set(0.12, -0.05, 0);
@@ -487,7 +504,7 @@ function buildAscent(glow: THREE.Texture): Built {
   const sparks: THREE.Sprite[] = [];
 
   for (let i = 0; i < nodeCount; i += 1) {
-    const node = new THREE.Mesh(new THREE.OctahedronGeometry(0.17, 0), wire(BLUE, 0.6));
+    const node = new THREE.Mesh(new THREE.OctahedronGeometry(0.17, 0), wire(palette.base, 0.6));
     node.userData.index = i;
     root.add(node);
     nodes.push(node);
@@ -496,13 +513,13 @@ function buildAscent(glow: THREE.Texture): Built {
     hits.push(hit);
     pickables.push(hit);
 
-    const halo = sprite(glow, WHITE, 0, 1.1);
+    const halo = sprite(glow, palette.hot, 0, 1.1);
     root.add(halo);
     halos.push(halo);
 
     const gate = new THREE.Group();
-    const outerMat = basic(BLUE, 0.2);
-    const innerMat = basic(BLUE, 0.1);
+    const outerMat = basic(palette.base, 0.2);
+    const innerMat = basic(palette.base, 0.1);
     const outer = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.008, 6, 72), outerMat);
     outer.rotation.x = Math.PI / 2;
     const inner = new THREE.Mesh(new THREE.TorusGeometry(0.36, 0.004, 4, 56), innerMat);
@@ -514,13 +531,13 @@ function buildAscent(glow: THREE.Texture): Built {
 
     const platform = new THREE.Group();
     const discMat = new THREE.MeshBasicMaterial({
-      color: BLUE, transparent: true, opacity: 0.1, side: THREE.DoubleSide,
+      color: palette.base, transparent: true, opacity: 0.1, side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending, depthWrite: false,
     });
     const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.012, 6), discMat);
-    const plateMat = wire(BLUE, 0.5);
+    const plateMat = wire(palette.base, 0.5);
     const plate = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.02, 6), plateMat);
-    const rimMat = basic(BLUE, 0.35);
+    const rimMat = basic(palette.base, 0.35);
     const rim = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.005, 4, 48), rimMat);
     rim.rotation.x = Math.PI / 2;
     platform.add(disc, plate, rim);
@@ -529,7 +546,7 @@ function buildAscent(glow: THREE.Texture): Built {
     platforms.push(platform);
     platformMats.push([discMat, plateMat, rimMat]);
 
-    const beamMat = basic(WHITE, 0);
+    const beamMat = basic(palette.hot, 0);
     const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, 1, 5), beamMat);
     root.add(beam);
     beams.push(beam);
@@ -537,8 +554,8 @@ function buildAscent(glow: THREE.Texture): Built {
   }
 
   for (let i = 0; i < nodeCount - 1; i += 1) {
-    const coreMat = basic(BLUE, 0.35);
-    const haloMat = basic(BLUE, 0.04);
+    const coreMat = basic(palette.base, 0.35);
+    const haloMat = basic(palette.base, 0.04);
     const core = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 1, 8), coreMat);
     const halo = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 1, 8), haloMat);
     root.add(core, halo);
@@ -547,7 +564,7 @@ function buildAscent(glow: THREE.Texture): Built {
   }
 
   [2.55, 3.3].forEach((radius) => {
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(radius, 0.006, 4, 120), basic(BLUE, 0.07));
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(radius, 0.006, 4, 120), basic(palette.base, 0.07));
     ring.position.z = -1.4;
     ring.scale.y = 1.2;
     root.add(ring);
@@ -558,20 +575,20 @@ function buildAscent(glow: THREE.Texture): Built {
     root.add(line([
       new THREE.Vector3(-2.62, y, 0),
       new THREE.Vector3(-2.34, y, 0),
-    ], BLUE, 0.16));
+    ], palette.base, 0.16));
     root.add(line([
       new THREE.Vector3(2.62, y, 0),
       new THREE.Vector3(2.4, y, 0),
-    ], BLUE, 0.08));
+    ], palette.base, 0.08));
   }
   root.add(line([
     new THREE.Vector3(2.74, -2.15, 0),
     new THREE.Vector3(2.74, 2.15, 0),
-  ], BLUE, 0.08));
+  ], palette.base, 0.08));
   root.add(line([
     new THREE.Vector3(0, -2.3, 0),
     new THREE.Vector3(0, 2.3, 0),
-  ], BLUE, 0.09));
+  ], palette.base, 0.09));
 
   const contextItems: { star: THREE.Mesh; link: THREE.Line }[] = [];
   for (let i = 0; i < 16; i += 1) {
@@ -580,7 +597,7 @@ function buildAscent(glow: THREE.Texture): Built {
     const y = -1.95 + ((i * 0.618) % 1) * 3.85;
     const star = new THREE.Mesh(
       new THREE.OctahedronGeometry(i % 5 === 0 ? 0.095 : 0.06, 0),
-      basic(BLUE, 0.35),
+      basic(palette.base, 0.35),
     );
     star.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius * 0.72);
     root.add(star);
@@ -589,7 +606,7 @@ function buildAscent(glow: THREE.Texture): Built {
     const link = new THREE.Line(
       geometry,
       new THREE.LineBasicMaterial({
-        color: BLUE, transparent: true, opacity: 0.05,
+        color: palette.base, transparent: true, opacity: 0.05,
         blending: THREE.AdditiveBlending, depthWrite: false,
       }),
     );
@@ -600,7 +617,7 @@ function buildAscent(glow: THREE.Texture): Built {
   const floor = new THREE.Mesh(
     new THREE.RingGeometry(1.9, 3.2, 64),
     new THREE.MeshBasicMaterial({
-      color: BLUE, transparent: true, opacity: 0.05, side: THREE.DoubleSide,
+      color: palette.base, transparent: true, opacity: 0.05, side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }),
   );
@@ -608,7 +625,7 @@ function buildAscent(glow: THREE.Texture): Built {
   floor.position.y = -2.45;
   root.add(floor);
 
-  const stage = new THREE.PolarGridHelper(3.3, 8, 3, 48, BLUE, BLUE);
+  const stage = new THREE.PolarGridHelper(3.3, 8, 3, 48, palette.base, palette.base);
   const stageMaterial = stage.material as THREE.LineBasicMaterial;
   stageMaterial.transparent = true;
   stageMaterial.opacity = 0.09;
@@ -616,37 +633,37 @@ function buildAscent(glow: THREE.Texture): Built {
   root.add(stage);
 
   const beacon = new THREE.Group();
-  const beaconMat = basic(WHITE, 0);
+  const beaconMat = basic(palette.hot, 0);
   const beaconBeam = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.8, 5), beaconMat);
   beaconBeam.position.y = 0.4;
-  const beaconRingMat = basic(WHITE, 0);
+  const beaconRingMat = basic(palette.hot, 0);
   const beaconRing = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.006, 4, 48), beaconRingMat);
   beaconRing.rotation.x = Math.PI / 2;
   beaconRing.position.y = 0.8;
-  const beaconStar = sprite(glow, WHITE, 0, 1.5);
+  const beaconStar = sprite(glow, palette.hot, 0, 1.5);
   beaconStar.position.y = 0.8;
   beacon.add(beaconBeam, beaconRing, beaconStar);
   root.add(beacon);
 
   const cutGroup = new THREE.Group();
-  const cutA = line([new THREE.Vector3(-0.18, -0.18, 0), new THREE.Vector3(0.18, 0.18, 0)], WHITE, 1);
-  const cutB = line([new THREE.Vector3(0.18, -0.18, 0), new THREE.Vector3(-0.18, 0.18, 0)], WHITE, 1);
+  const cutA = line([new THREE.Vector3(-0.18, -0.18, 0), new THREE.Vector3(0.18, 0.18, 0)], palette.hot, 1);
+  const cutB = line([new THREE.Vector3(0.18, -0.18, 0), new THREE.Vector3(-0.18, 0.18, 0)], palette.hot, 1);
   cutGroup.add(cutA, cutB);
   cutGroup.visible = false;
   root.add(cutGroup);
 
-  const travelPulse = sprite(glow, WHITE, 0, 0.75);
-  const travelTrail = sprite(glow, BLUE, 0, 1.35);
+  const travelPulse = sprite(glow, palette.hot, 0, 0.75);
+  const travelTrail = sprite(glow, palette.base, 0, 1.35);
   root.add(travelPulse, travelTrail);
   for (let i = 0; i < 6; i += 1) {
-    const spark = sprite(glow, WHITE, 0, 0.28);
+    const spark = sprite(glow, palette.hot, 0, 0.28);
     root.add(spark);
     sparks.push(spark);
   }
 
   const shockRings: { mesh: THREE.Mesh; mat: THREE.MeshBasicMaterial }[] = [];
   for (let i = 0; i < 3; i += 1) {
-    const mat = basic(WHITE, 0);
+    const mat = basic(palette.hot, 0);
     const mesh = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.007, 4, 48), mat);
     mesh.rotation.x = Math.PI / 2;
     root.add(mesh);
@@ -684,7 +701,7 @@ function buildAscent(glow: THREE.Texture): Built {
         hits[i].visible = true;
         hits[i].position.copy(point);
         const material = node.material as THREE.MeshBasicMaterial;
-        material.color.setHex(isActive ? 0xa9c4ff : isTarget ? WHITE : BLUE);
+        material.color.setHex(isActive ? palette.pale : isTarget ? palette.hot : palette.base);
         material.opacity = state.cut ? 0.32 : isActive ? 1 : isVisited ? 0.9 : 0.45;
         node.scale.setScalar(
           isActive ? 1.35 + Math.sin(time * 3) * 0.08 : isTarget ? 1.2 : isVisited ? 1.02 : 0.85,
@@ -706,7 +723,7 @@ function buildAscent(glow: THREE.Texture): Built {
         gate.position.copy(point);
         gate.rotation.z = time * (isActive ? 0.45 : 0.08) + i * 0.4;
         gate.scale.setScalar(isActive ? 1.08 + Math.sin(time * 2.4) * 0.04 : 1);
-        const gateColor = isActive || isTarget ? WHITE : BLUE;
+        const gateColor = isActive || isTarget ? palette.hot : palette.base;
         const [gateOuter, gateInner] = gateMats[i];
         gateOuter.color.setHex(gateColor);
         gateInner.color.setHex(gateColor);
@@ -719,7 +736,7 @@ function buildAscent(glow: THREE.Texture): Built {
         platform.rotation.y = time * 0.12 + i * 0.5;
         platform.scale.setScalar(isActive ? 1.15 + Math.sin(time * 2.4) * 0.05 : 1);
         const [discMat, plateMat, rimMat] = platformMats[i];
-        const platformColor = isActive ? WHITE : isTarget ? WHITE : BLUE;
+        const platformColor = isActive ? palette.hot : isTarget ? palette.hot : palette.base;
         discMat.color.setHex(platformColor);
         plateMat.color.setHex(platformColor);
         rimMat.color.setHex(platformColor);
@@ -731,7 +748,7 @@ function buildAscent(glow: THREE.Texture): Built {
         beam.visible = true;
         beam.position.set(point.x, point.y - 0.15, point.z);
         beam.scale.set(1, 0.3, 1);
-        beamMats[i].color.setHex(isActive ? WHITE : BLUE);
+        beamMats[i].color.setHex(isActive ? palette.hot : palette.base);
         beamMats[i].opacity = state.cut ? 0.06 : isActive ? 0.75 : isVisited ? 0.2 : 0.07;
       }
 
@@ -772,13 +789,13 @@ function buildAscent(glow: THREE.Texture): Built {
         }
         const mats = segmentMats[i];
         if (i < active) {
-          mats.core.color.setHex(BLUE);
+          mats.core.color.setHex(palette.base);
           mats.core.opacity = 0.9;
         } else if (i === active) {
-          mats.core.color.setHex(WHITE);
+          mats.core.color.setHex(palette.hot);
           mats.core.opacity = 1;
         } else {
-          mats.core.color.setHex(BLUE);
+          mats.core.color.setHex(palette.base);
           mats.core.opacity = 0.25;
         }
         mats.halo.color.copy(mats.core.color);
@@ -866,7 +883,8 @@ function buildAscent(glow: THREE.Texture): Built {
 }
 
 /* ---------------------------------------------------------------- atlas */
-function buildAtlas(glow: THREE.Texture): Built {
+function buildAtlas(glow: THREE.Texture, accent: number): Built {
+  const palette = wirePalette(accent);
   const root = new THREE.Group();
   root.rotation.x = 0.18;
 
@@ -880,7 +898,7 @@ function buildAtlas(glow: THREE.Texture): Built {
     const radius = 0.9 + (i % 8) * 0.34;
     const node = new THREE.Mesh(
       new THREE.OctahedronGeometry(i % 4 === 0 ? 0.22 : 0.17, 0),
-      basic(i % 4 === 0 ? WHITE : BLUE, 0.9),
+      basic(i % 4 === 0 ? palette.hot : palette.base, 0.9),
     );
     node.position.set(
       Math.cos(angle) * radius,
@@ -894,7 +912,7 @@ function buildAtlas(glow: THREE.Texture): Built {
     hit.position.copy(node.position);
     root.add(hit);
     pickables.push(hit);
-    const halo = sprite(glow, i % 4 === 0 ? WHITE : BLUE, 0.2, 0.75);
+    const halo = sprite(glow, i % 4 === 0 ? palette.hot : palette.base, 0.2, 0.75);
     halo.position.copy(node.position);
     root.add(halo);
     nodeHalos.push(halo);
@@ -903,7 +921,7 @@ function buildAtlas(glow: THREE.Texture): Built {
   const orbiting: THREE.Mesh[] = [];
   for (let i = 0; i < count; i += 1) {
     if (i % 4 !== 0) continue;
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.006, 5, 48), basic(WHITE, 0.35));
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.006, 5, 48), basic(palette.hot, 0.35));
     ring.position.copy(nodes[i].position);
     ring.rotation.set(1.1 + i * 0.22, i * 0.7, i * 0.35);
     root.add(ring);
@@ -916,40 +934,40 @@ function buildAtlas(glow: THREE.Texture): Built {
     root.add(line([
       base.clone(),
       new THREE.Vector3(node.position.x, node.position.y, node.position.z),
-    ], BLUE, 0.13));
-    const dot = new THREE.Mesh(new THREE.OctahedronGeometry(0.035, 0), basic(BLUE, 0.5));
+    ], palette.base, 0.13));
+    const dot = new THREE.Mesh(new THREE.OctahedronGeometry(0.035, 0), basic(palette.base, 0.5));
     dot.position.copy(base);
     root.add(dot);
   }
 
-  const nucleus = new THREE.Mesh(new THREE.IcosahedronGeometry(0.24, 1), wire(BLUE, 0.55));
+  const nucleus = new THREE.Mesh(new THREE.IcosahedronGeometry(0.24, 1), wire(palette.base, 0.55));
   root.add(nucleus);
-  const nucleusGlow = sprite(glow, BLUE, 0.16, 2.2);
+  const nucleusGlow = sprite(glow, palette.base, 0.16, 2.2);
   root.add(nucleusGlow);
 
-  const nebula = sprite(glow, BLUE, 0.14, 8);
+  const nebula = sprite(glow, palette.base, 0.14, 8);
   nebula.position.set(0, 0.2, -2.4);
   root.add(nebula);
 
   const motes: THREE.Sprite[] = [];
   for (let i = 0; i < 3; i += 1) {
-    const mote = sprite(glow, i === 1 ? WHITE : BLUE, 0.3, 0.5);
+    const mote = sprite(glow, i === 1 ? palette.hot : palette.base, 0.3, 0.5);
     root.add(mote);
     motes.push(mote);
   }
 
-  const orbitRing = new THREE.Mesh(new THREE.TorusGeometry(3.65, 0.005, 4, 180), basic(WHITE, 0.1));
+  const orbitRing = new THREE.Mesh(new THREE.TorusGeometry(3.65, 0.005, 4, 180), basic(palette.hot, 0.1));
   orbitRing.rotation.x = Math.PI / 2;
   orbitRing.position.y = -0.95;
   root.add(orbitRing);
 
-  const orbitRing2 = new THREE.Mesh(new THREE.TorusGeometry(3.95, 0.004, 4, 180), basic(BLUE, 0.12));
+  const orbitRing2 = new THREE.Mesh(new THREE.TorusGeometry(3.95, 0.004, 4, 180), basic(palette.base, 0.12));
   orbitRing2.rotation.x = 1.42;
   root.add(orbitRing2);
 
-  const orbitPulse = sprite(glow, WHITE, 0.35, 0.7);
+  const orbitPulse = sprite(glow, palette.hot, 0.35, 0.7);
   root.add(orbitPulse);
-  const orbitPulse2 = sprite(glow, BLUE, 0.3, 0.9);
+  const orbitPulse2 = sprite(glow, palette.base, 0.3, 0.9);
   root.add(orbitPulse2);
 
   const arc = (a: THREE.Vector3, b: THREE.Vector3, color: number, opacity: number) => {
@@ -966,9 +984,9 @@ function buildAtlas(glow: THREE.Texture): Built {
   for (let i = 0; i < count; i += 1) {
     const next = nodes[(i + 1) % count];
     const chord = nodes[(i + 5) % count];
-    root.add(arc(nodes[i].position.clone(), next.position.clone(), BLUE, 0.28));
+    root.add(arc(nodes[i].position.clone(), next.position.clone(), palette.base, 0.28));
     if (i % 2 === 0) {
-      root.add(arc(nodes[i].position.clone(), chord.position.clone(), WHITE, 0.1));
+      root.add(arc(nodes[i].position.clone(), chord.position.clone(), palette.hot, 0.1));
     }
   }
 
@@ -984,32 +1002,32 @@ function buildAtlas(glow: THREE.Texture): Built {
   const dustGeo = new THREE.BufferGeometry();
   dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPositions, 3));
   root.add(new THREE.Points(dustGeo, new THREE.PointsMaterial({
-    color: BLUE, size: 0.018, transparent: true, opacity: 0.55,
+    color: palette.base, size: 0.018, transparent: true, opacity: 0.55,
     blending: THREE.AdditiveBlending, depthWrite: false,
   })));
 
-  const grid = new THREE.PolarGridHelper(4.0, 8, 4, 64, BLUE, BLUE);
+  const grid = new THREE.PolarGridHelper(4.0, 8, 4, 64, palette.base, palette.base);
   const gridMaterial = grid.material as THREE.LineBasicMaterial;
   gridMaterial.transparent = true;
   gridMaterial.opacity = 0.12;
   grid.position.y = -1.1;
   root.add(grid);
 
-  const focusRing = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.01, 6, 64), basic(WHITE, 0.9));
+  const focusRing = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.01, 6, 64), basic(palette.hot, 0.9));
   focusRing.rotation.x = Math.PI / 2;
   root.add(focusRing);
 
-  const focusRing2 = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.006, 5, 56), basic(BLUE, 0.45));
+  const focusRing2 = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.006, 5, 56), basic(palette.base, 0.45));
   focusRing2.rotation.x = 1.2;
   root.add(focusRing2);
 
-  const focusBeam = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 1, 5), basic(WHITE, 0.35));
+  const focusBeam = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 1, 5), basic(palette.hot, 0.35));
   root.add(focusBeam);
 
-  const focusGlow = sprite(glow, BLUE, 0.2, 1.0);
+  const focusGlow = sprite(glow, palette.base, 0.2, 1.0);
   root.add(focusGlow);
 
-  const centerGlow = sprite(glow, BLUE, 0.14, 4.2);
+  const centerGlow = sprite(glow, palette.base, 0.14, 4.2);
   centerGlow.position.y = -0.2;
   root.add(centerGlow);
 
@@ -1076,14 +1094,15 @@ function buildAtlas(glow: THREE.Texture): Built {
 }
 
 /* ---------------------------------------------------------------- prism */
-function buildPrism(glow: THREE.Texture): Built {
+function buildPrism(glow: THREE.Texture, accent: number): Built {
+  const palette = wirePalette(accent);
   const root = new THREE.Group();
   root.rotation.x = 0.12;
 
   const outer = new THREE.LineSegments(
     new THREE.EdgesGeometry(new THREE.BoxGeometry(2.4, 3.5, 2.4)),
     new THREE.LineBasicMaterial({
-      color: WHITE, transparent: true, opacity: 0.6,
+      color: palette.hot, transparent: true, opacity: 0.6,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }),
   );
@@ -1092,7 +1111,7 @@ function buildPrism(glow: THREE.Texture): Built {
   const inner = new THREE.LineSegments(
     new THREE.EdgesGeometry(new THREE.BoxGeometry(1.75, 2.7, 1.75)),
     new THREE.LineBasicMaterial({
-      color: BLUE, transparent: true, opacity: 0.5,
+      color: palette.base, transparent: true, opacity: 0.5,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }),
   );
@@ -1101,7 +1120,7 @@ function buildPrism(glow: THREE.Texture): Built {
   const glass = new THREE.Mesh(
     new THREE.BoxGeometry(2.15, 3.15, 2.15),
     new THREE.MeshBasicMaterial({
-      color: BLUE, transparent: true, opacity: 0.035, side: THREE.DoubleSide,
+      color: palette.base, transparent: true, opacity: 0.035, side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }),
   );
@@ -1109,7 +1128,7 @@ function buildPrism(glow: THREE.Texture): Built {
 
   const beam = new THREE.Mesh(
     new THREE.CylinderGeometry(0.012, 0.012, 4.2, 6),
-    basic(WHITE, 0.28),
+    basic(palette.hot, 0.28),
   );
   root.add(beam);
 
@@ -1117,7 +1136,7 @@ function buildPrism(glow: THREE.Texture): Built {
   for (let i = 0; i < 3; i += 1) {
     const halo = new THREE.Mesh(
       new THREE.TorusGeometry(1.95, 0.006, 6, 120),
-      basic(i === 1 ? WHITE : BLUE, 0.2),
+      basic(i === 1 ? palette.hot : palette.base, 0.2),
     );
     halo.rotation.x = Math.PI / 2;
     halo.position.y = -1.4 + i * 1.4;
@@ -1128,7 +1147,7 @@ function buildPrism(glow: THREE.Texture): Built {
   const scan = new THREE.Mesh(
     new THREE.PlaneGeometry(2.45, 2.45),
     new THREE.MeshBasicMaterial({
-      color: BLUE, transparent: true, opacity: 0.08, side: THREE.DoubleSide,
+      color: palette.base, transparent: true, opacity: 0.08, side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }),
   );
@@ -1137,16 +1156,16 @@ function buildPrism(glow: THREE.Texture): Built {
 
   const scanLine = new THREE.Mesh(
     new THREE.BoxGeometry(2.45, 0.008, 0.008),
-    basic(WHITE, 0.8),
+    basic(palette.hot, 0.8),
   );
   root.add(scanLine);
 
-  const core = sprite(glow, BLUE, 0.6, 2.4);
+  const core = sprite(glow, palette.base, 0.6, 2.4);
   root.add(core);
 
   const motes: THREE.Mesh[] = [];
   for (let i = 0; i < 12; i += 1) {
-    const mote = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.07, 0.07), basic(i % 3 === 0 ? WHITE : BLUE, 0.6));
+    const mote = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.07, 0.07), basic(i % 3 === 0 ? palette.hot : palette.base, 0.6));
     root.add(mote);
     motes.push(mote);
   }
@@ -1180,7 +1199,8 @@ function buildPrism(glow: THREE.Texture): Built {
 }
 
 /* ---------------------------------------------------------------- bloom */
-function buildBloom(glow: THREE.Texture): Built {
+function buildBloom(glow: THREE.Texture, accent: number): Built {
+  const palette = wirePalette(accent);
   const root = new THREE.Group();
   root.rotation.x = 0.2;
 
@@ -1196,11 +1216,11 @@ function buildBloom(glow: THREE.Texture): Built {
   rotations.forEach((rotation, ringIndex) => {
     const ring = new THREE.Group();
     ring.rotation.set(rotation[0], rotation[1], rotation[2]);
-    const torus = new THREE.Mesh(new THREE.TorusGeometry(2.15, 0.012, 6, 140), basic(ringIndex % 2 === 0 ? WHITE : BLUE, 0.42));
+    const torus = new THREE.Mesh(new THREE.TorusGeometry(2.15, 0.012, 6, 140), basic(ringIndex % 2 === 0 ? palette.hot : palette.base, 0.42));
     ring.add(torus);
     for (let i = 0; i < 3; i += 1) {
       const angle = (i / 3) * Math.PI * 2 + ringIndex * 0.4;
-      const node = new THREE.Mesh(new THREE.OctahedronGeometry(0.075, 0), basic(i === 0 ? BLUE : WHITE, 0.8));
+      const node = new THREE.Mesh(new THREE.OctahedronGeometry(0.075, 0), basic(i === 0 ? palette.base : palette.hot, 0.8));
       node.position.set(Math.cos(angle) * 2.15, Math.sin(angle) * 2.15, 0);
       node.userData.index = nodes.length;
       ring.add(node);
@@ -1209,7 +1229,7 @@ function buildBloom(glow: THREE.Texture): Built {
       hit.position.copy(node.position);
       ring.add(hit);
       pickables.push(hit);
-      const halo = sprite(glow, i === 0 ? BLUE : WHITE, 0.18, 0.6);
+      const halo = sprite(glow, i === 0 ? palette.base : palette.hot, 0.18, 0.6);
       halo.position.copy(node.position);
       ring.add(halo);
       nodeHalos.push(halo);
@@ -1218,9 +1238,9 @@ function buildBloom(glow: THREE.Texture): Built {
     rings.push(ring);
   });
 
-  const core = new THREE.Mesh(new THREE.IcosahedronGeometry(0.3, 1), wire(WHITE, 0.5));
+  const core = new THREE.Mesh(new THREE.IcosahedronGeometry(0.3, 1), wire(palette.hot, 0.5));
   root.add(core);
-  const coreGlow = sprite(glow, BLUE, 0.16, 1.6);
+  const coreGlow = sprite(glow, palette.base, 0.16, 1.6);
   root.add(coreGlow);
 
   return {
@@ -1246,7 +1266,8 @@ function buildBloom(glow: THREE.Texture): Built {
 }
 
 /* ---------------------------------------------------------------- stack */
-function buildStack(): Built {
+function buildStack(accent: number): Built {
+  const palette = wirePalette(accent);
   const root = new THREE.Group();
   root.rotation.x = 0.3;
 
@@ -1257,7 +1278,7 @@ function buildStack(): Built {
     const depth = 2.4 - i * 0.16;
     const geometry = new THREE.PlaneGeometry(width, depth, 10, 7);
     const layer = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-      color: i === 4 ? WHITE : BLUE,
+      color: i === 4 ? palette.hot : palette.base,
       wireframe: true,
       transparent: true,
       opacity: i === 4 ? 0.36 : 0.22,
@@ -1271,7 +1292,7 @@ function buildStack(): Built {
     const outline = new THREE.LineSegments(
       new THREE.EdgesGeometry(geometry),
       new THREE.LineBasicMaterial({
-        color: i === 4 ? WHITE : BLUE,
+        color: i === 4 ? palette.hot : palette.base,
         transparent: true,
         opacity: i === 4 ? 0.5 : 0.28,
         blending: THREE.AdditiveBlending,
@@ -1289,7 +1310,7 @@ function buildStack(): Built {
       const connector = line([
         new THREE.Vector3(x, -1.5, z),
         new THREE.Vector3(x, 1.7, z),
-      ], BLUE, 0.12);
+      ], palette.base, 0.12);
       root.add(connector);
       connectors.push(connector);
     }
@@ -1298,7 +1319,7 @@ function buildStack(): Built {
   const beam = new THREE.Mesh(
     new THREE.PlaneGeometry(4.4, 3.1),
     new THREE.MeshBasicMaterial({
-      color: BLUE, transparent: true, opacity: 0.06, side: THREE.DoubleSide,
+      color: palette.base, transparent: true, opacity: 0.06, side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }),
   );
@@ -1327,9 +1348,9 @@ function buildStack(): Built {
     },
   };
 }
-
 /* ---------------------------------------------------------------- drift */
-function buildDrift(glow: THREE.Texture): Built {
+function buildDrift(glow: THREE.Texture, accent: number): Built {
+  const palette = wirePalette(accent);
   const root = new THREE.Group();
   root.rotation.x = 0.06;
   root.position.y = 0.22;
@@ -1351,7 +1372,7 @@ function buildDrift(glow: THREE.Texture): Built {
   const spread = 1.3;
 
   for (const side of [-1, 1]) {
-    const panelMat = wire(BLUE, 0.22);
+    const panelMat = wire(palette.base, 0.22);
     const panel = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 4.0, 6, 8), panelMat);
     panel.position.set(side * spread, 0, 0);
     panel.rotation.y = side * -0.07;
@@ -1359,7 +1380,7 @@ function buildDrift(glow: THREE.Texture): Built {
     panelMats.push(panelMat);
 
     for (const [px, py] of points) {
-      const nodeMat = basic(BLUE, 0.7);
+      const nodeMat = basic(palette.base, 0.7);
       const node = new THREE.Mesh(new THREE.OctahedronGeometry(0.095, 0), nodeMat);
       node.position.set(side * spread + px, py, 0.02);
       root.add(node);
@@ -1372,7 +1393,7 @@ function buildDrift(glow: THREE.Texture): Built {
     const a = nodes[index];
     const b = nodes[index + points.length];
     const mat = new THREE.LineBasicMaterial({
-      color: BLUE, transparent: true, opacity: 0.25,
+      color: palette.base, transparent: true, opacity: 0.25,
       blending: THREE.AdditiveBlending, depthWrite: false,
     });
     const connector = new THREE.Line(
@@ -1386,27 +1407,27 @@ function buildDrift(glow: THREE.Texture): Built {
   const seam = line([
     new THREE.Vector3(0, -1.98, 0),
     new THREE.Vector3(0, 1.98, 0),
-  ], WHITE, 0.2);
+  ], palette.hot, 0.2);
   root.add(seam);
 
   // The floor holds both snapshots; the bar reads them line by line.
-  const baseMat = wire(BLUE, 0.14);
+  const baseMat = wire(palette.base, 0.14);
   const base = new THREE.Mesh(new THREE.PlaneGeometry(2.9, 1.7, 6, 4), baseMat);
   base.rotation.x = -Math.PI / 2;
   base.position.y = -2.06;
   root.add(base);
 
-  const scanMat = basic(WHITE, 0.32);
+  const scanMat = basic(palette.hot, 0.32);
   const scan = new THREE.Mesh(new THREE.PlaneGeometry(2.8, 0.015), scanMat);
   scan.position.z = 0.03;
   root.add(scan);
 
-  const pulse = sprite(glow, WHITE, 0.5, 0.85);
+  const pulse = sprite(glow, palette.hot, 0.5, 0.85);
   root.add(pulse);
 
   const rings: THREE.Mesh[] = [];
   for (const y of [1.98]) {
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.62, 0.006, 4, 90), basic(BLUE, 0.2));
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.62, 0.006, 4, 90), basic(palette.base, 0.2));
     ring.rotation.x = Math.PI / 2;
     ring.position.y = y;
     root.add(ring);
@@ -1425,14 +1446,14 @@ function buildDrift(glow: THREE.Texture): Built {
         const isNew = index % points.length < added;
         const isOld = index % points.length >= points.length - removed;
         const mat = nodeMats[index];
-        mat.color.setHex(isNew ? 0x1ab2ff : isOld ? WHITE : BLUE);
+        mat.color.setHex(isNew ? palette.pale : isOld ? palette.hot : palette.base);
         mat.opacity = 0.5 + Math.sin(time * 1.4 + index) * 0.2;
         node.scale.setScalar(1 + Math.sin(time * 1.8 + index) * 0.12);
       });
       connectorMats.forEach((mat, index) => {
         const isNew = index < added;
         const isOld = index >= points.length - removed;
-        mat.color.setHex(isNew ? 0x1ab2ff : isOld ? WHITE : BLUE);
+        mat.color.setHex(isNew ? palette.pale : isOld ? palette.hot : palette.base);
         mat.opacity = isNew ? 0.85 : isOld ? 0.6 : 0.14;
       });
       const scanY = -1.95 + ((time * 0.22) % 1) * 3.9;
@@ -1979,13 +2000,14 @@ function buildHorizon(glow: THREE.Texture, mode: FigureMode, accent: number): Bu
   root.rotation.x = 0.16;
 
   if (mode === "wireframe") {
-    const core = new THREE.Mesh(new THREE.SphereGeometry(1.08, 32, 24), wire(WHITE, 0.55));
-    const shell = new THREE.Mesh(new THREE.SphereGeometry(1.16, 20, 14), wire(BLUE, 0.24));
+    const palette = wirePalette(accent);
+    const core = new THREE.Mesh(new THREE.SphereGeometry(1.08, 32, 24), wire(palette.hot, 0.55));
+    const shell = new THREE.Mesh(new THREE.SphereGeometry(1.16, 20, 14), wire(palette.base, 0.24));
     const rings: THREE.Mesh[] = [];
     for (let i = 0; i < 3; i += 1) {
       const ring = new THREE.Mesh(
         new THREE.TorusGeometry(1.5 + i * 0.36, 0.008, 4, 110),
-        basic(i % 2 ? accent : BONE, 0.42 - i * 0.08),
+        basic(i % 2 ? palette.base : palette.pale, 0.42 - i * 0.08),
       );
       ring.rotation.x = Math.PI / 2 + (i - 1) * 0.16;
       root.add(ring);
@@ -2229,8 +2251,16 @@ function Fallback({ variant }: { variant: FigureVariant }) {
 
   const bloomRings = [0, 30, 60, 90, 120, 150];
 
+  const palette = wirePalette(VARIANT_ACCENT[variant]);
+  const css = (hex: number) => `#${hex.toString(16).padStart(6, "0")}`;
+  const theme = {
+    "--fb-ink": css(palette.base),
+    "--fb-pale": css(palette.pale),
+    "--fb-hot": css(palette.hot),
+  } as CSSProperties;
+
   return (
-    <div className="fig-fallback">
+    <div className="fig-fallback" style={theme}>
       <svg
         viewBox="0 0 640 480"
         preserveAspectRatio="xMidYMid meet"
@@ -2244,14 +2274,14 @@ function Fallback({ variant }: { variant: FigureVariant }) {
             <stop offset="1" stopColor="#03050b" />
           </radialGradient>
           <linearGradient id={`${variant}-line`} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#8db7ff" stopOpacity="0.9" />
-            <stop offset="0.5" stopColor="#ffffff" stopOpacity="0.95" />
-            <stop offset="1" stopColor="#2b3cff" stopOpacity="0.55" />
+            <stop offset="0" stopColor={css(palette.hot)} stopOpacity="0.9" />
+            <stop offset="0.5" stopColor={css(palette.pale)} stopOpacity="0.95" />
+            <stop offset="1" stopColor={css(palette.base)} stopOpacity="0.55" />
           </linearGradient>
           <radialGradient id={`${variant}-core`} cx="50%" cy="50%" r="50%">
-            <stop offset="0" stopColor="#ffffff" />
-            <stop offset="0.45" stopColor="#b9c8ff" />
-            <stop offset="1" stopColor="#2b3cff" stopOpacity="0" />
+            <stop offset="0" stopColor={css(palette.hot)} />
+            <stop offset="0.45" stopColor={css(palette.pale)} />
+            <stop offset="1" stopColor={css(palette.base)} stopOpacity="0" />
           </radialGradient>
           <filter id={`${variant}-glow`} x="-40%" y="-40%" width="180%" height="180%">
             <feGaussianBlur stdDeviation="2.4" result="blur" />
@@ -2435,7 +2465,7 @@ function Fallback({ variant }: { variant: FigureVariant }) {
               <ellipse cx="320" cy="150" rx="136" ry="38" strokeOpacity=".26" />
               <ellipse cx="320" cy="250" rx="136" ry="38" strokeOpacity=".2" />
               <ellipse cx="320" cy="350" rx="136" ry="38" strokeOpacity=".14" />
-              <path d="M236 360 L422 316 L486 346" strokeOpacity=".2" fill="#2b3cff" fillOpacity=".08" />
+              <path d="M236 360 L422 316 L486 346" strokeOpacity=".2" fill="var(--fb-ink, #7b86c9)" fillOpacity=".08" />
               {[0, 1, 2, 3, 4, 5, 6, 7].map((index) => (
                 <rect
                   key={`mote${index}`}
@@ -2611,14 +2641,14 @@ export function Figure3D({
       else if (variant === "horizon") built = buildHorizon(glow, "planets", accent);
       else built = buildOrrery(variant, glow, accent);
     } else if (variant === "horizon") built = buildHorizon(glow, "wireframe", accent);
-    else if (variant === "orb") built = buildOrb(glow, star);
-    else if (variant === "dish") built = buildDish(glow);
-    else if (variant === "ascent") built = buildAscent(glow);
-    else if (variant === "atlas") built = buildAtlas(glow);
-    else if (variant === "drift") built = buildDrift(glow);
-    else if (variant === "prism") built = buildPrism(glow);
-    else if (variant === "bloom") built = buildBloom(glow);
-    else built = buildStack();
+    else if (variant === "orb") built = buildOrb(glow, star, accent);
+    else if (variant === "dish") built = buildDish(glow, accent);
+    else if (variant === "ascent") built = buildAscent(glow, accent);
+    else if (variant === "atlas") built = buildAtlas(glow, accent);
+    else if (variant === "drift") built = buildDrift(glow, accent);
+    else if (variant === "prism") built = buildPrism(glow, accent);
+    else if (variant === "bloom") built = buildBloom(glow, accent);
+    else built = buildStack(accent);
 
     scene.add(built.root);
 
