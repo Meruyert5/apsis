@@ -44,6 +44,7 @@ apsis.mmd
 # IAM authorization dumps describe a real account; never commit them.
 *.authz.json
 *authorization-details*.json
+!tests/fixtures/authorization-details.json
 
 # OS
 .DS_Store

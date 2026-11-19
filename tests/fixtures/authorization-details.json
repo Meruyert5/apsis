@@ -1,0 +1,90 @@
+{
+  "UserDetailList": [
+    {
+      "Path": "/",
+      "UserName": "ci-runner",
+      "Arn": "arn:aws:iam::111122223333:user/ci-runner",
+      "CreateDate": "2024-01-01T00:00:00Z",
+      "GroupList": ["platform"],
+      "AttachedManagedPolicies": [
+        { "PolicyName": "ReadOnlyAccess", "PolicyArn": "arn:aws:iam::aws:policy/ReadOnlyAccess" }
+      ],
+      "UserPolicyList": [
+        {
+          "PolicyName": "deploy",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              { "Effect": "Allow", "Action": "iam:PassRole", "Resource": "arn:aws:iam::111122223333:role/deploy" },
+              { "Effect": "Allow", "Action": ["lambda:CreateFunction", "lambda:InvokeFunction"], "Resource": "*" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Path": "/",
+      "UserName": "admin",
+      "Arn": "arn:aws:iam::111122223333:user/admin",
+      "CreateDate": "2024-01-01T00:00:00Z",
+      "GroupList": [],
+      "AttachedManagedPolicies": [
+        { "PolicyName": "AdministratorAccess", "PolicyArn": "arn:aws:iam::aws:policy/AdministratorAccess" }
+      ],
+      "UserPolicyList": []
+    }
+  ],
+  "GroupDetailList": [
+    {
+      "Path": "/",
+      "GroupName": "platform",
+      "Arn": "arn:aws:iam::111122223333:group/platform",
+      "CreateDate": "2024-01-01T00:00:00Z",
+      "AttachedManagedPolicies": [],
+      "GroupPolicyList": []
+    }
+  ],
+  "RoleDetailList": [
+    {
+      "Path": "/",
+      "RoleName": "deploy",
+      "Arn": "arn:aws:iam::111122223333:role/deploy",
+      "CreateDate": "2024-01-01T00:00:00Z",
+      "AssumeRolePolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [
+          { "Effect": "Allow", "Principal": { "Service": "lambda.amazonaws.com" }, "Action": "sts:AssumeRole" },
+          { "Effect": "Allow", "Principal": { "AWS": "arn:aws:iam::111122223333:root" }, "Action": "sts:AssumeRole" }
+        ]
+      },
+      "AttachedManagedPolicies": [
+        { "PolicyName": "AdministratorAccess", "PolicyArn": "arn:aws:iam::aws:policy/AdministratorAccess" }
+      ],
+      "RolePolicyList": []
+    }
+  ],
+  "Policies": [
+    {
+      "PolicyName": "AdministratorAccess",
+      "Arn": "arn:aws:iam::aws:policy/AdministratorAccess",
+      "PolicyVersionList": [
+        {
+          "VersionId": "v1",
+          "IsDefaultVersion": true,
+          "Document": "%7B%22Version%22%3A%222012-10-17%22%2C%22Statement%22%3A%5B%7B%22Effect%22%3A%22Allow%22%2C%22Action%22%3A%22%2A%22%2C%22Resource%22%3A%22%2A%22%7D%5D%7D"
+        }
+      ]
+    },
+    {
+      "PolicyName": "ReadOnlyAccess",
+      "Arn": "arn:aws:iam::aws:policy/ReadOnlyAccess",
+      "PolicyVersionList": [
+        {
+          "VersionId": "v1",
+          "IsDefaultVersion": true,
+          "Document": "%7B%22Version%22%3A%222012-10-17%22%2C%22Statement%22%3A%5B%7B%22Effect%22%3A%22Allow%22%2C%22Action%22%3A%5B%22%2A%3AGet%2A%22%2C%22%2A%3AList%2A%22%5D%2C%22Resource%22%3A%22%2A%22%7D%5D%7D"
+        }
+      ]
+    }
+  ]
+}
