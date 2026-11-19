@@ -18,10 +18,11 @@
 - Texture and chrome: SVG grain, 64px HUD grid, CRT scanlines, ambient edge glow,
   warm glass topbar, cream primary button, bone hairline panels. Interactive
   states now follow the view accent instead of the old ultramarine.
-- New mark in bone, amber and cyan: a Syne A with an amber sun at the focus and
-  a ringed cyan planet at the apsis, tied by a dashed arc. Matching 512/180
-  icons and a rebuilt OG card. Sora, IBM Plex Sans and Instrument Serif are
-  removed; the payload is Syne, Space Grotesk and IBM Plex Mono.
+- New mark in the Overview palette: three glossy four-point sparkles in gold,
+  cyan and violet on a deep-blue HUD tile, with a faint orbit and star field.
+  The OG card pairs it with the solid/outline APSIS wordmark in Syne. Matching
+  512/180 icons. Sora, IBM Plex Sans and Instrument Serif are removed; the
+  payload is Syne, Space Grotesk and IBM Plex Mono.
 - The wireframe pass is bone and periwinkle with a depth fog, larger nodes and
   accent selection rings; it stays a schematic, not a second planet scene.
 - Every figure has two instruments. A `Planets` / `Wire` switch replaces the old

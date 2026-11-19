@@ -100,12 +100,13 @@ below 17px.
 
 ## Mark
 
-The mark is a sharp 2px tile: a bone HUD frame, a coordinate grid, two inclined
-orbits in amber and cyan, a bone Syne A, an amber sun at the focus and a ringed
-cyan planet at the apsis of the outer orbit, tied by a dashed apsis arc. The same
-silhouette is used for `favicon.svg`, the 512px and Apple touch PNGs, the 34px
-rail mark and the OG card, so the tab, the home screen and the console header
-read as one system.
+The mark is a sharp 2px deep-blue HUD tile with three glossy four-point sparkles
+in gold, cyan and violet, a faint orbit and a quiet star field. It is the Apsis
+idea at icon scale: the far point of the orbit, the spark that marks it, not a
+miniature dashboard. The wordmark itself is the Syne APSIS/APSIS display title
+from the hero, so the icon and the title share one family. The same sparkle tile
+is used for `favicon.svg`, the 512px and Apple touch PNGs, the 34px rail mark and
+the OG card.
 
 ## Motion
 
