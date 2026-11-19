@@ -9,6 +9,9 @@
   "version": "0.2.0",
   "description": "Apsis fleet dashboard: eight read-only instruments over one AWS IAM export.",
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

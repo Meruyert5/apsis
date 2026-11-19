@@ -159,7 +159,7 @@ views and Lighthouse with accessibility, best-practice and SEO assertions.
 
 ### Console
 
-Requirements: Node 20+.
+Requirements: Node 22+.
 
 ```bash
 cd console
