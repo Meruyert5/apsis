@@ -28,8 +28,8 @@ const CHECKS = [
   { label: "Reproducible / snapshot", state: "ready" },
   { label: "Fullscreen / every figure", state: "verified" },
   { label: "Penumbra handoff / alert + evidence", state: "delivered" },
-  { label: "Pages workflow", state: "present" },
-  { label: "Remote / publish", state: "approval" },
+  { label: "Pages workflow", state: "live" },
+  { label: "Remote / publish", state: "published" },
 ];
 
 const ARCH = [
@@ -57,7 +57,7 @@ export function Blueprint({
           <h1>The whole plan, <em>one page.</em></h1>
           <p className="lede">
             Five pipeline stages, eight dashboard views, one evidence contract. This is the
-            complete system as built, with the release state and the open items in plain sight.
+            complete system as built, with the release state and the published URLs in plain sight.
           </p>
           <div className="actions">
             <button type="button" className="btn primary" onClick={() => navigate("overview")}>
@@ -70,7 +70,7 @@ export function Blueprint({
           <div className="meta-line">
             <span><i />{snapshot.accounts} accounts</span>
             <span>{techniqueCount} primitives</span>
-            <span>Complete / ready for upload</span>
+            <span>Live / GitHub Pages</span>
           </div>
         </div>
         <FigurePanel
@@ -80,7 +80,7 @@ export function Blueprint({
           meta="Five layers / one export"
           tags={["5 stages", "8 views", "read-only"]}
           note="Auto: layers breathe and the beam rises"
-          foot="Ready for review"
+          foot="Published / live"
           motion={motion}
         />
       </section>
@@ -142,7 +142,7 @@ export function Blueprint({
         <Panel title="Release state" meta={generatedLabel}>
           <div className="release-state">
             <span className="release-mark"><Icon name="check" size={20} /></span>
-            <div><b>Complete — ready for upload</b><p>The full system is built and the Penumbra handoff is delivered. Creating the GitHub repository and pushing are the only remaining steps.</p></div>
+            <div><b>Live — published to GitHub Pages</b><p>The repository is public, <code>main</code> is pushed, and the pages workflow deploys the console on every push. The engine, eight views and the Penumbra handoff are complete.</p></div>
           </div>
           <ul className="check-list">
             {CHECKS.map((check) => (
@@ -224,11 +224,11 @@ export function Blueprint({
         </Panel>
       </div>
 
-      <Panel title="Open items" meta="before publish">
+      <Panel title="Published" meta="after release">
         <div className="open-items">
-          <div><span>01</span><b>Approval</b><p>You sign off on the dashboard direction and the release shape.</p></div>
-          <div><span>02</span><b>Upload</b><p>Origin is configured. Create the GitHub repository, then push; the Pages workflow builds <code>console/dist</code>.</p></div>
-          <div><span>03</span><b>Live import</b><p>GetAccountAuthorizationDetails remains roadmap; the shipped console reads static fixtures.</p></div>
+          <div><span>01</span><b>Repository</b><p>Public at <code>github.com/Meruyert5/apsis</code>; <code>main</code> tracks origin and CI runs on every push.</p></div>
+          <div><span>02</span><b>Pages</b><p>HTTPS site at <code>meruyert5.github.io/apsis</code>, rebuilt by the pages workflow from <code>console/dist</code>.</p></div>
+          <div><span>03</span><b>Live import</b><p><code>apsis import --from-aws</code> reads <code>GetAccountAuthorizationDetails</code> through the AWS CLI; this demo runs on the synthetic 16-account fleet.</p></div>
         </div>
       </Panel>
     </>

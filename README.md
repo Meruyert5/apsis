@@ -59,12 +59,12 @@ asks a different question: **what do all those statements add up to?**
 
 ## Live demo
 
-GitHub Pages hosts the console from this repository. After the Pages workflow
-runs, the site is at:
+GitHub Pages serves the console from this repository:
 
 **https://meruyert5.github.io/apsis/**
 
-The build uses relative paths, so it also works from a project subpath or a
+The `pages` workflow rebuilds the site from `console/dist` on every push to
+`main`. The build uses relative paths, so it also works from a project subpath or a
 custom domain. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 The dashboard is served at `/`. The architecture and interaction inventory are

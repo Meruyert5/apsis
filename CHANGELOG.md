@@ -2,6 +2,9 @@
 
 ### Changed
 
+- Published to GitHub Pages at `https://meruyert5.github.io/apsis/`. CI and Pages
+  run on Node 22 so the accessibility audit has a global `WebSocket`; the import
+  fixture is tracked and the Python matrix is 3.11/3.12.
 - The observatory edition replaces the all-blue field: warm black and bone,
   Syne 700-800 display, Space Grotesk reading and IBM Plex Mono telemetry.
   Each view carries one accent (cyan, mint, amber, violet or rose) across the

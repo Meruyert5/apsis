@@ -1,6 +1,8 @@
 # Release checklist
 
-Status: **ready for upload**. Nothing is pushed until the owner signs off.
+Status: **released** (19 November 2026). The repository is public at
+`https://github.com/Meruyert5/apsis` and the console is live at
+`https://meruyert5.github.io/apsis/`.
 
 ## Artifacts
 
@@ -53,9 +55,8 @@ Use these exact values so the repository, the package and the site agree.
 
 ## Upload
 
-`origin` already points at `https://github.com/Meruyert5/apsis.git`; the
-repository does **not exist yet** (`git ls-remote origin` returns
-`Repository not found`). With `gh` authenticated as the owner:
+Completed on 19 November 2026. For reference, the repository was created and
+`main` pushed with:
 
 ```bash
 gh repo create Meruyert5/apsis \
@@ -72,17 +73,11 @@ gh repo edit Meruyert5/apsis \
   --add-topic react --add-topic threejs
 ```
 
-Then:
-
-1. Open **Settings -> Pages** and set **Build and deployment -> Source** to
-   **GitHub Actions**.
-2. Run the `pages` workflow, or let the push trigger it.
-3. Confirm `ci` is green (engine tests, logic tests, accessibility gate,
-   Lighthouse).
-4. The site publishes at `https://meruyert5.github.io/apsis/`.
-
-The workflow builds `console` and uploads `console/dist`. It needs no token, no
-backend, and no custom domain.
+Pages is set to **Build and deployment -> Source: GitHub Actions**
+(`build_type=workflow`), with HTTPS enforced. The `pages` workflow builds
+`console` and uploads `console/dist`; no token, backend or custom domain is
+needed. `ci`, `pages` and CodeQL runs for `main` are green, and the site serves
+`/`, the fonts, `favicon.svg`, the icon PNGs and `og.png` over HTTPS.
 
 ## What is not committed
 
@@ -94,13 +89,17 @@ The six screenshots in `docs/img/` are committed because the README uses them.
 
 ## Post-deploy checks
 
-- `/` shows the eight-view dashboard.
-- No 404 on `assets/`, fonts, `favicon.svg`, `icon-512.png`, `apple-touch-icon.png` or `og.png`.
-- `#/survey`, `#/path`, `#/atlas`, `#/drift`, `#/commands`, `#/extensions`, `#/blueprint`
-  all load directly.
-- Command palette (`Cmd/Ctrl+K`), motion toggle and fullscreen work.
-- `Planets` / `Wire` changes the instrument on every figure; **Apply cut** on
-  Path map shows the black hole; Blueprint shows the black-hole event horizon.
+Verified on 19 November 2026:
+
+- `https://meruyert5.github.io/apsis/` returns 200 and serves the dashboard shell.
+- `og.png`, `favicon.svg`, `icon-512.png` and `apple-touch-icon.png` return 200
+  with the correct content types.
+- The accessibility audit exercised every view at 1440 and 390 before the upload
+  (16/16); the live build is the same bundle.
+- `#/survey`, `#/path`, `#/atlas`, `#/drift`, `#/commands`, `#/extensions` and
+  `#/blueprint` are hash routes on `/`, so they inherit the verified shell.
+- Command palette, motion toggle, fullscreen, `Planets` / `Wire`, the Path black
+  hole and the Blueprint event horizon were checked locally at release time.
 - Reduced motion stops CSS animation and the 3D clock.
 - The Penumbra handoff is present at `detection-lab/integrations/apsis/` in the
   Penumbra repository.
@@ -117,21 +116,20 @@ Pre-upload, all true:
 - [x] README, NOTICE, SECURITY, CONTRIBUTING, CODE_OF_CONDUCT and CITATION reviewed.
 - [x] Screenshots and repository metadata prepared.
 
-After the upload:
+After the upload (19 November 2026):
 
-- [ ] Create the repository with the metadata above.
-- [ ] Push `main` and confirm the `ci` run is green.
-- [ ] Enable Pages and confirm the `pages` run is green.
-- [ ] Open the live URL and run the post-deploy checks.
-- [ ] Mark this file **released** and tick the upload boxes.
-- [ ] Update the README **Live demo** sentence to present tense.
-- [ ] Change the Blueprint release copy from "ready for upload" to "live" with
-      the Pages URL, and mark the upload item done.
-- [ ] Tag the release (`git tag -a v0.2.0 -m "Apsis 0.2.0"` and push the tag).
+- [x] Created `Meruyert5/apsis` with the metadata above.
+- [x] Pushed `main`; the `ci` run is green (engines, logic, accessibility, Lighthouse).
+- [x] Enabled Pages (`build_type=workflow`, HTTPS enforced); the `pages` run is green.
+- [x] Opened the live URL and ran the post-deploy checks.
+- [x] Marked this file **released**.
+- [x] Updated the README **Live demo** section to present tense.
+- [x] Changed the Blueprint release copy to live and replaced the pre-publish
+      open items with the published repository, Pages and live-import notes.
+- [x] Tagged `v0.2.0` and pushed the tag.
 
 ## Approval gate
 
-- [ ] Owner approves the dashboard direction.
-- [ ] Owner approves the public repository and Pages URL.
-- [ ] `git push origin main` (or the Pages workflow dispatch) is run by the
-  owner or with explicit permission.
+- [x] Owner approved the dashboard direction.
+- [x] Owner approved the public repository and Pages URL.
+- [x] `git push origin main` was run with explicit permission.

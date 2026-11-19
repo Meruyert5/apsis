@@ -8,7 +8,8 @@ The build has one HTML entry: `dist/index.html`, the eight-view dashboard.
 ## GitHub Pages
 
 The repository ships `.github/workflows/pages.yml`. It builds the console on
-every push to `main` and deploys `console/dist` through GitHub Pages.
+every push to `main` and deploys `console/dist` through GitHub Pages. The Apsis
+site is live at `https://meruyert5.github.io/apsis/` with HTTPS enforced.
 
 1. Push the repository to GitHub with the default branch named `main`.
 2. Open **Settings → Pages** and set **Build and deployment → Source** to
