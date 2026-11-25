@@ -23,9 +23,11 @@
   states now follow the view accent instead of the old ultramarine.
 - New mark in the Overview palette: three glossy four-point sparkles in gold,
   cyan and violet on a deep-blue HUD tile, with a faint orbit and star field.
-  The OG card pairs it with the solid/outline APSIS wordmark in Syne. Matching
-  512/180 icons. Sora, IBM Plex Sans and Instrument Serif are removed; the
-  payload is Syne, Space Grotesk and IBM Plex Mono.
+  The solid/outline APSIS wordmark in Syne sits beside it. Matching 512/180
+  icons. Sora, IBM Plex Sans and Instrument Serif are removed; the payload is
+  Syne, Space Grotesk and IBM Plex Mono.
+- The social preview is now a 1200x630 crop of the Overview dashboard instead of
+  the separate sparkles card, so shared links show the console itself.
 - The wireframe pass is tinted to each view accent - cyan, mint, amber, violet or
   rose - with base, pale and hot tones for structure, active lines and highlights,
   a depth fog, larger nodes and accent selection rings. The 2D fallback inherits

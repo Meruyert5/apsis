@@ -111,8 +111,9 @@ in gold, cyan and violet, a faint orbit and a quiet star field. It is the Apsis
 idea at icon scale: the far point of the orbit, the spark that marks it, not a
 miniature dashboard. The wordmark itself is the Syne APSIS/APSIS display title
 from the hero, so the icon and the title share one family. The same sparkle tile
-is used for `favicon.svg`, the 512px and Apple touch PNGs, the 34px rail mark and
-the OG card.
+is used for `favicon.svg`, the 512px and Apple touch PNGs, and the 34px rail
+mark. The social preview is a 1200x630 crop of the Overview dashboard, so the
+shared image matches the console instead of using the sparkle tile.
 
 ## Motion
 
