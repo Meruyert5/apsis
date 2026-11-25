@@ -77,7 +77,7 @@ Pages is set to **Build and deployment -> Source: GitHub Actions**
 (`build_type=workflow`), with HTTPS enforced. The `pages` workflow builds
 `console` and uploads `console/dist`; no token, backend or custom domain is
 needed. `ci`, `pages` and CodeQL runs for `main` are green, and the site serves
-`/`, the fonts, `favicon.svg`, the icon PNGs and `og.png` over HTTPS.
+`/`, the fonts, `favicon.svg`, the icon PNGs and `og-dashboard.png` over HTTPS.
 
 ## What is not committed
 
@@ -92,7 +92,7 @@ The six screenshots in `docs/img/` are committed because the README uses them.
 Verified on 19 November 2026:
 
 - `https://meruyert5.github.io/apsis/` returns 200 and serves the dashboard shell.
-- `og.png`, `favicon.svg`, `icon-512.png` and `apple-touch-icon.png` return 200
+- `og-dashboard.png`, `favicon.svg`, `icon-512.png` and `apple-touch-icon.png` return 200
   with the correct content types.
 - The accessibility audit exercised every view at 1440 and 390 before the upload
   (16/16); the live build is the same bundle.
